@@ -1,3 +1,4 @@
+import { touchesDisk } from './antibiotic.js';
 import { chainSpot, clusterSpot, R } from './attach.js';
 import { GAME } from './config.js';
 import { newMover } from './mover.js';
@@ -117,13 +118,19 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       });
     },
     // Where a new cell would join this group if it came from (wx, wy) in the
-    // dish, or null if the group is full.
-    attachSpot(wx, wy) {
+    // dish, or null if the group is full or every open spot is on a disk.
+    attachSpot(wx, wy, disks = [], dishRadius = 0) {
       if (group.cells.length >= GAME.GROUP_CAP) return null;
       const [px, py] = toLocal(wx, wy);
+      // Spots where the new cell would overlap an antibiotic disk are off-limits.
+      const cellRadius = R * pxPerUnit();
+      const allowed = (x, y) => {
+        const [sx, sy] = toWorld(x, y);
+        return !disks.some((disk) => touchesDisk(disk, [[sx, sy, cellRadius]], dishRadius));
+      };
       const spot = layout === 'chain'
-        ? chainSpot(group.cells, px, py)
-        : clusterSpot(group.cells, group.twist, px, py);
+        ? chainSpot(group.cells, px, py, allowed)
+        : clusterSpot(group.cells, group.twist, px, py, allowed);
       if (!spot) return null;
       spot.world = toWorld(spot.x, spot.y);
       return spot;
@@ -141,11 +148,12 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       group.moveFor = 0;
     },
     // The player divides: the daughter joins the nearest chain or cluster
-    // that has room and is close enough, or else starts a new one here.
-    divide(others, dishRadius) {
+    // that has room and is close enough (and not onto an antibiotic disk), or
+    // else starts a new one here.
+    divide(others, dishRadius, disks = []) {
       let best = null;
       for (const other of others) {
-        const spot = other.attachSpot?.(group.x, group.y);
+        const spot = other.attachSpot?.(group.x, group.y, disks, dishRadius);
         if (!spot) continue;
         const distance = Math.hypot(spot.world[0] - group.x, spot.world[1] - group.y);
         if (distance > GAME.SNAP_REACH * dishRadius) continue;

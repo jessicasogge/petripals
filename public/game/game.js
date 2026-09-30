@@ -1,6 +1,6 @@
 // The game loop: arrow-key steering, dividing as the player eats, the cell
 // counter, the antibiotic disks, and the win or game-over banner.
-import { touchedDisk } from './antibiotic.js';
+import { pushOffDisks, touchedDisk } from './antibiotic.js';
 import { GAME } from './config.js';
 import { coccusGroup } from './coccus.js';
 import { keepInDish, pushApart } from './physics.js';
@@ -57,7 +57,7 @@ export function playGame(buddyEl, species, nutrients, disks) {
   function dividePlayer() {
     pending -= GAME.NUTRIENTS_PER_DIVISION;
     sinceDivision = 0;
-    const offspring = player.divide(groups.filter((g) => g !== player), dishRadius());
+    const offspring = player.divide(groups.filter((g) => g !== player), dishRadius(), disks);
     if (offspring) {
       // Size and position the new cell right away. Otherwise the browser draws
       // it once at the center of the dish before this frame's positioning
@@ -100,6 +100,21 @@ export function playGame(buddyEl, species, nutrients, disks) {
     // measuring between writes (which makes the browser re-lay-out each time).
     for (const group of groups) group.size = group.reach();
     pushApart(groups, player);
+    // Offspring can't sit on an antibiotic disk: nudge any that slid onto one
+    // back off, and stop them from sliding further in.
+    for (const group of groups) {
+      if (group === player) continue;
+      const [dx, dy] = pushOffDisks(disks, group.body(), radius);
+      if (dx === 0 && dy === 0) continue;
+      group.x += dx;
+      group.y += dy;
+      const length = Math.hypot(dx, dy);
+      const inward = -(group.vx * dx + group.vy * dy) / length;
+      if (inward > 0) {
+        group.vx += (inward * dx) / length;
+        group.vy += (inward * dy) / length;
+      }
+    }
     for (const group of groups) {
       [group.x, group.y] = keepInDish(agar, group.x, group.y, group.size, group);
       group.place();

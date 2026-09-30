@@ -10,8 +10,9 @@ export const wobble = (k, salt) => Math.sin(k * 12.9898 + salt * 78.233);
 
 // Where a new cell would attach to a chain: past whichever end is nearer
 // (px, py), continuing the chain's direction with a gentle bend. `cells` are
-// in chain order.
-export function chainSpot(cells, px, py) {
+// in chain order. `allowed(x, y)` can rule spots out (for example, spots on an
+// antibiotic disk); returns null if there's no allowed spot.
+export function chainSpot(cells, px, py, allowed = () => true) {
   if (cells.length === 1) {
     let dx = px - cells[0].x;
     let dy = py - cells[0].y;
@@ -19,7 +20,8 @@ export function chainSpot(cells, px, py) {
     // grow sideways instead of stacking the new cell on top of the old one.
     if (dx === 0 && dy === 0) dx = 1;
     const d = Math.hypot(dx, dy);
-    return { x: cells[0].x + (dx / d) * SPACING, y: cells[0].y + (dy / d) * SPACING, atStart: false };
+    const spot = { x: cells[0].x + (dx / d) * SPACING, y: cells[0].y + (dy / d) * SPACING, atStart: false };
+    return allowed(spot.x, spot.y) ? spot : null;
   }
   const ends = [
     { tip: cells[0], prev: cells[1], atStart: true },
@@ -34,6 +36,7 @@ export function chainSpot(cells, px, py) {
     const ux = (dx * Math.cos(bend) - dy * Math.sin(bend)) / d;
     const uy = (dx * Math.sin(bend) + dy * Math.cos(bend)) / d;
     const spot = { x: end.tip.x + ux * SPACING, y: end.tip.y + uy * SPACING, atStart: end.atStart };
+    if (!allowed(spot.x, spot.y)) return;
     spot.distance = Math.hypot(spot.x - px, spot.y - py);
     if (!best || spot.distance < best.distance) best = spot;
   });
@@ -43,12 +46,13 @@ export function chainSpot(cells, px, py) {
 // Where a new cell would attach to a cluster: an open spot touching the
 // cluster, on the side facing (px, py), preferring nooks that touch several
 // cells so the cluster fills out into a bunch instead of a line. `twist` is
-// the cluster's own packing angle.
-export function clusterSpot(cells, twist, px, py) {
+// the cluster's own packing angle. `allowed(x, y)` can rule spots out.
+export function clusterSpot(cells, twist, px, py, allowed = () => true) {
   const reach = SPACING * 0.95; // how far a new cell sits from one it touches
   let best = null;
 
   function consider(x, y) {
+    if (!allowed(x, y)) return;
     if (cells.some((o) => Math.hypot(o.x - x, o.y - y) < R * 1.5)) return;
     const touching = cells.filter((o) => Math.hypot(o.x - x, o.y - y) < SPACING * 1.15).length;
     const distance = Math.hypot(x - px, y - py);

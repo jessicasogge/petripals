@@ -81,6 +81,19 @@ describe('chainSpot', () => {
     expect(spot.distance).toBeCloseTo(Math.hypot(spot.x - 60, spot.y - 40));
   });
 
+  it('skips an end that is ruled out and grows from the other one', () => {
+    const chain = [cell(0, 0), cell(SPACING, 0), cell(2 * SPACING, 0)];
+    const noRightSide = (x) => x < 2 * SPACING; // e.g. an antibiotic disk to the right
+    const spot = chainSpot(chain, 500, 0, noRightSide);
+    expect(spot.atStart).toBe(true);
+    expect(spot.x).toBeLessThan(0);
+  });
+
+  it('returns null when every spot is ruled out', () => {
+    expect(chainSpot([cell(0, 0)], 50, 0, () => false)).toBeNull();
+    expect(chainSpot([cell(0, 0), cell(SPACING, 0)], 50, 0, () => false)).toBeNull();
+  });
+
   it('does not change the cells it is given', () => {
     const chain = [cell(0, 0), cell(SPACING, 0)];
     const before = JSON.stringify(chain);
@@ -135,6 +148,19 @@ describe('clusterSpot', () => {
     // And the whole bunch fits well inside the length of an 8-cell chain.
     const widest = Math.max(...cells.flatMap((a) => cells.map((b) => distance(a, b))));
     expect(widest).toBeLessThan(7 * SPACING * 0.6);
+  });
+
+  it('never picks a spot that is ruled out', () => {
+    const notBelow = (x, y) => y <= 0; // e.g. an antibiotic disk below
+    const cells = growCluster(5, 0.7);
+    for (let angle = 0; angle < 6.28; angle += 0.5) {
+      const spot = clusterSpot(cells, 0.7, Math.cos(angle) * 200, Math.sin(angle) * 200, notBelow);
+      expect(spot.y).toBeLessThanOrEqual(0);
+    }
+  });
+
+  it('returns null when every spot is ruled out', () => {
+    expect(clusterSpot([cell(0, 0)], 0, 10, 10, () => false)).toBeNull();
   });
 
   it('does not change the cells it is given', () => {

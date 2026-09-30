@@ -5,9 +5,23 @@
 //
 // `antibiotics` are the three disks placed in each buddy's dish: drugs
 // commonly used against that species, labeled with their standard disk codes.
+//
+// For rod-style buddies, `body` traces the drawing's outline as circles
+// [x, y, radius], in fractions of the drawing's width from its center. It's
+// what counts as touching an antibiotic disk.
 export const SPECIES = {
   mona: {
     kind: 'rod',
+    body: [
+      // tail (flagellum)
+      [-0.443, 0.0, 0.057],
+      [-0.386, 0.0, 0.057],
+      [-0.33, 0.0, 0.057],
+      [-0.159, 0.0, 0.182],
+      [-0.008, 0.0, 0.182],
+      [0.144, 0.0, 0.182],
+      [0.295, 0.0, 0.182],
+    ],
     antibiotics: [
       { code: 'CIP', name: 'ciprofloxacin' },
       { code: 'GM', name: 'gentamicin' },
@@ -16,6 +30,19 @@ export const SPECIES = {
   },
   vi: {
     kind: 'rod',
+    body: [
+      // tail (flagellum)
+      [-0.444, -0.072, 0.056],
+      [-0.389, -0.072, 0.056],
+      [-0.333, -0.072, 0.056],
+      [-0.189, -0.072, 0.161],
+      [-0.098, -0.114, 0.161],
+      [-0.009, -0.128, 0.161],
+      [0.078, -0.114, 0.161],
+      [0.162, -0.072, 0.161],
+      [0.243, -0.003, 0.161],
+      [0.322, 0.094, 0.161],
+    ],
     antibiotics: [
       { code: 'TE', name: 'tetracycline' },
       { code: 'CIP', name: 'ciprofloxacin' },
@@ -25,6 +52,20 @@ export const SPECIES = {
   // A spirochete: a long corkscrew-shaped cell that divides in two like a rod.
   elia: {
     kind: 'rod',
+    body: [
+      [-0.391, 0.0, 0.104],
+      [-0.32, 0.0, 0.104],
+      [-0.25, 0.0, 0.104],
+      [-0.18, 0.0, 0.104],
+      [-0.109, 0.0, 0.104],
+      [-0.039, 0.0, 0.104],
+      [0.031, 0.0, 0.104],
+      [0.102, 0.0, 0.104],
+      [0.172, 0.0, 0.104],
+      [0.242, 0.0, 0.104],
+      [0.312, 0.0, 0.104],
+      [0.396, 0.0, 0.083],
+    ],
     antibiotics: [
       { code: 'DO', name: 'doxycycline' },
       { code: 'AMX', name: 'amoxicillin' },
@@ -34,6 +75,11 @@ export const SPECIES = {
   // A coccobacillus: a short, plump rod with no flagellum. Divides in two like a rod.
   coco: {
     kind: 'rod',
+    body: [
+      [-0.142, 0.008, 0.275],
+      [0.0, 0.008, 0.275],
+      [0.142, 0.008, 0.275],
+    ],
     antibiotics: [
       { code: 'CRO', name: 'ceftriaxone' },
       { code: 'AMC', name: 'amoxicillin-clavulanate' },

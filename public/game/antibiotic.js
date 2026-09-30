@@ -35,6 +35,37 @@ export function touchesDisk(disk, circles, dishRadius) {
   return circles.some(([x, y, r]) => Math.hypot(x - dx, y - dy) < reach + r);
 }
 
+// How far to move a body (circles as above) so it no longer overlaps any
+// disk, as [dx, dy] in pixels. [0, 0] if it's already clear. Each disk pushes
+// the body straight out from its center, by the deepest overlap.
+export function pushOffDisks(disks, circles, dishRadius) {
+  let moveX = 0;
+  let moveY = 0;
+  for (const disk of disks) {
+    const cx = disk.fx * dishRadius;
+    const cy = disk.fy * dishRadius;
+    const reach = disk.r * dishRadius;
+    let deepest = null;
+    for (const [x, y, r] of circles) {
+      const px = x + moveX;
+      const py = y + moveY;
+      const distance = Math.hypot(px - cx, py - cy);
+      const overlap = reach + r - distance;
+      if (overlap > 0 && (!deepest || overlap > deepest.overlap)) {
+        // Straight out from the disk's center; pick a direction if dead center.
+        const nx = distance > 0 ? (px - cx) / distance : 1;
+        const ny = distance > 0 ? (py - cy) / distance : 0;
+        deepest = { overlap, nx, ny };
+      }
+    }
+    if (deepest) {
+      moveX += deepest.nx * deepest.overlap;
+      moveY += deepest.ny * deepest.overlap;
+    }
+  }
+  return [moveX, moveY];
+}
+
 // The first disk the circles touch, or null if they touch none.
 export function touchedDisk(disks, circles, dishRadius) {
   return disks.find((disk) => touchesDisk(disk, circles, dishRadius)) || null;
