@@ -19,7 +19,7 @@ body {
 }
 
 .microbe {
-  width: 130px;
+  width: 108px;
   animation: wobble 3s ease-in-out infinite;
 }
 
@@ -113,13 +113,6 @@ body {
   box-shadow: 0 20px 40px rgba(19, 78, 74, 0.08);
 }
 
-.eyebrow {
-  margin: 0 0 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.8rem;
-  font-weight: 700;
-}
 
 .picker-grid {
   display: grid;
@@ -174,7 +167,7 @@ body {
 }
 
 .vi {
-  background: rgba(165, 243, 252, 0.45);
+  background: rgba(253, 186, 116, 0.45);
 }
 
 .pick-btn {
@@ -283,11 +276,6 @@ body {
   display: none;
 }
 
-/* Vi (Vibrio fischeri) is bioluminescent. */
-.glow {
-  filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.85));
-}
-
 .wobble {
   animation: wobble 3s ease-in-out infinite;
 }
@@ -362,7 +350,7 @@ body {
 }
 
 /* Offspring are already drifting around, so they skip the idle wiggle. That
-   also keeps a dish full of glowing Vis smooth. */
+   also keeps a dish full of 64 cells smooth. */
 .buddy-mover.drifter .dish-buddy {
   animation: none;
 }
