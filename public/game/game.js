@@ -1,12 +1,12 @@
 // The game loop: arrow-key steering, dividing as the player eats, the cell
-// counter, the antibiotic disk, and the win or game-over banner.
-import { touchesDisk } from './antibiotic.js';
+// counter, the antibiotic disks, and the win or game-over banner.
+import { touchedDisk } from './antibiotic.js';
 import { GAME } from './config.js';
 import { coccusGroup } from './coccus.js';
 import { keepInDish, pushApart } from './physics.js';
 import { rodGroup } from './rod.js';
 
-export function playGame(buddyEl, species, nutrients, disk) {
+export function playGame(buddyEl, species, nutrients, disks) {
   const agar = document.querySelector('.agar');
   const counter = document.querySelector('.cell-count');
   const dishRadius = () => agar.clientWidth / 2;
@@ -105,13 +105,14 @@ export function playGame(buddyEl, species, nutrients, disk) {
       group.place();
     }
 
-    // Touching the antibiotic disk is game over.
-    if (!finished && touchesDisk(disk, player.body(), radius)) {
+    // Touching any antibiotic disk is game over.
+    const hit = finished ? null : touchedDisk(disks, player.body(), radius);
+    if (hit) {
       finished = true;
       held.clear();
       nutrients.stop();
       playerMover.classList.add('killed');
-      setTimeout(showGameOver, 500);
+      setTimeout(() => showGameOver(hit), 500);
     }
 
     if (!finished) {
@@ -148,7 +149,7 @@ export function playGame(buddyEl, species, nutrients, disk) {
     showBanner('You won!', `${buddyEl.dataset.name} grew a colony of ${GAME.TARGET_CELLS} cells!`);
   }
 
-  function showGameOver() {
+  function showGameOver(disk) {
     showBanner(
       'Game over',
       `${buddyEl.dataset.name} touched the ${disk.antibiotic.name} disk. Antibiotics kill bacteria!`,

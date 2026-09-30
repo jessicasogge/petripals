@@ -1,15 +1,28 @@
-// The antibiotic disk: a small white paper disk soaked in a drug, like the
-// ones used in the lab (the Kirby-Bauer disk test). If the player's buddy
-// touches it, the game is over.
+// The antibiotic disks: small white paper disks soaked in drugs, like the ones
+// used in the lab (the Kirby-Bauer disk test). If the player's buddy touches
+// one, the game is over.
 import { GAME } from './config.js';
 
-// Pick a random spot for the disk, as fractions of the dish radius from the
+// Pick a random spot for one disk, as fractions of the dish radius from the
 // center: away from the middle (where the buddy starts) and from the rim.
 export function diskSpot(random = Math.random) {
   const angle = random() * Math.PI * 2;
   const distance = GAME.DISK_MIN_DISTANCE +
     random() * (GAME.DISK_MAX_DISTANCE - GAME.DISK_MIN_DISTANCE);
   return { fx: Math.cos(angle) * distance, fy: Math.sin(angle) * distance, r: GAME.DISK_RADIUS };
+}
+
+// Pick spots for `count` disks, spread apart from each other so there's
+// always room to swim between them.
+export function diskSpots(count, random = Math.random) {
+  const disks = [];
+  for (let tries = 0; disks.length < count && tries < 500; tries++) {
+    const spot = diskSpot(random);
+    if (disks.every((d) => Math.hypot(d.fx - spot.fx, d.fy - spot.fy) >= GAME.DISK_MIN_GAP)) {
+      disks.push(spot);
+    }
+  }
+  return disks;
 }
 
 // Whether any of the given circles overlaps the disk. Circles are
@@ -22,18 +35,26 @@ export function touchesDisk(disk, circles, dishRadius) {
   return circles.some(([x, y, r]) => Math.hypot(x - dx, y - dy) < reach + r);
 }
 
-// Put a disk on the agar and return where it is.
-export function placeAntibiotic(antibiotic) {
-  const disk = diskSpot();
-  const el = document.createElement('div');
-  el.className = 'antibiotic';
-  el.style.left = `${50 + disk.fx * 50}%`;
-  el.style.top = `${50 + disk.fy * 50}%`;
-  el.style.width = `${disk.r * 100}%`;
-  el.textContent = antibiotic.code;
-  el.setAttribute('role', 'img');
-  el.setAttribute('aria-label', `Antibiotic disk: ${antibiotic.name}. Don't touch it!`);
-  el.title = antibiotic.name;
-  document.querySelector('.agar').appendChild(el);
-  return { ...disk, el, antibiotic };
+// The first disk the circles touch, or null if they touch none.
+export function touchedDisk(disks, circles, dishRadius) {
+  return disks.find((disk) => touchesDisk(disk, circles, dishRadius)) || null;
+}
+
+// Put one disk per antibiotic on the agar and return where they are.
+export function placeAntibiotics(antibiotics) {
+  const agar = document.querySelector('.agar');
+  return diskSpots(antibiotics.length).map((spot, i) => {
+    const antibiotic = antibiotics[i];
+    const el = document.createElement('div');
+    el.className = 'antibiotic';
+    el.style.left = `${50 + spot.fx * 50}%`;
+    el.style.top = `${50 + spot.fy * 50}%`;
+    el.style.width = `${spot.r * 100}%`;
+    el.textContent = antibiotic.code;
+    el.setAttribute('role', 'img');
+    el.setAttribute('aria-label', `Antibiotic disk: ${antibiotic.name}. Don't touch it!`);
+    el.title = antibiotic.name;
+    agar.appendChild(el);
+    return { ...spot, el, antibiotic };
+  });
 }
