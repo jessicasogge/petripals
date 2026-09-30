@@ -198,6 +198,7 @@ body {
 }
 
 .petri-dish {
+  position: relative;
   width: min(600px, 100%);
   aspect-ratio: 1;
   margin: 0 auto;
@@ -227,6 +228,7 @@ body {
 
 /* Positioned by petri-dish.js; the buddy's own idle animation stays on the SVG. */
 .buddy-mover {
+  grid-area: 1 / 1; /* stack in the dish center, even after dividing into two */
   width: 22%;
   position: relative;
   z-index: 1; /* swim over the nutrients */
@@ -275,4 +277,53 @@ body {
 
 .wobble {
   animation: wobble 3s ease-in-out infinite;
+}
+
+.species {
+  font-size: 0.95rem;
+}
+
+.win-banner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  width: min(320px, 85%);
+  padding: 1.25rem 1.5rem 1.5rem;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.92);
+  border: 2px solid rgba(15, 118, 110, 0.25);
+  border-radius: 20px;
+  box-shadow: 0 16px 36px rgba(19, 78, 74, 0.2);
+  animation: pop-in 0.35s ease-out;
+}
+
+.win-banner[hidden] {
+  display: none;
+}
+
+.win-banner h2 {
+  margin: 0 0 0.5rem;
+}
+
+.win-banner p {
+  margin: 0;
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.85);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.play-again {
+  margin-top: 1rem;
+  font: inherit;
+  font-weight: 700;
 }

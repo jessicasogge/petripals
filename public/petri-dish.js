@@ -6,13 +6,13 @@ if (buddy) {
   buddy.removeAttribute('hidden');
   document.title = `PetriPals | ${buddy.dataset.name}`;
   const nutrients = scatterNutrients();
-  setUpMovement(buddy, nutrients);
+  playGame(buddy, nutrients);
 } else {
   // No buddy (or an unknown one) in the URL: send them back to choose.
   window.location.replace('./buddy-picker.html');
 }
 
-function setUpMovement(buddyEl, nutrients) {
+function playGame(buddyEl, nutrients) {
   const agar = document.querySelector('.agar');
   const mover = document.querySelector('.buddy-mover');
 
@@ -22,6 +22,15 @@ function setUpMovement(buddyEl, nutrients) {
   // How close a nutrient has to be to get picked up, as a fraction of the
   // buddy's half-width (less than 1 so it has to swim over it, not just near).
   const PICKUP_REACH = 0.6;
+
+  // Growth: each nutrient adds a bit of size; at FULL_SIZE the buddy divides.
+  const NUTRIENTS_TO_DIVIDE = 8;
+  const FULL_SIZE = 1.8; // times the starting size
+  const GROWTH_PER_NUTRIENT = (FULL_SIZE - 1) / NUTRIENTS_TO_DIVIDE;
+
+  // Rods (Mona, Vi) mostly get longer before they divide; round cocci
+  // (Goldie) grow evenly in every direction.
+  const isRod = buddyEl.dataset.buddy !== 'goldie';
 
   const directions = {
     ArrowUp: [0, -1],
@@ -35,12 +44,16 @@ function setUpMovement(buddyEl, nutrients) {
   let x = 0;
   let y = 0;
   let facing = 1; // 1 = right, -1 = left
+  let eaten = 0;
+  let size = 1; // what's drawn right now; eases toward targetSize
+  let targetSize = 1;
+  let dividing = false;
   let lastTime = null;
 
   window.addEventListener('keydown', (event) => {
     if (!(event.key in directions)) return;
     event.preventDefault(); // stop arrow keys from scrolling the page
-    held.add(event.key);
+    if (!dividing) held.add(event.key);
   });
 
   window.addEventListener('keyup', (event) => {
@@ -50,7 +63,31 @@ function setUpMovement(buddyEl, nutrients) {
   // Don't keep moving if the window loses focus while a key is down.
   window.addEventListener('blur', () => held.clear());
 
+  document.querySelector('.play-again').addEventListener('click', () => {
+    window.location.reload();
+  });
+
+  // Width and height scale for a given size.
+  function stretch(s) {
+    return isRod ? [s, 1 + (s - 1) * 0.35] : [s, s];
+  }
+
+  function place(el, px, py, s, face) {
+    const [sx, sy] = stretch(s);
+    el.style.transform = `translate(${px}px, ${py}px) scale(${sx * face}, ${sy})`;
+  }
+
+  // Keep a buddy of half-width `radius` fully inside the dish, sliding along
+  // the rim instead of leaving it.
+  function keepInDish(px, py, radius) {
+    const maxDistance = Math.max(0, agar.clientWidth / 2 - radius);
+    const fromCenter = Math.hypot(px, py);
+    if (fromCenter <= maxDistance) return [px, py];
+    return [(px / fromCenter) * maxDistance, (py / fromCenter) * maxDistance];
+  }
+
   function step(time) {
+    if (dividing) return;
     const seconds = lastTime === null ? 0 : (time - lastTime) / 1000;
     lastTime = time;
 
@@ -61,11 +98,7 @@ function setUpMovement(buddyEl, nutrients) {
       dy += directions[key][1];
     }
 
-    // Keep the buddy fully inside the dish: its center can go as far as the
-    // dish radius minus the buddy's own radius.
     const dishRadius = agar.clientWidth / 2;
-    const buddyRadius = buddyEl.getBoundingClientRect().width / 2;
-    const maxDistance = Math.max(0, dishRadius - buddyRadius);
 
     if (dx !== 0 || dy !== 0) {
       // Same speed on diagonals as straight lines.
@@ -76,16 +109,78 @@ function setUpMovement(buddyEl, nutrients) {
       if (dx !== 0) facing = Math.sign(dx);
     }
 
-    // Slide along the rim instead of leaving the dish.
-    const fromCenter = Math.hypot(x, y);
-    if (fromCenter > maxDistance) {
-      x = (x / fromCenter) * maxDistance;
-      y = (y / fromCenter) * maxDistance;
+    // Grow smoothly toward the target size instead of jumping.
+    size += (targetSize - size) * Math.min(1, seconds * 6);
+
+    place(mover, x, y, size, facing);
+    const buddyRadius = buddyEl.getBoundingClientRect().width / 2;
+    [x, y] = keepInDish(x, y, buddyRadius);
+    place(mover, x, y, size, facing);
+
+    const ate = nutrients.eatNear(
+      x / dishRadius,
+      y / dishRadius,
+      (buddyRadius * PICKUP_REACH) / dishRadius,
+    );
+    if (ate > 0) {
+      eaten += ate;
+      targetSize = Math.min(FULL_SIZE, 1 + eaten * GROWTH_PER_NUTRIENT);
     }
 
-    mover.style.transform = `translate(${x}px, ${y}px) scaleX(${facing})`;
-    nutrients.eatNear(x / dishRadius, y / dishRadius, (buddyRadius * PICKUP_REACH) / dishRadius);
+    // Divide once the buddy has eaten enough and finished growing into it.
+    if (eaten >= NUTRIENTS_TO_DIVIDE && FULL_SIZE - size < 0.01) {
+      divide();
+      return;
+    }
+
     requestAnimationFrame(step);
+  }
+
+  // Binary fission: the grown buddy splits into two normal-sized daughter
+  // cells that drift apart, then the player wins.
+  function divide() {
+    dividing = true;
+    held.clear();
+    nutrients.stop();
+
+    const daughter = mover.cloneNode(true);
+    daughter.querySelector('.dish-buddy:not([hidden])').setAttribute('aria-hidden', 'true');
+    mover.after(daughter);
+
+    const startWidth = buddyEl.getBoundingClientRect().width;
+    const daughterWidth = startWidth / FULL_SIZE;
+    const spread = daughterWidth * 0.6;
+    const DURATION = 900;
+    let start = null;
+
+    function animate(time) {
+      if (start === null) start = time;
+      const t = Math.min(1, (time - start) / DURATION);
+      const ease = 1 - (1 - t) ** 3;
+      const s = FULL_SIZE + (1 - FULL_SIZE) * ease;
+      // Each half starts where it sat inside the parent and slides outward.
+      const offset = (startWidth / 4) * (1 - ease) + spread * ease;
+
+      const [ax, ay] = keepInDish(x - offset, y, daughterWidth / 2);
+      const [bx, by] = keepInDish(x + offset, y, daughterWidth / 2);
+      place(mover, ax, ay, s, facing);
+      place(daughter, bx, by, s, facing);
+
+      if (t < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        setTimeout(showWin, 400);
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  function showWin() {
+    const banner = document.querySelector('.win-banner');
+    banner.querySelector('.win-name').textContent = buddyEl.dataset.name;
+    banner.removeAttribute('hidden');
+    banner.querySelector('.play-again').focus();
   }
 
   requestAnimationFrame(step);
@@ -102,6 +197,7 @@ function scatterNutrients() {
   // Positions are stored relative to the dish center, as fractions of the dish
   // radius (-1 to 1), so they stay put when the window is resized.
   const flecks = [];
+  let stopped = false;
 
   function randomSpot(avoidX, avoidY) {
     for (let tries = 0; tries < 50; tries++) {
@@ -118,6 +214,7 @@ function scatterNutrients() {
   }
 
   function addFleck(avoidX, avoidY) {
+    if (stopped) return;
     const spot = randomSpot(avoidX, avoidY);
     if (!spot) return;
     const el = document.createElement('span');
@@ -136,8 +233,9 @@ function scatterNutrients() {
 
   return {
     // Pick up every fleck within `reach` of the buddy's position (all values
-    // are fractions of the dish radius).
+    // are fractions of the dish radius). Returns how many were picked up.
     eatNear(bx, by, reach) {
+      let count = 0;
       for (let i = flecks.length - 1; i >= 0; i--) {
         const fleck = flecks[i];
         if (Math.hypot(fleck.fx - bx, fleck.fy - by) > reach) continue;
@@ -145,8 +243,13 @@ function scatterNutrients() {
         fleck.el.classList.add('eaten');
         fleck.el.addEventListener('transitionend', () => fleck.el.remove(), { once: true });
         setTimeout(() => addFleck(bx, by), RESPAWN_MS);
+        count++;
       }
+      return count;
     },
-    count: () => flecks.length,
+    // No more new flecks once the game is over.
+    stop() {
+      stopped = true;
+    },
   };
 }
