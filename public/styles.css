@@ -129,10 +129,19 @@ body {
 }
 
 .buddy-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background: rgba(255, 255, 255, 0.5);
   border: 2px solid rgba(15, 118, 110, 0.2);
   border-radius: 18px;
   padding: 1rem;
+}
+
+/* Line the Select buttons up along the bottom, however long the name above. */
+.buddy-card .pick-btn {
+  margin-top: auto;
+  white-space: nowrap;
 }
 
 .buddy-icon {
@@ -158,6 +167,10 @@ body {
 
 .goldie {
   background: rgba(253, 230, 138, 0.45);
+}
+
+.scarlett {
+  background: rgba(252, 165, 165, 0.45);
 }
 
 .vi {

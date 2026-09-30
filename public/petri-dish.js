@@ -28,8 +28,8 @@ function playGame(buddyEl, nutrients) {
   const FULL_SIZE = 1.8; // times the starting size
   const GROWTH_PER_NUTRIENT = (FULL_SIZE - 1) / NUTRIENTS_TO_DIVIDE;
 
-  // Rods (Mona, Vi) mostly get longer before they divide; round cocci
-  // (Goldie) grow evenly in every direction.
+  // Rods (Mona, Vi) and chains (Scarlett) mostly get longer before they
+  // divide; Goldie's grape-like cluster grows evenly in every direction.
   const isRod = buddyEl.dataset.buddy !== 'goldie';
 
   const directions = {
