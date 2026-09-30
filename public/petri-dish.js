@@ -254,7 +254,7 @@ function newMover(svg) {
 // A rod-shaped cell (Mona, Vi). Each division it splits across the middle
 // and the two cells go their separate ways.
 function rodGroup({ mover, svg, species, isPlayer }) {
-  const ROD_WIDTH = 18; // percent of the dish
+  const ROD_WIDTH = 14; // percent of the dish
 
   const group = {
     mover,
@@ -301,7 +301,7 @@ function rodGroup({ mover, svg, species, isPlayer }) {
 // player. So Scarlett builds chains along the lines she swims, and Goldie
 // builds bunches wherever she lingers.
 function coccusGroup({ mover, svg, species, isPlayer }) {
-  const CELL_SIZE = 8; // one cell's width, as a percent of the dish
+  const CELL_SIZE = 6; // one cell's width, as a percent of the dish
   const R = 10; // cell radius in SVG units
   const SPACING = R * 1.75; // center to center, for cells that touch
   const { layout, colors } = species;
@@ -512,7 +512,7 @@ function coccusGroup({ mover, svg, species, isPlayer }) {
 // buddy swims over them, and replaced somewhere else a few seconds later.
 function scatterNutrients() {
   const agar = document.querySelector('.agar');
-  const COUNT = 6; // flecks on the agar at a time
+  const COUNT = 10; // flecks on the agar at a time
   const RESPAWN_MS = 3000;
   const MIN_GAP = 0.12; // keep flecks from clumping, as a fraction of the radius
 
