@@ -171,6 +171,8 @@ export function playGame(buddyEl, species, nutrients, disks) {
     );
   }
 
+  // Keep the how-to-play target in step with the real one.
+  for (const el of document.querySelectorAll('.target-cells')) el.textContent = GAME.TARGET_CELLS;
   updateCounter();
   requestAnimationFrame(step);
 }
