@@ -1,16 +1,18 @@
 {
-  "name": "my-api",
+  "name": "petripals",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "description": "A cartoon microbe buddy game with an Express + TypeScript server",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
-  "author": "",
+  "author": "Jessica Sogge",
   "license": "ISC",
   "type": "module",
   "dependencies": {
