@@ -7,6 +7,8 @@ export const SPECIES = {
   vi: { kind: 'rod' },
   // A spirochete: a long corkscrew-shaped cell that divides in two like a rod.
   elia: { kind: 'rod' },
+  // A coccobacillus: a short, plump rod with no flagellum. Divides in two like a rod.
+  coco: { kind: 'rod' },
   scarlett: {
     kind: 'coccus',
     layout: 'chain',

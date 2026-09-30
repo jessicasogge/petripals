@@ -123,7 +123,7 @@ body {
 }
 
 .picker-shell {
-  width: min(1040px, 100%);
+  width: min(760px, 100%);
   background: rgba(255, 255, 255, 0.35);
   border: 2px solid rgba(19, 78, 74, 0.15);
   border-radius: 24px;
@@ -134,7 +134,7 @@ body {
 
 .picker-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); /* 3 across on wide screens */
   gap: 1rem;
   margin-top: 1.5rem;
 }
@@ -186,6 +186,10 @@ body {
 
 .elia {
   background: rgba(216, 180, 254, 0.45);
+}
+
+.coco {
+  background: rgba(212, 176, 140, 0.45);
 }
 
 .vi {
