@@ -24,7 +24,7 @@ function playGame(buddyEl, nutrients) {
   const PICKUP_REACH = 0.6;
 
   // Growth: each nutrient adds a bit of size; at FULL_SIZE the buddy divides.
-  const NUTRIENTS_TO_DIVIDE = 8;
+  const NUTRIENTS_TO_DIVIDE = 11;
   const FULL_SIZE = 1.8; // times the starting size
   const GROWTH_PER_NUTRIENT = (FULL_SIZE - 1) / NUTRIENTS_TO_DIVIDE;
 

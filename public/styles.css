@@ -229,7 +229,7 @@ body {
 /* Positioned by petri-dish.js; the buddy's own idle animation stays on the SVG. */
 .buddy-mover {
   grid-area: 1 / 1; /* stack in the dish center, even after dividing into two */
-  width: 22%;
+  width: 18%;
   position: relative;
   z-index: 1; /* swim over the nutrients */
   will-change: transform;
