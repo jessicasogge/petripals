@@ -1,0 +1,188 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #ccfbf1;
+  color: #134e4a;
+  font-family: system-ui, sans-serif;
+  text-align: center;
+  padding-top: 3rem;
+}
+
+.friends {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.microbe {
+  width: 180px;
+  animation: wobble 3s ease-in-out infinite;
+}
+
+.buddy {
+  width: 120px;
+}
+
+.bob {
+  animation: bob 2.4s ease-in-out infinite;
+}
+
+.squish {
+  animation: squish 2s ease-in-out infinite 0.5s;
+  transform-origin: bottom center;
+}
+
+@keyframes wobble {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+
+  50% {
+    transform: rotate(4deg);
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes squish {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+
+  50% {
+    transform: scale(1.08, 0.92);
+  }
+}
+
+.start-btn {
+  margin-top: 1rem;
+  padding: 0.8rem 2rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+  background: #0f766e;
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0 4px 0 #134e4a;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.start-btn:hover {
+  background: #14b8a6;
+}
+
+.start-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #134e4a;
+}
+
+.start-btn:disabled {
+  cursor: wait;
+  opacity: 0.8;
+}
+
+.picker-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1rem;
+}
+
+.picker-shell {
+  width: min(900px, 100%);
+  background: rgba(255, 255, 255, 0.35);
+  border: 2px solid rgba(19, 78, 74, 0.15);
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(19, 78, 74, 0.08);
+}
+
+.eyebrow {
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.buddy-card {
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px solid rgba(15, 118, 110, 0.2);
+  border-radius: 18px;
+  padding: 1rem;
+}
+
+.buddy-icon {
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 0.75rem;
+  border-radius: 22px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: inset 0 0 0 2px rgba(19, 78, 74, 0.06);
+}
+
+.buddy-icon svg {
+  width: 90px;
+  height: 90px;
+  display: block;
+}
+
+.pip {
+  background: rgba(196, 181, 253, 0.45);
+}
+
+.goldie {
+  background: rgba(253, 230, 138, 0.45);
+}
+
+.bubbles {
+  background: rgba(167, 243, 208, 0.45);
+}
+
+.pick-btn {
+  margin-top: 0.75rem;
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 999px;
+  background: #0f766e;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: #0f766e;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
