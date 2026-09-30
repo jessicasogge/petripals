@@ -194,14 +194,14 @@ body {
 }
 
 .dish-shell {
-  width: min(560px, 100%);
+  width: min(760px, 100%);
 }
 
 .petri-dish {
-  width: min(340px, 100%);
+  width: min(600px, 100%);
   aspect-ratio: 1;
-  margin: 1.5rem auto 0;
-  padding: 14px;
+  margin: 0 auto;
+  padding: 18px;
   border-radius: 50%;
   /* glass rim */
   background: rgba(255, 255, 255, 0.55);
@@ -226,7 +226,7 @@ body {
 }
 
 .dish-buddy {
-  width: 60%;
+  width: 45%;
   height: auto;
   display: block;
 }
