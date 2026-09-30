@@ -16,11 +16,13 @@
               <rect x="30" y="75" width="140" height="60" rx="30" fill="#86efac" stroke="#15803d" stroke-width="4" />
               <circle cx="145" cy="90" r="4" fill="#dcfce7" />
               <circle cx="55" cy="122" r="3" fill="#dcfce7" />
-              <path d="M78 103 Q86 94 94 103" stroke="#14532d" stroke-width="4" fill="none" stroke-linecap="round" />
-              <path d="M106 103 Q114 94 122 103" stroke="#14532d" stroke-width="4" fill="none" stroke-linecap="round" />
-              <ellipse cx="70" cy="113" rx="7" ry="4" fill="#f9a8d4" opacity="0.8" />
-              <ellipse cx="130" cy="113" rx="7" ry="4" fill="#f9a8d4" opacity="0.8" />
-              <ellipse cx="100" cy="117" rx="5" ry="4" fill="#14532d" />
+              <g class="face">
+                <path d="M78 103 Q86 94 94 103" stroke="#14532d" stroke-width="4" fill="none" stroke-linecap="round" />
+                <path d="M106 103 Q114 94 122 103" stroke="#14532d" stroke-width="4" fill="none" stroke-linecap="round" />
+                <ellipse cx="70" cy="113" rx="7" ry="4" fill="#f9a8d4" opacity="0.8" />
+                <ellipse cx="130" cy="113" rx="7" ry="4" fill="#f9a8d4" opacity="0.8" />
+                <ellipse cx="100" cy="117" rx="5" ry="4" fill="#14532d" />
+              </g>
             </svg>
             <svg viewBox="2 15 180 180" class="dish-buddy wobble glow" data-buddy="vi" data-name="Vi" role="img" aria-label="Vi, a glowing comma-shaped Vibrio fischeri" hidden>
               <!-- flagellum -->
@@ -30,13 +32,15 @@
               <path d="M58 92 Q108 62 150 122" stroke="#a5f3fc" stroke-width="50" fill="none" stroke-linecap="round" />
               <circle cx="70" cy="80" r="5" fill="#ecfeff" />
               <circle cx="146" cy="126" r="4" fill="#ecfeff" />
-              <circle cx="96" cy="88" r="7" fill="#164e63" />
-              <circle cx="120" cy="92" r="7" fill="#164e63" />
-              <circle cx="98" cy="86" r="2.5" fill="white" />
-              <circle cx="122" cy="90" r="2.5" fill="white" />
-              <ellipse cx="84" cy="101" rx="6" ry="4" fill="#f9a8d4" opacity="0.8" />
-              <ellipse cx="132" cy="108" rx="6" ry="4" fill="#f9a8d4" opacity="0.8" />
-              <path d="M101 102 Q108 109 116 104" stroke="#164e63" stroke-width="3.5" fill="none" stroke-linecap="round" />
+              <g class="face">
+                <circle cx="96" cy="88" r="7" fill="#164e63" />
+                <circle cx="120" cy="92" r="7" fill="#164e63" />
+                <circle cx="98" cy="86" r="2.5" fill="white" />
+                <circle cx="122" cy="90" r="2.5" fill="white" />
+                <ellipse cx="84" cy="101" rx="6" ry="4" fill="#f9a8d4" opacity="0.8" />
+                <ellipse cx="132" cy="108" rx="6" ry="4" fill="#f9a8d4" opacity="0.8" />
+                <path d="M101 102 Q108 109 116 104" stroke="#164e63" stroke-width="3.5" fill="none" stroke-linecap="round" />
+              </g>
             </svg>
             <svg viewBox="24 29 152 152" class="dish-buddy squish" data-buddy="goldie" data-name="Goldie" role="img" aria-label="Goldie, a golden grape-like cluster of Staphylococcus" hidden>
               <!-- grape-like cluster of cocci (Staphylococcus) -->
@@ -99,6 +103,7 @@
         </div>
       </div>
 
+      <p class="cell-count" aria-live="polite">1 / 64 cells</p>
       <a class="back-link" href="./buddy-picker.html">Pick a different buddy</a>
     </main>
     <script src="./petri-dish.js"></script>
