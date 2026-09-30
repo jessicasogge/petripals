@@ -1,10 +1,10 @@
 // The antibiotic disks: small white paper disks soaked in drugs, like the ones
-// used in the lab (the Kirby-Bauer disk test). If the player's buddy touches
+// used in the lab (the Kirby-Bauer disk test). If the player's pal touches
 // one, the game is over.
 import { GAME } from './config.js';
 
 // Pick a random spot for one disk, as fractions of the dish radius from the
-// center: away from the middle (where the buddy starts) and from the rim.
+// center: away from the middle (where the pal starts) and from the rim.
 export function diskSpot(random = Math.random) {
   const angle = random() * Math.PI * 2;
   const distance = GAME.DISK_MIN_DISTANCE +

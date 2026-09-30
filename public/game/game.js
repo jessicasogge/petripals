@@ -6,16 +6,16 @@ import { coccusGroup } from './coccus.js';
 import { keepInDish, pushApart } from './physics.js';
 import { rodGroup } from './rod.js';
 
-export function playGame(buddyEl, species, nutrients, disks) {
+export function playGame(palEl, species, nutrients, disks) {
   const agar = document.querySelector('.agar');
   const counter = document.querySelector('.cell-count');
   const dishRadius = () => agar.clientWidth / 2;
 
   // Every living group in the dish. The first is the one the player steers.
-  const playerMover = document.querySelector('.buddy-mover');
+  const playerMover = document.querySelector('.pal-mover');
   playerMover.classList.add('player');
   const makeGroup = species.kind === 'rod' ? rodGroup : coccusGroup;
-  const player = makeGroup({ mover: playerMover, svg: buddyEl, species, isPlayer: true });
+  const player = makeGroup({ mover: playerMover, svg: palEl, species, isPlayer: true });
   const groups = [player];
 
   let pending = 0; // nutrients eaten toward the next division
@@ -161,13 +161,13 @@ export function playGame(buddyEl, species, nutrients, disks) {
   }
 
   function showWin() {
-    showBanner('You won!', `${buddyEl.dataset.name} grew a colony of ${GAME.TARGET_CELLS} cells!`);
+    showBanner('You won!', `${palEl.dataset.name} grew a colony of ${GAME.TARGET_CELLS} cells!`);
   }
 
   function showGameOver(disk) {
     showBanner(
       'Game over',
-      `${buddyEl.dataset.name} touched the ${disk.antibiotic.name} disk. Antibiotics kill bacteria!`,
+      `${palEl.dataset.name} touched the ${disk.antibiotic.name} disk. Antibiotics kill bacteria!`,
     );
   }
 
