@@ -36,7 +36,8 @@ export function rodGroup({ mover, svg, species, isPlayer }) {
         fr * w,
       ]);
     },
-    // Split into two rods that push apart end to end.
+    // Split into two rods that push apart end to end. An offspring that
+    // divides slides back the other way and settles again.
     divide() {
       const copy = svg.cloneNode(true);
       const child = rodGroup({ mover: newMover(copy), svg: copy, species, isPlayer: false });
@@ -46,7 +47,11 @@ export function rodGroup({ mover, svg, species, isPlayer }) {
       const burst = GAME.BURST_SPEED * (document.querySelector('.agar').clientWidth / 2);
       child.vx = group.facing * burst;
       child.vy = (Math.random() - 0.5) * burst * 0.4;
-      if (!isPlayer) group.vx = -child.vx;
+      if (!isPlayer) {
+        group.vx = -child.vx;
+        group.vy = -child.vy;
+        group.age = 0;
+      }
       return child;
     },
     coast: null,

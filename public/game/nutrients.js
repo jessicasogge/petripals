@@ -1,5 +1,6 @@
-// Nutrient flecks: scattered over the agar, picked up when the player's
-// pal swims over them, and replaced somewhere else a few seconds later.
+// Nutrient flecks: scattered over the agar, picked up when the player's pal
+// or any of its offspring touches one, and replaced somewhere else a few
+// seconds later.
 // `avoid` lists areas to keep clear, like the antibiotic disks, each as
 // { fx, fy, r } in fractions of the dish radius.
 export function scatterNutrients({ avoid = [] } = {}) {

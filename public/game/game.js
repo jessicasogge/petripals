@@ -18,8 +18,9 @@ export function playGame(palEl, species, nutrients, disks) {
   const player = makeGroup({ mover: playerMover, svg: palEl, species, isPlayer: true });
   const groups = [player];
 
-  let pending = 0; // nutrients eaten toward the next division
-  let sinceDivision = Infinity; // ms since the last division
+  let pending = 0; // nutrients the player has eaten toward the next division
+  let sinceDivision = Infinity; // ms since the player last divided
+  let sinceAnyDivision = Infinity; // ms since any cell last divided
   let finished = false;
   let lastTime = null;
 
@@ -51,13 +52,14 @@ export function playGame(palEl, species, nutrients, disks) {
     counter.textContent = `${shown} / ${GAME.TARGET_CELLS} cells`;
   }
 
-  // Binary fission: the player's cell divides and the daughter stays behind.
-  // A rod's daughter slides off on its own; a coccus's daughter joins a nearby
-  // chain or cluster, or starts a new one. Offspring never divide themselves.
-  function dividePlayer() {
-    pending -= GAME.NUTRIENTS_PER_DIVISION;
-    sinceDivision = 0;
-    const offspring = player.divide(groups.filter((g) => g !== player), dishRadius(), disks);
+  // Binary fission: a cell divides and the daughter stays behind. A rod's
+  // daughter slides off on its own; a coccus's daughter joins a nearby chain
+  // or cluster (maybe the one it came from), or starts a new one. `from` is
+  // where the dividing cell is, for cocci.
+  function divideGroup(group, from) {
+    sinceAnyDivision = 0;
+    const others = groups.filter((g) => g !== player);
+    const offspring = group.divide(others, dishRadius(), disks, from);
     if (offspring) {
       // Size and position the new cell right away. Otherwise the browser draws
       // it once at the center of the dish before this frame's positioning
@@ -67,6 +69,34 @@ export function playGame(palEl, species, nutrients, disks) {
       groups.push(offspring);
     }
     updateCounter();
+  }
+
+  function dividePlayer() {
+    pending -= GAME.NUTRIENTS_PER_DIVISION;
+    sinceDivision = 0;
+    divideGroup(player);
+  }
+
+  // Offspring eat any nutrient they touch, whether they land on it or it
+  // pops up under them, and divide in two just like the player.
+  function feedOffspring(seconds, radius) {
+    for (const group of [...groups]) {
+      if (group === player) continue;
+      group.pending ??= 0;
+      group.sinceDivision = (group.sinceDivision ?? Infinity) + seconds * 1000;
+      for (const [mx, my, reach] of group.mouths()) {
+        const ate = nutrients.eatNear(mx / radius, my / radius, reach / radius);
+        if (ate === 0) continue;
+        group.pending += ate;
+        group.from = [mx, my]; // the cell that ate is the one that divides
+      }
+      if (group.pending >= GAME.NUTRIENTS_PER_DIVISION && group.sinceDivision > GAME.DIVIDE_MS &&
+          totalCells() < GAME.TARGET_CELLS) {
+        group.pending -= GAME.NUTRIENTS_PER_DIVISION;
+        group.sinceDivision = 0;
+        divideGroup(group, group.from);
+      }
+    }
   }
 
   function step(time) {
@@ -91,6 +121,7 @@ export function playGame(palEl, species, nutrients, disks) {
     }
 
     sinceDivision += seconds * 1000;
+    sinceAnyDivision += seconds * 1000;
 
     for (const group of groups) {
       if (group !== player) group.coast(seconds);
@@ -136,9 +167,10 @@ export function playGame(palEl, species, nutrients, disks) {
         ate += nutrients.eatNear(px / radius, py / radius, reach / radius);
       }
       pending += ate;
+      feedOffspring(seconds, radius);
 
       const won = totalCells() >= GAME.TARGET_CELLS;
-      if (won && sinceDivision > GAME.DIVIDE_MS + 300) {
+      if (won && sinceAnyDivision > GAME.DIVIDE_MS + 300) {
         finished = true;
         held.clear();
         nutrients.stop();
