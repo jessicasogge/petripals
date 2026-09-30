@@ -152,16 +152,16 @@ body {
   display: block;
 }
 
-.pip {
-  background: rgba(196, 181, 253, 0.45);
+.sue {
+  background: rgba(134, 239, 172, 0.45);
 }
 
 .goldie {
   background: rgba(253, 230, 138, 0.45);
 }
 
-.bubbles {
-  background: rgba(167, 243, 208, 0.45);
+.vi {
+  background: rgba(165, 243, 252, 0.45);
 }
 
 .pick-btn {
@@ -239,6 +239,11 @@ body {
 
 .dish-buddy[hidden] {
   display: none;
+}
+
+/* Vi (Vibrio fischeri) is bioluminescent. */
+.glow {
+  filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.85));
 }
 
 .wobble {
