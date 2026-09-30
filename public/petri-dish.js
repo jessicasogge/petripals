@@ -28,10 +28,6 @@ const GAME = {
   // distance of where it would attach (a fraction of the dish radius).
   SNAP_REACH: 0.3,
   NUTRIENTS_PER_DIVISION: 1, // nutrients the player eats before dividing
-  // Everything is drawn smaller as the population grows so a full dish fits:
-  // each doubling of the population multiplies the size by this much.
-  SHRINK: 0.86,
-  ROD_SHRINK: 0.83, // rods take more room, so they shrink a bit faster
   SPEED: 0.8, // player speed, as a fraction of the dish radius per second
   BURST_SPEED: 0.9, // how hard a new group pushes away when it splits off
   SETTLE_RATE: 4, // how quickly a new group slows to a stop (higher = sooner)
@@ -62,7 +58,6 @@ function playGame(buddyEl, species, nutrients) {
   const player = makeGroup({ mover: playerMover, svg: buddyEl, species, isPlayer: true });
   const groups = [player];
 
-  let scale = 1; // drawn size; eases toward the size for the current population
   let pending = 0; // nutrients eaten toward the next division
   let sinceDivision = Infinity; // ms since the last division
   let finished = false;
@@ -128,15 +123,11 @@ function playGame(buddyEl, species, nutrients) {
       }
     }
 
-    // Draw everything a little smaller as the population grows so it fits.
-    const shrink = species.kind === 'rod' ? GAME.ROD_SHRINK : GAME.SHRINK;
-    const targetScale = totalCells() ** Math.log2(shrink);
-    scale += (targetScale - scale) * Math.min(1, seconds * 3);
     sinceDivision += seconds * 1000;
 
     for (const group of groups) {
       if (group !== player) group.coast(seconds);
-      group.update(seconds, scale);
+      group.update(seconds);
     }
     // Measure every group once, after all the size changes, instead of
     // measuring between writes (which makes the browser re-lay-out each time).
@@ -263,7 +254,7 @@ function newMover(svg) {
 // A rod-shaped cell (Mona, Vi). Each division it splits across the middle
 // and the two cells go their separate ways.
 function rodGroup({ mover, svg, species, isPlayer }) {
-  const ROD_WIDTH = 18; // percent of the dish, before the colony grows
+  const ROD_WIDTH = 18; // percent of the dish
 
   const group = {
     mover,
@@ -277,8 +268,8 @@ function rodGroup({ mover, svg, species, isPlayer }) {
     cellCount: () => 1,
     halfWidth: () => svg.getBoundingClientRect().width / 2,
     reach: () => group.halfWidth(),
-    update(seconds, scale) {
-      mover.style.width = `${ROD_WIDTH * scale}%`;
+    update() {
+      mover.style.width = `${ROD_WIDTH}%`;
     },
     place() {
       mover.style.transform = `translate(${group.x}px, ${group.y}px) scaleX(${group.facing})`;
@@ -310,7 +301,7 @@ function rodGroup({ mover, svg, species, isPlayer }) {
 // player. So Scarlett builds chains along the lines she swims, and Goldie
 // builds bunches wherever she lingers.
 function coccusGroup({ mover, svg, species, isPlayer }) {
-  const CELL_SIZE = 8; // one cell's width, as a percent of the dish, at the start
+  const CELL_SIZE = 8; // one cell's width, as a percent of the dish
   const R = 10; // cell radius in SVG units
   const SPACING = R * 1.75; // center to center, for cells that touch
   const { layout, colors } = species;
@@ -329,7 +320,6 @@ function coccusGroup({ mover, svg, species, isPlayer }) {
     facing: 1,
     // Cells in SVG units around the group's origin. For a chain, in order.
     cells: [{ x: 0, y: 0, fromX: 0, fromY: 0, toX: 0, toY: 0, face: isPlayer }],
-    scale: 1,
     moveFor: null, // ms into sliding a new cell into place, or null
     twist: Math.random() * Math.PI * 2, // each cluster packs at its own angle
     cellCount: () => group.cells.length,
@@ -380,7 +370,7 @@ function coccusGroup({ mover, svg, species, isPlayer }) {
   function draw() {
     const [mx, my] = extent();
     svg.setAttribute('viewBox', `${-mx} ${-my} ${2 * mx} ${2 * my}`);
-    mover.style.width = `${(mx / R) * CELL_SIZE * group.scale}%`;
+    mover.style.width = `${(mx / R) * CELL_SIZE}%`;
     // Cells higher up sit behind lower ones.
     const order = [...group.cells].sort((a, b) => a.y - b.y);
     svg.innerHTML = order.map(cellMarkup).join('');
@@ -441,8 +431,7 @@ function coccusGroup({ mover, svg, species, isPlayer }) {
       for (const c of group.cells) farthest = Math.max(farthest, Math.hypot(c.x, c.y) + R);
       return farthest * pxPerUnit();
     },
-    update(seconds, scale) {
-      group.scale = scale;
+    update(seconds) {
       if (group.moveFor !== null) {
         group.moveFor += seconds * 1000;
         const t = Math.min(1, group.moveFor / GAME.DIVIDE_MS);
@@ -506,7 +495,6 @@ function coccusGroup({ mover, svg, species, isPlayer }) {
       const child = coccusGroup({ mover: newMover(copy), svg: copy, species, isPlayer: false });
       child.x = group.x;
       child.y = group.y;
-      child.scale = group.scale;
       const angle = Math.random() * Math.PI * 2;
       const burst = GAME.BURST_SPEED * dishRadius * 0.5;
       child.vx = Math.cos(angle) * burst;
@@ -524,7 +512,7 @@ function coccusGroup({ mover, svg, species, isPlayer }) {
 // buddy swims over them, and replaced somewhere else a few seconds later.
 function scatterNutrients() {
   const agar = document.querySelector('.agar');
-  const COUNT = 14;
+  const COUNT = 6; // flecks on the agar at a time
   const RESPAWN_MS = 3000;
   const MIN_GAP = 0.12; // keep flecks from clumping, as a fraction of the radius
 
