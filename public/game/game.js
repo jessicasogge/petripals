@@ -100,11 +100,11 @@ export function playGame(buddyEl, species, nutrients, disks) {
     // measuring between writes (which makes the browser re-lay-out each time).
     for (const group of groups) group.size = group.reach();
     pushApart(groups, player);
-    // Offspring can't sit on an antibiotic disk: nudge any that slid onto one
-    // back off, and stop them from sliding further in.
+    // Offspring keep a little clear space around each antibiotic disk: nudge
+    // any that slid too close back out, and stop them from sliding further in.
     for (const group of groups) {
       if (group === player) continue;
-      const [dx, dy] = pushOffDisks(disks, group.body(), radius);
+      const [dx, dy] = pushOffDisks(disks, group.body(), radius, GAME.DISK_BUFFER);
       if (dx === 0 && dy === 0) continue;
       group.x += dx;
       group.y += dy;

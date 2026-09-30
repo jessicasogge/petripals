@@ -122,11 +122,12 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
     attachSpot(wx, wy, disks = [], dishRadius = 0) {
       if (group.cells.length >= GAME.GROUP_CAP) return null;
       const [px, py] = toLocal(wx, wy);
-      // Spots where the new cell would overlap an antibiotic disk are off-limits.
+      // Spots on or right next to an antibiotic disk are off-limits.
       const cellRadius = R * pxPerUnit();
       const allowed = (x, y) => {
         const [sx, sy] = toWorld(x, y);
-        return !disks.some((disk) => touchesDisk(disk, [[sx, sy, cellRadius]], dishRadius));
+        return !disks.some((disk) =>
+          touchesDisk(disk, [[sx, sy, cellRadius]], dishRadius, GAME.DISK_BUFFER));
       };
       const spot = layout === 'chain'
         ? chainSpot(group.cells, px, py, allowed)

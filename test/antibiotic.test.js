@@ -75,6 +75,11 @@ describe('touchesDisk', () => {
     expect(touchesDisk(disk, chain, dishRadius)).toBe(true);
   });
 
+  it('counts coming within the buffer as touching when given one', () => {
+    expect(touchesDisk(disk, [[133, 0, 10]], dishRadius)).toBe(false);
+    expect(touchesDisk(disk, [[133, 0, 10]], dishRadius, 0.025)).toBe(true);
+  });
+
   it('treats an empty body as not touching', () => {
     expect(touchesDisk(disk, [], dishRadius)).toBe(false);
   });
@@ -131,6 +136,13 @@ describe('pushOffDisks', () => {
     expect(Math.hypot(dx, dy)).toBeCloseTo(30);
   });
 
+  it('keeps extra clear space around the disk when given a buffer', () => {
+    // 5px of clear space (buffer 0.025 of a 200px radius), from the edge that
+    // was already just touching.
+    const [dx] = pushOffDisks([disk], [[130, 0, 10]], dishRadius, 0.025);
+    expect(dx).toBeCloseTo(5);
+  });
+
   it('clears every disk, not just one', () => {
     const disks = [disk, { fx: -0.5, fy: 0, r: 0.1 }];
     const bodies = [[[110, 0, 10]], [[-110, 0, 10]]];
@@ -139,6 +151,14 @@ describe('pushOffDisks', () => {
       const moved = body.map(([x, y, r]) => [x + dx, y + dy, r - 1e-6]);
       expect(touchedDisk(disks, moved, dishRadius)).toBeNull();
     }
+  });
+});
+
+describe('disk buffer', () => {
+  it('leaves a visible gap without blocking the space between disks', () => {
+    expect(GAME.DISK_BUFFER).toBeGreaterThan(0);
+    // Even with the buffer on both disks, there's still room to swim between.
+    expect(GAME.DISK_MIN_GAP - 2 * (GAME.DISK_RADIUS + GAME.DISK_BUFFER)).toBeGreaterThan(0.15);
   });
 });
 

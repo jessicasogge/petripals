@@ -128,4 +128,7 @@ export const GAME = {
   DISK_MIN_DISTANCE: 0.4,
   DISK_MAX_DISTANCE: 0.65,
   DISK_MIN_GAP: 0.4,
+  // How much clear space offspring keep around each disk, so they never look
+  // like they're touching it. (The player's game over still needs a real touch.)
+  DISK_BUFFER: 0.035,
 };
