@@ -23,10 +23,13 @@ const SPECIES = {
 
 const GAME = {
   TARGET_CELLS: 64, // grow the population to this many cells to win
-  GROUP_CAP: 8, // chains and clusters break in two when they'd pass this
-  NUTRIENTS_PER_GENERATION: 2, // nutrients the player eats per round of division
-  SHRINK: 0.86, // cocci are drawn a bit smaller each generation so they fit
+  GROUP_CAP: 8, // chains and clusters break apart once they reach this many
+  NUTRIENTS_PER_DIVISION: 1, // nutrients the player eats before dividing
+  // Everything is drawn smaller as the population grows so a full dish fits:
+  // each doubling of the population multiplies the size by this much.
+  SHRINK: 0.86,
   ROD_SHRINK: 0.83, // rods take more room, so they shrink a bit faster
+  BREAK_DELAY_MS: 350, // pause at full size before a chain or cluster breaks
   SPEED: 0.8, // player speed, as a fraction of the dish radius per second
   DRIFT_SPEED: 0.1, // how fast offspring wander, same units
   BURST_SPEED: 0.9, // how hard a new group pushes away when it splits off
@@ -56,9 +59,8 @@ function playGame(buddyEl, species, nutrients) {
   const player = makeGroup({ mover: playerMover, svg: buddyEl, species, isPlayer: true });
   const groups = [player];
 
-  let generation = 0;
-  let scale = 1; // drawn size; eases toward SHRINK ** generation
-  let pending = 0; // nutrients eaten toward the next generation
+  let scale = 1; // drawn size; eases toward the size for the current population
+  let pending = 0; // nutrients eaten toward the next division
   let sinceDivision = Infinity; // ms since the last division
   let finished = false;
   let lastTime = null;
@@ -87,20 +89,18 @@ function playGame(buddyEl, species, nutrients) {
   const totalCells = () => groups.reduce((sum, g) => sum + g.cellCount(), 0);
 
   function updateCounter() {
-    counter.textContent = `${totalCells()} / ${GAME.TARGET_CELLS} cells`;
+    const shown = Math.min(totalCells(), GAME.TARGET_CELLS);
+    counter.textContent = `${shown} / ${GAME.TARGET_CELLS} cells`;
   }
 
-  // One round of binary fission: every cell in every group divides at once.
-  function divideEverything() {
-    generation++;
-    pending -= GAME.NUTRIENTS_PER_GENERATION;
+  // Binary fission for the player's buddy only: every cell in it divides.
+  // A rod splits in two and one half swims off; a chain or cluster doubles in
+  // place. Offspring that have already split off just drift.
+  function dividePlayer() {
+    pending -= GAME.NUTRIENTS_PER_DIVISION;
     sinceDivision = 0;
-    const born = [];
-    for (const group of [...groups]) {
-      const offspring = group.divide();
-      if (offspring) born.push(offspring);
-    }
-    groups.push(...born);
+    const offspring = player.divide();
+    if (offspring) groups.push(offspring);
     updateCounter();
   }
 
@@ -125,9 +125,10 @@ function playGame(buddyEl, species, nutrients) {
       }
     }
 
-    // Draw everything a little smaller each generation so the colony fits.
+    // Draw everything a little smaller as the population grows so it fits.
     const shrink = species.kind === 'rod' ? GAME.ROD_SHRINK : GAME.SHRINK;
-    scale += (shrink ** generation - scale) * Math.min(1, seconds * 3);
+    const targetScale = totalCells() ** Math.log2(shrink);
+    scale += (targetScale - scale) * Math.min(1, seconds * 3);
     sinceDivision += seconds * 1000;
 
     for (const group of groups) {
@@ -150,17 +151,21 @@ function playGame(buddyEl, species, nutrients) {
       }
       pending += ate;
 
-      const ready =
-        pending >= GAME.NUTRIENTS_PER_GENERATION &&
-        sinceDivision > GAME.DIVIDE_MS &&
-        totalCells() < GAME.TARGET_CELLS;
-      if (ready) divideEverything();
+      const won = totalCells() >= GAME.TARGET_CELLS;
+      const full = player.cellCount() >= GAME.GROUP_CAP;
 
-      if (totalCells() >= GAME.TARGET_CELLS && sinceDivision > GAME.DIVIDE_MS + 300) {
+      if (won && sinceDivision > GAME.DIVIDE_MS + 300) {
         finished = true;
         held.clear();
         nutrients.stop();
         setTimeout(showWin, 300);
+      } else if (!won && full && player.breakApart &&
+                 sinceDivision > GAME.DIVIDE_MS + GAME.BREAK_DELAY_MS) {
+        // A full chain or cluster breaks apart; the player keeps one piece.
+        groups.push(...player.breakApart());
+      } else if (!won && !full && pending >= GAME.NUTRIENTS_PER_DIVISION &&
+                 sinceDivision > GAME.DIVIDE_MS) {
+        dividePlayer();
       }
     }
 
@@ -227,6 +232,14 @@ function wanderer(group) {
   let heading = Math.random() * Math.PI * 2;
   return (seconds, dishRadius) => {
     heading += (Math.random() - 0.5) * 2 * seconds;
+    // Near the rim, turn gently back toward the middle so offspring spread
+    // over the whole dish instead of lining up around the edge.
+    const fromCenter = Math.hypot(group.x, group.y) / dishRadius;
+    if (fromCenter > 0.75) {
+      const inward = Math.atan2(-group.y, -group.x);
+      const turn = Math.atan2(Math.sin(inward - heading), Math.cos(inward - heading));
+      heading += turn * Math.min(1, seconds * (fromCenter - 0.75) * 4);
+    }
     const cruise = GAME.DRIFT_SPEED * dishRadius;
     const easing = Math.min(1, seconds * 1.5);
     group.vx += (Math.cos(heading) * cruise - group.vx) * easing;
@@ -249,10 +262,10 @@ function newMover(svg) {
   return mover;
 }
 
-// A rod-shaped cell (Mona, Vi). Each generation it splits across the middle
+// A rod-shaped cell (Mona, Vi). Each division it splits across the middle
 // and the two cells go their separate ways.
 function rodGroup({ mover, svg, species, isPlayer }) {
-  const ROD_WIDTH = 18; // percent of the dish, at generation 0
+  const ROD_WIDTH = 18; // percent of the dish, before the colony grows
 
   const group = {
     mover,
@@ -292,11 +305,12 @@ function rodGroup({ mover, svg, species, isPlayer }) {
   return group;
 }
 
-// A chain or cluster of round cells (Scarlett, Goldie). Every cell divides
-// each generation, doubling the group; once it would pass GROUP_CAP cells it
-// breaks in two and the half without the face drifts off on its own.
+// A chain or cluster of round cells (Scarlett, Goldie). Each division, every
+// cell in the group divides, doubling it in place. Once it reaches GROUP_CAP
+// cells it breaks apart: a chain snaps in half, and a cluster crumbles into
+// small clumps. The player keeps the piece with the face; the rest drift off.
 function coccusGroup({ mover, svg, species, isPlayer, cells: startCells }) {
-  const CELL_SIZE = 8; // one cell's width, as a percent of the dish, at generation 0
+  const CELL_SIZE = 8; // one cell's width, as a percent of the dish, at the start
   const R = 10; // cell radius in SVG units
   const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
   const { layout, colors } = species;
@@ -416,6 +430,42 @@ function coccusGroup({ mover, svg, species, isPlayer, cells: startCells }) {
     group.moveFor = 0;
   }
 
+  // A chain breaks somewhere along its length; here, right in the middle.
+  function snapInHalf(cells) {
+    const inOrder = [...cells].sort((a, b) => a.x - b.x);
+    const half = Math.floor(inOrder.length / 2);
+    return [inOrder.slice(0, half), inOrder.slice(half)];
+  }
+
+  // A cluster crumbles into clumps of 2 to 4 neighboring cells.
+  function crumble(cells) {
+    const sizes = [];
+    let left = cells.length;
+    while (left > 0) {
+      if (left <= 4) {
+        sizes.push(left);
+        break;
+      }
+      let size = 2 + Math.floor(Math.random() * 3);
+      if (left - size < 2) size = left - 2; // never leave a lone cell behind
+      sizes.push(size);
+      left -= size;
+    }
+    // Take neighboring cells together by going around the cluster's middle.
+    const cx = cells.reduce((sum, c) => sum + c.x, 0) / cells.length;
+    const cy = cells.reduce((sum, c) => sum + c.y, 0) / cells.length;
+    const around = [...cells].sort(
+      (a, b) => Math.atan2(a.y - cy, a.x - cx) - Math.atan2(b.y - cy, b.x - cx),
+    );
+    const pieces = [];
+    let taken = 0;
+    for (const size of sizes) {
+      pieces.push(around.slice(taken, taken + size));
+      taken += size;
+    }
+    return pieces;
+  }
+
   Object.assign(group, {
     reach() {
       let farthest = 0;
@@ -449,35 +499,66 @@ function coccusGroup({ mover, svg, species, isPlayer, cells: startCells }) {
       ]);
     },
     divide() {
-      const n = group.cells.length;
-      if (n * 2 <= GAME.GROUP_CAP) {
-        rearrange(spots(n * 2), true);
-        return null;
+      rearrange(spots(group.cells.length * 2), true);
+      return null;
+    },
+    // Break a full group into pieces. This group becomes the piece with the
+    // face; every other piece is returned as a new drifting group.
+    breakApart() {
+      const pieces = layout === 'chain' ? snapInHalf(group.cells) : crumble(group.cells);
+      const unit = pxPerUnit();
+      const agarRadius = document.querySelector('.agar').clientWidth / 2;
+      const center = (piece) => [
+        piece.reduce((sum, c) => sum + c.x, 0) / piece.length,
+        piece.reduce((sum, c) => sum + c.y, 0) / piece.length,
+      ];
+      // Where a piece's middle is in the dish, and its cells relative to it.
+      const place = (piece) => {
+        const [cx, cy] = center(piece);
+        return {
+          x: group.x + cx * unit * group.facing,
+          y: group.y + cy * unit,
+          cells: piece.map((c) => ({ ...c, x: c.x - cx, y: c.y - cy })),
+        };
+      };
+
+      const kept = pieces.find((piece) => piece.some((c) => c.face)) || pieces[0];
+      const home = place(kept);
+      const offspring = [];
+      for (const piece of pieces) {
+        if (piece === kept) continue;
+        const spot = place(piece);
+        const copy = svg.cloneNode(false);
+        const child = coccusGroup({
+          mover: newMover(copy),
+          svg: copy,
+          species,
+          isPlayer: false,
+          cells: spot.cells.map((c) => ({ ...c, face: false })),
+        });
+        child.x = spot.x;
+        child.y = spot.y;
+        child.facing = group.facing;
+        child.scale = group.scale;
+        // Push away from the piece the player keeps.
+        const dx = spot.x - home.x;
+        const dy = spot.y - home.y;
+        const distance = Math.hypot(dx, dy) || 1;
+        const burst = GAME.BURST_SPEED * agarRadius * 0.6;
+        child.vx = (dx / distance) * burst;
+        child.vy = (dy / distance) * burst;
+        child.settle();
+        offspring.push(child);
       }
-      // Too big to hold together: each cell still divides, but the group
-      // breaks in two. This group keeps one daughter of every cell (and the
-      // face); the other daughters drift off as a new group.
-      rearrange(spots(n), false);
-      const copy = svg.cloneNode(false);
-      const child = coccusGroup({
-        mover: newMover(copy),
-        svg: copy,
-        species,
-        isPlayer: false,
-        cells: group.cells.map((c) => ({ ...c, face: false })),
-      });
-      child.x = group.x;
-      child.y = group.y;
-      child.scale = group.scale;
-      const angle = Math.random() * Math.PI * 2;
-      const burst = GAME.BURST_SPEED * (document.querySelector('.agar').clientWidth / 2);
-      child.vx = Math.cos(angle) * burst;
-      child.vy = Math.sin(angle) * burst;
-      if (!isPlayer) {
-        group.vx = -child.vx;
-        group.vy = -child.vy;
-      }
-      return child;
+      group.x = home.x;
+      group.y = home.y;
+      group.cells = home.cells;
+      group.settle();
+      return offspring;
+    },
+    // Slide the cells into the neat layout for however many there are.
+    settle() {
+      rearrange(spots(group.cells.length), false);
     },
   });
 
