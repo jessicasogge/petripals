@@ -31,8 +31,9 @@ const GAME = {
   ROD_SHRINK: 0.83, // rods take more room, so they shrink a bit faster
   BREAK_DELAY_MS: 350, // pause at full size before a chain or cluster breaks
   SPEED: 0.8, // player speed, as a fraction of the dish radius per second
-  DRIFT_SPEED: 0.1, // how fast offspring wander, same units
   BURST_SPEED: 0.9, // how hard a new group pushes away when it splits off
+  SETTLE_RATE: 4, // how quickly a new group slows to a stop (higher = sooner)
+  SETTLE_MS: 1500, // after this long, offspring stay put for good
   PICKUP_REACH: 0.6, // how close a rod's middle must get to a nutrient
   DIVIDE_MS: 600,
 };
@@ -95,7 +96,7 @@ function playGame(buddyEl, species, nutrients) {
 
   // Binary fission for the player's buddy only: every cell in it divides.
   // A rod splits in two and one half swims off; a chain or cluster doubles in
-  // place. Offspring that have already split off just drift.
+  // place. Offspring that have already split off stay where they settled.
   function dividePlayer() {
     pending -= GAME.NUTRIENTS_PER_DIVISION;
     sinceDivision = 0;
@@ -132,7 +133,7 @@ function playGame(buddyEl, species, nutrients) {
     sinceDivision += seconds * 1000;
 
     for (const group of groups) {
-      if (group !== player) group.wander(seconds, radius);
+      if (group !== player) group.coast(seconds);
       group.update(seconds, scale);
     }
     // Measure every group once, after all the size changes, instead of
@@ -185,7 +186,7 @@ function playGame(buddyEl, species, nutrients) {
 }
 
 // Keep a group whose farthest edge is `reach` px from its center fully inside
-// the dish, sliding along the rim. Drifting groups bounce off it.
+// the dish, sliding along the rim. Offspring still sliding bounce off it.
 function keepInDish(agar, px, py, reach, group) {
   const maxDistance = Math.max(0, agar.clientWidth / 2 - reach);
   const fromCenter = Math.hypot(px, py);
@@ -202,13 +203,19 @@ function keepInDish(agar, px, py, reach, group) {
   return [nx * maxDistance, ny * maxDistance];
 }
 
-// Nudge overlapping groups apart so the dish doesn't turn into one pile. The
-// player is never pushed; offspring get out of the player's way.
+// While offspring are still settling, nudge them off each other so they
+// don't land in a pile. The player swims over everything, and offspring that
+// have settled stay exactly where they are.
 function pushApart(groups, player) {
+  const settling = (g) => g !== player && g.age * 1000 < GAME.SETTLE_MS;
   for (let i = 0; i < groups.length; i++) {
     for (let j = i + 1; j < groups.length; j++) {
       const a = groups[i];
       const b = groups[j];
+      if (a === player || b === player) continue;
+      const aMoves = settling(a);
+      const bMoves = settling(b);
+      if (!aMoves && !bMoves) continue;
       const dx = b.x - a.x;
       const dy = b.y - a.y;
       const distance = Math.hypot(dx, dy) || 0.01;
@@ -216,7 +223,7 @@ function pushApart(groups, player) {
       if (overlap <= 0) continue;
       const nx = dx / distance;
       const ny = dy / distance;
-      const aShare = a === player ? 0 : b === player ? 1 : 0.5;
+      const aShare = aMoves && bMoves ? 0.5 : aMoves ? 1 : 0;
       const push = Math.min(overlap, 3);
       a.x -= nx * push * aShare;
       a.y -= ny * push * aShare;
@@ -226,34 +233,29 @@ function pushApart(groups, player) {
   }
 }
 
-// Shared wandering for offspring: drift slowly in a slowly-turning direction,
-// easing out of any burst from splitting off.
-function wanderer(group) {
-  let heading = Math.random() * Math.PI * 2;
-  return (seconds, dishRadius) => {
-    heading += (Math.random() - 0.5) * 2 * seconds;
-    // Near the rim, turn gently back toward the middle so offspring spread
-    // over the whole dish instead of lining up around the edge.
-    const fromCenter = Math.hypot(group.x, group.y) / dishRadius;
-    if (fromCenter > 0.75) {
-      const inward = Math.atan2(-group.y, -group.x);
-      const turn = Math.atan2(Math.sin(inward - heading), Math.cos(inward - heading));
-      heading += turn * Math.min(1, seconds * (fromCenter - 0.75) * 4);
+// Offspring on agar don't wander: a new group slides a little way from where
+// it split off, slows down, and stays put, the way cells on a plate stay
+// where they land and grow into colonies.
+function coaster(group) {
+  group.age = 0;
+  return (seconds) => {
+    group.age += seconds;
+    const slowdown = Math.exp(-GAME.SETTLE_RATE * seconds);
+    group.vx *= slowdown;
+    group.vy *= slowdown;
+    if (Math.hypot(group.vx, group.vy) < 1) {
+      group.vx = 0;
+      group.vy = 0;
     }
-    const cruise = GAME.DRIFT_SPEED * dishRadius;
-    const easing = Math.min(1, seconds * 1.5);
-    group.vx += (Math.cos(heading) * cruise - group.vx) * easing;
-    group.vy += (Math.sin(heading) * cruise - group.vy) * easing;
     group.x += group.vx * seconds;
     group.y += group.vy * seconds;
-    if (Math.abs(group.vx) > 1) group.facing = Math.sign(group.vx);
   };
 }
 
 // Add a new group's mover to the dish, holding a copy of the buddy art.
 function newMover(svg) {
   const mover = document.createElement('div');
-  mover.className = 'buddy-mover drifter';
+  mover.className = 'buddy-mover offspring';
   svg.removeAttribute('role');
   svg.removeAttribute('aria-label');
   svg.setAttribute('aria-hidden', 'true');
@@ -299,16 +301,17 @@ function rodGroup({ mover, svg, species, isPlayer }) {
       if (!isPlayer) group.vx = -child.vx;
       return child;
     },
-    wander: null,
+    coast: null,
   };
-  group.wander = wanderer(group);
+  group.coast = coaster(group);
   return group;
 }
 
 // A chain or cluster of round cells (Scarlett, Goldie). Each division, every
 // cell in the group divides, doubling it in place. Once it reaches GROUP_CAP
 // cells it breaks apart: a chain snaps in half, and a cluster crumbles into
-// small clumps. The player keeps the piece with the face; the rest drift off.
+// small clumps. The player keeps the piece with the face; the rest slide off
+// a little way and settle.
 function coccusGroup({ mover, svg, species, isPlayer, cells: startCells }) {
   const CELL_SIZE = 8; // one cell's width, as a percent of the dish, at the start
   const R = 10; // cell radius in SVG units
@@ -503,7 +506,7 @@ function coccusGroup({ mover, svg, species, isPlayer, cells: startCells }) {
       return null;
     },
     // Break a full group into pieces. This group becomes the piece with the
-    // face; every other piece is returned as a new drifting group.
+    // face; every other piece is returned as a new group of offspring.
     breakApart() {
       const pieces = layout === 'chain' ? snapInHalf(group.cells) : crumble(group.cells);
       const unit = pxPerUnit();
@@ -562,7 +565,7 @@ function coccusGroup({ mover, svg, species, isPlayer, cells: startCells }) {
     },
   });
 
-  group.wander = wanderer(group);
+  group.coast = coaster(group);
   draw();
   return group;
 }

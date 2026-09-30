@@ -330,7 +330,7 @@ body {
 }
 
 /* The group the player steers stays on top, in full color with a soft halo;
-   the offspring drifting around are paler and a little washed out. */
+   the offspring left behind are paler and a little washed out. */
 .buddy-mover.player {
   z-index: 2;
   filter:
@@ -339,19 +339,19 @@ body {
     drop-shadow(0 0 7px rgba(15, 118, 110, 0.45));
 }
 
-.buddy-mover.drifter {
+.buddy-mover.offspring {
   opacity: 0.75;
   filter: saturate(0.45) brightness(1.08);
 }
 
 /* Only the player's buddy has a face. */
-.buddy-mover.drifter .face {
+.buddy-mover.offspring .face {
   display: none;
 }
 
-/* Offspring are already drifting around, so they skip the idle wiggle. That
-   also keeps a dish full of 64 cells smooth. */
-.buddy-mover.drifter .dish-buddy {
+/* Offspring sit still on the agar, without the idle wiggle. That also keeps
+   a dish full of 64 cells smooth. */
+.buddy-mover.offspring .dish-buddy {
   animation: none;
 }
 
