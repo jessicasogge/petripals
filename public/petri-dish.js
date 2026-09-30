@@ -59,7 +59,6 @@ function playGame(buddyEl, species, nutrients) {
   let generation = 0;
   let scale = 1; // drawn size; eases toward SHRINK ** generation
   let pending = 0; // nutrients eaten toward the next generation
-  let swell = 0; // 0..1, how grown the cells are toward dividing (eased)
   let sinceDivision = Infinity; // ms since the last division
   let finished = false;
   let lastTime = null;
@@ -126,16 +125,14 @@ function playGame(buddyEl, species, nutrients) {
       }
     }
 
-    // Everyone grows together as the player eats, then divides together.
-    const targetSwell = Math.min(1, pending / GAME.NUTRIENTS_PER_GENERATION);
-    swell += (targetSwell - swell) * Math.min(1, seconds * 6);
+    // Draw everything a little smaller each generation so the colony fits.
     const shrink = species.kind === 'rod' ? GAME.ROD_SHRINK : GAME.SHRINK;
     scale += (shrink ** generation - scale) * Math.min(1, seconds * 3);
     sinceDivision += seconds * 1000;
 
     for (const group of groups) {
       if (group !== player) group.wander(seconds, radius);
-      group.update(seconds, scale, swell);
+      group.update(seconds, scale);
     }
     // Measure every group once, after all the size changes, instead of
     // measuring between writes (which makes the browser re-lay-out each time).
@@ -155,7 +152,6 @@ function playGame(buddyEl, species, nutrients) {
 
       const ready =
         pending >= GAME.NUTRIENTS_PER_GENERATION &&
-        swell > 0.97 &&
         sinceDivision > GAME.DIVIDE_MS &&
         totalCells() < GAME.TARGET_CELLS;
       if (ready) divideEverything();
@@ -253,11 +249,10 @@ function newMover(svg) {
   return mover;
 }
 
-// A rod-shaped cell (Mona, Vi). It gets longer as it grows, then splits
-// across the middle; the two cells go their separate ways.
+// A rod-shaped cell (Mona, Vi). Each generation it splits across the middle
+// and the two cells go their separate ways.
 function rodGroup({ mover, svg, species, isPlayer }) {
   const ROD_WIDTH = 18; // percent of the dish, at generation 0
-  const FULL_LENGTH = 1.8; // times its normal length right before dividing
 
   const group = {
     mover,
@@ -268,19 +263,14 @@ function rodGroup({ mover, svg, species, isPlayer }) {
     vx: 0,
     vy: 0,
     facing: 1,
-    length: 1,
     cellCount: () => 1,
     halfWidth: () => svg.getBoundingClientRect().width / 2,
     reach: () => group.halfWidth(),
-    update(seconds, scale, swell) {
+    update(seconds, scale) {
       mover.style.width = `${ROD_WIDTH * scale}%`;
-      const target = 1 + (FULL_LENGTH - 1) * swell;
-      group.length += (target - group.length) * Math.min(1, seconds * 8);
     },
     place() {
-      const widen = 1 + (group.length - 1) * 0.35; // mostly longer, a bit wider
-      mover.style.transform =
-        `translate(${group.x}px, ${group.y}px) scale(${group.length * group.facing}, ${widen})`;
+      mover.style.transform = `translate(${group.x}px, ${group.y}px) scaleX(${group.facing})`;
     },
     mouths: () => [[group.x, group.y, group.halfWidth() * GAME.PICKUP_REACH]],
     // Split into two rods that push apart end to end.
@@ -290,7 +280,6 @@ function rodGroup({ mover, svg, species, isPlayer }) {
       child.x = group.x;
       child.y = group.y;
       child.facing = group.facing;
-      child.length = group.length;
       const burst = GAME.BURST_SPEED * (document.querySelector('.agar').clientWidth / 2);
       child.vx = group.facing * burst;
       child.vy = (Math.random() - 0.5) * burst * 0.4;
@@ -309,7 +298,6 @@ function rodGroup({ mover, svg, species, isPlayer }) {
 function coccusGroup({ mover, svg, species, isPlayer, cells: startCells }) {
   const CELL_SIZE = 8; // one cell's width, as a percent of the dish, at generation 0
   const R = 10; // cell radius in SVG units
-  const SWELL = 0.22; // how much bigger cells get right before dividing
   const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
   const { layout, colors } = species;
 
@@ -350,7 +338,6 @@ function coccusGroup({ mover, svg, species, isPlayer, cells: startCells }) {
     vy: 0,
     facing: 1,
     cells: startCells || [{ x: 0, y: 0, fromX: 0, fromY: 0, toX: 0, toY: 0, face: isPlayer }],
-    swell: 0,
     scale: 1,
     moveFor: null, // ms into rearranging after a division, or null
     cellCount: () => group.cells.length,
@@ -360,10 +347,9 @@ function coccusGroup({ mover, svg, species, isPlayer, cells: startCells }) {
   function extent() {
     let mx = 0;
     let my = 0;
-    const r = R * (1 + SWELL * group.swell);
     for (const c of group.cells) {
-      mx = Math.max(mx, Math.abs(c.x) + r);
-      my = Math.max(my, Math.abs(c.y) + r);
+      mx = Math.max(mx, Math.abs(c.x) + R);
+      my = Math.max(my, Math.abs(c.y) + R);
     }
     return [mx + 2, my + 2];
   }
@@ -371,14 +357,12 @@ function coccusGroup({ mover, svg, species, isPlayer, cells: startCells }) {
   const pxPerUnit = () => mover.offsetWidth / (2 * extent()[0]);
 
   function cellMarkup(c) {
-    const r = R * (1 + SWELL * group.swell);
-    const k = r / R;
     let out =
-      `<circle cx="${c.x}" cy="${c.y}" r="${r}" fill="${colors.fill}" stroke="${colors.stroke}" stroke-width="${1.7 * k}" />` +
-      `<circle cx="${c.x - 2.7 * k}" cy="${c.y - 3.2 * k}" r="${1.5 * k}" fill="${colors.highlight}" />`;
+      `<circle cx="${c.x}" cy="${c.y}" r="${R}" fill="${colors.fill}" stroke="${colors.stroke}" stroke-width="1.7" />` +
+      `<circle cx="${c.x - 2.7}" cy="${c.y - 3.2}" r="1.5" fill="${colors.highlight}" />`;
     if (c.face) {
       out +=
-        `<g transform="translate(${c.x} ${c.y}) scale(${k})">` +
+        `<g transform="translate(${c.x} ${c.y})">` +
         `<circle cx="-3.6" cy="0" r="2" fill="${colors.dark}" />` +
         `<circle cx="3.6" cy="0" r="2" fill="${colors.dark}" />` +
         '<circle cx="-3" cy="-0.6" r="0.75" fill="white" />' +
@@ -435,13 +419,11 @@ function coccusGroup({ mover, svg, species, isPlayer, cells: startCells }) {
   Object.assign(group, {
     reach() {
       let farthest = 0;
-      const r = R * (1 + SWELL * group.swell);
-      for (const c of group.cells) farthest = Math.max(farthest, Math.hypot(c.x, c.y) + r);
+      for (const c of group.cells) farthest = Math.max(farthest, Math.hypot(c.x, c.y) + R);
       return farthest * pxPerUnit();
     },
-    update(seconds, scale, swell) {
+    update(seconds, scale) {
       group.scale = scale;
-      group.swell = swell;
       if (group.moveFor !== null) {
         group.moveFor += seconds * 1000;
         const t = Math.min(1, group.moveFor / GAME.DIVIDE_MS);
@@ -460,11 +442,10 @@ function coccusGroup({ mover, svg, species, isPlayer, cells: startCells }) {
     // Every cell can pick up nutrients it swims over.
     mouths() {
       const unit = pxPerUnit();
-      const r = R * (1 + SWELL * group.swell);
       return group.cells.map((c) => [
         group.x + c.x * unit * group.facing,
         group.y + c.y * unit,
-        r * unit * 0.9,
+        R * unit * 0.9,
       ]);
     },
     divide() {

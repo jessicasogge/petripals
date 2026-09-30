@@ -341,13 +341,19 @@ body {
   font-weight: 700;
 }
 
-/* The group the player steers stays on top of the offspring drifting around. */
+/* The group the player steers stays on top, in full color with a soft halo;
+   the offspring drifting around are paler and a little washed out. */
 .buddy-mover.player {
   z-index: 2;
+  filter:
+    drop-shadow(0 0 2px #fff)
+    drop-shadow(0 0 3px #fff)
+    drop-shadow(0 0 7px rgba(15, 118, 110, 0.45));
 }
 
 .buddy-mover.drifter {
-  opacity: 0.85;
+  opacity: 0.75;
+  filter: saturate(0.45) brightness(1.08);
 }
 
 /* Offspring are already drifting around, so they skip the idle wiggle. That
