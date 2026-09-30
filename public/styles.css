@@ -388,37 +388,9 @@ body {
 }
 
 .how-to-play {
-  width: min(520px, 100%);
-  margin: 1.25rem auto 0;
-  padding: 1rem 1.25rem;
-  text-align: left;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 16px;
-}
-
-.how-to-play h2 {
-  margin: 0 0 0.5rem;
-  font-size: 1.1rem;
-  color: #0f766e;
-}
-
-.how-to-play ul {
-  margin: 0;
-  padding-left: 1.25rem;
+  margin: 0.75rem 0 0;
   line-height: 1.6;
-}
-
-.how-to-play kbd {
-  display: inline-block;
-  min-width: 1.5em;
-  padding: 0 0.3em;
-  font-family: inherit;
-  font-size: 0.85em;
-  text-align: center;
-  background: white;
-  border: 1px solid #99a8a6;
-  border-bottom-width: 2px;
-  border-radius: 4px;
+  color: #334155;
 }
 
 /* The antibiotic disk: a small white paper disk with the drug's code on it,
