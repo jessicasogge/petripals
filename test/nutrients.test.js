@@ -64,6 +64,23 @@ describe('scattering nutrients', () => {
     }
   });
 
+  it('keeps flecks off areas to avoid, like the antibiotic disk', () => {
+    const disk = { fx: 0.5, fy: 0.2, r: 0.07 };
+    for (let dish = 0; dish < 30; dish++) {
+      document.body.innerHTML = '<div class="agar"></div>';
+      const nutrients = scatterNutrients({ avoid: [disk] });
+      // Also eat and respawn a few times, since replacements must avoid it too.
+      for (let bite = 0; bite < 5; bite++) {
+        const [target] = liveFlecks();
+        nutrients.eatNear(target.fx, target.fy, 0.01);
+        vi.advanceTimersByTime(RESPAWN_MS);
+      }
+      for (const f of liveFlecks()) {
+        expect(Math.hypot(f.fx - disk.fx, f.fy - disk.fy)).toBeGreaterThan(disk.r + 0.12);
+      }
+    }
+  });
+
   it('hides flecks from screen readers, since they are decoration', () => {
     scatterNutrients();
     for (const f of liveFlecks()) expect(f.el.getAttribute('aria-hidden')).toBe('true');

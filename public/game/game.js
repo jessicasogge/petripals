@@ -1,11 +1,12 @@
 // The game loop: arrow-key steering, dividing as the player eats, the cell
-// counter, and the win banner.
+// counter, the antibiotic disk, and the win or game-over banner.
+import { touchesDisk } from './antibiotic.js';
 import { GAME } from './config.js';
 import { coccusGroup } from './coccus.js';
 import { keepInDish, pushApart } from './physics.js';
 import { rodGroup } from './rod.js';
 
-export function playGame(buddyEl, species, nutrients) {
+export function playGame(buddyEl, species, nutrients, disk) {
   const agar = document.querySelector('.agar');
   const counter = document.querySelector('.cell-count');
   const dishRadius = () => agar.clientWidth / 2;
@@ -104,6 +105,15 @@ export function playGame(buddyEl, species, nutrients) {
       group.place();
     }
 
+    // Touching the antibiotic disk is game over.
+    if (!finished && touchesDisk(disk, player.body(), radius)) {
+      finished = true;
+      held.clear();
+      nutrients.stop();
+      playerMover.classList.add('killed');
+      setTimeout(showGameOver, 500);
+    }
+
     if (!finished) {
       let ate = 0;
       for (const [px, py, reach] of player.mouths()) {
@@ -126,12 +136,23 @@ export function playGame(buddyEl, species, nutrients) {
     requestAnimationFrame(step);
   }
 
-  function showWin() {
+  function showBanner(title, message) {
     const banner = document.querySelector('.win-banner');
-    banner.querySelector('.win-message').textContent =
-      `${buddyEl.dataset.name} grew a colony of ${GAME.TARGET_CELLS} cells!`;
+    banner.querySelector('h2').textContent = title;
+    banner.querySelector('.win-message').textContent = message;
     banner.removeAttribute('hidden');
     banner.querySelector('.play-again').focus();
+  }
+
+  function showWin() {
+    showBanner('You won!', `${buddyEl.dataset.name} grew a colony of ${GAME.TARGET_CELLS} cells!`);
+  }
+
+  function showGameOver() {
+    showBanner(
+      'Game over',
+      `${buddyEl.dataset.name} touched the ${disk.antibiotic.name} disk. Antibiotics kill bacteria!`,
+    );
   }
 
   updateCounter();
