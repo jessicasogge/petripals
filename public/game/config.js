@@ -5,6 +5,8 @@
 export const SPECIES = {
   mona: { kind: 'rod' },
   vi: { kind: 'rod' },
+  // A spirochete: a long corkscrew-shaped cell that divides in two like a rod.
+  elia: { kind: 'rod' },
   scarlett: {
     kind: 'coccus',
     layout: 'chain',

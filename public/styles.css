@@ -13,9 +13,11 @@ body {
 
 .friends {
   display: flex;
+  flex-wrap: wrap; /* on narrow screens, buddies wrap onto a second row */
   justify-content: center;
   align-items: flex-end;
   gap: 0.5rem;
+  padding: 0 1rem;
 }
 
 .microbe {
@@ -69,6 +71,22 @@ body {
   }
 }
 
+/* Elia is a spirochete: she wiggles like a corkscrew. */
+@keyframes slither {
+  0%,
+  100% {
+    transform: skewX(-8deg);
+  }
+
+  50% {
+    transform: skewX(8deg);
+  }
+}
+
+.slither {
+  animation: slither 1.6s ease-in-out infinite;
+}
+
 .start-btn {
   margin-top: 1rem;
   padding: 0.8rem 2rem;
@@ -105,7 +123,7 @@ body {
 }
 
 .picker-shell {
-  width: min(900px, 100%);
+  width: min(1040px, 100%);
   background: rgba(255, 255, 255, 0.35);
   border: 2px solid rgba(19, 78, 74, 0.15);
   border-radius: 24px;
@@ -116,7 +134,7 @@ body {
 
 .picker-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 1rem;
   margin-top: 1.5rem;
 }
@@ -164,6 +182,10 @@ body {
 
 .scarlett {
   background: rgba(252, 165, 165, 0.45);
+}
+
+.elia {
+  background: rgba(216, 180, 254, 0.45);
 }
 
 .vi {
