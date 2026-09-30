@@ -212,70 +212,106 @@ function rodBody(buddyEl, mover) {
   };
 }
 
-// Round cells (Scarlett, Goldie): the buddy starts as one coccus. Nutrients
-// make the next cell to divide swell up; it then splits, and the new cell
-// stays attached. Build the full chain or cluster to win.
+// Round cells (Scarlett, Goldie): the buddy starts as one coccus. Like real
+// bacteria dividing by binary fission, every cell grows and then divides each
+// generation, so the colony doubles: 1, 2, 4, 8, 16, 32, 64. The daughter
+// cells stay stuck together, making a long chain (Streptococcus divides in one
+// plane) or a grape-like cluster (Staphylococcus divides in several planes).
+// Reaching 64 cells wins.
 function coccusBody(svg, mover, layout, colors) {
-  const TARGET_CELLS = 8;
-  const NUTRIENTS_PER_DIVISION = 2;
-  const CELL_SIZE = 8; // one cell's width, as a percent of the dish
-  const SWELL = 0.22; // how much bigger a cell gets right before dividing
-  const DIVIDE_MS = 450;
+  const TARGET_CELLS = 64;
+  const NUTRIENTS_PER_GENERATION = 2;
+  const CELL_SIZE = 8; // the first cell's width, as a percent of the dish
+  const SHRINK = 0.86; // cells are drawn smaller each generation so 64 fit
+  const SWELL = 0.22; // how much bigger cells get right before dividing
+  const DIVIDE_MS = 600;
 
-  // Cell geometry in SVG units: radius 10, neighbors about 1.7 radii apart.
-  const R = 10;
-  const SPACING = 17;
+  // Geometry is in SVG units: the first cell has radius 10.
+  const FIRST_RADIUS = 10;
+  const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 
-  // Where the n-th new cell goes (n = 1 for the first division), relative to
-  // the original cell with the face at (0, 0).
-  function spotFor(n) {
-    if (layout === 'chain') {
-      // Streptococcus: add to alternating ends so the chain grows both ways,
-      // with a gentle curve.
-      const index = Math.ceil(n / 2) * (n % 2 ? 1 : -1);
-      const cx = index * SPACING;
-      return [cx, 0.0022 * cx * cx];
+  // A fixed little wobble per cell so the cluster looks organic without
+  // jittering from frame to frame.
+  const wobble = (k, salt) => Math.sin(k * 12.9898 + salt * 78.233) * 0.5;
+
+  // Where each of `n` cells of radius `r` sits, centered on (0, 0).
+  function spots(n, r) {
+    const out = [];
+    if (layout === 'cluster') {
+      // Packed outward from the middle in a sunflower pattern: a lumpy bunch.
+      for (let k = 0; k < n; k++) {
+        const distance = r * 1.12 * Math.sqrt(k);
+        const angle = k * GOLDEN_ANGLE;
+        out.push([
+          distance * Math.cos(angle) + wobble(k, 1) * r * 0.35,
+          distance * Math.sin(angle) + wobble(k, 2) * r * 0.35,
+        ]);
+      }
+      return out;
     }
-    // Staphylococcus: pile up into an irregular grape-like bunch.
-    const CLUSTER = [
-      [16, -3], [5, -16], [-11, -12], [21, -18], [-17, 3], [-4, -29], [13, 13],
-    ];
-    return CLUSTER[(n - 1) % CLUSTER.length];
+    // Chain: cells spaced along a loose spiral, so a long chain coils up
+    // instead of running off the dish. Short chains are nearly straight.
+    const pitch = r * 1.75;
+    const coilGap = r * 3.2;
+    const b = coilGap / (2 * Math.PI);
+    const startAngle = 3.2;
+    for (let k = 0; k < n; k++) {
+      const arc = k * pitch + 0.5 * b * startAngle * startAngle;
+      const angle = Math.sqrt((2 * arc) / b);
+      out.push([b * angle * Math.cos(angle), b * angle * Math.sin(angle)]);
+    }
+    const cx = out.reduce((sum, p) => sum + p[0], 0) / n;
+    const cy = out.reduce((sum, p) => sum + p[1], 0) / n;
+    return out.map(([px, py]) => [px - cx, py - cy]);
   }
 
-  // Each cell: current position and scale, plus where it's heading.
-  const cells = [{ x: 0, y: 0, s: 1, targetS: 1, face: true }];
-  let pending = 0; // nutrients eaten toward the next division
-  let divisions = []; // cells currently sliding out of their parent
+  let radius = FIRST_RADIUS;
+  // Each cell: where it's drawn now, where it's heading, and its swell.
+  let cells = [{ x: 0, y: 0, fromX: 0, fromY: 0, toX: 0, toY: 0, s: 1, targetS: 1, face: true }];
+  let pending = 0; // nutrients eaten toward the next generation
+  let dividingFor = null; // ms into the current division, or null
   let finished = false;
 
-  // The cell that will divide next is the existing cell nearest the next spot.
-  function nextParent() {
-    const [nx, ny] = spotFor(cells.length);
-    let best = cells[0];
-    for (const cell of cells) {
-      if (Math.hypot(cell.x - nx, cell.y - ny) < Math.hypot(best.x - nx, best.y - ny)) best = cell;
+  // Every cell divides at once. Each parent's two daughters take the two new
+  // spots nearest to it, so cells split in place instead of reshuffling.
+  function divideAll() {
+    radius *= SHRINK;
+    const targets = spots(cells.length * 2, radius);
+    const children = [];
+    const used = new Array(cells.length).fill(0);
+    // Match the spots nearest the middle first so the face cell stays central.
+    const order = targets.map((t, i) => i).sort(
+      (a, b) => Math.hypot(...targets[a]) - Math.hypot(...targets[b]),
+    );
+    for (const i of order) {
+      const [tx, ty] = targets[i];
+      let best = -1;
+      for (let p = 0; p < cells.length; p++) {
+        if (used[p] >= 2) continue;
+        if (best === -1 ||
+            Math.hypot(cells[p].x - tx, cells[p].y - ty) <
+            Math.hypot(cells[best].x - tx, cells[best].y - ty)) best = p;
+      }
+      const parent = cells[best];
+      children.push({
+        x: parent.x, y: parent.y, fromX: parent.x, fromY: parent.y, toX: tx, toY: ty,
+        s: parent.s, targetS: 1,
+        face: parent.face && used[best] === 0, // the face stays with one daughter
+      });
+      used[best]++;
     }
-    return best;
+    cells = children;
+    dividingFor = 0;
   }
 
-  function divide() {
-    const parent = nextParent();
-    const [tx, ty] = spotFor(cells.length);
-    const child = { x: parent.x, y: parent.y, s: parent.s * 0.8, targetS: 1 };
-    cells.push(child);
-    parent.targetS = 1;
-    divisions.push({ child, fromX: parent.x, fromY: parent.y, tx, ty, elapsed: 0 });
-  }
-
-  // Half the drawing's width and height in SVG units, centered on the face
-  // cell so the buddy doesn't jump around as it grows.
+  // Half the drawing's width and height in SVG units, centered on the
+  // colony so it doesn't jump around as it grows.
   function extent() {
     let mx = 0;
     let my = 0;
     for (const c of cells) {
-      mx = Math.max(mx, Math.abs(c.x) + R * c.s);
-      my = Math.max(my, Math.abs(c.y) + R * c.s);
+      mx = Math.max(mx, Math.abs(c.x) + radius * c.s);
+      my = Math.max(my, Math.abs(c.y) + radius * c.s);
     }
     return [mx + 2, my + 2];
   }
@@ -283,13 +319,14 @@ function coccusBody(svg, mover, layout, colors) {
   const pxPerUnit = () => mover.offsetWidth / (2 * extent()[0]);
 
   function cellMarkup(c) {
-    const r = R * c.s;
+    const r = radius * c.s;
+    const k = r / FIRST_RADIUS; // everything scales with the cell
     let out =
-      `<circle cx="${c.x}" cy="${c.y}" r="${r}" fill="${colors.fill}" stroke="${colors.stroke}" stroke-width="1.7" />` +
-      `<circle cx="${c.x - 2.7 * c.s}" cy="${c.y - 3.2 * c.s}" r="${1.5 * c.s}" fill="${colors.highlight}" />`;
+      `<circle cx="${c.x}" cy="${c.y}" r="${r}" fill="${colors.fill}" stroke="${colors.stroke}" stroke-width="${1.7 * k}" />` +
+      `<circle cx="${c.x - 2.7 * k}" cy="${c.y - 3.2 * k}" r="${1.5 * k}" fill="${colors.highlight}" />`;
     if (c.face) {
       out +=
-        `<g transform="translate(${c.x} ${c.y}) scale(${c.s})">` +
+        `<g transform="translate(${c.x} ${c.y}) scale(${k})">` +
         `<circle cx="-3.6" cy="0" r="2" fill="${colors.dark}" />` +
         `<circle cx="3.6" cy="0" r="2" fill="${colors.dark}" />` +
         '<circle cx="-3" cy="-0.6" r="0.75" fill="white" />' +
@@ -305,10 +342,24 @@ function coccusBody(svg, mover, layout, colors) {
   function draw() {
     const [mx, my] = extent();
     svg.setAttribute('viewBox', `${-mx} ${-my} ${2 * mx} ${2 * my}`);
-    mover.style.width = `${(mx / R) * CELL_SIZE}%`;
+    mover.style.width = `${(mx / FIRST_RADIUS) * CELL_SIZE}%`;
     // Cells higher up sit behind lower ones; the face cell is always in front.
     const order = [...cells].sort((a, b) => (a.face ? 1 : 0) - (b.face ? 1 : 0) || a.y - b.y);
     svg.innerHTML = order.map(cellMarkup).join('');
+  }
+
+  // Divide once enough nutrients are in (and the last division has finished);
+  // until then, the whole colony swells a little with each nutrient.
+  function maybeDivide() {
+    if (cells.length >= TARGET_CELLS || dividingFor !== null) return;
+    if (pending >= NUTRIENTS_PER_GENERATION) {
+      pending -= NUTRIENTS_PER_GENERATION;
+      divideAll();
+    }
+    const swell = cells.length < TARGET_CELLS
+      ? 1 + SWELL * Math.min(1, pending / NUTRIENTS_PER_GENERATION)
+      : 1;
+    for (const c of cells) c.targetS = swell;
   }
 
   draw();
@@ -316,19 +367,24 @@ function coccusBody(svg, mover, layout, colors) {
   return {
     update(seconds) {
       for (const c of cells) c.s += (c.targetS - c.s) * Math.min(1, seconds * 8);
-      divisions = divisions.filter((d) => {
-        d.elapsed += seconds * 1000;
-        const t = Math.min(1, d.elapsed / DIVIDE_MS);
+      if (dividingFor !== null) {
+        dividingFor += seconds * 1000;
+        const t = Math.min(1, dividingFor / DIVIDE_MS);
         const ease = 1 - (1 - t) ** 3;
-        d.child.x = d.fromX + (d.tx - d.fromX) * ease;
-        d.child.y = d.fromY + (d.ty - d.fromY) * ease;
-        return t < 1;
-      });
+        for (const c of cells) {
+          c.x = c.fromX + (c.toX - c.fromX) * ease;
+          c.y = c.fromY + (c.toY - c.fromY) * ease;
+        }
+        if (t >= 1) {
+          dividingFor = null;
+          maybeDivide(); // nutrients eaten mid-division count toward the next one
+        }
+      }
       draw();
     },
     reachOfDish() {
       let farthest = 0;
-      for (const c of cells) farthest = Math.max(farthest, Math.hypot(c.x, c.y) + R * c.s);
+      for (const c of cells) farthest = Math.max(farthest, Math.hypot(c.x, c.y) + radius * c.s);
       return farthest * pxPerUnit();
     },
     place(px, py, face) {
@@ -337,28 +393,19 @@ function coccusBody(svg, mover, layout, colors) {
     // Every cell can pick up nutrients it swims over.
     mouths(px, py, face) {
       const unit = pxPerUnit();
-      return cells.map((c) => [px + c.x * unit * face, py + c.y * unit, R * c.s * unit * 0.9]);
+      return cells.map((c) => [px + c.x * unit * face, py + c.y * unit, radius * c.s * unit * 0.9]);
     },
     feed(count) {
-      if (finished) return;
+      if (finished || cells.length >= TARGET_CELLS) return;
       pending += count;
-      while (pending >= NUTRIENTS_PER_DIVISION && cells.length < TARGET_CELLS) {
-        pending -= NUTRIENTS_PER_DIVISION;
-        divide();
-      }
-      // The next cell to divide swells as it takes in nutrients.
-      if (cells.length < TARGET_CELLS) {
-        for (const c of cells) c.targetS = 1;
-        nextParent().targetS = 1 + SWELL * (pending / NUTRIENTS_PER_DIVISION);
-      }
+      maybeDivide();
     },
-    isReadyToWin: () => cells.length >= TARGET_CELLS && divisions.length === 0,
+    isReadyToWin: () => cells.length >= TARGET_CELLS && dividingFor === null,
     finish(px, py, face, done) {
       finished = true;
       done();
     },
-    winMessage: (name) =>
-      `${name} grew into a ${layout} of ${TARGET_CELLS} cells!`,
+    winMessage: (name) => `${name} grew into a ${layout} of ${TARGET_CELLS} cells!`,
   };
 }
 
