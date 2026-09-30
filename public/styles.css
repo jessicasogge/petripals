@@ -19,7 +19,7 @@ body {
 }
 
 .microbe {
-  width: 180px;
+  width: 130px;
   animation: wobble 3s ease-in-out infinite;
 }
 
