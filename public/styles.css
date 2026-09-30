@@ -221,7 +221,7 @@ body {
   /* agar gel with a soft glass highlight */
   background:
     radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.75), transparent 32%),
-    radial-gradient(circle at 50% 50%, #fef9c3, #fde68a);
+    radial-gradient(circle at 50% 50%, #fef9c3, #e7eeab);
   border: 2px solid rgba(180, 83, 9, 0.2);
 }
 
