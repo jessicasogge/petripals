@@ -98,7 +98,14 @@ function playGame(buddyEl, species, nutrients) {
     pending -= GAME.NUTRIENTS_PER_DIVISION;
     sinceDivision = 0;
     const offspring = player.divide(groups.filter((g) => g !== player), dishRadius());
-    if (offspring) groups.push(offspring);
+    if (offspring) {
+      // Size and position the new cell right away. Otherwise the browser draws
+      // it once at the center of the dish before this frame's positioning
+      // catches up, which shows up as a flash.
+      offspring.update(0);
+      offspring.place();
+      groups.push(offspring);
+    }
     updateCounter();
   }
 
