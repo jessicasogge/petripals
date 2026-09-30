@@ -42,7 +42,7 @@ describe('scattering nutrients', () => {
     }
   });
 
-  it('keeps the middle clear so the buddy does not start on top of food', () => {
+  it('keeps the middle clear so the pal does not start on top of food', () => {
     for (let dish = 0; dish < 30; dish++) {
       document.body.innerHTML = '<div class="agar"></div>';
       scatterNutrients();
@@ -88,7 +88,7 @@ describe('scattering nutrients', () => {
 });
 
 describe('eating nutrients', () => {
-  it('eats a fleck the buddy is on and reports it', () => {
+  it('eats a fleck the pal is on and reports it', () => {
     const nutrients = scatterNutrients();
     const [target] = liveFlecks();
     expect(nutrients.eatNear(target.fx, target.fy, 0.01)).toBe(1);
@@ -139,7 +139,7 @@ describe('respawning nutrients', () => {
     expect(liveFlecks()).toHaveLength(COUNT);
   });
 
-  it('puts the replacement somewhere else, not right where the buddy ate', () => {
+  it('puts the replacement somewhere else, not right where the pal ate', () => {
     for (let round = 0; round < 20; round++) {
       document.body.innerHTML = '<div class="agar"></div>';
       const nutrients = scatterNutrients();

@@ -1,12 +1,12 @@
-// How each buddy grows. Every buddy is a single cell that divides each time it
+// How each pal grows. Every pal is a single cell that divides each time it
 // eats. Rods (Mona, Vi) separate after dividing. Cocci are round cells whose
 // daughters stick together: in chains for Streptococcus (divides in one
 // plane) or grape-like clusters for Staphylococcus (divides in several).
 //
-// `antibiotics` are the three disks placed in each buddy's dish: drugs
+// `antibiotics` are the three disks placed in each pal's dish: drugs
 // commonly used against that species, labeled with their standard disk codes.
 //
-// For rod-style buddies, `body` traces the drawing's outline as circles
+// For rod-style pals, `body` traces the drawing's outline as circles
 // [x, y, radius], in fractions of the drawing's width from its center. It's
 // what counts as touching an antibiotic disk.
 export const SPECIES = {

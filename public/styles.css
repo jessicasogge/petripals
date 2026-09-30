@@ -13,7 +13,7 @@ body {
 
 .friends {
   display: flex;
-  flex-wrap: wrap; /* on narrow screens, buddies wrap onto a second row */
+  flex-wrap: wrap; /* on narrow screens, pals wrap onto a second row */
   justify-content: center;
   align-items: flex-end;
   gap: 0.5rem;
@@ -25,7 +25,7 @@ body {
   animation: wobble 3s ease-in-out infinite;
 }
 
-.buddy {
+.pal {
   width: 120px;
 }
 
@@ -139,7 +139,7 @@ body {
   margin-top: 1.5rem;
 }
 
-.buddy-card {
+.pal-card {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -150,12 +150,12 @@ body {
 }
 
 /* Line the Select buttons up along the bottom, however long the name above. */
-.buddy-card .pick-btn {
+.pal-card .pick-btn {
   margin-top: auto;
   white-space: nowrap;
 }
 
-.buddy-icon {
+.pal-icon {
   width: 110px;
   height: 110px;
   margin: 0 auto 0.75rem;
@@ -166,7 +166,7 @@ body {
   box-shadow: inset 0 0 0 2px rgba(19, 78, 74, 0.06);
 }
 
-.buddy-icon svg {
+.pal-icon svg {
   width: 90px;
   height: 90px;
   display: block;
@@ -258,8 +258,8 @@ body {
   border: 2px solid rgba(180, 83, 9, 0.2);
 }
 
-/* Positioned by petri-dish.js; the buddy's own idle animation stays on the SVG. */
-.buddy-mover {
+/* Positioned by petri-dish.js; the pal's own idle animation stays on the SVG. */
+.pal-mover {
   grid-area: 1 / 1; /* stack in the dish center, even after dividing into two */
   width: 18%;
   position: relative;
@@ -292,13 +292,13 @@ body {
   opacity: 0;
 }
 
-.dish-buddy {
+.dish-pal {
   width: 100%;
   height: auto;
   display: block;
 }
 
-.dish-buddy[hidden] {
+.dish-pal[hidden] {
   display: none;
 }
 
@@ -357,7 +357,7 @@ body {
 
 /* The group the player steers stays on top, in full color with a soft halo;
    the offspring left behind are paler and a little washed out. */
-.buddy-mover.player {
+.pal-mover.player {
   z-index: 2;
   filter:
     drop-shadow(0 0 2px #fff)
@@ -365,19 +365,19 @@ body {
     drop-shadow(0 0 7px rgba(15, 118, 110, 0.45));
 }
 
-.buddy-mover.offspring {
+.pal-mover.offspring {
   opacity: 0.75;
   filter: saturate(0.45) brightness(1.08);
 }
 
-/* Only the player's buddy has a face. */
-.buddy-mover.offspring .face {
+/* Only the player's pal has a face. */
+.pal-mover.offspring .face {
   display: none;
 }
 
 /* Offspring sit still on the agar, without the idle wiggle. That also keeps
    a dish full of 64 cells smooth. */
-.buddy-mover.offspring .dish-buddy {
+.pal-mover.offspring .dish-pal {
   animation: none;
 }
 
@@ -411,13 +411,13 @@ body {
   letter-spacing: 0.02em;
 }
 
-/* The player's buddy after touching the antibiotic. */
-.buddy-mover.killed {
+/* The player's pal after touching the antibiotic. */
+.pal-mover.killed {
   filter: grayscale(1);
   opacity: 0.45;
   transition: filter 0.4s ease, opacity 0.4s ease;
 }
 
-.buddy-mover.killed .dish-buddy {
+.pal-mover.killed .dish-pal {
   animation: none;
 }

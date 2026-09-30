@@ -1,5 +1,5 @@
 // Nutrient flecks: scattered over the agar, picked up when the player's
-// buddy swims over them, and replaced somewhere else a few seconds later.
+// pal swims over them, and replaced somewhere else a few seconds later.
 // `avoid` lists areas to keep clear, like the antibiotic disks, each as
 // { fx, fy, r } in fractions of the dish radius.
 export function scatterNutrients({ avoid = [] } = {}) {
@@ -20,10 +20,10 @@ export function scatterNutrients({ avoid = [] } = {}) {
       const distance = Math.sqrt(Math.random()) * 0.82;
       const fx = Math.cos(angle) * distance;
       const fy = Math.sin(angle) * distance;
-      const clearOfBuddy = Math.hypot(fx - avoidX, fy - avoidY) > 0.3;
+      const clearOfPal = Math.hypot(fx - avoidX, fy - avoidY) > 0.3;
       const clearOfOthers = flecks.every((f) => Math.hypot(fx - f.fx, fy - f.fy) > MIN_GAP);
       const clearOfHazards = avoid.every((a) => Math.hypot(fx - a.fx, fy - a.fy) > a.r + MIN_GAP);
-      if (clearOfBuddy && clearOfOthers && clearOfHazards) return { fx, fy };
+      if (clearOfPal && clearOfOthers && clearOfHazards) return { fx, fy };
     }
     return null; // dish is crowded; skip this one
   }
@@ -43,7 +43,7 @@ export function scatterNutrients({ avoid = [] } = {}) {
     flecks.push({ el, ...spot });
   }
 
-  // Buddies start in the middle, so the first batch avoids the center.
+  // Pals start in the middle, so the first batch avoids the center.
   for (let i = 0; i < COUNT; i++) addFleck(0, 0);
 
   return {

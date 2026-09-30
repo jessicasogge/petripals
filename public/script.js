@@ -6,7 +6,7 @@ if (startButton) {
     startButton.disabled = true;
 
     setTimeout(() => {
-      window.location.href = './buddy-picker.html';
+      window.location.href = './pal-picker.html';
     }, 250);
   });
 }

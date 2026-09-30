@@ -13,7 +13,7 @@ describe('diskSpot', () => {
     }
   });
 
-  it('is never close enough to the middle to touch a buddy at the start', () => {
+  it('is never close enough to the middle to touch a pal at the start', () => {
     expect(GAME.DISK_MIN_DISTANCE - GAME.DISK_RADIUS).toBeGreaterThan(0.25);
   });
 
@@ -38,7 +38,7 @@ describe('diskSpots', () => {
         for (let b = a + 1; b < disks.length; b++) {
           const gap = Math.hypot(disks[a].fx - disks[b].fx, disks[a].fy - disks[b].fy);
           expect(gap).toBeGreaterThanOrEqual(GAME.DISK_MIN_GAP);
-          // The open space between their edges is wider than a buddy (about 0.14).
+          // The open space between their edges is wider than a pal (about 0.14).
           expect(gap - 2 * GAME.DISK_RADIUS).toBeGreaterThan(0.2);
         }
       }
@@ -60,12 +60,12 @@ describe('touchesDisk', () => {
   const dishRadius = 200;
   const disk = { fx: 0.5, fy: 0, r: 0.1 }; // center at (100, 0), radius 20px
 
-  it('detects a buddy overlapping the disk', () => {
+  it('detects a pal overlapping the disk', () => {
     expect(touchesDisk(disk, [[100, 0, 5]], dishRadius)).toBe(true);
     expect(touchesDisk(disk, [[125, 0, 10]], dishRadius)).toBe(true); // edges overlap
   });
 
-  it('ignores a buddy that is close but not touching', () => {
+  it('ignores a pal that is close but not touching', () => {
     expect(touchesDisk(disk, [[131, 0, 10]], dishRadius)).toBe(false);
     expect(touchesDisk(disk, [[0, 0, 30]], dishRadius)).toBe(false);
   });
@@ -163,30 +163,30 @@ describe('disk buffer', () => {
 });
 
 describe('touch shapes', () => {
-  it('gives every rod-style buddy a traced outline for touching disks', () => {
-    for (const [buddy, species] of Object.entries(SPECIES)) {
+  it('gives every rod-style pal a traced outline for touching disks', () => {
+    for (const [pal, species] of Object.entries(SPECIES)) {
       if (species.kind !== 'rod') continue;
-      expect(species.body?.length, buddy).toBeGreaterThan(0);
+      expect(species.body?.length, pal).toBeGreaterThan(0);
       for (const [fx, fy, fr] of species.body) {
         // Every circle fits inside the drawing.
-        expect(Math.abs(fx) + fr, buddy).toBeLessThanOrEqual(0.5 + 1e-9);
-        expect(Math.abs(fy) + fr, buddy).toBeLessThanOrEqual(0.5 + 1e-9);
-        expect(fr, buddy).toBeGreaterThan(0);
+        expect(Math.abs(fx) + fr, pal).toBeLessThanOrEqual(0.5 + 1e-9);
+        expect(Math.abs(fy) + fr, pal).toBeLessThanOrEqual(0.5 + 1e-9);
+        expect(fr, pal).toBeGreaterThan(0);
       }
     }
   });
 });
 
 describe('antibiotic choices', () => {
-  it('gives every buddy three different antibiotics, each with a code and a name', () => {
-    for (const [buddy, species] of Object.entries(SPECIES)) {
-      expect(species.antibiotics, buddy).toHaveLength(3);
+  it('gives every pal three different antibiotics, each with a code and a name', () => {
+    for (const [pal, species] of Object.entries(SPECIES)) {
+      expect(species.antibiotics, pal).toHaveLength(3);
       for (const antibiotic of species.antibiotics) {
-        expect(antibiotic.code, buddy).toMatch(/^[A-Z]{1,3}$/);
-        expect(antibiotic.name, buddy).toBeTruthy();
+        expect(antibiotic.code, pal).toMatch(/^[A-Z]{1,3}$/);
+        expect(antibiotic.name, pal).toBeTruthy();
       }
       const codes = new Set(species.antibiotics.map((a) => a.code));
-      expect(codes.size, buddy).toBe(3);
+      expect(codes.size, pal).toBe(3);
     }
   });
 });
