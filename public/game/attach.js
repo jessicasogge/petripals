@@ -13,9 +13,12 @@ export const wobble = (k, salt) => Math.sin(k * 12.9898 + salt * 78.233);
 // in chain order.
 export function chainSpot(cells, px, py) {
   if (cells.length === 1) {
-    const dx = px - cells[0].x;
-    const dy = py - cells[0].y;
-    const d = Math.hypot(dx, dy) || 1;
+    let dx = px - cells[0].x;
+    let dy = py - cells[0].y;
+    // If the player is exactly on the cell there's no direction toward them;
+    // grow sideways instead of stacking the new cell on top of the old one.
+    if (dx === 0 && dy === 0) dx = 1;
+    const d = Math.hypot(dx, dy);
     return { x: cells[0].x + (dx / d) * SPACING, y: cells[0].y + (dy / d) * SPACING, atStart: false };
   }
   const ends = [
@@ -42,18 +45,43 @@ export function chainSpot(cells, px, py) {
 // cells so the cluster fills out into a bunch instead of a line. `twist` is
 // the cluster's own packing angle.
 export function clusterSpot(cells, twist, px, py) {
+  const reach = SPACING * 0.95; // how far a new cell sits from one it touches
   let best = null;
+
+  function consider(x, y) {
+    if (cells.some((o) => Math.hypot(o.x - x, o.y - y) < R * 1.5)) return;
+    const touching = cells.filter((o) => Math.hypot(o.x - x, o.y - y) < SPACING * 1.15).length;
+    const distance = Math.hypot(x - px, y - py);
+    const score = distance - touching * SPACING * 1.5;
+    if (!best || score < best.score) best = { x, y, atStart: false, distance, score };
+  }
+
+  // Six spots around each cell, each turned a little so clusters look organic.
   cells.forEach((c, i) => {
     for (let k = 0; k < 6; k++) {
       const angle = twist + (k * Math.PI) / 3 + wobble(k, i) * 0.3;
-      const x = c.x + Math.cos(angle) * SPACING * 0.95;
-      const y = c.y + Math.sin(angle) * SPACING * 0.95;
-      if (cells.some((o) => Math.hypot(o.x - x, o.y - y) < R * 1.5)) continue;
-      const touching = cells.filter((o) => Math.hypot(o.x - x, o.y - y) < SPACING * 1.15).length;
-      const distance = Math.hypot(x - px, y - py);
-      const score = distance - touching * SPACING * 1.5;
-      if (!best || score < best.score) best = { x, y, atStart: false, distance, score };
+      consider(c.x + Math.cos(angle) * reach, c.y + Math.sin(angle) * reach);
     }
   });
+
+  // The nooks between each pair of neighboring cells: the two spots that
+  // touch both. The turned spots above can miss these, and they're what lets
+  // a cluster fill in instead of growing arms.
+  for (let i = 0; i < cells.length; i++) {
+    for (let j = i + 1; j < cells.length; j++) {
+      const a = cells[i];
+      const b = cells[j];
+      const gap = Math.hypot(b.x - a.x, b.y - a.y);
+      if (gap === 0 || gap >= 2 * reach) continue;
+      const midX = (a.x + b.x) / 2;
+      const midY = (a.y + b.y) / 2;
+      const rise = Math.sqrt(reach * reach - (gap / 2) ** 2);
+      const nx = -(b.y - a.y) / gap;
+      const ny = (b.x - a.x) / gap;
+      consider(midX + nx * rise, midY + ny * rise);
+      consider(midX - nx * rise, midY - ny * rise);
+    }
+  }
+
   return best;
 }
