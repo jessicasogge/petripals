@@ -195,6 +195,48 @@ describe('dividing next to a group', () => {
   });
 });
 
+describe('an offspring cell dividing', () => {
+  it('adds the daughter to its own group, next to the cell that divided', () => {
+    const group = makeGroup('goldie');
+    grow(group, 3);
+    const before = cellCenters(group);
+    const [cx, cy] = before[2];
+    expect(group.divide([group], DISH_RADIUS, [], [cx, cy])).toBeNull();
+    expect(group.cellCount()).toBe(4);
+    group.update(1);
+    const newest = cellCenters(group).find((c) => before.every((b) => distance(b, c) > 0.01));
+    expect(distance(newest, [cx, cy])).toBeLessThan(2 * SPACING * UNIT);
+  });
+
+  it('starts the daughter sliding in from the cell that divided', () => {
+    const group = makeGroup('scarlett');
+    grow(group, 2);
+    const [ex, ey] = group.body()[1];
+    group.divide([group], DISH_RADIUS, [], [ex, ey]);
+    group.update(0);
+    const centers = cellCenters(group);
+    // The new cell starts on top of the cell that divided...
+    expect(centers.some(([x, y]) => distance([x, y], [ex, ey]) < 0.01 &&
+      centers.filter((c) => distance(c, [ex, ey]) < 0.01).length === 2)).toBe(true);
+    // ...and ends up touching the end of the chain.
+    group.update(1);
+    const after = cellCenters(group);
+    const ends = [after[0], after[after.length - 1]];
+    expect(ends.some((end) => Math.abs(distance(end, [ex, ey]) - SPACING * UNIT) < 0.01)).toBe(true);
+  });
+
+  it('starts a new group at the cell that divided when its own group is full', () => {
+    const group = makeGroup('goldie');
+    grow(group, GAME.GROUP_CAP);
+    const [cx, cy] = group.body()[0];
+    const child = group.divide([group], DISH_RADIUS, [], [cx, cy]);
+    expect(child).not.toBeNull();
+    expect([child.x, child.y]).toEqual([cx, cy]);
+    expect(child.isPlayer).toBe(false);
+    expect(group.cellCount()).toBe(GAME.GROUP_CAP);
+  });
+});
+
 describe('antibiotic disks', () => {
   // A disk to the right of a cell at the center, as the game stores it
   // (fractions of the dish radius). The usual spot for a new cell on that

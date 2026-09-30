@@ -6,7 +6,7 @@ import { coaster } from './physics.js';
 
 // A round cell (Scarlett, Goldie). The player is always a single coccus.
 // Offspring are chains or clusters of cocci that grow one cell at a time as
-// the player's daughters join them, up to GROUP_CAP cells. A chain grows from
+// daughters join them (the player's, or their own cells' when they eat), up to GROUP_CAP cells. A chain grows from
 // whichever end is nearer the player; a cluster grows on the side facing the
 // player. So Scarlett builds chains along the lines she swims, and Goldie
 // builds bunches wherever she lingers.
@@ -148,26 +148,29 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       else group.cells.push(cell);
       group.moveFor = 0;
     },
-    // The player divides: the daughter joins the nearest chain or cluster
-    // that has room and is close enough (and not onto an antibiotic disk), or
-    // else starts a new one here.
-    divide(others, dishRadius, disks = []) {
+    // A cell divides: the daughter joins the nearest chain or cluster that
+    // has room and is close enough (and not onto an antibiotic disk), or else
+    // starts a new one. `from` is where the dividing cell is in the dish: the
+    // player's spot, or the cell in an offspring group that ate a nutrient.
+    // Returns the new group, or null if the daughter joined one.
+    divide(others, dishRadius, disks = [], from = [group.x, group.y]) {
+      const [fx, fy] = from;
       let best = null;
       for (const other of others) {
-        const spot = other.attachSpot?.(group.x, group.y, disks, dishRadius);
+        const spot = other.attachSpot?.(fx, fy, disks, dishRadius);
         if (!spot) continue;
-        const distance = Math.hypot(spot.world[0] - group.x, spot.world[1] - group.y);
+        const distance = Math.hypot(spot.world[0] - fx, spot.world[1] - fy);
         if (distance > GAME.SNAP_REACH * dishRadius) continue;
         if (!best || distance < best.distance) best = { other, spot, distance };
       }
       if (best) {
-        best.other.addCell(best.spot, group.x, group.y);
+        best.other.addCell(best.spot, fx, fy);
         return null;
       }
       const copy = svg.cloneNode(false);
       const child = coccusGroup({ mover: newMover(copy), svg: copy, species, isPlayer: false });
-      child.x = group.x;
-      child.y = group.y;
+      child.x = fx;
+      child.y = fy;
       const angle = Math.random() * Math.PI * 2;
       const burst = GAME.BURST_SPEED * dishRadius * 0.5;
       child.vx = Math.cos(angle) * burst;
