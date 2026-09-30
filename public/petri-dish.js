@@ -5,18 +5,23 @@ const buddy = document.querySelector(`.dish-buddy[data-buddy="${choice}"]`);
 if (buddy) {
   buddy.removeAttribute('hidden');
   document.title = `PetriPals | ${buddy.dataset.name}`;
-  setUpMovement(buddy);
+  const nutrients = scatterNutrients();
+  setUpMovement(buddy, nutrients);
 } else {
   // No buddy (or an unknown one) in the URL: send them back to choose.
   window.location.replace('./buddy-picker.html');
 }
 
-function setUpMovement(buddyEl) {
+function setUpMovement(buddyEl, nutrients) {
   const agar = document.querySelector('.agar');
   const mover = document.querySelector('.buddy-mover');
 
   // How far the buddy travels per second, as a fraction of the dish radius.
   const SPEED = 0.8;
+
+  // How close a nutrient has to be to get picked up, as a fraction of the
+  // buddy's half-width (less than 1 so it has to swim over it, not just near).
+  const PICKUP_REACH = 0.6;
 
   const directions = {
     ArrowUp: [0, -1],
@@ -79,8 +84,69 @@ function setUpMovement(buddyEl) {
     }
 
     mover.style.transform = `translate(${x}px, ${y}px) scaleX(${facing})`;
+    nutrients.eatNear(x / dishRadius, y / dishRadius, (buddyRadius * PICKUP_REACH) / dishRadius);
     requestAnimationFrame(step);
   }
 
   requestAnimationFrame(step);
+}
+
+// Nutrient flecks: scattered over the agar, picked up when a buddy swims over
+// them, and replaced somewhere else a few seconds later.
+function scatterNutrients() {
+  const agar = document.querySelector('.agar');
+  const COUNT = 14;
+  const RESPAWN_MS = 3000;
+  const MIN_GAP = 0.12; // keep flecks from clumping, as a fraction of the radius
+
+  // Positions are stored relative to the dish center, as fractions of the dish
+  // radius (-1 to 1), so they stay put when the window is resized.
+  const flecks = [];
+
+  function randomSpot(avoidX, avoidY) {
+    for (let tries = 0; tries < 50; tries++) {
+      // Uniform over the disk, kept away from the rim.
+      const angle = Math.random() * Math.PI * 2;
+      const distance = Math.sqrt(Math.random()) * 0.82;
+      const fx = Math.cos(angle) * distance;
+      const fy = Math.sin(angle) * distance;
+      const clearOfBuddy = Math.hypot(fx - avoidX, fy - avoidY) > 0.3;
+      const clearOfOthers = flecks.every((f) => Math.hypot(fx - f.fx, fy - f.fy) > MIN_GAP);
+      if (clearOfBuddy && clearOfOthers) return { fx, fy };
+    }
+    return null; // dish is crowded; skip this one
+  }
+
+  function addFleck(avoidX, avoidY) {
+    const spot = randomSpot(avoidX, avoidY);
+    if (!spot) return;
+    const el = document.createElement('span');
+    el.className = 'nutrient';
+    if (Math.random() < 0.4) el.classList.add('small');
+    if (Math.random() < 0.5) el.classList.add('pale');
+    el.style.left = `${50 + spot.fx * 50}%`;
+    el.style.top = `${50 + spot.fy * 50}%`;
+    el.setAttribute('aria-hidden', 'true');
+    agar.appendChild(el);
+    flecks.push({ el, ...spot });
+  }
+
+  // Buddies start in the middle, so the first batch avoids the center.
+  for (let i = 0; i < COUNT; i++) addFleck(0, 0);
+
+  return {
+    // Pick up every fleck within `reach` of the buddy's position (all values
+    // are fractions of the dish radius).
+    eatNear(bx, by, reach) {
+      for (let i = flecks.length - 1; i >= 0; i--) {
+        const fleck = flecks[i];
+        if (Math.hypot(fleck.fx - bx, fleck.fy - by) > reach) continue;
+        flecks.splice(i, 1);
+        fleck.el.classList.add('eaten');
+        fleck.el.addEventListener('transitionend', () => fleck.el.remove(), { once: true });
+        setTimeout(() => addFleck(bx, by), RESPAWN_MS);
+      }
+    },
+    count: () => flecks.length,
+  };
 }
