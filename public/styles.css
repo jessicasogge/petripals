@@ -227,8 +227,35 @@ body {
 
 /* Positioned by petri-dish.js; the buddy's own idle animation stays on the SVG. */
 .buddy-mover {
-  width: 28%;
+  width: 22%;
+  position: relative;
+  z-index: 1; /* swim over the nutrients */
   will-change: transform;
+}
+
+/* Nutrient flecks scattered on the agar; placed by petri-dish.js. */
+.nutrient {
+  position: absolute;
+  width: 2.2%;
+  aspect-ratio: 1;
+  border-radius: 45% 55% 50% 40%;
+  background: #c2410c;
+  opacity: 0.75;
+  transform: translate(-50%, -50%);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.nutrient.small {
+  width: 1.5%;
+}
+
+.nutrient.pale {
+  background: #a16207;
+}
+
+.nutrient.eaten {
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
 }
 
 .dish-buddy {
