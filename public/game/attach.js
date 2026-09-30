@@ -13,9 +13,12 @@ export const wobble = (k, salt) => Math.sin(k * 12.9898 + salt * 78.233);
 // in chain order.
 export function chainSpot(cells, px, py) {
   if (cells.length === 1) {
-    const dx = px - cells[0].x;
-    const dy = py - cells[0].y;
-    const d = Math.hypot(dx, dy) || 1;
+    let dx = px - cells[0].x;
+    let dy = py - cells[0].y;
+    // If the player is exactly on the cell there's no direction toward them;
+    // grow sideways instead of stacking the new cell on top of the old one.
+    if (dx === 0 && dy === 0) dx = 1;
+    const d = Math.hypot(dx, dy);
     return { x: cells[0].x + (dx / d) * SPACING, y: cells[0].y + (dy / d) * SPACING, atStart: false };
   }
   const ends = [
