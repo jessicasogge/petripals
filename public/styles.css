@@ -356,6 +356,11 @@ body {
   filter: saturate(0.45) brightness(1.08);
 }
 
+/* Only the player's buddy has a face. */
+.buddy-mover.drifter .face {
+  display: none;
+}
+
 /* Offspring are already drifting around, so they skip the idle wiggle. That
    also keeps a dish full of glowing Vis smooth. */
 .buddy-mover.drifter .dish-buddy {
