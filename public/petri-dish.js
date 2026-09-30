@@ -22,7 +22,7 @@ const SPECIES = {
 };
 
 const GAME = {
-  TARGET_CELLS: 32, // grow the population to this many cells to win
+  TARGET_CELLS: 16, // grow the population to this many cells to win
   GROUP_CAP: 8, // chains and clusters stop growing at this many cells
   // A new coccus joins a chain or cluster if the player is within this
   // distance of where it would attach (a fraction of the dish radius).
