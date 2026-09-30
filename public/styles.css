@@ -387,6 +387,12 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+.how-to-play {
+  margin: 0.75rem 0 0;
+  line-height: 1.6;
+  color: #334155;
+}
+
 /* The antibiotic disk: a small white paper disk with the drug's code on it,
    like the disks used in the lab. Placed by game/antibiotic.js. */
 .antibiotic {
