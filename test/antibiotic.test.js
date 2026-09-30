@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { diskSpot, diskSpots, touchedDisk, touchesDisk } from '../public/game/antibiotic.js';
+import { diskSpot, diskSpots, pushOffDisks, touchedDisk, touchesDisk } from '../public/game/antibiotic.js';
 import { GAME, SPECIES } from '../public/game/config.js';
 
 describe('diskSpot', () => {
@@ -75,6 +75,11 @@ describe('touchesDisk', () => {
     expect(touchesDisk(disk, chain, dishRadius)).toBe(true);
   });
 
+  it('counts coming within the buffer as touching when given one', () => {
+    expect(touchesDisk(disk, [[133, 0, 10]], dishRadius)).toBe(false);
+    expect(touchesDisk(disk, [[133, 0, 10]], dishRadius, 0.025)).toBe(true);
+  });
+
   it('treats an empty body as not touching', () => {
     expect(touchesDisk(disk, [], dishRadius)).toBe(false);
   });
@@ -94,6 +99,81 @@ describe('touchedDisk', () => {
 
   it('returns null when no disk is touched', () => {
     expect(touchedDisk(disks, [[0, 0, 5]], dishRadius)).toBeNull();
+  });
+});
+
+describe('pushOffDisks', () => {
+  const dishRadius = 200;
+  const disk = { fx: 0.5, fy: 0, r: 0.1 }; // center at (100, 0), radius 20px
+
+  it('leaves a body that is already clear where it is', () => {
+    expect(pushOffDisks([disk], [[0, 0, 10]], dishRadius)).toEqual([0, 0]);
+  });
+
+  it('pushes an overlapping body straight out until it just touches', () => {
+    const [dx, dy] = pushOffDisks([disk], [[125, 0, 10]], dishRadius); // 5px overlap
+    expect(dx).toBeCloseTo(5);
+    expect(dy).toBeCloseTo(0);
+  });
+
+  it('pushes out in whatever direction the body came from', () => {
+    const [dx, dy] = pushOffDisks([disk], [[100, 25, 10]], dishRadius);
+    expect(dx).toBeCloseTo(0);
+    expect(dy).toBeCloseTo(5);
+  });
+
+  it('moves the whole body by its deepest overlap', () => {
+    // A chain whose last two cells both overlap; the deeper one decides.
+    const chain = [[60, 0, 10], [80, 0, 10], [95, 0, 10]];
+    const [dx, dy] = pushOffDisks([disk], chain, dishRadius);
+    const moved = chain.map(([x, y, r]) => [x + dx, y + dy, r]);
+    expect(touchesDisk(disk, moved, dishRadius + 1e-6)).toBe(false);
+    expect(dy).toBeCloseTo(0);
+  });
+
+  it('still picks a direction for a body right on the disk center', () => {
+    const [dx, dy] = pushOffDisks([disk], [[100, 0, 10]], dishRadius);
+    expect(Math.hypot(dx, dy)).toBeCloseTo(30);
+  });
+
+  it('keeps extra clear space around the disk when given a buffer', () => {
+    // 5px of clear space (buffer 0.025 of a 200px radius), from the edge that
+    // was already just touching.
+    const [dx] = pushOffDisks([disk], [[130, 0, 10]], dishRadius, 0.025);
+    expect(dx).toBeCloseTo(5);
+  });
+
+  it('clears every disk, not just one', () => {
+    const disks = [disk, { fx: -0.5, fy: 0, r: 0.1 }];
+    const bodies = [[[110, 0, 10]], [[-110, 0, 10]]];
+    for (const body of bodies) {
+      const [dx, dy] = pushOffDisks(disks, body, dishRadius);
+      const moved = body.map(([x, y, r]) => [x + dx, y + dy, r - 1e-6]);
+      expect(touchedDisk(disks, moved, dishRadius)).toBeNull();
+    }
+  });
+});
+
+describe('disk buffer', () => {
+  it('leaves a visible gap without blocking the space between disks', () => {
+    expect(GAME.DISK_BUFFER).toBeGreaterThan(0);
+    // Even with the buffer on both disks, there's still room to swim between.
+    expect(GAME.DISK_MIN_GAP - 2 * (GAME.DISK_RADIUS + GAME.DISK_BUFFER)).toBeGreaterThan(0.15);
+  });
+});
+
+describe('touch shapes', () => {
+  it('gives every rod-style buddy a traced outline for touching disks', () => {
+    for (const [buddy, species] of Object.entries(SPECIES)) {
+      if (species.kind !== 'rod') continue;
+      expect(species.body?.length, buddy).toBeGreaterThan(0);
+      for (const [fx, fy, fr] of species.body) {
+        // Every circle fits inside the drawing.
+        expect(Math.abs(fx) + fr, buddy).toBeLessThanOrEqual(0.5 + 1e-9);
+        expect(Math.abs(fy) + fr, buddy).toBeLessThanOrEqual(0.5 + 1e-9);
+        expect(fr, buddy).toBeGreaterThan(0);
+      }
+    }
   });
 });
 
