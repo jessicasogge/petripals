@@ -19,7 +19,7 @@ body {
 }
 
 .microbe {
-  width: 130px;
+  width: 108px;
   animation: wobble 3s ease-in-out infinite;
 }
 
@@ -113,13 +113,6 @@ body {
   box-shadow: 0 20px 40px rgba(19, 78, 74, 0.08);
 }
 
-.eyebrow {
-  margin: 0 0 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.8rem;
-  font-weight: 700;
-}
 
 .picker-grid {
   display: grid;
@@ -174,7 +167,7 @@ body {
 }
 
 .vi {
-  background: rgba(165, 243, 252, 0.45);
+  background: rgba(253, 186, 116, 0.45);
 }
 
 .pick-btn {
@@ -283,11 +276,6 @@ body {
   display: none;
 }
 
-/* Vi (Vibrio fischeri) is bioluminescent. */
-.glow {
-  filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.85));
-}
-
 .wobble {
   animation: wobble 3s ease-in-out infinite;
 }
@@ -342,7 +330,7 @@ body {
 }
 
 /* The group the player steers stays on top, in full color with a soft halo;
-   the offspring drifting around are paler and a little washed out. */
+   the offspring left behind are paler and a little washed out. */
 .buddy-mover.player {
   z-index: 2;
   filter:
@@ -351,19 +339,19 @@ body {
     drop-shadow(0 0 7px rgba(15, 118, 110, 0.45));
 }
 
-.buddy-mover.drifter {
+.buddy-mover.offspring {
   opacity: 0.75;
   filter: saturate(0.45) brightness(1.08);
 }
 
 /* Only the player's buddy has a face. */
-.buddy-mover.drifter .face {
+.buddy-mover.offspring .face {
   display: none;
 }
 
-/* Offspring are already drifting around, so they skip the idle wiggle. That
-   also keeps a dish full of glowing Vis smooth. */
-.buddy-mover.drifter .dish-buddy {
+/* Offspring sit still on the agar, without the idle wiggle. That also keeps
+   a dish full of 64 cells smooth. */
+.buddy-mover.offspring .dish-buddy {
   animation: none;
 }
 
