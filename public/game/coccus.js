@@ -109,6 +109,13 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
         return [wx, wy, R * pxPerUnit() * 0.9];
       });
     },
+    // Every cell's circle, used to tell whether the group touches the disk.
+    body() {
+      return group.cells.map((c) => {
+        const [wx, wy] = toWorld(c.x, c.y);
+        return [wx, wy, R * pxPerUnit()];
+      });
+    },
     // Where a new cell would join this group if it came from (wx, wy) in the
     // dish, or null if the group is full.
     attachSpot(wx, wy) {

@@ -26,6 +26,12 @@ export function rodGroup({ mover, svg, species, isPlayer }) {
       mover.style.transform = `translate(${group.x}px, ${group.y}px) scaleX(${group.facing})`;
     },
     mouths: () => [[group.x, group.y, group.halfWidth() * GAME.PICKUP_REACH]],
+    // The rod's body, roughly, as three circles along its length (it lies
+    // sideways). Used to tell whether it touches the antibiotic disk.
+    body() {
+      const w = group.halfWidth() * 2;
+      return [-0.28, 0, 0.28].map((along) => [group.x + along * w, group.y, w * 0.14]);
+    },
     // Split into two rods that push apart end to end.
     divide() {
       const copy = svg.cloneNode(true);
