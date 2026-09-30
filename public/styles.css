@@ -225,8 +225,14 @@ body {
   border: 2px solid rgba(180, 83, 9, 0.2);
 }
 
-.dish-buddy {
+/* Positioned by petri-dish.js; the buddy's own idle animation stays on the SVG. */
+.buddy-mover {
   width: 28%;
+  will-change: transform;
+}
+
+.dish-buddy {
+  width: 100%;
   height: auto;
   display: block;
 }
