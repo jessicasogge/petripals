@@ -167,6 +167,40 @@ describe('pushOffDisks', () => {
       expect(touchedDisk(disks, moved, dishRadius)).toBeNull();
     }
   });
+
+  // A chain of cells curved around a disk, hugging it, each `inside` px too
+  // close. Like the ones that used to shake back and forth forever.
+  function curvedChain(clear, inside) {
+    const cells = [];
+    for (let i = -3; i <= 3; i++) {
+      const a = Math.PI / 2 + i * 0.45;
+      cells.push([Math.cos(a) * (clear + 7 - inside), Math.sin(a) * (clear + 7 - inside), 7]);
+    }
+    return cells;
+  }
+
+  it('pushes a chain curved around a disk clear in one go, without shaking', () => {
+    const dishRadius = 300;
+    const disk = { fx: 0, fy: 0, r: 0.1 };
+    const buffer = 0.035;
+    const clear = (disk.r + buffer) * dishRadius;
+    let cells = curvedChain(clear, 1);
+    const moves = [];
+    for (let frame = 0; frame < 10; frame++) {
+      const [dx, dy] = pushOffDisks([disk], cells, dishRadius, buffer);
+      moves.push([dx, dy]);
+      cells = cells.map(([x, y, r]) => [x + dx, y + dy, r]);
+    }
+    // The first push clears it, and after that it stays put.
+    expect(Math.hypot(...moves[0])).toBeGreaterThan(0);
+    for (const [dx, dy] of moves.slice(1)) expect(Math.hypot(dx, dy)).toBeLessThan(1e-9);
+    // It moved straight away from the disk (down, toward the chain's middle).
+    expect(Math.abs(moves[0][0])).toBeLessThan(1e-9);
+    expect(moves[0][1]).toBeGreaterThan(0);
+    // And every cell really is clear.
+    for (const [x, y, r] of cells) expect(Math.hypot(x, y)).toBeGreaterThanOrEqual(clear + r - 1e-9);
+  });
+
 });
 
 describe('disk buffer', () => {
