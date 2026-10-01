@@ -313,6 +313,21 @@ body {
   font-size: 0.95rem;
 }
 
+/* The pal's name and species above the dish. */
+.dish-title {
+  margin-bottom: 1.25rem;
+}
+
+.dish-title .pal-name {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.dish-title .species {
+  margin: 0.15rem 0 0;
+  font-size: 1.05rem;
+}
+
 .win-banner {
   position: absolute;
   top: 50%;

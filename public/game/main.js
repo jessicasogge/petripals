@@ -16,6 +16,11 @@ if (pal) {
   pal.removeAttribute('hidden');
   document.title = `PetriPals | ${pal.dataset.name} | Level ${levelNumber}`;
   const species = SPECIES[pal.dataset.pal];
+  // Her name and species above the dish.
+  const title = document.querySelector('.pal-name');
+  title.textContent = pal.dataset.name;
+  title.style.color = species.color;
+  document.querySelector('.species-name').textContent = species.scientific;
   const disks = placeAntibiotics(antibioticsFor(species.antibiotics, level.disks));
   const nutrients = scatterNutrients({ avoid: disks });
   playGame(pal, species, nutrients, disks, { level: levelNumber, target: level.target });
