@@ -53,10 +53,18 @@ describe('a rod', () => {
     expect(makeRod('mona').cellCount()).toBe(1);
   });
 
-  it('is sized to 12% of the dish, and reaches half its width from its center', () => {
-    const rod = makeRod('vi');
+  it('is sized to 12% of the dish unless its species says otherwise, and reaches half its width', () => {
+    const rod = makeRod('elia');
     expect(rod.mover.style.width).toBe('12%');
-    expect(rod.reach()).toBeCloseTo(ROD_PX / 2);
+    expect(rod.reach()).toBeCloseTo(rodPx('elia') / 2);
+  });
+
+  it('draws Mona and Vi a bit smaller than Elia, and Coco smallest', () => {
+    for (const name of ['mona', 'vi']) {
+      expect(makeRod(name).mover.style.width).toBe(`${SPECIES[name].size}%`);
+      expect(SPECIES[name].size).toBeLessThan(12);
+      expect(SPECIES[name].size).toBeGreaterThan(SPECIES.coco.size);
+    }
   });
 
   it('draws Coco smaller than the other rods, since she is one of the smallest bacteria', () => {

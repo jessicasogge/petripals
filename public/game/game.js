@@ -158,8 +158,8 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
     // measuring between writes (which makes the browser re-lay-out each time).
     for (const group of groups) group.size = group.reach();
     pushApart(groups, player);
-    // Offspring keep a little clear space around each antibiotic disk: nudge
-    // any that slid too close back out, and stop them from sliding further in.
+    // Offspring grow up to the edge of each disk's zone of inhibition but never
+    // into it: nudge any that slid in back out, and stop them sliding further.
     // Offspring also stay inside the rim, checked cell by cell (a long chain
     // isn't one big circle). Then the disks get one more say, so the rim can
     // never push a chain back onto a disk.
@@ -167,14 +167,15 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
       if (group === player) {
         [group.x, group.y] = keepInDish(agar, group.x, group.y, group.size, group);
       } else {
-        nudge(group, pushOffDisks(disks, group.body(), radius, GAME.DISK_BUFFER));
+        nudge(group, pushOffDisks(disks, group.body(), radius));
         nudge(group, pushInsideRim(group.body(), radius));
-        nudge(group, pushOffDisks(disks, group.body(), radius, GAME.DISK_BUFFER));
+        nudge(group, pushOffDisks(disks, group.body(), radius));
       }
       group.place();
     }
 
-    // Touching any antibiotic disk is game over.
+    // Touching any antibiotic disk, or the zone of inhibition around it, is
+    // game over.
     const hit = finished ? null : touchedDisk(disks, player.body(), radius, GAME.TOUCH_MARGIN);
     if (hit) {
       finished = true;
@@ -240,7 +241,7 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
       `${palEl.dataset.name} hit ${name} on level ${level}`);
     showBanner(
       'Game over',
-      `${palEl.dataset.name} touched the ${disk.antibiotic.name} disk. Antibiotics kill bacteria!`,
+      `${palEl.dataset.name} swam into the ${disk.antibiotic.name} zone of inhibition. Antibiotics kill bacteria!`,
       `Try level ${level} again`,
       { startOver: level > 1 }, // on level 1 they'd do the same thing
     );

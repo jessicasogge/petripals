@@ -100,11 +100,11 @@ describe('game settings', () => {
   it('keep the disks inside the dish and clear of where the pal starts', () => {
     expect(GAME.DISK_MIN_DISTANCE).toBeLessThan(GAME.DISK_MAX_DISTANCE);
     // The farthest disk, buffer and all, still sits inside the rim.
-    expect(GAME.DISK_MAX_DISTANCE + GAME.DISK_RADIUS + GAME.DISK_BUFFER).toBeLessThan(1);
+    expect(GAME.DISK_MAX_DISTANCE + GAME.DISK_RADIUS + GAME.ZONE_MAX_WIDTH).toBeLessThan(1);
   });
 
-  it('count a touch with a much smaller margin than the space offspring keep from disks', () => {
-    expect(GAME.TOUCH_MARGIN).toBeLessThan(GAME.DISK_BUFFER);
+  it('count a touch with a much smaller margin than even the smallest zone', () => {
+    expect(GAME.TOUCH_MARGIN).toBeLessThan(GAME.ZONE_MIN_WIDTH);
   });
 
   it('let a chain or cluster hold at least a few cells', () => {
