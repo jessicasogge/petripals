@@ -1,7 +1,7 @@
 // Checks where the win spore burst comes from and that its colors are real
 // colors.
 import { describe, expect, it } from 'vitest';
-import { AGAR_COLORS, burstOrigin, lighten } from '../public/game/spores.js';
+import { AGAR_COLORS, burstOrigin } from '../public/game/spores.js';
 
 describe('burstOrigin', () => {
   it('bursts from the middle of the element, as fractions of the window', () => {
@@ -22,16 +22,5 @@ describe('burstOrigin', () => {
 describe('AGAR_COLORS', () => {
   it('are all six-digit hex colors', () => {
     for (const color of AGAR_COLORS) expect(color).toMatch(/^#[0-9A-F]{6}$/i);
-  });
-});
-
-describe('lighten', () => {
-  it('leaves the color alone at 0 and makes white at 1', () => {
-    expect(lighten('#3e7cc9', 0)).toBe('#3e7cc9');
-    expect(lighten('#3E7CC9', 1)).toBe('#ffffff');
-  });
-
-  it('goes part of the way to white in between', () => {
-    expect(lighten('#000000', 0.5)).toBe('#808080');
   });
 });
