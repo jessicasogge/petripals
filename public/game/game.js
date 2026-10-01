@@ -176,7 +176,7 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
 
     // Touching any antibiotic disk, or the zone of inhibition around it, is
     // game over.
-    const hit = finished ? null : touchedDisk(disks, player.body(), radius, GAME.TOUCH_MARGIN);
+    const hit = finished ? null : touchedDisk(disks, player.body(), radius);
     if (hit) {
       finished = true;
       held.clear();

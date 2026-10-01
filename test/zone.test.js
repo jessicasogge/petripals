@@ -3,6 +3,8 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { placeAntibiotics, touchedDisk, zoneWidth } from '../public/game/antibiotic.js';
 import { GAME } from '../public/game/config.js';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 beforeEach(() => {
   document.body.innerHTML = '<div class="agar"></div>';
@@ -41,16 +43,35 @@ describe('touching the zone', () => {
   const dishRadius = 200;
   const disk = { fx: 0.5, fy: 0, r: GAME.DISK_RADIUS, zone: zoneWidth(30), antibiotic: { code: 'P' } };
   const edgeOfZone = (disk.fx - disk.r - disk.zone) * dishRadius; // px from the dish center
-  const margin = GAME.TOUCH_MARGIN; // what the game passes
 
   it('counts as touching once a cell reaches the zone, before it gets to the disk', () => {
     const cell = [edgeOfZone - 4, 0, 5]; // 1px into the zone, well short of the disk
     expect(touchedDisk([{ ...disk, zone: 0 }], [cell], dishRadius)).toBeNull();
-    expect(touchedDisk([disk], [cell], dishRadius, margin)).toBe(disk);
+    expect(touchedDisk([disk], [cell], dishRadius)).toBe(disk);
   });
 
-  it("doesn't count a cell that's clear of the zone", () => {
-    const cell = [edgeOfZone - 8, 0, 5]; // 3px short of the zone's edge
-    expect(touchedDisk([disk], [cell], dishRadius, margin)).toBeNull();
+  it('counts the slightest touch of the edge', () => {
+    const cell = [edgeOfZone - 4.9, 0, 5]; // a tenth of a pixel over the edge
+    expect(touchedDisk([disk], [cell], dishRadius)).toBe(disk);
+  });
+
+  it("doesn't count a cell that's even a pixel short of the zone, with no extra margin", () => {
+    // The game used to count coming within an extra margin as touching, so it
+    // could end with a gap still showing.
+    const cell = [edgeOfZone - 6, 0, 5]; // 1px short of the zone's edge
+    expect(touchedDisk([disk], [cell], dishRadius)).toBeNull();
+  });
+});
+
+describe('when the pal dies', () => {
+  // Read the stylesheet from the project folder (jsdom changes import.meta.url).
+  const css = readFileSync(resolve(process.cwd(), 'public/styles.css'), 'utf8');
+  const rule = css.match(/\.pal-mover\.killed \.dish-pal \{([^}]*)\}/)[1];
+
+  it('freezes her mid-wiggle, so she stays exactly where she touched the zone', () => {
+    // Turning the animation off instead snaps her back to her resting pose,
+    // up to 10px away, so she looked like she never touched it.
+    expect(rule).toMatch(/animation-play-state:\s*paused/);
+    expect(rule).not.toMatch(/animation:\s*none/);
   });
 });
