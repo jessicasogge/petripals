@@ -14,7 +14,7 @@
   },
   "keywords": [],
   "author": "Jessica Sogge",
-  "license": "ISC",
+  "license": "MIT",
   "type": "module",
   "dependencies": {
     "express": "^5.2.1"

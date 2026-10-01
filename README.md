@@ -68,6 +68,14 @@ The tests use [Vitest](https://vitest.dev/). Most of the game logic runs in [jsd
 
 Every push to `main` runs the tests and, if they pass, publishes `public/` to GitHub Pages (see [`.github/workflows/pages.yml`](.github/workflows/pages.yml)).
 
+## Contributing
+
+Bug reports, ideas and fixes are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for how to get started, and please follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## License
+
+PetriPals is released under the [MIT License](LICENSE). The confetti uses [canvas-confetti](https://github.com/catdad/canvas-confetti), which is ISC licensed ([`public/game/vendor/confetti.LICENSE`](public/game/vendor/confetti.LICENSE)).
+
 ## Credits
 
 Made by Jessica Sogge.
