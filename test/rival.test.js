@@ -54,7 +54,8 @@ describe('rivalBrain', () => {
     list[0] = { fx: -0.5, fy: 0 }; // a new one appears on the left instead
     brain.step(0.01, radius);
     expect(leader.x).toBeGreaterThan(0); // still heading right...
-    for (let i = 0; i < 50; i++) brain.step(0.01, radius); // ...until it looks again
+    const steps = Math.ceil(MIXED.RIVAL_REACT_MS / 10) + 1;
+    for (let i = 0; i < steps; i++) brain.step(0.01, radius); // ...until it looks again
     expect(leader.facing).toBe(-1);
   });
 
