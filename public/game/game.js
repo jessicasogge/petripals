@@ -194,12 +194,16 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
       feedOffspring(seconds, radius);
 
       const won = totalCells() >= target;
-      if (won && sinceAnyDivision > GAME.DIVIDE_MS + 300) {
+      if (won) {
+        // Celebrate the moment the colony is big enough, and stop play so a
+        // disk can't be touched after winning. The pop-up waits only until
+        // the newest cell has finished sliding into place.
         finished = true;
         held.clear();
         nutrients.stop();
-        setTimeout(showWin, 300);
-      } else if (!won && pending >= GAME.NUTRIENTS_PER_DIVISION &&
+        sporeBurst(playerMover, { big: level === LEVELS.length });
+        setTimeout(showWin, Math.max(0, GAME.DIVIDE_MS - sinceAnyDivision));
+      } else if (pending >= GAME.NUTRIENTS_PER_DIVISION &&
                  sinceDivision > GAME.DIVIDE_MS) {
         dividePlayer();
       }
@@ -219,7 +223,6 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
   }
 
   function showWin() {
-    sporeBurst(playerMover, { big: level === LEVELS.length });
     const name = palEl.dataset.name;
     const pal = palEl.dataset.pal;
     track(`level-complete/${pal}/level-${level}`, `${name} finished level ${level}`);
