@@ -229,10 +229,13 @@ body {
   width: min(760px, 100%);
 }
 
+/* The agar keeps itself square (below) and the glass rim wraps around it.
+   Don't size the agar from the dish's height instead: Safari (so every
+   browser on an iPhone) can ignore a percentage height when the parent's
+   height only comes from aspect-ratio, which squashes the agar into an oval. */
 .petri-dish {
   position: relative;
   width: min(600px, 100%);
-  aspect-ratio: 1;
   margin: 0 auto;
   padding: 18px;
   border-radius: 50%;
@@ -247,7 +250,7 @@ body {
 .agar {
   position: relative;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1;
   border-radius: 50%;
   display: grid;
   place-items: center;
