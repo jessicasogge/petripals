@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { GAME } from '../public/game/config.js';
-import { coaster, keepInDish, pushApart } from '../public/game/physics.js';
+import { coaster, keepInDish, pushApart, pushInsideRim } from '../public/game/physics.js';
 
 // keepInDish only reads the dish's width, so a plain object stands in for it.
 // This dish has a radius of 200px.
@@ -163,5 +163,43 @@ describe('coaster', () => {
     for (let i = 0; i < 600; i++) coast(1 / 600);
     expect(g.x).toBeGreaterThan(200 / GAME.SETTLE_RATE * 0.9);
     expect(g.x).toBeLessThan(200 / GAME.SETTLE_RATE * 1.05);
+  });
+});
+
+describe('pushInsideRim', () => {
+  const R = 200;
+
+  it('leaves a body that is already inside alone', () => {
+    expect(pushInsideRim([[0, 0, 10], [150, 0, 10]], R)).toEqual([0, 0]);
+  });
+
+  it('pulls a cell poking out back in, straight toward the center', () => {
+    const [dx, dy] = pushInsideRim([[195, 0, 10]], R);
+    expect(dx).toBeCloseTo(-5);
+    expect(dy).toBeCloseTo(0);
+  });
+
+  it("doesn't pull in a long chain lying along the rim just because it's long", () => {
+    // Eight cells in a gentle arc just inside the rim: a long group, but every
+    // cell is inside, so nothing moves.
+    const chain = [];
+    for (let i = 0; i < 8; i++) {
+      const a = i * 0.11;
+      chain.push([Math.cos(a) * 175, Math.sin(a) * 175, 10]);
+    }
+    expect(pushInsideRim(chain, R)).toEqual([0, 0]);
+  });
+
+  it('only moves a chain as far as its one stray cell needs', () => {
+    const chain = [[100, 0, 10], [120, 0, 10], [140, 0, 10], [160, 0, 10], [185, 0, 10], [195, 0, 10]];
+    const [dx, dy] = pushInsideRim(chain, R);
+    expect(dx).toBeCloseTo(-5);
+    expect(dy).toBeCloseTo(0);
+  });
+
+  it('ends with every cell inside, even with several sticking out in different places', () => {
+    const body = [[195, 30, 10], [150, 140, 12], [-10, 196, 8]];
+    const [dx, dy] = pushInsideRim(body, R);
+    for (const [x, y, r] of body) expect(Math.hypot(x + dx, y + dy) + r).toBeLessThanOrEqual(R + 1e-6);
   });
 });
