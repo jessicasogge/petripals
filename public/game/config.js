@@ -3,6 +3,13 @@
 // daughters stick together: in chains for Streptococcus (divides in one
 // plane) or grape-like clusters for Staphylococcus (divides in several).
 //
+// Each antibiotic's `zone` is the zone of inhibition around its disk, as the
+// diameter in millimeters a lab would measure for a susceptible strain of
+// that species (ballpark figures from standard disk tests; bigger means the
+// drug works better). Borrelia can't be grown for disk tests, so Elia's are
+// made up from how well each drug works on her. The game scales these down
+// to fit the dish (see ZONE_* below).
+//
 // `antibiotics` are the disks placed in each pal's dish, in order (level 1
 // uses the first, level 5 all five, and later levels start over from the
 // top): drugs commonly used against that species, labeled with their
@@ -32,11 +39,11 @@ export const SPECIES = {
       [0.295, 0.0, 0.182],
     ],
     antibiotics: [
-      { code: 'CIP', name: 'ciprofloxacin' },
-      { code: 'GM', name: 'gentamicin' },
-      { code: 'CAZ', name: 'ceftazidime' },
-      { code: 'TZP', name: 'piperacillin-tazobactam' },
-      { code: 'MEM', name: 'meropenem' },
+      { code: 'CIP', name: 'ciprofloxacin', zone: 30 },
+      { code: 'GM', name: 'gentamicin', zone: 20 },
+      { code: 'CAZ', name: 'ceftazidime', zone: 25 },
+      { code: 'TZP', name: 'piperacillin-tazobactam', zone: 27 },
+      { code: 'MEM', name: 'meropenem', zone: 29 },
     ],
   },
   vi: {
@@ -57,11 +64,11 @@ export const SPECIES = {
       [0.322, 0.094, 0.161],
     ],
     antibiotics: [
-      { code: 'TE', name: 'tetracycline' },
-      { code: 'CIP', name: 'ciprofloxacin' },
-      { code: 'AZM', name: 'azithromycin' },
-      { code: 'DO', name: 'doxycycline' },
-      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole' },
+      { code: 'TE', name: 'tetracycline', zone: 24 },
+      { code: 'CIP', name: 'ciprofloxacin', zone: 33 },
+      { code: 'AZM', name: 'azithromycin', zone: 22 },
+      { code: 'DO', name: 'doxycycline', zone: 25 },
+      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 26 },
     ],
   },
   // A spirochete: a long corkscrew-shaped cell that divides in two like a rod.
@@ -84,11 +91,11 @@ export const SPECIES = {
       [0.396, 0.0, 0.083],
     ],
     antibiotics: [
-      { code: 'DO', name: 'doxycycline' },
-      { code: 'AMX', name: 'amoxicillin' },
-      { code: 'CXM', name: 'cefuroxime' },
-      { code: 'CRO', name: 'ceftriaxone' },
-      { code: 'AZM', name: 'azithromycin' },
+      { code: 'DO', name: 'doxycycline', zone: 32 },
+      { code: 'AMX', name: 'amoxicillin', zone: 28 },
+      { code: 'CXM', name: 'cefuroxime', zone: 23 },
+      { code: 'CRO', name: 'ceftriaxone', zone: 34 },
+      { code: 'AZM', name: 'azithromycin', zone: 30 },
     ],
   },
   // A coccobacillus: a short, plump rod with no flagellum. Divides in two like a rod.
@@ -105,11 +112,11 @@ export const SPECIES = {
       [0.142, 0.008, 0.275],
     ],
     antibiotics: [
-      { code: 'CRO', name: 'ceftriaxone' },
-      { code: 'AMC', name: 'amoxicillin-clavulanate' },
-      { code: 'AZM', name: 'azithromycin' },
-      { code: 'LVX', name: 'levofloxacin' },
-      { code: 'CTX', name: 'cefotaxime' },
+      { code: 'CRO', name: 'ceftriaxone', zone: 36 },
+      { code: 'AMC', name: 'amoxicillin-clavulanate', zone: 20 },
+      { code: 'AZM', name: 'azithromycin', zone: 17 },
+      { code: 'LVX', name: 'levofloxacin', zone: 35 },
+      { code: 'CTX', name: 'cefotaxime', zone: 34 },
     ],
   },
   scarlett: {
@@ -119,11 +126,11 @@ export const SPECIES = {
     layout: 'chain',
     colors: { fill: '#fca5a5', stroke: '#b91c1c', highlight: '#fee2e2', dark: '#7f1d1d' },
     antibiotics: [
-      { code: 'P', name: 'penicillin' },
-      { code: 'E', name: 'erythromycin' },
-      { code: 'CC', name: 'clindamycin' },
-      { code: 'CRO', name: 'ceftriaxone' },
-      { code: 'VA', name: 'vancomycin' },
+      { code: 'P', name: 'penicillin', zone: 30 },
+      { code: 'E', name: 'erythromycin', zone: 27 },
+      { code: 'CC', name: 'clindamycin', zone: 22 },
+      { code: 'CRO', name: 'ceftriaxone', zone: 33 },
+      { code: 'VA', name: 'vancomycin', zone: 23 },
     ],
   },
   goldie: {
@@ -133,11 +140,11 @@ export const SPECIES = {
     layout: 'cluster',
     colors: { fill: '#fde68a', stroke: '#b45309', highlight: '#fef3c7', dark: '#78350f' },
     antibiotics: [
-      { code: 'OX', name: 'oxacillin' },
-      { code: 'VA', name: 'vancomycin' },
-      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole' },
-      { code: 'CC', name: 'clindamycin' },
-      { code: 'DO', name: 'doxycycline' },
+      { code: 'OX', name: 'oxacillin', zone: 21 },
+      { code: 'VA', name: 'vancomycin', zone: 18 },
+      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 28 },
+      { code: 'CC', name: 'clindamycin', zone: 27 },
+      { code: 'DO', name: 'doxycycline', zone: 26 },
     ],
   },
 };
@@ -172,10 +179,17 @@ export const GAME = {
   DISK_MAX_DISTANCE: 0.65,
   DISK_MIN_GAP: 0.4,
   // The zone of inhibition: the clear ring around each disk where the drug
-  // has soaked into the agar, this wide (a fraction of the dish radius).
-  // Offspring grow right up to its edge but never into it, and the player
-  // touching it is game over.
-  ZONE_WIDTH: 0.045,
+  // has soaked into the agar. Offspring grow right up to its edge but never
+  // into it, and the player touching it is game over. Its width comes from
+  // the drug's zone in mm: ZONE_MM_SMALL mm or less is ZONE_MIN_WIDTH wide,
+  // ZONE_MM_BIG mm or more is ZONE_MAX_WIDTH, and in between scales evenly
+  // (widths are fractions of the dish radius).
+  ZONE_MM_SMALL: 15,
+  ZONE_MM_BIG: 37,
+  ZONE_MIN_WIDTH: 0.025,
+  ZONE_MAX_WIDTH: 0.07,
+  // Room to swim between two neighboring zones, at least.
+  SWIM_ROOM: 0.13,
   // Extra room counted as touching a zone, so the player loses as soon as the
   // edges meet (about a pixel, to cover the zone's soft edge).
   TOUCH_MARGIN: 0.005,

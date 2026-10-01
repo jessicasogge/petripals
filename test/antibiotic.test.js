@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { antibioticsFor, diskSpot, diskSpots, pushOffDisks, touchedDisk, touchesDisk } from '../public/game/antibiotic.js';
+import { antibioticsFor, diskSpot, diskSpots, pushOffDisks, touchedDisk, touchesDisk, zoneWidth } from '../public/game/antibiotic.js';
 import { GAME, LEVELS, SPECIES } from '../public/game/config.js';
 
 describe('diskSpot', () => {
@@ -112,8 +112,8 @@ describe('touchedDisk', () => {
   it('uses a game margin about the width of the outlines', () => {
     expect(GAME.TOUCH_MARGIN).toBeGreaterThan(0);
     expect(GAME.TOUCH_MARGIN).toBeLessThan(0.02);
-    // Offspring still keep clear of the disks by more than this.
-    expect(GAME.ZONE_WIDTH).toBeGreaterThan(GAME.TOUCH_MARGIN);
+    // Even the smallest zone is much wider than this.
+    expect(GAME.ZONE_MIN_WIDTH).toBeGreaterThan(GAME.TOUCH_MARGIN * 3);
   });
 });
 
@@ -204,16 +204,76 @@ describe('pushOffDisks', () => {
 });
 
 describe('zone of inhibition', () => {
-  it('is wide enough to see without blocking the space between disks', () => {
-    expect(GAME.ZONE_WIDTH).toBeGreaterThan(0);
-    // Even with a zone around both disks, there's still room to swim between:
-    // more than a rod pal is tall (about 0.08 of the dish radius).
-    expect(GAME.DISK_MIN_GAP - 2 * (GAME.DISK_RADIUS + GAME.ZONE_WIDTH)).toBeGreaterThan(0.12);
+  it('turns a zone in mm into a width that grows with the zone', () => {
+    expect(zoneWidth(GAME.ZONE_MM_SMALL)).toBeCloseTo(GAME.ZONE_MIN_WIDTH);
+    expect(zoneWidth(GAME.ZONE_MM_BIG)).toBeCloseTo(GAME.ZONE_MAX_WIDTH);
+    expect(zoneWidth(30)).toBeGreaterThan(zoneWidth(20));
+    // Beyond the range it stays at the smallest or biggest width.
+    expect(zoneWidth(6)).toBeCloseTo(GAME.ZONE_MIN_WIDTH);
+    expect(zoneWidth(50)).toBeCloseTo(GAME.ZONE_MAX_WIDTH);
+  });
+
+  it('gives every antibiotic a zone in a believable range, different across each pal\'s drugs', () => {
+    for (const [pal, species] of Object.entries(SPECIES)) {
+      for (const { code, zone } of species.antibiotics) {
+        expect(zone, `${pal} ${code}`).toBeGreaterThanOrEqual(15);
+        expect(zone, `${pal} ${code}`).toBeLessThanOrEqual(40);
+      }
+      const sizes = species.antibiotics.map((a) => a.zone);
+      expect(Math.max(...sizes) - Math.min(...sizes), pal).toBeGreaterThanOrEqual(5);
+    }
+  });
+
+  it('gives the same drug different zones on different pals', () => {
+    // Ciprofloxacin, ceftriaxone, azithromycin and others show up for more than one pal.
+    const byDrug = {};
+    for (const species of Object.values(SPECIES)) {
+      for (const { code, zone } of species.antibiotics) (byDrug[code] ??= new Set()).add(zone);
+    }
+    for (const code of ['CIP', 'CRO', 'AZM', 'VA', 'DO', 'SXT', 'CC']) {
+      expect(byDrug[code].size, code).toBeGreaterThan(1);
+    }
+  });
+
+  it('leaves room to swim between the two biggest zones, wider than a rod pal is tall', () => {
+    const [a, b] = diskSpots([GAME.ZONE_MAX_WIDTH, GAME.ZONE_MAX_WIDTH]);
+    const between = Math.hypot(a.fx - b.fx, a.fy - b.fy) - 2 * (GAME.DISK_RADIUS + GAME.ZONE_MAX_WIDTH);
+    expect(between).toBeGreaterThanOrEqual(GAME.SWIM_ROOM - 1e-9);
+    expect(GAME.SWIM_ROOM).toBeGreaterThan(0.1);
+  });
+
+  it('always fits seven disks with each pal\'s zones, with swimming room between every pair', () => {
+    for (const species of Object.values(SPECIES)) {
+      const zones = antibioticsFor(species.antibiotics, 7).map((a) => zoneWidth(a.zone));
+      for (let dish = 0; dish < 30; dish++) {
+        const disks = diskSpots(zones);
+        expect(disks).toHaveLength(7);
+        for (let i = 0; i < disks.length; i++) {
+          expect(disks[i].zone).toBe(zones[i]);
+          for (let j = i + 1; j < disks.length; j++) {
+            const a = disks[i];
+            const b = disks[j];
+            const between = Math.hypot(a.fx - b.fx, a.fy - b.fy) - (a.r + a.zone + b.r + b.zone);
+            expect(between).toBeGreaterThanOrEqual(GAME.SWIM_ROOM - 1e-9);
+          }
+        }
+      }
+    }
   });
 
   it('never reaches the middle, where the pal starts', () => {
     // A rod pal reaches about 0.12 of the dish radius from its center.
-    expect(GAME.DISK_MIN_DISTANCE - GAME.DISK_RADIUS - GAME.ZONE_WIDTH).toBeGreaterThan(0.2);
+    expect(GAME.DISK_MIN_DISTANCE - GAME.DISK_RADIUS - GAME.ZONE_MAX_WIDTH).toBeGreaterThan(0.2);
+  });
+
+  it('counts touching a zone as touching its disk', () => {
+    const disk = { fx: 0.5, fy: 0, r: 0.1, zone: 0.05 };
+    // The zone's edge is at 0.35 of the dish radius = 70px.
+    expect(touchesDisk(disk, [[64, 0, 5]], 200)).toBe(false);
+    expect(touchesDisk(disk, [[66, 0, 5]], 200)).toBe(true);
+    // pushOffDisks moves a body clear of the whole zone.
+    const [dx] = pushOffDisks([disk], [[66, 0, 5]], 200);
+    expect(66 + dx).toBeCloseTo(65);
   });
 });
 

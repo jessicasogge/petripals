@@ -131,7 +131,7 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       const allowed = (x, y) => {
         const [sx, sy] = toWorld(x, y);
         return !disks.some((disk) =>
-          touchesDisk(disk, [[sx, sy, cellRadius]], dishRadius, GAME.ZONE_WIDTH));
+          touchesDisk(disk, [[sx, sy, cellRadius]], dishRadius));
       };
       const spot = layout === 'chain'
         ? chainSpot(group.cells, px, py, allowed)

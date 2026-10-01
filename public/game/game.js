@@ -167,16 +167,16 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
       if (group === player) {
         [group.x, group.y] = keepInDish(agar, group.x, group.y, group.size, group);
       } else {
-        nudge(group, pushOffDisks(disks, group.body(), radius, GAME.ZONE_WIDTH));
+        nudge(group, pushOffDisks(disks, group.body(), radius));
         nudge(group, pushInsideRim(group.body(), radius));
-        nudge(group, pushOffDisks(disks, group.body(), radius, GAME.ZONE_WIDTH));
+        nudge(group, pushOffDisks(disks, group.body(), radius));
       }
       group.place();
     }
 
     // Touching any antibiotic disk, or the zone of inhibition around it, is
     // game over.
-    const hit = finished ? null : touchedDisk(disks, player.body(), radius, GAME.ZONE_WIDTH + GAME.TOUCH_MARGIN);
+    const hit = finished ? null : touchedDisk(disks, player.body(), radius, GAME.TOUCH_MARGIN);
     if (hit) {
       finished = true;
       held.clear();

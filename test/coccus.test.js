@@ -240,23 +240,24 @@ describe('an offspring cell dividing', () => {
 
 describe('antibiotic disks', () => {
   // A disk to the right of a cell at the center, as the game stores it
-  // (fractions of the dish radius). The usual spot for a new cell on that
-  // side is just clear of the disk itself but inside its buffer, so the
-  // buffer is the only thing keeping a cell out of it.
-  const clearOfDisk = SPACING * UNIT + (GAME.DISK_RADIUS + GAME.ZONE_WIDTH / 2) * DISH_RADIUS + CELL_PX / 2;
-  const diskRight = { fx: clearOfDisk / DISH_RADIUS, fy: 0, r: GAME.DISK_RADIUS };
+  // (fractions of the dish radius), with a zone of inhibition around it. The
+  // usual spot for a new cell on that side is just clear of the disk itself
+  // but inside its zone, so the zone is the only thing keeping a cell out.
+  const ZONE = 0.045;
+  const clearOfDisk = SPACING * UNIT + (GAME.DISK_RADIUS + ZONE / 2) * DISH_RADIUS + CELL_PX / 2;
+  const diskRight = { fx: clearOfDisk / DISH_RADIUS, fy: 0, r: GAME.DISK_RADIUS, zone: ZONE };
 
   it('never attaches a new cell on or right next to a disk', () => {
     // A one-cell chain only grows toward the player, and here that spot is
-    // clear of the disk itself but inside its buffer, so there's no room.
+    // clear of the disk itself but inside its zone, so there's no room.
     const group = makeGroup('scarlett');
     expect(group.attachSpot(50, 0, [diskRight], DISH_RADIUS)).toBeNull();
     // Away from the disk, it grows fine.
     expect(group.attachSpot(-50, 0, [diskRight], DISH_RADIUS)).not.toBeNull();
   });
 
-  it('keeps every cell it does attach clear of the disk and its buffer', () => {
-    const reach = (diskRight.r + GAME.ZONE_WIDTH) * DISH_RADIUS + CELL_PX / 2;
+  it('keeps every cell it does attach clear of the disk and its zone', () => {
+    const reach = (diskRight.r + ZONE) * DISH_RADIUS + CELL_PX / 2;
     const diskCenter = [diskRight.fx * DISH_RADIUS, 0];
     for (let angle = 0; angle < 6.28; angle += 0.4) {
       const group = makeGroup('goldie');
