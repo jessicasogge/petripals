@@ -87,6 +87,23 @@ describe('scattering nutrients', () => {
   });
 });
 
+describe('colors', () => {
+  it('gives each fleck a rainbow color, not all the same one', () => {
+    const hues = new Set();
+    for (let dish = 0; dish < 5; dish++) {
+      document.body.innerHTML = '<div class="agar"></div>';
+      scatterNutrients();
+      for (const f of liveFlecks()) {
+        const hue = Number(f.el.style.getPropertyValue('--hue'));
+        expect(hue).toBeGreaterThanOrEqual(0);
+        expect(hue).toBeLessThan(360);
+        hues.add(hue);
+      }
+    }
+    expect(hues.size).toBeGreaterThan(10);
+  });
+});
+
 describe('eating nutrients', () => {
   it('eats a fleck the pal is on and reports it', () => {
     const nutrients = scatterNutrients();

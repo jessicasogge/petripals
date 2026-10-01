@@ -273,18 +273,18 @@ body {
   width: 2.2%;
   aspect-ratio: 1;
   border-radius: 45% 55% 50% 40%;
-  background: #c2410c;
-  opacity: 0.75;
+  /* Each fleck gets a random --hue (set in game/nutrients.js), so the agar is
+     sprinkled with every color of the rainbow. The faint dark ring keeps the
+     yellow ones visible against the yellow agar. */
+  background: hsl(var(--hue, 20) 85% 52%);
+  box-shadow: 0 0 0 1px rgba(19, 78, 74, 0.25);
+  opacity: 0.9;
   transform: translate(-50%, -50%);
   transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
 .nutrient.small {
   width: 1.5%;
-}
-
-.nutrient.pale {
-  background: #a16207;
 }
 
 .nutrient.eaten {
