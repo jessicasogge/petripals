@@ -259,6 +259,12 @@ body {
     radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.75), transparent 32%),
     radial-gradient(circle at 50% 50%, #fef9c3, #e7eeab);
   border: 2px solid rgba(180, 83, 9, 0.2);
+  /* Touch and hold on the agar to steer (game/touch.js): don't scroll or zoom
+     the page, select text, or pop up the long-press menu instead. */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
 /* Positioned by petri-dish.js; the pal's own idle animation stays on the SVG. */
@@ -434,6 +440,34 @@ body {
   color: #334155;
 }
 
+/* Arrow-key directions on a computer, touch directions on a phone or tablet.
+   The media query picks from the device before any script runs (a finger is a
+   "coarse" pointer); then game/touch.js switches them to match whatever the
+   player actually uses, for devices with both. */
+.for-touch {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .for-keys {
+    display: none;
+  }
+
+  .for-touch {
+    display: inline;
+  }
+}
+
+html.input-touch .for-keys,
+html.input-keys .for-touch {
+  display: none;
+}
+
+html.input-touch .for-touch,
+html.input-keys .for-keys {
+  display: inline;
+}
+
 /* The antibiotic disk: a small white paper disk with the drug's code on it,
    like the disks used in the lab. Placed by game/antibiotic.js. */
 .antibiotic {
@@ -547,4 +581,20 @@ body:not(.picker-page) {
 body:not(.picker-page) .signature {
   margin-top: auto;
   padding-top: 2rem;
+}
+
+/* On a phone, give the dish as much of the screen as we can: less padding
+   around the card and a thinner glass rim. */
+@media (max-width: 600px) {
+  .picker-page:has(.dish-shell) {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .dish-shell {
+    padding: 1rem 0.5rem;
+  }
+
+  .dish-shell .petri-dish {
+    padding: 8px;
+  }
 }

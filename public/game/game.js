@@ -1,4 +1,4 @@
-// The game loop: arrow-key steering, dividing as the player eats, the cell
+// The game loop: arrow-key and touch steering, dividing as the player eats, the cell
 // counter, the antibiotic disks, and the level-complete, win or game-over
 // pop-up.
 import { pushOffDisks, touchedDisk } from './antibiotic.js';
@@ -7,6 +7,7 @@ import { coccusGroup } from './coccus.js';
 import { keepInDish, pushApart, pushInsideRim } from './physics.js';
 import { rodGroup } from './rod.js';
 import { sporeBurst } from './spores.js';
+import { stepToward, touchSteering } from './touch.js';
 import { track } from './track.js';
 
 // `level` is which level this is (1 to 5) and `target` how many cells it
@@ -45,6 +46,9 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
   window.addEventListener('keyup', (event) => held.delete(event.key));
   // Don't keep moving if the window loses focus while a key is down.
   window.addEventListener('blur', () => held.clear());
+
+  // On a touch screen (or with a mouse), touch and hold where to swim.
+  const touch = touchSteering(agar);
 
   // The pop-up's buttons: the main one goes to the next level, back to
   // level 1, or tries this level again; after a game over, "Start over" goes
@@ -139,11 +143,21 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
         dx += directions[key][0];
         dy += directions[key][1];
       }
+      const maxStep = GAME.SPEED * radius * seconds;
       if (dx !== 0 || dy !== 0) {
         const length = Math.hypot(dx, dy); // same speed on diagonals
-        player.x += (dx / length) * GAME.SPEED * radius * seconds;
-        player.y += (dy / length) * GAME.SPEED * radius * seconds;
+        player.x += (dx / length) * maxStep;
+        player.y += (dy / length) * maxStep;
         if (dx !== 0) player.facing = Math.sign(dx);
+      } else if (touch.target()) {
+        // Swim toward the finger, at the same speed as with the keys.
+        const [tx, ty] = touch.target();
+        const [mx, my] = stepToward(player.x, player.y, tx, ty, maxStep, GAME.ARRIVE * radius);
+        player.x += mx;
+        player.y += my;
+        // Only turn around when mostly heading sideways, so she doesn't
+        // flip back and forth while swimming nearly straight up or down.
+        if (Math.abs(mx) > Math.abs(my) * 0.5) player.facing = Math.sign(mx);
       }
     }
 
@@ -180,6 +194,7 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
     if (hit) {
       finished = true;
       held.clear();
+      touch.stop();
       nutrients.stop();
       playerMover.classList.add('killed');
       setTimeout(() => showGameOver(hit), 500);
@@ -200,6 +215,7 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
         // the newest cell has finished sliding into place.
         finished = true;
         held.clear();
+        touch.stop();
         nutrients.stop();
         sporeBurst(playerMover, { big: level === LEVELS.length });
         setTimeout(showWin, Math.max(0, GAME.DIVIDE_MS - sinceAnyDivision));

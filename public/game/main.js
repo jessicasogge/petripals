@@ -4,6 +4,10 @@ import { antibioticsFor, placeAntibiotics } from './antibiotic.js';
 import { LEVELS, SPECIES } from './config.js';
 import { playGame } from './game.js';
 import { scatterNutrients } from './nutrients.js';
+import { watchInputMode } from './touch.js';
+
+// Show touch or arrow-key directions, whichever fits the device.
+watchInputMode();
 
 const params = new URLSearchParams(window.location.search);
 const choice = params.get('pal');
