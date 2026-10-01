@@ -4,8 +4,9 @@
 // plane) or grape-like clusters for Staphylococcus (divides in several).
 //
 // `antibiotics` are the disks placed in each pal's dish, in order (level 1
-// uses the first, level 5 all five): drugs commonly used against that
-// species, labeled with their standard disk codes.
+// uses the first, level 5 all five, and later levels start over from the
+// top): drugs commonly used against that species, labeled with their
+// standard disk codes.
 //
 // For rod-style pals, `body` traces the drawing's outline as circles
 // [x, y, radius], in fractions of the drawing's width from its center. It's
@@ -128,6 +129,8 @@ export const LEVELS = [
   { disks: 3, target: 16 },
   { disks: 4, target: 32 },
   { disks: 5, target: 64 },
+  { disks: 6, target: 128 },
+  { disks: 7, target: 256 },
 ];
 
 export const GAME = {

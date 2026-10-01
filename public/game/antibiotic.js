@@ -13,16 +13,21 @@ export function diskSpot(random = Math.random) {
 }
 
 // Pick spots for `count` disks, spread apart from each other so there's
-// always room to swim between them.
+// always room to swim between them. With lots of disks, the first few can
+// land so that there's no room left for the rest; then start over.
 export function diskSpots(count, random = Math.random) {
-  const disks = [];
-  for (let tries = 0; disks.length < count && tries < 500; tries++) {
-    const spot = diskSpot(random);
-    if (disks.every((d) => Math.hypot(d.fx - spot.fx, d.fy - spot.fy) >= GAME.DISK_MIN_GAP)) {
-      disks.push(spot);
+  let best = [];
+  for (let attempt = 0; attempt < 50 && best.length < count; attempt++) {
+    const disks = [];
+    for (let tries = 0; disks.length < count && tries < 500; tries++) {
+      const spot = diskSpot(random);
+      if (disks.every((d) => Math.hypot(d.fx - spot.fx, d.fy - spot.fy) >= GAME.DISK_MIN_GAP)) {
+        disks.push(spot);
+      }
     }
+    if (disks.length > best.length) best = disks;
   }
-  return disks;
+  return best;
 }
 
 // Whether any of the given circles overlaps the disk. Circles are
@@ -71,6 +76,12 @@ export function pushOffDisks(disks, circles, dishRadius, buffer = 0) {
 // The first disk the circles touch, or null if they touch none.
 export function touchedDisk(disks, circles, dishRadius, margin = 0) {
   return disks.find((disk) => touchesDisk(disk, circles, dishRadius, margin)) || null;
+}
+
+// The antibiotics for a dish with `count` disks: the pal's list in order,
+// starting over from the top if there are more disks than drugs.
+export function antibioticsFor(list, count) {
+  return Array.from({ length: count }, (_, i) => list[i % list.length]);
 }
 
 // Put one disk per antibiotic on the agar and return where they are.

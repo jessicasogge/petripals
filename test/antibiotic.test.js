@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { diskSpot, diskSpots, pushOffDisks, touchedDisk, touchesDisk } from '../public/game/antibiotic.js';
+import { antibioticsFor, diskSpot, diskSpots, pushOffDisks, touchedDisk, touchesDisk } from '../public/game/antibiotic.js';
 import { GAME, LEVELS, SPECIES } from '../public/game/config.js';
 
 describe('diskSpot', () => {
@@ -193,28 +193,36 @@ describe('touch shapes', () => {
 });
 
 describe('antibiotic choices', () => {
-  it('gives every pal a different antibiotic for each disk in the last level, each with a code and a name', () => {
-    const most = LEVELS[LEVELS.length - 1].disks;
+  it('gives every pal five different antibiotics, each with a code and a name', () => {
     for (const [pal, species] of Object.entries(SPECIES)) {
-      expect(species.antibiotics, pal).toHaveLength(most);
+      expect(species.antibiotics, pal).toHaveLength(5);
       for (const antibiotic of species.antibiotics) {
         expect(antibiotic.code, pal).toMatch(/^[A-Z]{1,3}$/);
         expect(antibiotic.name, pal).toBeTruthy();
       }
       const codes = new Set(species.antibiotics.map((a) => a.code));
-      expect(codes.size, pal).toBe(most);
+      expect(codes.size, pal).toBe(5);
     }
+  });
+
+  it('uses the list in order, starting over when a level has more disks than drugs', () => {
+    const list = ['A', 'B', 'C', 'D', 'E'];
+    expect(antibioticsFor(list, 1)).toEqual(['A']);
+    expect(antibioticsFor(list, 5)).toEqual(list);
+    expect(antibioticsFor(list, 7)).toEqual(['A', 'B', 'C', 'D', 'E', 'A', 'B']);
   });
 });
 
 describe('levels', () => {
-  it('adds one disk and doubles the colony each level, from 1 disk and 4 cells to 5 and 64', () => {
+  it('adds one disk and doubles the colony each level, from 1 disk and 4 cells to 7 and 256', () => {
     expect(LEVELS).toEqual([
       { disks: 1, target: 4 },
       { disks: 2, target: 8 },
       { disks: 3, target: 16 },
       { disks: 4, target: 32 },
       { disks: 5, target: 64 },
+      { disks: 6, target: 128 },
+      { disks: 7, target: 256 },
     ]);
   });
 

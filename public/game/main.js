@@ -1,6 +1,6 @@
 // Entry point for the petri dish page: find the pal and level picked in the
 // URL (petri-dish.html?pal=mona&level=2) and start the game with them.
-import { placeAntibiotics } from './antibiotic.js';
+import { antibioticsFor, placeAntibiotics } from './antibiotic.js';
 import { LEVELS, SPECIES } from './config.js';
 import { playGame } from './game.js';
 import { scatterNutrients } from './nutrients.js';
@@ -16,7 +16,7 @@ if (pal) {
   pal.removeAttribute('hidden');
   document.title = `PetriPals | ${pal.dataset.name} | Level ${levelNumber}`;
   const species = SPECIES[pal.dataset.pal];
-  const disks = placeAntibiotics(species.antibiotics.slice(0, level.disks));
+  const disks = placeAntibiotics(antibioticsFor(species.antibiotics, level.disks));
   const nutrients = scatterNutrients({ avoid: disks });
   playGame(pal, species, nutrients, disks, { level: levelNumber, target: level.target });
 } else {

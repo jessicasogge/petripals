@@ -88,6 +88,9 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       for (const c of group.cells) farthest = Math.max(farthest, Math.hypot(c.x, c.y) + R);
       return farthest * pxPerUnit();
     },
+    // Redraw only while a new cell is sliding into place; a still group
+    // looks the same every frame, and with hundreds of cells redrawing them
+    // all slows the game down.
     update(seconds) {
       if (group.moveFor !== null) {
         group.moveFor += seconds * 1000;
@@ -98,8 +101,8 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
           c.y = c.fromY + (c.toY - c.fromY) * ease;
         }
         if (t >= 1) group.moveFor = null;
+        draw();
       }
-      draw();
     },
     place() {
       mover.style.transform = `translate(${group.x}px, ${group.y}px) scaleX(${group.facing})`;
