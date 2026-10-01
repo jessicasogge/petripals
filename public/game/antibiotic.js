@@ -120,6 +120,10 @@ export function placeAntibiotics(antibiotics) {
     zone.style.left = `${50 + spot.fx * 50}%`;
     zone.style.top = `${50 + spot.fy * 50}%`;
     zone.style.width = `${(spot.r + GAME.ZONE_WIDTH) * 100}%`;
+    // A slightly uneven edge, different for each zone, like on a real plate.
+    const wobble = () => `${48 + Math.random() * 4}%`;
+    zone.style.borderRadius =
+      `${wobble()} ${wobble()} ${wobble()} ${wobble()} / ${wobble()} ${wobble()} ${wobble()} ${wobble()}`;
     zone.setAttribute('aria-hidden', 'true');
     agar.appendChild(zone);
     const el = document.createElement('div');
