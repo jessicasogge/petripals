@@ -8,6 +8,8 @@
 // top): drugs commonly used against that species, labeled with their
 // standard disk codes.
 //
+// Rod-style pals are drawn `size` percent of the dish wide (12 unless set).
+//
 // For rod-style pals, `body` traces the drawing's outline as circles
 // [x, y, radius], in fractions of the drawing's width from its center. It's
 // what counts as touching an antibiotic disk.
@@ -81,8 +83,11 @@ export const SPECIES = {
     ],
   },
   // A coccobacillus: a short, plump rod with no flagellum. Divides in two like a rod.
+  // H. influenzae is one of the smallest bacteria, and her drawing fills
+  // more of its box than the other rods', so she's drawn smaller.
   coco: {
     kind: 'rod',
+    size: 8.5,
     body: [
       [-0.142, 0.008, 0.275],
       [0.0, 0.008, 0.275],

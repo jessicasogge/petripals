@@ -10,7 +10,9 @@ import { rodGroup } from '../public/game/rod.js';
 // way the browser would.
 const DISH_WIDTH = 400;
 const DISH_RADIUS = DISH_WIDTH / 2;
-const ROD_PX = 0.12 * DISH_WIDTH; // rods are 12% of the dish wide
+// Rods are drawn 12% of the dish wide unless their species says otherwise.
+const rodPx = (name) => ((SPECIES[name].size ?? 12) / 100) * DISH_WIDTH;
+const ROD_PX = rodPx('mona');
 
 let saved;
 beforeEach(() => {
@@ -57,6 +59,13 @@ describe('a rod', () => {
     expect(rod.reach()).toBeCloseTo(ROD_PX / 2);
   });
 
+  it('draws Coco smaller than the other rods, since she is one of the smallest bacteria', () => {
+    const coco = makeRod('coco');
+    expect(coco.mover.style.width).toBe(`${SPECIES.coco.size}%`);
+    expect(SPECIES.coco.size).toBeLessThan(12);
+    expect(coco.reach()).toBeCloseTo(rodPx('coco') / 2);
+  });
+
   it('is drawn where it is in the dish, flipped to face the way it is going', () => {
     const rod = makeRod('coco', { x: 30, y: -12, facing: -1 });
     rod.place();
@@ -68,11 +77,12 @@ describe('touch outline', () => {
   it.each(RODS)('follows %s\'s traced shape, scaled to the drawing and placed where she is', (name) => {
     const rod = makeRod(name, { x: 50, y: 20 });
     const body = rod.body();
+    const w = rodPx(name);
     expect(body).toHaveLength(SPECIES[name].body.length);
     SPECIES[name].body.forEach(([fx, fy, fr], i) => {
-      expect(body[i][0]).toBeCloseTo(50 + fx * ROD_PX);
-      expect(body[i][1]).toBeCloseTo(20 + fy * ROD_PX);
-      expect(body[i][2]).toBeCloseTo(fr * ROD_PX);
+      expect(body[i][0]).toBeCloseTo(50 + fx * w);
+      expect(body[i][1]).toBeCloseTo(20 + fy * w);
+      expect(body[i][2]).toBeCloseTo(fr * w);
     });
   });
 
