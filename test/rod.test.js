@@ -60,7 +60,7 @@ describe('a rod', () => {
   it('is drawn where it is in the dish, flipped to face the way it is going', () => {
     const rod = makeRod('coco', { x: 30, y: -12, facing: -1 });
     rod.place();
-    expect(rod.mover.style.transform).toBe('translate(30px, -12px) scaleX(-1)');
+    expect(rod.mover.style.transform).toBe('translate(30px, -12px) scaleX(-1) rotate(0deg)');
   });
 });
 
@@ -147,5 +147,81 @@ describe('dividing', () => {
     const grandchild = child.divide();
     expect(grandchild.isPlayer).toBe(false);
     expect(document.querySelectorAll('.agar .pal-mover')).toHaveLength(3);
+  });
+});
+
+describe('turning to point the way she swims (Elia)', () => {
+  const deg = (radians) => (radians * 180) / Math.PI;
+  // Steer like the game does: set facing from left/right, then aim.
+  function steer(rod, dx, dy) {
+    if (dx !== 0) rod.facing = Math.sign(dx);
+    rod.aim(dx, dy);
+    rod.update(10); // long enough to finish turning
+  }
+
+  it('points up, down and diagonally, whichever way she faces', () => {
+    const elia = makeRod('elia', { isPlayer: true });
+    steer(elia, 1, 0);
+    expect(deg(elia.tilt)).toBeCloseTo(0);
+    steer(elia, 0, -1); // straight up
+    expect(deg(elia.tilt)).toBeCloseTo(-90);
+    steer(elia, 1, 1); // down and to the right
+    expect(deg(elia.tilt)).toBeCloseTo(45);
+    steer(elia, -1, -1); // up and to the left
+    expect(elia.facing).toBe(-1);
+    expect(deg(elia.tilt)).toBeCloseTo(-45);
+  });
+
+  it('keeps facing the same way when steered straight up or down', () => {
+    const elia = makeRod('elia', { isPlayer: true, facing: -1 });
+    steer(elia, 0, 1);
+    expect(elia.facing).toBe(-1);
+    expect(deg(elia.tilt)).toBeCloseTo(90);
+  });
+
+  it('swings there smoothly rather than snapping', () => {
+    const elia = makeRod('elia', { isPlayer: true });
+    elia.aim(0, -1);
+    elia.update(1 / 60);
+    expect(deg(elia.tilt)).toBeLessThan(0);
+    expect(deg(elia.tilt)).toBeGreaterThan(-90);
+  });
+
+  it.each(['mona', 'vi', 'coco'])('leaves %s level: she only flips left or right', (name) => {
+    const rod = makeRod(name, { isPlayer: true });
+    steer(rod, 0, -1);
+    steer(rod, 1, 1);
+    expect(rod.tilt).toBe(0);
+  });
+
+  it('is drawn tilted', () => {
+    const elia = makeRod('elia', { isPlayer: true });
+    steer(elia, 0, -1);
+    elia.place();
+    const angle = Number(elia.mover.style.transform.match(/rotate\(([-\d.e]+)deg\)/)[1]);
+    expect(angle).toBeCloseTo(-90);
+  });
+
+  it('turns her touch outline with her: pointing up, her head is above her and her tail below', () => {
+    for (const facing of [1, -1]) {
+      const elia = makeRod('elia', { isPlayer: true, facing });
+      steer(elia, 0, -1);
+      const body = elia.body();
+      const head = body[body.length - 1]; // her last circle is her head
+      const tail = body[0];
+      expect(head[1]).toBeLessThan(-ROD_PX * 0.3);
+      expect(tail[1]).toBeGreaterThan(ROD_PX * 0.3);
+      expect(Math.abs(head[0])).toBeLessThan(ROD_PX * 0.05);
+    }
+  });
+
+  it('sends a new rod sliding off the way she points, and it points that way too', () => {
+    const burst = GAME.BURST_SPEED * DISH_RADIUS;
+    const elia = makeRod('elia', { isPlayer: true });
+    steer(elia, 0, -1);
+    const child = elia.divide();
+    expect(child.tilt).toBeCloseTo(elia.tilt);
+    expect(child.vy).toBeCloseTo(-burst);
+    expect(Math.abs(child.vx)).toBeLessThanOrEqual(burst * 0.2 + 1e-9);
   });
 });

@@ -56,8 +56,10 @@ export const SPECIES = {
     ],
   },
   // A spirochete: a long corkscrew-shaped cell that divides in two like a rod.
+  // She swims pointing the way she's going (`turns`), not just left or right.
   elia: {
     kind: 'rod',
+    turns: true,
     body: [
       [-0.391, 0.0, 0.104],
       [-0.32, 0.0, 0.104],
@@ -144,6 +146,11 @@ export const GAME = {
   SETTLE_RATE: 4, // how quickly a new group slows to a stop (higher = sooner)
   SETTLE_MS: 1500, // after this long, offspring stay put for good
   DIVIDE_MS: 600,
+  TURN_RATE: 12, // how quickly a pal that turns (Elia) swings to point the new way
+  // A pal that turns only points a new way once it's been steered that way
+  // this long, so letting go of a diagonal (one key always lifts a moment
+  // before the other) doesn't leave her pointing straight across.
+  AIM_HOLD_MS: 60,
   // The antibiotic disks: their radius, how far from the center they can go,
   // and how far apart they must be, center to center (all as fractions of the
   // dish radius). They never sit on the starting spot.

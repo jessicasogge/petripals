@@ -35,6 +35,8 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
     ArrowRight: [1, 0],
   };
   const held = new Set();
+  let steering = ''; // the direction being steered, and for how long
+  let steeringFor = 0;
 
   window.addEventListener('keydown', (event) => {
     if (!(event.key in directions)) return;
@@ -129,6 +131,13 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
         player.x += (dx / length) * GAME.SPEED * radius * seconds;
         player.y += (dy / length) * GAME.SPEED * radius * seconds;
         if (dx !== 0) player.facing = Math.sign(dx);
+        const direction = `${dx},${dy}`;
+        if (direction !== steering) {
+          steering = direction;
+          steeringFor = 0;
+        }
+        steeringFor += seconds * 1000;
+        if (steeringFor >= GAME.AIM_HOLD_MS) player.aim?.(dx, dy);
       }
     }
 
