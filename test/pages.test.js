@@ -1,5 +1,5 @@
-// Checks that every page shows the PetriPals tab icon, not the browser's
-// generic globe.
+// Checks the things every page shares: the PetriPals tab icon (not the
+// browser's generic globe) and Jess's signature at the foot.
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
@@ -16,5 +16,12 @@ describe('tab icon', () => {
   it('has both icon files', () => {
     expect(existsSync(file('favicon.svg'))).toBe(true);
     expect(existsSync(file('favicon-32.png'))).toBe(true);
+  });
+});
+
+describe('signature', () => {
+  it.each(PAGES)('%s is signed at the foot', (page) => {
+    const html = readFileSync(file(page), 'utf8');
+    expect(html).toContain('<footer class="signature">jsogge 2026</footer>');
   });
 });
