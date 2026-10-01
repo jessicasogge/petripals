@@ -169,6 +169,9 @@ export const GAME = {
   SNAP_REACH: 0.3,
   NUTRIENTS_PER_DIVISION: 1, // nutrients the player eats before dividing
   SPEED: 0.8, // player speed, as a fraction of the dish radius per second
+  // With touch steering, how close to the finger counts as there (so she
+  // settles instead of jittering on the spot), as a fraction of the dish radius.
+  ARRIVE: 0.01,
   BURST_SPEED: 0.9, // how hard a new group pushes away when it splits off
   SETTLE_RATE: 4, // how quickly a new group slows to a stop (higher = sooner)
   SETTLE_MS: 1500, // after this long, offspring stay put for good
