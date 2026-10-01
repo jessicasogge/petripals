@@ -183,7 +183,10 @@ export const GAME = {
   // With touch steering, how close to the finger counts as there (so she
   // settles instead of jittering on the spot), as a fraction of the dish radius.
   ARRIVE: 0.01,
-  BURST_SPEED: 0.9, // how hard a new group pushes away when it splits off
+  // How hard a new group pushes away when it splits off. It slides about
+  // BURST_SPEED / SETTLE_RATE of the dish radius (half that for cocci) before
+  // it stops: far enough to see, short enough not to slide into a zone easily.
+  BURST_SPEED: 0.65,
   SETTLE_RATE: 4, // how quickly a new group slows to a stop (higher = sooner)
   SETTLE_MS: 1500, // after this long, offspring stay put for good
   DIVIDE_MS: 600,
