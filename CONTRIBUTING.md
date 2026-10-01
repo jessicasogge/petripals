@@ -41,4 +41,4 @@ Everyone taking part is expected to follow the [Code of Conduct](CODE_OF_CONDUCT
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the project's [ISC License](LICENSE).
+By contributing, you agree that your contributions will be licensed under the project's [MIT License](LICENSE).

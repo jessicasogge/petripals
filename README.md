@@ -74,7 +74,7 @@ Bug reports, ideas and fixes are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## License
 
-PetriPals is released under the [ISC License](LICENSE). The confetti uses [canvas-confetti](https://github.com/catdad/canvas-confetti), also ISC licensed ([`public/game/vendor/confetti.LICENSE`](public/game/vendor/confetti.LICENSE)).
+PetriPals is released under the [MIT License](LICENSE). The confetti uses [canvas-confetti](https://github.com/catdad/canvas-confetti), which is ISC licensed ([`public/game/vendor/confetti.LICENSE`](public/game/vendor/confetti.LICENSE)).
 
 ## Credits
 
