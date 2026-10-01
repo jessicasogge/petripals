@@ -109,12 +109,6 @@ describe('touchedDisk', () => {
     expect(touchedDisk(disks, [[70, 0, 5]], dishRadius, 0.012)).toBeNull();
   });
 
-  it('uses a game margin about the width of the outlines', () => {
-    expect(GAME.TOUCH_MARGIN).toBeGreaterThan(0);
-    expect(GAME.TOUCH_MARGIN).toBeLessThan(0.02);
-    // Even the smallest zone is much wider than this.
-    expect(GAME.ZONE_MIN_WIDTH).toBeGreaterThan(GAME.TOUCH_MARGIN * 3);
-  });
 });
 
 describe('pushOffDisks', () => {

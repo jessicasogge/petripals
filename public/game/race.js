@@ -8,6 +8,7 @@ import { arrowKeys } from './keyboard.js';
 import { rivalBrain } from './rival.js';
 import { rodGroup } from './rod.js';
 import { sporeBurst } from './spores.js';
+import { steer, touchSteering } from './touch.js';
 import { track } from './track.js';
 
 const groupFor = (species) => (species.kind === 'rod' ? rodGroup : coccusGroup);
@@ -47,6 +48,8 @@ export function playRace({ you, rival, nutrients }) {
   const theirs = makeColony({ leader: rivalLeader, nutrients, dishRadius, target, onDivide: () => updateCounter() });
   const brain = rivalBrain(rivalLeader, nutrients);
   const keys = arrowKeys();
+  // On a touch screen (or with a mouse), touch and hold where to swim.
+  const touch = touchSteering(agar);
   let finished = false;
   let lastTime = null;
 
@@ -76,13 +79,7 @@ export function playRace({ you, rival, nutrients }) {
 
     if (!finished) {
       // Steer your pal; the computer steers the rival.
-      const [dx, dy] = keys.direction();
-      if (dx !== 0 || dy !== 0) {
-        const length = Math.hypot(dx, dy); // same speed on diagonals
-        yourLeader.x += (dx / length) * GAME.SPEED * radius * seconds;
-        yourLeader.y += (dy / length) * GAME.SPEED * radius * seconds;
-        if (dx !== 0) yourLeader.facing = Math.sign(dx);
-      }
+      steer(yourLeader, keys.direction(), touch.target(), GAME.SPEED * radius * seconds, GAME.ARRIVE * radius);
       brain.step(seconds, radius);
     }
 
@@ -109,6 +106,7 @@ export function playRace({ you, rival, nutrients }) {
   function finish(won) {
     finished = true;
     keys.stop();
+    touch.stop();
     nutrients.stop();
     updateCounter();
     const winner = won ? yours : theirs;

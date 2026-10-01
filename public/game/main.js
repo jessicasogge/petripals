@@ -8,6 +8,10 @@ import { LEVELS, MIXED, SPECIES } from './config.js';
 import { playGame } from './game.js';
 import { scatterNutrients } from './nutrients.js';
 import { playRace } from './race.js';
+import { watchInputMode } from './touch.js';
+
+// Show touch or arrow-key directions, whichever fits the device.
+watchInputMode();
 
 const params = new URLSearchParams(window.location.search);
 const choice = params.get('pal');
@@ -62,7 +66,10 @@ function startMixed() {
 
   const howTo = document.querySelector('.how-to-play');
   howTo.replaceChildren(
-    `Race ${rival.svg.dataset.name} to ${MIXED.TARGET} cells! Use the arrow keys to eat nutrients.`,
+    `Race ${rival.svg.dataset.name} to ${MIXED.TARGET} cells! `,
+    // Arrow-key or touch wording, whichever fits the device (see styles.css).
+    wording('for-keys', 'Use the arrow keys to eat nutrients.'),
+    wording('for-touch', 'Touch and hold where you want to swim to eat nutrients.'),
     document.createElement('br'),
     'Any cell that eats a nutrient divides, so grab them before the rival does!',
   );
@@ -82,4 +89,11 @@ function italic(text) {
   const i = document.createElement('i');
   i.textContent = text;
   return i;
+}
+
+function wording(className, text) {
+  const span = document.createElement('span');
+  span.className = className;
+  span.textContent = text;
+  return span;
 }

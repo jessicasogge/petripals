@@ -259,6 +259,12 @@ body {
     radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.75), transparent 32%),
     radial-gradient(circle at 50% 50%, #fef9c3, #e7eeab);
   border: 2px solid rgba(180, 83, 9, 0.2);
+  /* Touch and hold on the agar to steer (game/touch.js): don't scroll or zoom
+     the page, select text, or pop up the long-press menu instead. */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
 /* Positioned by petri-dish.js; the pal's own idle animation stays on the SVG. */
@@ -469,6 +475,34 @@ body {
   color: #334155;
 }
 
+/* Arrow-key directions on a computer, touch directions on a phone or tablet.
+   The media query picks from the device before any script runs (a finger is a
+   "coarse" pointer); then game/touch.js switches them to match whatever the
+   player actually uses, for devices with both. */
+.for-touch {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .for-keys {
+    display: none;
+  }
+
+  .for-touch {
+    display: inline;
+  }
+}
+
+html.input-touch .for-keys,
+html.input-keys .for-touch {
+  display: none;
+}
+
+html.input-touch .for-touch,
+html.input-keys .for-keys {
+  display: inline;
+}
+
 /* The antibiotic disk: a small white paper disk with the drug's code on it,
    like the disks used in the lab. Placed by game/antibiotic.js. */
 .antibiotic {
@@ -498,14 +532,17 @@ body {
      uneven shape (set in game/antibiotic.js). */
   border-radius: 50%;
   /* The disk covers the inner ~65%, so the visible ring is the outer third:
-     clear agar out to ~86%, then a hazy rim, then the normal agar. */
+     clear agar, then a thin hazy rim right at the outside. The rim has to
+     sit at the very edge, because that's where touching it ends the game
+     (see touchesDisk in game/antibiotic.js); a rim that faded out early
+     made the game end with a gap still showing. */
   background: radial-gradient(
     closest-side,
     rgba(255, 255, 252, 0.85) 0%,
-    rgba(255, 255, 252, 0.8) 80%,
-    rgba(255, 255, 248, 0.6) 87%,
-    rgba(206, 192, 110, 0.35) 93%,
-    rgba(206, 192, 110, 0.12) 97.5%,
+    rgba(255, 255, 252, 0.8) 88%,
+    rgba(255, 255, 248, 0.65) 93%,
+    rgba(206, 192, 110, 0.4) 97%,
+    rgba(206, 192, 110, 0.3) 99%,
     rgba(206, 192, 110, 0) 100%
   );
   filter: blur(0.5px);
@@ -548,8 +585,11 @@ body {
   transition: filter 0.4s ease, opacity 0.4s ease;
 }
 
+/* Freeze her mid-wiggle rather than turning the animation off: switching it
+   off snaps her back to her resting pose (up to 10px away for a bob), so she
+   would look like she never touched the zone. */
 .pal-mover.killed .dish-pal {
-  animation: none;
+  animation-play-state: paused;
 }
 
 /* Jess's signature at the foot of every page. */
@@ -576,4 +616,20 @@ body:not(.picker-page) {
 body:not(.picker-page) .signature {
   margin-top: auto;
   padding-top: 2rem;
+}
+
+/* On a phone, give the dish as much of the screen as we can: less padding
+   around the card and a thinner glass rim. */
+@media (max-width: 600px) {
+  .picker-page:has(.dish-shell) {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .dish-shell {
+    padding: 1rem 0.5rem;
+  }
+
+  .dish-shell .petri-dish {
+    padding: 8px;
+  }
 }

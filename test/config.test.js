@@ -103,10 +103,6 @@ describe('game settings', () => {
     expect(GAME.DISK_MAX_DISTANCE + GAME.DISK_RADIUS + GAME.ZONE_MAX_WIDTH).toBeLessThan(1);
   });
 
-  it('count a touch with a much smaller margin than even the smallest zone', () => {
-    expect(GAME.TOUCH_MARGIN).toBeLessThan(GAME.ZONE_MIN_WIDTH);
-  });
-
   it('let a chain or cluster hold at least a few cells', () => {
     expect(Number.isInteger(GAME.GROUP_CAP)).toBe(true);
     expect(GAME.GROUP_CAP).toBeGreaterThanOrEqual(4);

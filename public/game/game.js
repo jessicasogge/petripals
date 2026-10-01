@@ -1,4 +1,4 @@
-// The classic game loop: steer with the arrow keys, grow a colony past the
+// The classic game loop: steer with the arrow keys or by touch, grow a colony past the
 // antibiotic disks, and the level-complete, win or game-over pop-up.
 import { touchedDisk } from './antibiotic.js';
 import { makeColony, moveGroups } from './colony.js';
@@ -7,6 +7,7 @@ import { coccusGroup } from './coccus.js';
 import { arrowKeys } from './keyboard.js';
 import { rodGroup } from './rod.js';
 import { sporeBurst } from './spores.js';
+import { steer, touchSteering } from './touch.js';
 import { track } from './track.js';
 
 // `level` is which level this is (1 to 7) and `target` how many cells it
@@ -28,6 +29,8 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
   let finished = false;
   let lastTime = null;
   const keys = arrowKeys();
+  // On a touch screen (or with a mouse), touch and hold where to swim.
+  const touch = touchSteering(agar);
 
   // The pop-up's buttons: the main one goes to the next level, back to
   // level 1, or tries this level again; after a game over, "Start over" goes
@@ -53,13 +56,7 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
 
     // Steer the player's pal.
     if (!finished) {
-      const [dx, dy] = keys.direction();
-      if (dx !== 0 || dy !== 0) {
-        const length = Math.hypot(dx, dy); // same speed on diagonals
-        player.x += (dx / length) * GAME.SPEED * radius * seconds;
-        player.y += (dy / length) * GAME.SPEED * radius * seconds;
-        if (dx !== 0) player.facing = Math.sign(dx);
-      }
+      steer(player, keys.direction(), touch.target(), GAME.SPEED * radius * seconds, GAME.ARRIVE * radius);
     }
 
     colony.tick(seconds);
@@ -67,10 +64,11 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
 
     // Touching any antibiotic disk, or the zone of inhibition around it, is
     // game over.
-    const hit = finished ? null : touchedDisk(disks, player.body(), radius, GAME.TOUCH_MARGIN);
+    const hit = finished ? null : touchedDisk(disks, player.body(), radius);
     if (hit) {
       finished = true;
       keys.stop();
+      touch.stop();
       nutrients.stop();
       playerMover.classList.add('killed');
       setTimeout(() => showGameOver(hit), 500);
@@ -85,6 +83,7 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
         // the newest cell has finished sliding into place.
         finished = true;
         keys.stop();
+        touch.stop();
         nutrients.stop();
         sporeBurst(playerMover, { big: level === LEVELS.length });
         setTimeout(showWin, Math.max(0, GAME.DIVIDE_MS - colony.sinceAnyDivision));
