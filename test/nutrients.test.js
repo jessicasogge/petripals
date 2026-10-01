@@ -104,6 +104,29 @@ describe('colors', () => {
   });
 });
 
+describe('count and positions', () => {
+  it('can put a different number of flecks on the agar', () => {
+    scatterNutrients({ count: 14 });
+    expect(liveFlecks()).toHaveLength(14);
+  });
+
+  it('reports where every fleck is', () => {
+    const nutrients = scatterNutrients();
+    const reported = nutrients.positions();
+    expect(reported).toHaveLength(COUNT);
+    for (const f of liveFlecks()) {
+      expect(reported.some((p) => Math.abs(p.fx - f.fx) < 1e-6 && Math.abs(p.fy - f.fy) < 1e-6)).toBe(true);
+    }
+  });
+
+  it('stops reporting a fleck once it is eaten', () => {
+    const nutrients = scatterNutrients();
+    const [target] = liveFlecks();
+    nutrients.eatNear(target.fx, target.fy, 0.01);
+    expect(nutrients.positions()).toHaveLength(COUNT - 1);
+  });
+});
+
 describe('eating nutrients', () => {
   it('eats a fleck the pal is on and reports it', () => {
     const nutrients = scatterNutrients();

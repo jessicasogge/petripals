@@ -54,7 +54,7 @@ describe('names above the dish', () => {
   it.each(PALS)("matches %s's species name on the picker", (pal) => {
     const picker = page('pal-picker.html');
     // The picker card for this pal links to her dish and shows her species.
-    const card = picker.slice(0, picker.indexOf(`petri-dish.html?pal=${pal}"`));
+    const card = picker.slice(0, picker.indexOf(`choose-mode.html?pal=${pal}"`));
     const shown = [...card.matchAll(/<i>([^<]+)<\/i>/g)].at(-1)[1];
     expect(SPECIES[pal].scientific).toBe(shown);
   });

@@ -50,12 +50,14 @@ export function keepInDish(agar, px, py, reach, group) {
 // don't land in a pile. The player swims over everything, and offspring that
 // have settled stay exactly where they are.
 export function pushApart(groups, player) {
-  const settling = (g) => g !== player && g.age * 1000 < GAME.SETTLE_MS;
+  // Leaders (`player`, or any group marked isPlayer) swim over everything.
+  const leads = (g) => g === player || g.isPlayer === true;
+  const settling = (g) => !leads(g) && g.age * 1000 < GAME.SETTLE_MS;
   for (let i = 0; i < groups.length; i++) {
     for (let j = i + 1; j < groups.length; j++) {
       const a = groups[i];
       const b = groups[j];
-      if (a === player || b === player) continue;
+      if (leads(a) || leads(b)) continue;
       const aMoves = settling(a);
       const bMoves = settling(b);
       if (!aMoves && !bMoves) continue;

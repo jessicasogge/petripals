@@ -151,6 +151,16 @@ export const SPECIES = {
   },
 };
 
+// Mixed culture mode: no disks, just you and a rival pal (picked at random,
+// steered by the computer) racing to grow a colony of TARGET cells first.
+export const MIXED = {
+  TARGET: 32,
+  NUTRIENTS: 14, // flecks on the agar at a time (two species are eating)
+  RIVAL_SPEED: 0.62, // fraction of the dish radius per second (you swim at GAME.SPEED)
+  RIVAL_REACT_MS: 450, // how often the rival looks around for a new nutrient
+  RIVAL_WANDER: 0.5, // how much the rival weaves off course, in radians
+};
+
 // Each level adds an antibiotic disk and doubles the colony you need to grow.
 export const LEVELS = [
   { disks: 1, target: 4 },

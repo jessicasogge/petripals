@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PetriPals | Choose a Mode</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="./favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="picker-page">
+    <main class="picker-shell mode-shell">
+      <div class="mode-pal" aria-hidden="true"></div>
+      <h1>How should <span class="mode-pal-name">your pal</span> play?</h1>
+      <section class="mode-grid">
+        <article class="pal-card mode-card">
+          <h2>Classic</h2>
+          <p>Grow your colony through 7 levels without touching the antibiotic disks.</p>
+          <a class="pick-btn mode-classic" href="./petri-dish.html">Play classic</a>
+        </article>
+        <article class="pal-card mode-card">
+          <h2>Mixed culture</h2>
+          <p>No antibiotics. Race a rival pal to grow the biggest colony first!</p>
+          <a class="pick-btn mode-mixed" href="./petri-dish.html">Play mixed culture</a>
+        </article>
+      </section>
+      <a class="back-link" href="./pal-picker.html">Pick a different pal</a>
+    </main>
+    <script type="module" src="./game/choose-mode.js"></script>
+    <script data-goatcounter="https://petripals.goatcounter.com/count"
+            async src="https://gc.zgo.at/count.js"></script>
+  </body>
+</html>
