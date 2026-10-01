@@ -1,7 +1,8 @@
-// The spore burst: when the player beats a level, the colony "sporulates"
-// and little blobs in agar colors burst out from it and drift down. Uses
-// canvas-confetti (vendor/confetti.js, v1.9.4, ISC license), copied in
-// because the game is plain files with no build step.
+// The spore burst: when a colony wins (you beating a level, or whichever
+// colony wins a mixed culture race), it "sporulates" and little blobs in agar
+// colors burst out from it and drift down. Uses canvas-confetti
+// (vendor/confetti.js, v1.9.4, ISC license), copied in because the game is
+// plain files with no build step.
 import confetti from './vendor/confetti.js';
 
 // Colors of real agar plates and stains.

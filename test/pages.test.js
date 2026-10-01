@@ -2,9 +2,10 @@
 // browser's generic globe) and Jess's signature at the foot.
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { LEVELS, MIXED } from '../public/game/config.js';
 
 const file = (name) => new URL(`../public/${name}`, import.meta.url);
-const PAGES = ['index.html', 'pal-picker.html', 'petri-dish.html'];
+const PAGES = ['index.html', 'pal-picker.html', 'choose-mode.html', 'petri-dish.html'];
 
 describe('tab icon', () => {
   it.each(PAGES)('%s links the icon, with a PNG for browsers without SVG icons', (page) => {
@@ -23,5 +24,18 @@ describe('signature', () => {
   it.each(PAGES)('%s is signed at the foot', (page) => {
     const html = readFileSync(file(page), 'utf8');
     expect(html).toContain('<footer class="signature">jsogge 2026</footer>');
+  });
+});
+
+describe('the mode choice page', () => {
+  // Its descriptions are typed into the page, so check they match the game.
+  const html = readFileSync(file('choose-mode.html'), 'utf8');
+
+  it('says how many levels classic has', () => {
+    expect(html).toContain(`through ${LEVELS.length} levels`);
+  });
+
+  it('says how big a colony wins the mixed culture race', () => {
+    expect(html).toContain(`a colony of ${MIXED.TARGET} cells first`);
   });
 });

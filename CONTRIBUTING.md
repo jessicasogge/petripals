@@ -37,6 +37,7 @@ Everyone taking part is expected to follow the [Code of Conduct](CODE_OF_CONDUCT
 - **Keep pull requests small and focused.** One fix or feature per pull request is easiest to review.
 - **Write comments in plain English** that explain why, not just what, like the existing code does.
 - **Check it on a phone as well as a computer.** The game works with both arrow keys and touch.
+- **Try both game modes.** Classic and mixed culture share a lot of code (colonies, steering, nutrients), so a change for one can affect the other.
 - **Keep the science honest.** If a pal, drug or zone size is simplified or made up for the game, say so in a comment.
 
 ## License

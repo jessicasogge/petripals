@@ -1,6 +1,6 @@
-// Nutrient flecks: scattered over the agar, picked up when the player's pal
-// or any of its offspring touches one, and replaced somewhere else a few
-// seconds later.
+// Nutrient flecks: scattered over the agar, picked up when any pal or
+// offspring touches one (yours, or in mixed culture the rival's too), and
+// replaced somewhere else a few seconds later.
 // `avoid` lists areas to keep clear, like the antibiotic disks, each as
 // { fx, fy, r } in fractions of the dish radius. `count` is how many flecks
 // are on the agar at a time.

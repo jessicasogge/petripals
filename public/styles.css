@@ -119,6 +119,9 @@ body {
   min-height: 100vh;
   display: grid;
   place-items: center;
+  /* Keep the card and the signature under it together in the middle, even
+     on a page whose card is short (like choose-mode.html). */
+  align-content: center;
   padding: 2rem 1rem;
 }
 
