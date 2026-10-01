@@ -117,7 +117,7 @@ export function playRace({ you, rival, nutrients }) {
       if (won) {
         showBanner('You won the race!', `Your colony reached ${target} cells before ${rivalName}'s did.`);
       } else {
-        showBanner(`${rivalName} took over the plate!`, `${rivalName}'s colony reached ${target} cells first.`);
+        showBanner('You lost!', `${rivalName} took over the plate, reaching ${target} cells first.`);
       }
     }, Math.max(0, GAME.DIVIDE_MS - winner.sinceAnyDivision));
   }
