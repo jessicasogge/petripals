@@ -2,7 +2,7 @@
   "name": "petripals",
   "version": "1.0.0",
   "private": true,
-  "description": "A cartoon microbe pal game with an Express + TypeScript server",
+  "description": "A cute browser game where you grow a bacterial colony and dodge antibiotics.",
   "main": "dist/index.js",
   "scripts": {
     "test": "vitest run",
