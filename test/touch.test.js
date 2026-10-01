@@ -5,7 +5,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { fromCenter, stepToward, touchSteering, watchInputMode } from '../public/game/touch.js';
+import { fromCenter, steer, stepToward, touchSteering, watchInputMode } from '../public/game/touch.js';
 
 describe('stepToward', () => {
   it('heads straight for the finger at full speed', () => {
@@ -28,6 +28,48 @@ describe('stepToward', () => {
   it("stays put once she's there, so she doesn't jitter on the spot", () => {
     expect(stepToward(0, 0, 0, 0, 5)).toEqual([0, 0]);
     expect(stepToward(0, 0, 1.5, 0, 5, 2)).toEqual([0, 0]); // close enough counts
+  });
+});
+
+describe('steer', () => {
+  const pal = (x = 0, y = 0, facing = 1) => ({ x, y, facing });
+
+  it('moves with the arrow keys at full speed, the same on diagonals', () => {
+    const p = pal();
+    steer(p, [1, 1], null, 10);
+    expect(Math.hypot(p.x, p.y)).toBeCloseTo(10);
+    expect(p.x).toBeCloseTo(p.y);
+  });
+
+  it('turns to face the way the arrow keys point', () => {
+    const p = pal();
+    steer(p, [-1, 0], null, 5);
+    expect([p.x, p.facing]).toEqual([-5, -1]);
+  });
+
+  it('swims toward the finger when no arrow key is held', () => {
+    const p = pal();
+    steer(p, [0, 0], [30, 40], 5);
+    expect(p.x).toBeCloseTo(3);
+    expect(p.y).toBeCloseTo(4);
+  });
+
+  it('lets the arrow keys win over a finger', () => {
+    const p = pal();
+    steer(p, [0, 1], [100, 0], 5);
+    expect([p.x, p.y]).toEqual([0, 5]);
+  });
+
+  it("doesn't flip her around while swimming nearly straight up or down", () => {
+    const p = pal(0, 0, 1);
+    steer(p, [0, 0], [-1, 50], 5);
+    expect(p.facing).toBe(1);
+  });
+
+  it('stays put with no keys and no finger', () => {
+    const p = pal(7, 8);
+    steer(p, [0, 0], null, 5);
+    expect([p.x, p.y]).toEqual([7, 8]);
   });
 });
 

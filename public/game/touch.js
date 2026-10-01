@@ -82,3 +82,24 @@ export function watchInputMode(root = document.documentElement, win = window) {
     if (event.key.startsWith('Arrow')) set('keys');
   });
 }
+
+// Move `group` (the player's pal) for one frame: the arrow keys win if any
+// are held ([dx, dy] from keyboard.js); otherwise she swims toward the
+// finger, if one is down ([x, y] or null, from touchSteering). The same top
+// speed, `maxStep`, either way; `arrive` is how close to the finger counts as
+// there. Both game modes use this.
+export function steer(group, [dx, dy], finger, maxStep, arrive = 0) {
+  if (dx !== 0 || dy !== 0) {
+    const length = Math.hypot(dx, dy); // same speed on diagonals
+    group.x += (dx / length) * maxStep;
+    group.y += (dy / length) * maxStep;
+    if (dx !== 0) group.facing = Math.sign(dx);
+  } else if (finger) {
+    const [mx, my] = stepToward(group.x, group.y, finger[0], finger[1], maxStep, arrive);
+    group.x += mx;
+    group.y += my;
+    // Only turn around when mostly heading sideways, so she doesn't flip
+    // back and forth while swimming nearly straight up or down.
+    if (Math.abs(mx) > Math.abs(my) * 0.5) group.facing = Math.sign(mx);
+  }
+}

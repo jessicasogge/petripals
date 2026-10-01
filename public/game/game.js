@@ -1,52 +1,34 @@
-// The game loop: arrow-key and touch steering, dividing as the player eats, the cell
-// counter, the antibiotic disks, and the level-complete, win or game-over
-// pop-up.
-import { pushOffDisks, touchedDisk } from './antibiotic.js';
+// The classic game loop: steer with the arrow keys or by touch, grow a colony past the
+// antibiotic disks, and the level-complete, win or game-over pop-up.
+import { touchedDisk } from './antibiotic.js';
+import { makeColony, moveGroups } from './colony.js';
 import { GAME, LEVELS } from './config.js';
 import { coccusGroup } from './coccus.js';
-import { keepInDish, pushApart, pushInsideRim } from './physics.js';
+import { arrowKeys } from './keyboard.js';
 import { rodGroup } from './rod.js';
 import { sporeBurst } from './spores.js';
-import { stepToward, touchSteering } from './touch.js';
+import { steer, touchSteering } from './touch.js';
 import { track } from './track.js';
 
-// `level` is which level this is (1 to 5) and `target` how many cells it
+// `level` is which level this is (1 to 7) and `target` how many cells it
 // takes to beat it.
 export function playGame(palEl, species, nutrients, disks, { level = 1, target = LEVELS[0].target } = {}) {
   const agar = document.querySelector('.agar');
   const counter = document.querySelector('.cell-count');
   const dishRadius = () => agar.clientWidth / 2;
 
-  // Every living group in the dish. The first is the one the player steers.
+  // The player's pal leads the colony.
   const playerMover = document.querySelector('.pal-mover');
   playerMover.classList.add('player');
   const makeGroup = species.kind === 'rod' ? rodGroup : coccusGroup;
   const player = makeGroup({ mover: playerMover, svg: palEl, species, isPlayer: true });
-  const groups = [player];
+  const colony = makeColony({
+    leader: player, nutrients, disks, dishRadius, target, onDivide: () => updateCounter(),
+  });
 
-  let pending = 0; // nutrients the player has eaten toward the next division
-  let sinceDivision = Infinity; // ms since the player last divided
-  let sinceAnyDivision = Infinity; // ms since any cell last divided
   let finished = false;
   let lastTime = null;
-
-  const directions = {
-    ArrowUp: [0, -1],
-    ArrowDown: [0, 1],
-    ArrowLeft: [-1, 0],
-    ArrowRight: [1, 0],
-  };
-  const held = new Set();
-
-  window.addEventListener('keydown', (event) => {
-    if (!(event.key in directions)) return;
-    event.preventDefault(); // stop arrow keys from scrolling the page
-    if (!finished) held.add(event.key);
-  });
-  window.addEventListener('keyup', (event) => held.delete(event.key));
-  // Don't keep moving if the window loses focus while a key is down.
-  window.addEventListener('blur', () => held.clear());
-
+  const keys = arrowKeys();
   // On a touch screen (or with a mouse), touch and hold where to swim.
   const touch = touchSteering(agar);
 
@@ -62,72 +44,9 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
   document.querySelector('.play-again').addEventListener('click', () => goToLevel(nextLevel));
   document.querySelector('.start-over').addEventListener('click', () => goToLevel(1));
 
-  const totalCells = () => groups.reduce((sum, g) => sum + g.cellCount(), 0);
-
   function updateCounter() {
-    const shown = Math.min(totalCells(), target);
+    const shown = Math.min(colony.cellCount(), target);
     counter.textContent = `Level ${level} · ${shown} / ${target} cells`;
-  }
-
-  // Binary fission: a cell divides and the daughter stays behind. A rod's
-  // daughter slides off on its own; a coccus's daughter joins a nearby chain
-  // or cluster (maybe the one it came from), or starts a new one. `from` is
-  // where the dividing cell is, for cocci.
-  function divideGroup(group, from) {
-    sinceAnyDivision = 0;
-    const others = groups.filter((g) => g !== player);
-    const offspring = group.divide(others, dishRadius(), disks, from);
-    if (offspring) {
-      // Size and position the new cell right away. Otherwise the browser draws
-      // it once at the center of the dish before this frame's positioning
-      // catches up, which shows up as a flash.
-      offspring.update(0);
-      offspring.place();
-      groups.push(offspring);
-    }
-    updateCounter();
-  }
-
-  // Move an offspring group by [dx, dy] and stop it sliding back the way it
-  // was pushed from.
-  function nudge(group, [dx, dy]) {
-    if (dx === 0 && dy === 0) return;
-    group.x += dx;
-    group.y += dy;
-    const length = Math.hypot(dx, dy);
-    const against = -(group.vx * dx + group.vy * dy) / length;
-    if (against > 0) {
-      group.vx += (against * dx) / length;
-      group.vy += (against * dy) / length;
-    }
-  }
-
-  function dividePlayer() {
-    pending -= GAME.NUTRIENTS_PER_DIVISION;
-    sinceDivision = 0;
-    divideGroup(player);
-  }
-
-  // Offspring eat any nutrient they touch, whether they land on it or it
-  // pops up under them, and divide in two just like the player.
-  function feedOffspring(seconds, radius) {
-    for (const group of [...groups]) {
-      if (group === player) continue;
-      group.pending ??= 0;
-      group.sinceDivision = (group.sinceDivision ?? Infinity) + seconds * 1000;
-      for (const [mx, my, reach] of group.body()) {
-        const ate = nutrients.eatNear(mx / radius, my / radius, reach / radius);
-        if (ate === 0) continue;
-        group.pending += ate;
-        group.from = [mx, my]; // for cocci, the cell that ate is the one that divides
-      }
-      if (group.pending >= GAME.NUTRIENTS_PER_DIVISION && group.sinceDivision > GAME.DIVIDE_MS &&
-          totalCells() < target) {
-        group.pending -= GAME.NUTRIENTS_PER_DIVISION;
-        group.sinceDivision = 0;
-        divideGroup(group, group.from);
-      }
-    }
   }
 
   function step(time) {
@@ -135,65 +54,20 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
     lastTime = time;
     const radius = dishRadius();
 
-    // Steer the player's group.
+    // Steer the player's pal.
     if (!finished) {
-      let dx = 0;
-      let dy = 0;
-      for (const key of held) {
-        dx += directions[key][0];
-        dy += directions[key][1];
-      }
-      const maxStep = GAME.SPEED * radius * seconds;
-      if (dx !== 0 || dy !== 0) {
-        const length = Math.hypot(dx, dy); // same speed on diagonals
-        player.x += (dx / length) * maxStep;
-        player.y += (dy / length) * maxStep;
-        if (dx !== 0) player.facing = Math.sign(dx);
-      } else if (touch.target()) {
-        // Swim toward the finger, at the same speed as with the keys.
-        const [tx, ty] = touch.target();
-        const [mx, my] = stepToward(player.x, player.y, tx, ty, maxStep, GAME.ARRIVE * radius);
-        player.x += mx;
-        player.y += my;
-        // Only turn around when mostly heading sideways, so she doesn't
-        // flip back and forth while swimming nearly straight up or down.
-        if (Math.abs(mx) > Math.abs(my) * 0.5) player.facing = Math.sign(mx);
-      }
+      steer(player, keys.direction(), touch.target(), GAME.SPEED * radius * seconds, GAME.ARRIVE * radius);
     }
 
-    sinceDivision += seconds * 1000;
-    sinceAnyDivision += seconds * 1000;
-
-    for (const group of groups) {
-      if (group !== player) group.coast(seconds);
-      group.update(seconds);
-    }
-    // Measure every group once, after all the size changes, instead of
-    // measuring between writes (which makes the browser re-lay-out each time).
-    for (const group of groups) group.size = group.reach();
-    pushApart(groups, player);
-    // Offspring grow up to the edge of each disk's zone of inhibition but never
-    // into it: nudge any that slid in back out, and stop them sliding further.
-    // Offspring also stay inside the rim, checked cell by cell (a long chain
-    // isn't one big circle). Then the disks get one more say, so the rim can
-    // never push a chain back onto a disk.
-    for (const group of groups) {
-      if (group === player) {
-        [group.x, group.y] = keepInDish(agar, group.x, group.y, group.size, group);
-      } else {
-        nudge(group, pushOffDisks(disks, group.body(), radius));
-        nudge(group, pushInsideRim(group.body(), radius));
-        nudge(group, pushOffDisks(disks, group.body(), radius));
-      }
-      group.place();
-    }
+    colony.tick(seconds);
+    moveGroups(colony.groups, { agar, radius, seconds, disks });
 
     // Touching any antibiotic disk, or the zone of inhibition around it, is
     // game over.
     const hit = finished ? null : touchedDisk(disks, player.body(), radius);
     if (hit) {
       finished = true;
-      held.clear();
+      keys.stop();
       touch.stop();
       nutrients.stop();
       playerMover.classList.add('killed');
@@ -201,27 +75,20 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
     }
 
     if (!finished) {
-      let ate = 0;
-      for (const [px, py, reach] of player.body()) {
-        ate += nutrients.eatNear(px / radius, py / radius, reach / radius);
-      }
-      pending += ate;
-      feedOffspring(seconds, radius);
+      colony.eat(seconds, radius);
 
-      const won = totalCells() >= target;
-      if (won) {
+      if (colony.cellCount() >= target) {
         // Celebrate the moment the colony is big enough, and stop play so a
         // disk can't be touched after winning. The pop-up waits only until
         // the newest cell has finished sliding into place.
         finished = true;
-        held.clear();
+        keys.stop();
         touch.stop();
         nutrients.stop();
         sporeBurst(playerMover, { big: level === LEVELS.length });
-        setTimeout(showWin, Math.max(0, GAME.DIVIDE_MS - sinceAnyDivision));
-      } else if (pending >= GAME.NUTRIENTS_PER_DIVISION &&
-                 sinceDivision > GAME.DIVIDE_MS) {
-        dividePlayer();
+        setTimeout(showWin, Math.max(0, GAME.DIVIDE_MS - colony.sinceAnyDivision));
+      } else {
+        colony.divideLeader();
       }
     }
 

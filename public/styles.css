@@ -119,6 +119,9 @@ body {
   min-height: 100vh;
   display: grid;
   place-items: center;
+  /* Keep the card and the signature under it together in the middle, even
+     on a page whose card is short (like choose-mode.html). */
+  align-content: center;
   padding: 2rem 1rem;
 }
 
@@ -268,6 +271,32 @@ body {
 }
 
 /* Positioned by petri-dish.js; the pal's own idle animation stays on the SVG. */
+/* The mode screen after picking a pal. */
+.mode-shell h1 {
+  margin: 0.75rem 0 0;
+}
+
+.mode-pal {
+  display: flex;
+  justify-content: center;
+}
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.mode-card h2 {
+  margin: 0.25rem 0 0.5rem;
+}
+
+.mode-card p {
+  margin: 0 0 1rem;
+  line-height: 1.45;
+}
+
 .pal-mover {
   grid-area: 1 / 1; /* stack in the dish center, even after dividing into two */
   width: 18%;
@@ -410,6 +439,15 @@ body {
     drop-shadow(0 0 2px #fff)
     drop-shadow(0 0 3px #fff)
     drop-shadow(0 0 7px rgba(15, 118, 110, 0.45));
+}
+
+/* The rival's pal in mixed culture mode: a soft dark outline instead of the
+   player's white glow, so you can tell who's who. */
+.pal-mover.rival {
+  z-index: 2;
+  filter:
+    drop-shadow(0 0 1.5px rgba(30, 41, 59, 0.55))
+    drop-shadow(0 0 5px rgba(30, 41, 59, 0.25));
 }
 
 .pal-mover.offspring {

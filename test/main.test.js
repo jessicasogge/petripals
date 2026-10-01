@@ -10,6 +10,7 @@ import { LEVELS, SPECIES } from '../public/game/config.js';
 
 // Don't run the real game loop; just record how the game was started.
 vi.mock('../public/game/game.js', () => ({ playGame: vi.fn() }));
+vi.mock('../public/game/race.js', () => ({ playRace: vi.fn() }));
 
 // (jsdom changes import.meta.url to a web address, so find the file from the project folder.)
 const page = readFileSync(resolve(process.cwd(), 'public/petri-dish.html'), 'utf8');
@@ -117,5 +118,51 @@ describe('a broken address', () => {
     const playGame = await open('?pal=mona"]');
     expect(location.replace).toHaveBeenCalledWith('./pal-picker.html');
     expect(playGame).not.toHaveBeenCalled();
+  });
+});
+
+describe('mixed culture mode', () => {
+  async function openMixed(search) {
+    await open(search);
+    const { playRace } = await import('../public/game/race.js');
+    return playRace;
+  }
+
+  it('starts a race instead of the classic game, with no antibiotic disks', async () => {
+    const playRace = await openMixed('?pal=mona&mode=mixed');
+    expect(playRace).toHaveBeenCalledTimes(1);
+    const { playGame } = await import('../public/game/game.js');
+    expect(playGame).not.toHaveBeenCalled();
+    expect(document.querySelectorAll('.antibiotic')).toHaveLength(0);
+  });
+
+  it('picks a rival that is never your own pal', async () => {
+    for (let i = 0; i < 12; i++) {
+      const playRace = await openMixed('?pal=goldie&mode=mixed');
+      const { you, rival } = playRace.mock.calls.at(-1)[0];
+      expect(you.svg.dataset.pal).toBe('goldie');
+      expect(rival.svg.dataset.pal).not.toBe('goldie');
+      expect(rival.species).toEqual(SPECIES[rival.svg.dataset.pal]);
+    }
+  });
+
+  it('uses the rival in the address when there is one', async () => {
+    const playRace = await openMixed('?pal=mona&mode=mixed&rival=vi');
+    expect(playRace.mock.calls[0][0].rival.svg.dataset.pal).toBe('vi');
+  });
+
+  it('ignores a made-up rival, or your own pal as the rival', async () => {
+    for (const rival of ['nope', 'mona']) {
+      const playRace = await openMixed(`?pal=mona&mode=mixed&rival=${rival}`);
+      expect(playRace.mock.calls.at(-1)[0].rival.svg.dataset.pal).not.toMatch(new RegExp(`^(${rival})$`));
+    }
+  });
+
+  it('shows "Mona vs. Vi" above the dish with both species', async () => {
+    await openMixed('?pal=mona&mode=mixed&rival=vi');
+    expect(document.querySelector('.pal-name').textContent).toBe('Mona vs. Vi');
+    expect(document.querySelector('.species').textContent).toBe('Pseudomonas aeruginosa vs. Vibrio cholerae');
+    expect(document.title).toBe('PetriPals | Mona vs. Vi');
+    expect(document.querySelector('.how-to-play').textContent).toMatch(/Race Vi to 64 cells/);
   });
 });
