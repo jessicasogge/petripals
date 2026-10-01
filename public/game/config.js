@@ -39,11 +39,11 @@ export const SPECIES = {
       [0.295, 0.0, 0.182],
     ],
     antibiotics: [
-      { code: 'CIP', name: 'ciprofloxacin', zone: 30 },
-      { code: 'GM', name: 'gentamicin', zone: 20 },
+      { code: 'CIP', name: 'ciprofloxacin', zone: 32 },
+      { code: 'GM', name: 'gentamicin', zone: 18 },
       { code: 'CAZ', name: 'ceftazidime', zone: 25 },
-      { code: 'TZP', name: 'piperacillin-tazobactam', zone: 27 },
-      { code: 'MEM', name: 'meropenem', zone: 29 },
+      { code: 'TZP', name: 'piperacillin-tazobactam', zone: 28 },
+      { code: 'MEM', name: 'meropenem', zone: 31 },
     ],
   },
   vi: {
@@ -64,11 +64,11 @@ export const SPECIES = {
       [0.322, 0.094, 0.161],
     ],
     antibiotics: [
-      { code: 'TE', name: 'tetracycline', zone: 24 },
-      { code: 'CIP', name: 'ciprofloxacin', zone: 33 },
-      { code: 'AZM', name: 'azithromycin', zone: 22 },
-      { code: 'DO', name: 'doxycycline', zone: 25 },
-      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 26 },
+      { code: 'TE', name: 'tetracycline', zone: 23 },
+      { code: 'CIP', name: 'ciprofloxacin', zone: 35 },
+      { code: 'AZM', name: 'azithromycin', zone: 20 },
+      { code: 'DO', name: 'doxycycline', zone: 24 },
+      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 25 },
     ],
   },
   // A spirochete: a long corkscrew-shaped cell that divides in two like a rod.
@@ -91,11 +91,11 @@ export const SPECIES = {
       [0.396, 0.0, 0.083],
     ],
     antibiotics: [
-      { code: 'DO', name: 'doxycycline', zone: 32 },
+      { code: 'DO', name: 'doxycycline', zone: 33 },
       { code: 'AMX', name: 'amoxicillin', zone: 28 },
-      { code: 'CXM', name: 'cefuroxime', zone: 23 },
-      { code: 'CRO', name: 'ceftriaxone', zone: 34 },
-      { code: 'AZM', name: 'azithromycin', zone: 30 },
+      { code: 'CXM', name: 'cefuroxime', zone: 21 },
+      { code: 'CRO', name: 'ceftriaxone', zone: 36 },
+      { code: 'AZM', name: 'azithromycin', zone: 31 },
     ],
   },
   // A coccobacillus: a short, plump rod with no flagellum. Divides in two like a rod.
@@ -112,11 +112,11 @@ export const SPECIES = {
       [0.142, 0.008, 0.275],
     ],
     antibiotics: [
-      { code: 'CRO', name: 'ceftriaxone', zone: 36 },
-      { code: 'AMC', name: 'amoxicillin-clavulanate', zone: 20 },
-      { code: 'AZM', name: 'azithromycin', zone: 17 },
-      { code: 'LVX', name: 'levofloxacin', zone: 35 },
-      { code: 'CTX', name: 'cefotaxime', zone: 34 },
+      { code: 'CRO', name: 'ceftriaxone', zone: 39 },
+      { code: 'AMC', name: 'amoxicillin-clavulanate', zone: 17 },
+      { code: 'AZM', name: 'azithromycin', zone: 13 },
+      { code: 'LVX', name: 'levofloxacin', zone: 38 },
+      { code: 'CTX', name: 'cefotaxime', zone: 37 },
     ],
   },
   scarlett: {
@@ -126,11 +126,11 @@ export const SPECIES = {
     layout: 'chain',
     colors: { fill: '#fca5a5', stroke: '#b91c1c', highlight: '#fee2e2', dark: '#7f1d1d' },
     antibiotics: [
-      { code: 'P', name: 'penicillin', zone: 30 },
+      { code: 'P', name: 'penicillin', zone: 31 },
       { code: 'E', name: 'erythromycin', zone: 27 },
-      { code: 'CC', name: 'clindamycin', zone: 22 },
-      { code: 'CRO', name: 'ceftriaxone', zone: 33 },
-      { code: 'VA', name: 'vancomycin', zone: 23 },
+      { code: 'CC', name: 'clindamycin', zone: 20 },
+      { code: 'CRO', name: 'ceftriaxone', zone: 35 },
+      { code: 'VA', name: 'vancomycin', zone: 21 },
     ],
   },
   goldie: {
@@ -140,11 +140,11 @@ export const SPECIES = {
     layout: 'cluster',
     colors: { fill: '#fde68a', stroke: '#b45309', highlight: '#fef3c7', dark: '#78350f' },
     antibiotics: [
-      { code: 'OX', name: 'oxacillin', zone: 21 },
-      { code: 'VA', name: 'vancomycin', zone: 18 },
-      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 28 },
-      { code: 'CC', name: 'clindamycin', zone: 27 },
-      { code: 'DO', name: 'doxycycline', zone: 26 },
+      { code: 'OX', name: 'oxacillin', zone: 20 },
+      { code: 'VA', name: 'vancomycin', zone: 16 },
+      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 30 },
+      { code: 'CC', name: 'clindamycin', zone: 29 },
+      { code: 'DO', name: 'doxycycline', zone: 27 },
     ],
   },
 };
@@ -184,10 +184,10 @@ export const GAME = {
   // the drug's zone in mm: ZONE_MM_SMALL mm or less is ZONE_MIN_WIDTH wide,
   // ZONE_MM_BIG mm or more is ZONE_MAX_WIDTH, and in between scales evenly
   // (widths are fractions of the dish radius).
-  ZONE_MM_SMALL: 15,
-  ZONE_MM_BIG: 37,
-  ZONE_MIN_WIDTH: 0.025,
-  ZONE_MAX_WIDTH: 0.07,
+  ZONE_MM_SMALL: 13,
+  ZONE_MM_BIG: 40,
+  ZONE_MIN_WIDTH: 0.02,
+  ZONE_MAX_WIDTH: 0.075,
   // Room to swim between two neighboring zones, at least.
   SWIM_ROOM: 0.13,
   // Extra room counted as touching a zone, so the player loses as soon as the

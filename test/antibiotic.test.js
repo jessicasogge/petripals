@@ -221,11 +221,11 @@ describe('zone of inhibition', () => {
   it('gives every antibiotic a zone in a believable range, different across each pal\'s drugs', () => {
     for (const [pal, species] of Object.entries(SPECIES)) {
       for (const { code, zone } of species.antibiotics) {
-        expect(zone, `${pal} ${code}`).toBeGreaterThanOrEqual(15);
+        expect(zone, `${pal} ${code}`).toBeGreaterThanOrEqual(12);
         expect(zone, `${pal} ${code}`).toBeLessThanOrEqual(40);
       }
       const sizes = species.antibiotics.map((a) => a.zone);
-      expect(Math.max(...sizes) - Math.min(...sizes), pal).toBeGreaterThanOrEqual(5);
+      expect(Math.max(...sizes) - Math.min(...sizes), pal).toBeGreaterThanOrEqual(10);
     }
   });
 
