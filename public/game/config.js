@@ -192,7 +192,4 @@ export const GAME = {
   ZONE_MAX_WIDTH: 0.075,
   // Room to swim between two neighboring zones, at least.
   SWIM_ROOM: 0.13,
-  // Extra room counted as touching a zone, so the player loses as soon as the
-  // edges meet (about a pixel, to cover the zone's soft edge).
-  TOUCH_MARGIN: 0.005,
 };
