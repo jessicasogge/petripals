@@ -7,7 +7,9 @@ import { scatterNutrients } from './nutrients.js';
 
 const params = new URLSearchParams(window.location.search);
 const choice = params.get('pal');
-const pal = document.querySelector(`.dish-pal[data-pal="${choice}"]`);
+// Compare names rather than building a CSS selector from the address, so a
+// mangled link (e.g. ?pal=mona"]) can't crash the page.
+const pal = [...document.querySelectorAll('.dish-pal')].find((el) => el.dataset.pal === choice);
 // Level 1 unless the URL says otherwise.
 const levelNumber = Math.min(Math.max(parseInt(params.get('level'), 10) || 1, 1), LEVELS.length);
 const level = LEVELS[levelNumber - 1];
