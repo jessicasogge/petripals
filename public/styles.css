@@ -516,3 +516,29 @@ body {
 .pal-mover.killed .dish-pal {
   animation: none;
 }
+
+/* Jess's signature at the foot of every page. */
+.signature {
+  margin: 2rem 0 1.5rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  opacity: 0.6;
+}
+
+.picker-page .signature {
+  margin: 1rem 0 0;
+}
+
+/* On the home page, push it down to the bottom of the screen instead of
+   right under the start button. */
+body:not(.picker-page) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+body:not(.picker-page) .signature {
+  margin-top: auto;
+  padding-top: 2rem;
+}
