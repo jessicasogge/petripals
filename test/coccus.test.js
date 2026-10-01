@@ -196,6 +196,66 @@ describe('dividing next to a group', () => {
   });
 });
 
+describe('sliding a new cell into place', () => {
+  // A group that has just had a cell join it from the player 50px away.
+  function joining() {
+    const group = makeGroup('scarlett');
+    const player = makeGroup('scarlett', { isPlayer: true, x: 50 });
+    player.divide([group], DISH_RADIUS);
+    const cell = group.cells.find((c) => c.fromX !== c.toX || c.fromY !== c.toY);
+    return { group, cell };
+  }
+
+  it('glides partway there midway through, fast at first and slowing as it arrives', () => {
+    const { group, cell } = joining();
+    const half = GAME.DIVIDE_MS / 2000; // half the slide, in seconds
+    group.update(half);
+    // Halfway through the time it's already 7/8 of the way (an ease-out).
+    expect(cell.x).toBeCloseTo(cell.fromX + (cell.toX - cell.fromX) * 0.875);
+    expect(cell.y).toBeCloseTo(cell.fromY + (cell.toY - cell.fromY) * 0.875);
+    expect(group.moveFor).not.toBeNull(); // still sliding
+  });
+
+  it('adds up the time across frames, landing exactly in place and stopping', () => {
+    const { group, cell } = joining();
+    const frame = GAME.DIVIDE_MS / 1000 / 10;
+    for (let i = 0; i < 9; i++) group.update(frame);
+    expect(group.moveFor).not.toBeNull();
+    group.update(frame * 2); // a slow last frame overshoots the time, not the spot
+    expect([cell.x, cell.y]).toEqual([cell.toX, cell.toY]);
+    expect(group.moveFor).toBeNull();
+  });
+
+  it("stops redrawing once everything is still, since that's slow with many cells", () => {
+    const { group } = joining();
+    group.update(1); // finish the slide
+    group.svg.innerHTML = '<g class="marker" />'; // anything a redraw would replace
+    group.update(1);
+    expect(group.svg.querySelector('.marker')).not.toBeNull();
+  });
+});
+
+describe('size and position', () => {
+  it('reaches one cell\'s radius from its middle when it is a single cell', () => {
+    expect(makeGroup('goldie').reach()).toBeCloseTo(R * UNIT);
+  });
+
+  it('reaches to the edge of its farthest cell as it grows', () => {
+    const group = makeGroup('scarlett', { x: 40, y: -10 });
+    grow(group, 5);
+    const farthest = Math.max(...cellCenters(group).map((c) => distance(c, [40, -10])));
+    expect(group.reach()).toBeCloseTo(farthest + R * UNIT);
+    expect(group.reach()).toBeGreaterThan(R * UNIT);
+  });
+
+  it('is drawn where it is in the dish, flipped to face the way it is going', () => {
+    const group = makeGroup('goldie', { x: -25, y: 60 });
+    group.facing = -1;
+    group.place();
+    expect(group.mover.style.transform).toBe('translate(-25px, 60px) scaleX(-1)');
+  });
+});
+
 describe('an offspring cell dividing', () => {
   it('adds the daughter to its own group, next to the cell that divided', () => {
     const group = makeGroup('goldie');
