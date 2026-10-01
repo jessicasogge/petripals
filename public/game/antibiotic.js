@@ -122,7 +122,9 @@ export function placeAntibiotics(antibiotics) {
     el.textContent = antibiotic.code;
     el.setAttribute('role', 'img');
     el.setAttribute('aria-label', `Antibiotic disk: ${antibiotic.name}. Don't touch it!`);
-    el.title = antibiotic.name;
+    // Shown in a little label above the disk when you hover over it (see
+    // .antibiotic::after in styles.css), e.g. "Penicillin".
+    el.dataset.name = antibiotic.name[0].toUpperCase() + antibiotic.name.slice(1);
     agar.appendChild(el);
     return { ...spot, el, antibiotic };
   });
