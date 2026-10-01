@@ -38,7 +38,8 @@ export function scatterNutrients({ avoid = [] } = {}) {
     // Its radius as a fraction of the dish radius, matching the CSS widths.
     const small = Math.random() < 0.4;
     if (small) el.classList.add('small');
-    if (Math.random() < 0.5) el.classList.add('pale');
+    // A random color of the rainbow for each fleck.
+    el.style.setProperty('--hue', Math.floor(Math.random() * 360));
     el.style.left = `${50 + spot.fx * 50}%`;
     el.style.top = `${50 + spot.fy * 50}%`;
     el.setAttribute('aria-hidden', 'true');
