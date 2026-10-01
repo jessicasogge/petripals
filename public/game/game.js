@@ -44,13 +44,17 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
   // Don't keep moving if the window loses focus while a key is down.
   window.addEventListener('blur', () => held.clear());
 
-  // The pop-up's button: next level, start over, or try this level again.
+  // The pop-up's buttons: the main one goes to the next level, back to
+  // level 1, or tries this level again; after a game over, "Start over" goes
+  // back to level 1.
   let nextLevel = level;
-  document.querySelector('.play-again').addEventListener('click', () => {
+  function goToLevel(n) {
     const url = new URL(window.location.href);
-    url.searchParams.set('level', nextLevel);
+    url.searchParams.set('level', n);
     window.location.href = url.toString();
-  });
+  }
+  document.querySelector('.play-again').addEventListener('click', () => goToLevel(nextLevel));
+  document.querySelector('.start-over').addEventListener('click', () => goToLevel(1));
 
   const totalCells = () => groups.reduce((sum, g) => sum + g.cellCount(), 0);
 
@@ -191,11 +195,12 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
     requestAnimationFrame(step);
   }
 
-  function showBanner(title, message, button) {
+  function showBanner(title, message, button, { startOver = false } = {}) {
     const banner = document.querySelector('.win-banner');
     banner.querySelector('h2').textContent = title;
     banner.querySelector('.win-message').textContent = message;
     banner.querySelector('.play-again').textContent = button;
+    banner.querySelector('.start-over').hidden = !startOver;
     banner.removeAttribute('hidden');
     banner.querySelector('.play-again').focus();
   }
@@ -218,6 +223,7 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
       'Game over',
       `${palEl.dataset.name} touched the ${disk.antibiotic.name} disk. Antibiotics kill bacteria!`,
       `Try level ${level} again`,
+      { startOver: level > 1 }, // on level 1 they'd do the same thing
     );
   }
 

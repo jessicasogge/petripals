@@ -349,10 +349,33 @@ body {
   }
 }
 
-.play-again {
+.banner-buttons {
   margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.banner-buttons .pick-btn {
+  margin-top: 0;
   font: inherit;
   font-weight: 700;
+}
+
+.banner-buttons .pick-btn[hidden] {
+  display: none;
+}
+
+/* The second choice in the pop-up: outlined instead of filled. */
+.start-over {
+  background: white;
+  color: #0f766e;
+  box-shadow: inset 0 0 0 2px #0f766e;
+}
+
+.start-over:hover {
+  background: #ccfbf1;
 }
 
 /* The group the player steers stays on top, in full color with a soft halo;
