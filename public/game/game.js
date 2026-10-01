@@ -229,11 +229,11 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
     if (level === LEVELS.length) track(`won-all-levels/${pal}`, `${name} beat every level`);
     if (level < LEVELS.length) {
       nextLevel = level + 1;
-      showBanner(`Level ${level} complete!`, `${name} grew a colony of ${target} cells!`,
+      showBanner(`Level ${level} complete!`, `You grew a colony of ${target} cells!`,
         `Play level ${nextLevel}`);
     } else {
       nextLevel = 1;
-      showBanner('You won!', `${name} beat all ${LEVELS.length} levels with a colony of ${target} cells!`,
+      showBanner('You won!', `You beat all ${LEVELS.length} levels with a colony of ${target} cells!`,
         'Play again');
     }
   }
