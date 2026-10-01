@@ -54,9 +54,9 @@ export function sporeBurst(el, { big = false } = {}) {
       disableForReducedMotion: true,
     };
     if (!big) {
-      // About a second: fewer spores, not flung as far, and they fade fast.
-      confetti({ ...base, particleCount: 50, startVelocity: 18, scalar: 0.9,
-        gravity: 0.6, decay: 0.9, ticks: 110 });
+      // Under a second: fewer spores, not flung as far, and they fade fast.
+      confetti({ ...base, particleCount: 30, startVelocity: 15, scalar: 0.9,
+        gravity: 0.6, decay: 0.9, ticks: 90 });
       return;
     }
     const floaty = { ...base, gravity: 0.35, decay: 0.92, ticks: 250 };
