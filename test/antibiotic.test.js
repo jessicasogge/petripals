@@ -38,7 +38,7 @@ describe('diskSpots', () => {
         for (let b = a + 1; b < disks.length; b++) {
           const gap = Math.hypot(disks[a].fx - disks[b].fx, disks[a].fy - disks[b].fy);
           expect(gap).toBeGreaterThanOrEqual(GAME.DISK_MIN_GAP);
-          // The open space between their edges is wider than a pal (about 0.14).
+          // The open space between their edges is wider than a pal (about 0.12).
           expect(gap - 2 * GAME.DISK_RADIUS).toBeGreaterThan(0.2);
         }
       }

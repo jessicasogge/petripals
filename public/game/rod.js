@@ -5,7 +5,7 @@ import { coaster } from './physics.js';
 // A rod-shaped cell (Mona, Vi). Each division it splits across the middle
 // and the two cells go their separate ways.
 export function rodGroup({ mover, svg, species, isPlayer }) {
-  const ROD_WIDTH = 14; // percent of the dish
+  const ROD_WIDTH = 12; // percent of the dish
 
   const group = {
     mover,

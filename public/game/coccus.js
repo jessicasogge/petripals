@@ -11,7 +11,7 @@ import { coaster } from './physics.js';
 // player. So Scarlett builds chains along the lines she swims, and Goldie
 // builds bunches wherever she lingers.
 export function coccusGroup({ mover, svg, species, isPlayer }) {
-  const CELL_SIZE = 6; // one cell's width, as a percent of the dish
+  const CELL_SIZE = 5; // one cell's width, as a percent of the dish
   const { layout, colors } = species;
 
   const group = {

@@ -124,7 +124,7 @@ export const GAME = {
   // The antibiotic disks: their radius, how far from the center they can go,
   // and how far apart they must be, center to center (all as fractions of the
   // dish radius). They never sit on the starting spot.
-  DISK_RADIUS: 0.07,
+  DISK_RADIUS: 0.085,
   DISK_MIN_DISTANCE: 0.4,
   DISK_MAX_DISTANCE: 0.65,
   DISK_MIN_GAP: 0.4,

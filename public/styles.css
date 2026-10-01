@@ -406,7 +406,7 @@ body {
   border: 2px solid #cbd5e1;
   box-shadow: 0 2px 4px rgba(19, 78, 74, 0.2);
   color: #475569;
-  font-size: clamp(7px, 1.1vw, 12px);
+  font-size: clamp(8px, 1.3vw, 14px);
   font-weight: 800;
   letter-spacing: 0.02em;
 }

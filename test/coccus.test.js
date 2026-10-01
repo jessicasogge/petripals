@@ -11,7 +11,7 @@ import { GAME, SPECIES } from '../public/game/config.js';
 // the browser would.
 const DISH_WIDTH = 400;
 const DISH_RADIUS = DISH_WIDTH / 2;
-const CELL_PX = 0.06 * DISH_WIDTH; // CELL_SIZE is 6% of the dish
+const CELL_PX = 0.05 * DISH_WIDTH; // CELL_SIZE is 5% of the dish
 const UNIT = CELL_PX / (2 * R); // pixels per SVG unit
 
 let saved;
@@ -242,7 +242,8 @@ describe('antibiotic disks', () => {
   // (fractions of the dish radius). The usual spot for a new cell on that
   // side is just clear of the disk itself but inside its buffer, so the
   // buffer is the only thing keeping a cell out of it.
-  const diskRight = { fx: 0.255, fy: 0, r: GAME.DISK_RADIUS };
+  const clearOfDisk = SPACING * UNIT + (GAME.DISK_RADIUS + GAME.DISK_BUFFER / 2) * DISH_RADIUS + CELL_PX / 2;
+  const diskRight = { fx: clearOfDisk / DISH_RADIUS, fy: 0, r: GAME.DISK_RADIUS };
 
   it('never attaches a new cell on or right next to a disk', () => {
     // A one-cell chain only grows toward the player, and here that spot is
