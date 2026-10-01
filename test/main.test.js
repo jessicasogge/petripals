@@ -1,0 +1,121 @@
+// @vitest-environment jsdom
+// main.js starts the petri dish page from its address, e.g.
+// petri-dish.html?pal=mona&level=2. These tests load the real page into
+// jsdom, a simulated browser page, and check it picks the right pal and
+// level, and copes with addresses that are broken or made up.
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { LEVELS, SPECIES } from '../public/game/config.js';
+
+// Don't run the real game loop; just record how the game was started.
+vi.mock('../public/game/game.js', () => ({ playGame: vi.fn() }));
+
+// (jsdom changes import.meta.url to a web address, so find the file from the project folder.)
+const page = readFileSync(resolve(process.cwd(), 'public/petri-dish.html'), 'utf8');
+const body = page.slice(page.indexOf('<body'), page.indexOf('</body>'));
+
+let location;
+
+// Open the dish page at `search` (like '?pal=mona&level=2') and run main.js.
+async function open(search) {
+  location = { search, href: `http://localhost/petri-dish.html${search}`, replace: vi.fn() };
+  vi.stubGlobal('location', location);
+  document.body.outerHTML = body;
+  vi.resetModules();
+  await import('../public/game/main.js');
+  const { playGame } = await import('../public/game/game.js');
+  return playGame;
+}
+
+beforeEach(() => {
+  document.title = 'PetriPals | Petri Dish';
+});
+afterEach(() => {
+  vi.unstubAllGlobals();
+  vi.clearAllMocks();
+});
+
+describe('picking the pal', () => {
+  it('shows the chosen pal and hides the others', async () => {
+    await open('?pal=vi');
+    const shown = [...document.querySelectorAll('.dish-pal:not([hidden])')];
+    expect(shown.map((el) => el.dataset.pal)).toEqual(['vi']);
+  });
+
+  it('puts her name, in her color, and species above the dish', async () => {
+    await open('?pal=goldie');
+    const name = document.querySelector('.pal-name');
+    expect(name.textContent).toBe('Goldie');
+    // jsdom reports colors as rgb(), so compare against the same color set the same way.
+    const expected = document.createElement('span');
+    expected.style.color = SPECIES.goldie.color;
+    expect(name.style.color).toBe(expected.style.color);
+    expect(document.querySelector('.species-name').textContent).toBe(SPECIES.goldie.scientific);
+  });
+
+  it('names the pal and level in the tab title', async () => {
+    await open('?pal=mona&level=3');
+    expect(document.title).toBe('PetriPals | Mona | Level 3');
+  });
+
+  it.each(Object.keys(SPECIES))('starts the game for %s with her own species settings', async (pal) => {
+    const playGame = await open(`?pal=${pal}`);
+    expect(playGame).toHaveBeenCalledTimes(1);
+    const [palEl, species] = playGame.mock.calls[0];
+    expect(palEl.dataset.pal).toBe(pal);
+    expect(species).toEqual(SPECIES[pal]);
+  });
+});
+
+describe('picking the level', () => {
+  // The level and cell target the game was started with.
+  async function startedAt(search) {
+    const playGame = await open(search);
+    return playGame.mock.calls[0][4];
+  }
+
+  it('starts at level 1 when the address has no level', async () => {
+    expect(await startedAt('?pal=mona')).toEqual({ level: 1, target: LEVELS[0].target });
+  });
+
+  it.each(LEVELS.map((level, i) => [i + 1, level]))(
+    'level %i uses its own cell target and number of disks',
+    async (n, level) => {
+      expect(await startedAt(`?pal=mona&level=${n}`)).toEqual({ level: n, target: level.target });
+      expect(document.querySelectorAll('.agar .antibiotic')).toHaveLength(level.disks);
+    },
+  );
+
+  it.each([
+    ['too high', '99', LEVELS.length],
+    ['zero', '0', 1],
+    ['negative', '-3', 1],
+    ['not a number', 'abc', 1],
+    ['empty', '', 1],
+    ['a decimal', '2.7', 2],
+  ])('a level that is %s ("%s") becomes level %i', async (_, value, expected) => {
+    const { level } = await startedAt(`?pal=mona&level=${value}`);
+    expect(level).toBe(expected);
+  });
+});
+
+describe('a broken address', () => {
+  it.each([
+    ['no pal', ''],
+    ['an unknown pal', '?pal=bogus'],
+    ['a pal with the wrong capitals', '?pal=Mona'],
+  ])('with %s, sends them back to pick a pal instead of starting', async (_, search) => {
+    const playGame = await open(search);
+    expect(location.replace).toHaveBeenCalledWith('./pal-picker.html');
+    expect(playGame).not.toHaveBeenCalled();
+    expect(document.querySelectorAll('.dish-pal:not([hidden])')).toHaveLength(0);
+  });
+
+  it('with a mangled pal name, still sends them back instead of crashing', async () => {
+    // A stray quote or bracket once broke the page before it could redirect.
+    const playGame = await open('?pal=mona"]');
+    expect(location.replace).toHaveBeenCalledWith('./pal-picker.html');
+    expect(playGame).not.toHaveBeenCalled();
+  });
+});

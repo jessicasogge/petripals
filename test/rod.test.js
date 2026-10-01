@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 // rod.js sizes and moves elements on the page, so these tests run in jsdom,
 // a simulated browser page.
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { GAME, SPECIES } from '../public/game/config.js';
 import { rodGroup } from '../public/game/rod.js';
 
@@ -27,6 +27,8 @@ beforeEach(() => {
   });
 });
 afterEach(() => {
+  vi.restoreAllMocks();
+  vi.unstubAllGlobals();
   if (saved) Object.defineProperty(HTMLElement.prototype, 'offsetWidth', saved);
   else delete HTMLElement.prototype.offsetWidth;
 });
@@ -108,6 +110,57 @@ describe('touch outline', () => {
     const tail = (rod) => rod.body()[0][0]; // her first circles are the flagellum
     expect(tail(makeRod('mona', { facing: 1 }))).toBeLessThan(0);
     expect(tail(makeRod('mona', { facing: -1 }))).toBeGreaterThan(0);
+  });
+});
+
+describe("the player's touch outline follows her idle animation", () => {
+  // jsdom doesn't run CSS animations, so stand in for what the browser would
+  // report mid-animation: the drawing's current transform, as a matrix (see
+  // mover.test.js for the same trick).
+  class Matrix {
+    constructor(text) {
+      [this.a, this.b, this.c, this.d, this.e, this.f] = text.match(/-?[\d.]+(?:e-?\d+)?/g).map(Number);
+    }
+  }
+  function animate(transform) {
+    vi.stubGlobal('DOMMatrixReadOnly', Matrix);
+    vi.spyOn(window, 'getComputedStyle').mockReturnValue({ transform, transformOrigin: '0px 0px' });
+  }
+  const BOB_UP = 'matrix(1, 0, 0, 1, 0, -10)'; // translateY(-10px), mid-bob
+
+  it.each(RODS)('moves %s\'s outline up with her when she bobs', (name) => {
+    const still = makeRod(name, { isPlayer: true, x: 50, y: 20 }).body();
+    animate(BOB_UP);
+    const bobbing = makeRod(name, { isPlayer: true, x: 50, y: 20 }).body();
+    bobbing.forEach(([x, y, r], i) => {
+      expect(x).toBeCloseTo(still[i][0]);
+      expect(y).toBeCloseTo(still[i][1] - 10);
+      expect(r).toBeCloseTo(still[i][2]);
+    });
+  });
+
+  it('still mirrors her outline when she bobs facing left', () => {
+    animate(BOB_UP);
+    const right = makeRod('mona', { isPlayer: true, x: 10, facing: 1 }).body();
+    const left = makeRod('mona', { isPlayer: true, x: 10, facing: -1 }).body();
+    right.forEach(([x, y], i) => {
+      expect(left[i][0] - 10).toBeCloseTo(-(x - 10));
+      expect(left[i][1]).toBeCloseTo(y);
+    });
+  });
+
+  it('grows her touch circles when the animation stretches her, so touches are not missed', () => {
+    const still = makeRod('vi', { isPlayer: true }).body();
+    animate('matrix(1.1, 0, 0, 0.9, 0, 0)'); // a squish: wider and shorter
+    const squished = makeRod('vi', { isPlayer: true }).body();
+    squished.forEach(([, , r], i) => expect(r).toBeCloseTo(still[i][2] * 1.1));
+  });
+
+  it("ignores the animation for offspring, which don't bob", () => {
+    const before = makeRod('mona', { x: 50, y: 20 }).body();
+    animate(BOB_UP);
+    expect(makeRod('mona', { x: 50, y: 20 }).body()).toEqual(before);
+    expect(window.getComputedStyle).not.toHaveBeenCalled();
   });
 });
 
