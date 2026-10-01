@@ -8,6 +8,9 @@
 // top): drugs commonly used against that species, labeled with their
 // standard disk codes.
 //
+// `scientific` is the species name shown above the dish, with the pal's name
+// in her `color`.
+//
 // Rod-style pals are drawn `size` percent of the dish wide (12 unless set).
 //
 // For rod-style pals, `body` traces the drawing's outline as circles
@@ -15,6 +18,8 @@
 // what counts as touching an antibiotic disk.
 export const SPECIES = {
   mona: {
+    scientific: 'Pseudomonas aeruginosa',
+    color: '#15803d', // for her name above the dish
     kind: 'rod',
     body: [
       // tail (flagellum)
@@ -35,6 +40,8 @@ export const SPECIES = {
     ],
   },
   vi: {
+    scientific: 'Vibrio cholerae',
+    color: '#c2410c', // for her name above the dish
     kind: 'rod',
     body: [
       // tail (flagellum)
@@ -59,6 +66,8 @@ export const SPECIES = {
   },
   // A spirochete: a long corkscrew-shaped cell that divides in two like a rod.
   elia: {
+    scientific: 'Borrelia burgdorferi',
+    color: '#7e22ce', // for her name above the dish
     kind: 'rod',
     body: [
       [-0.391, 0.0, 0.104],
@@ -86,6 +95,8 @@ export const SPECIES = {
   // H. influenzae is one of the smallest bacteria, and her drawing fills
   // more of its box than the other rods', so she's drawn smaller.
   coco: {
+    scientific: 'Haemophilus influenzae',
+    color: '#7c4a2d', // for her name above the dish
     kind: 'rod',
     size: 8.5,
     body: [
@@ -102,6 +113,8 @@ export const SPECIES = {
     ],
   },
   scarlett: {
+    scientific: 'Streptococcus pyogenes',
+    color: '#b91c1c', // for her name above the dish
     kind: 'coccus',
     layout: 'chain',
     colors: { fill: '#fca5a5', stroke: '#b91c1c', highlight: '#fee2e2', dark: '#7f1d1d' },
@@ -114,6 +127,8 @@ export const SPECIES = {
     ],
   },
   goldie: {
+    scientific: 'Staphylococcus aureus',
+    color: '#b45309', // for her name above the dish
     kind: 'coccus',
     layout: 'cluster',
     colors: { fill: '#fde68a', stroke: '#b45309', highlight: '#fef3c7', dark: '#78350f' },
