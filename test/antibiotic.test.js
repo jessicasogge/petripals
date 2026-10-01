@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { antibioticsFor, diskSpot, diskSpots, pushOffDisks, touchedDisk, touchesDisk, zoneWidth } from '../public/game/antibiotic.js';
+import { antibioticsFor, diskSpot, diskSpots, touchedDisk, touchesDisk, zoneWidth } from '../public/game/antibiotic.js';
 import { GAME, LEVELS, SPECIES } from '../public/game/config.js';
 
 describe('diskSpot', () => {
@@ -111,92 +111,6 @@ describe('touchedDisk', () => {
 
 });
 
-describe('pushOffDisks', () => {
-  const dishRadius = 200;
-  const disk = { fx: 0.5, fy: 0, r: 0.1 }; // center at (100, 0), radius 20px
-
-  it('leaves a body that is already clear where it is', () => {
-    expect(pushOffDisks([disk], [[0, 0, 10]], dishRadius)).toEqual([0, 0]);
-  });
-
-  it('pushes an overlapping body straight out until it just touches', () => {
-    const [dx, dy] = pushOffDisks([disk], [[125, 0, 10]], dishRadius); // 5px overlap
-    expect(dx).toBeCloseTo(5);
-    expect(dy).toBeCloseTo(0);
-  });
-
-  it('pushes out in whatever direction the body came from', () => {
-    const [dx, dy] = pushOffDisks([disk], [[100, 25, 10]], dishRadius);
-    expect(dx).toBeCloseTo(0);
-    expect(dy).toBeCloseTo(5);
-  });
-
-  it('moves the whole body by its deepest overlap', () => {
-    // A chain whose last two cells both overlap; the deeper one decides.
-    const chain = [[60, 0, 10], [80, 0, 10], [95, 0, 10]];
-    const [dx, dy] = pushOffDisks([disk], chain, dishRadius);
-    const moved = chain.map(([x, y, r]) => [x + dx, y + dy, r]);
-    expect(touchesDisk(disk, moved, dishRadius + 1e-6)).toBe(false);
-    expect(dy).toBeCloseTo(0);
-  });
-
-  it('still picks a direction for a body right on the disk center', () => {
-    const [dx, dy] = pushOffDisks([disk], [[100, 0, 10]], dishRadius);
-    expect(Math.hypot(dx, dy)).toBeCloseTo(30);
-  });
-
-  it('keeps extra clear space around the disk when given a buffer', () => {
-    // 5px of clear space (buffer 0.025 of a 200px radius), from the edge that
-    // was already just touching.
-    const [dx] = pushOffDisks([disk], [[130, 0, 10]], dishRadius, 0.025);
-    expect(dx).toBeCloseTo(5);
-  });
-
-  it('clears every disk, not just one', () => {
-    const disks = [disk, { fx: -0.5, fy: 0, r: 0.1 }];
-    const bodies = [[[110, 0, 10]], [[-110, 0, 10]]];
-    for (const body of bodies) {
-      const [dx, dy] = pushOffDisks(disks, body, dishRadius);
-      const moved = body.map(([x, y, r]) => [x + dx, y + dy, r - 1e-6]);
-      expect(touchedDisk(disks, moved, dishRadius)).toBeNull();
-    }
-  });
-
-  // A chain of cells curved around a disk, hugging it, each `inside` px too
-  // close. Like the ones that used to shake back and forth forever.
-  function curvedChain(clear, inside) {
-    const cells = [];
-    for (let i = -3; i <= 3; i++) {
-      const a = Math.PI / 2 + i * 0.45;
-      cells.push([Math.cos(a) * (clear + 7 - inside), Math.sin(a) * (clear + 7 - inside), 7]);
-    }
-    return cells;
-  }
-
-  it('pushes a chain curved around a disk clear in one go, without shaking', () => {
-    const dishRadius = 300;
-    const disk = { fx: 0, fy: 0, r: 0.1 };
-    const buffer = 0.035;
-    const clear = (disk.r + buffer) * dishRadius;
-    let cells = curvedChain(clear, 1);
-    const moves = [];
-    for (let frame = 0; frame < 10; frame++) {
-      const [dx, dy] = pushOffDisks([disk], cells, dishRadius, buffer);
-      moves.push([dx, dy]);
-      cells = cells.map(([x, y, r]) => [x + dx, y + dy, r]);
-    }
-    // The first push clears it, and after that it stays put.
-    expect(Math.hypot(...moves[0])).toBeGreaterThan(0);
-    for (const [dx, dy] of moves.slice(1)) expect(Math.hypot(dx, dy)).toBeLessThan(1e-9);
-    // It moved straight away from the disk (down, toward the chain's middle).
-    expect(Math.abs(moves[0][0])).toBeLessThan(1e-9);
-    expect(moves[0][1]).toBeGreaterThan(0);
-    // And every cell really is clear.
-    for (const [x, y, r] of cells) expect(Math.hypot(x, y)).toBeGreaterThanOrEqual(clear + r - 1e-9);
-  });
-
-});
-
 describe('zone of inhibition', () => {
   it('turns a zone in mm into a width that grows with the zone', () => {
     expect(zoneWidth(GAME.ZONE_MM_SMALL)).toBeCloseTo(GAME.ZONE_MIN_WIDTH);
@@ -270,9 +184,6 @@ describe('zone of inhibition', () => {
     // The zone's edge is at 0.35 of the dish radius = 70px.
     expect(touchesDisk(disk, [[64, 0, 5]], 200)).toBe(false);
     expect(touchesDisk(disk, [[66, 0, 5]], 200)).toBe(true);
-    // pushOffDisks moves a body clear of the whole zone.
-    const [dx] = pushOffDisks([disk], [[66, 0, 5]], 200);
-    expect(66 + dx).toBeCloseTo(65);
   });
 });
 

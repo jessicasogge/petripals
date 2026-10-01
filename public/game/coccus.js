@@ -104,6 +104,13 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
         draw();
       }
     },
+    // Remove the cells at these places in the list (the same order as body()),
+    // when they pop. The others stay exactly where they are.
+    removeCells(indexes) {
+      const gone = new Set(indexes);
+      group.cells = group.cells.filter((_, i) => !gone.has(i));
+      draw();
+    },
     place() {
       mover.style.transform = `translate(${group.x}px, ${group.y}px) scaleX(${group.facing})`;
     },
