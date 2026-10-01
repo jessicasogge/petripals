@@ -2,6 +2,32 @@
 // each other, and sliding to a stop after splitting off.
 import { GAME } from './config.js';
 
+// How far to move a body (circles [x, y, r] in px from the dish center) so
+// every circle is inside a dish of radius `dishRadius`, as [dx, dy]. [0, 0]
+// if it's already inside. It checks the actual cells, so a long chain lying
+// along the rim isn't pulled in as if it were one big circle; each step moves
+// the body straight in from whichever cell pokes out furthest.
+export function pushInsideRim(circles, dishRadius) {
+  let moveX = 0;
+  let moveY = 0;
+  for (let step = 0; step < 4; step++) {
+    let worst = null;
+    for (const [x, y, r] of circles) {
+      const px = x + moveX;
+      const py = y + moveY;
+      const fromCenter = Math.hypot(px, py);
+      const over = fromCenter + r - dishRadius;
+      if (over > 1e-9 && (!worst || over > worst.over)) worst = { over, px, py, fromCenter };
+    }
+    if (!worst) break;
+    const nx = worst.fromCenter > 0 ? worst.px / worst.fromCenter : 1;
+    const ny = worst.fromCenter > 0 ? worst.py / worst.fromCenter : 0;
+    moveX -= nx * worst.over;
+    moveY -= ny * worst.over;
+  }
+  return [moveX, moveY];
+}
+
 // Keep a group whose farthest edge is `reach` px from its center fully inside
 // the dish, sliding along the rim. Offspring still sliding bounce off it.
 export function keepInDish(agar, px, py, reach, group) {

@@ -4,7 +4,7 @@
 import { pushOffDisks, touchedDisk } from './antibiotic.js';
 import { GAME, LEVELS } from './config.js';
 import { coccusGroup } from './coccus.js';
-import { keepInDish, pushApart } from './physics.js';
+import { keepInDish, pushApart, pushInsideRim } from './physics.js';
 import { rodGroup } from './rod.js';
 import { sporeBurst } from './spores.js';
 import { track } from './track.js';
@@ -84,6 +84,20 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
     updateCounter();
   }
 
+  // Move an offspring group by [dx, dy] and stop it sliding back the way it
+  // was pushed from.
+  function nudge(group, [dx, dy]) {
+    if (dx === 0 && dy === 0) return;
+    group.x += dx;
+    group.y += dy;
+    const length = Math.hypot(dx, dy);
+    const against = -(group.vx * dx + group.vy * dy) / length;
+    if (against > 0) {
+      group.vx += (against * dx) / length;
+      group.vy += (against * dy) / length;
+    }
+  }
+
   function dividePlayer() {
     pending -= GAME.NUTRIENTS_PER_DIVISION;
     sinceDivision = 0;
@@ -146,21 +160,17 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
     pushApart(groups, player);
     // Offspring keep a little clear space around each antibiotic disk: nudge
     // any that slid too close back out, and stop them from sliding further in.
+    // Offspring also stay inside the rim, checked cell by cell (a long chain
+    // isn't one big circle). Then the disks get one more say, so the rim can
+    // never push a chain back onto a disk.
     for (const group of groups) {
-      if (group === player) continue;
-      const [dx, dy] = pushOffDisks(disks, group.body(), radius, GAME.DISK_BUFFER);
-      if (dx === 0 && dy === 0) continue;
-      group.x += dx;
-      group.y += dy;
-      const length = Math.hypot(dx, dy);
-      const inward = -(group.vx * dx + group.vy * dy) / length;
-      if (inward > 0) {
-        group.vx += (inward * dx) / length;
-        group.vy += (inward * dy) / length;
+      if (group === player) {
+        [group.x, group.y] = keepInDish(agar, group.x, group.y, group.size, group);
+      } else {
+        nudge(group, pushOffDisks(disks, group.body(), radius, GAME.DISK_BUFFER));
+        nudge(group, pushInsideRim(group.body(), radius));
+        nudge(group, pushOffDisks(disks, group.body(), radius, GAME.DISK_BUFFER));
       }
-    }
-    for (const group of groups) {
-      [group.x, group.y] = keepInDish(agar, group.x, group.y, group.size, group);
       group.place();
     }
 
