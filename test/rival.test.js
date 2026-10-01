@@ -26,10 +26,30 @@ describe('rivalBrain', () => {
   const radius = 200;
   const plate = (list) => ({ positions: () => list });
   const steady = () => 0.5; // no weaving, always the nearest
+  // Let the rival's head-start pause run out, so it's ready to swim.
+  const ready = (brain) => brain.step(MIXED.RIVAL_START_MS / 1000, radius);
+
+  it('waits a moment before starting, so you get a head start', () => {
+    const leader = { x: 0, y: 0, facing: 1 };
+    const brain = rivalBrain(leader, plate([{ fx: -0.5, fy: 0 }]), steady);
+    // Frame after frame for just under the pause, it doesn't move...
+    const frames = Math.floor(MIXED.RIVAL_START_MS / 16) - 1;
+    for (let i = 0; i < frames; i++) brain.step(0.016, radius);
+    expect([leader.x, leader.y]).toEqual([0, 0]);
+    // ...and once the pause is over, it's off.
+    brain.step(0.05, radius);
+    brain.step(0.05, radius);
+    expect(leader.x).toBeLessThan(0);
+  });
+
+  it('pauses for about a second', () => {
+    expect(MIXED.RIVAL_START_MS).toBe(1000);
+  });
 
   it('swims toward the nutrient it picked, at the rival\'s speed', () => {
     const leader = { x: 0, y: 0, facing: 1 };
     const brain = rivalBrain(leader, plate([{ fx: -0.5, fy: 0 }]), steady);
+    ready(brain);
     brain.step(0.1, radius);
     expect(leader.x).toBeCloseTo(-MIXED.RIVAL_SPEED * radius * 0.1);
     expect(leader.y).toBeCloseTo(0);
@@ -42,7 +62,9 @@ describe('rivalBrain', () => {
 
   it('stays put when there\'s nothing to eat', () => {
     const leader = { x: 10, y: 20, facing: 1 };
-    rivalBrain(leader, plate([]), steady).step(0.1, radius);
+    const brain = rivalBrain(leader, plate([]), steady);
+    ready(brain);
+    brain.step(0.1, radius);
     expect([leader.x, leader.y]).toEqual([10, 20]);
   });
 
@@ -50,6 +72,7 @@ describe('rivalBrain', () => {
     const list = [{ fx: 0.5, fy: 0 }];
     const leader = { x: 0, y: 0, facing: 1 };
     const brain = rivalBrain(leader, plate(list), steady);
+    ready(brain);
     brain.step(0.01, radius); // picks the one to the right
     list[0] = { fx: -0.5, fy: 0 }; // a new one appears on the left instead
     brain.step(0.01, radius);
@@ -64,6 +87,7 @@ describe('rivalBrain', () => {
     const random = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
     const leader = { x: 0, y: 0, facing: 1 };
     const brain = rivalBrain(leader, plate([{ fx: 0.9, fy: 0 }]), random);
+    ready(brain);
     for (let i = 0; i < 200; i++) {
       const before = [leader.x, leader.y];
       brain.step(0.016, radius);

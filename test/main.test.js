@@ -163,6 +163,6 @@ describe('mixed culture mode', () => {
     expect(document.querySelector('.pal-name').textContent).toBe('Mona vs. Vi');
     expect(document.querySelector('.species').textContent).toBe('Pseudomonas aeruginosa vs. Vibrio cholerae');
     expect(document.title).toBe('PetriPals | Mona vs. Vi');
-    expect(document.querySelector('.how-to-play').textContent).toMatch(/Race Vi to 32 cells/);
+    expect(document.querySelector('.how-to-play').textContent).toMatch(/Race Vi to 64 cells/);
   });
 });

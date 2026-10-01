@@ -19,9 +19,15 @@ export function rivalBrain(leader, nutrients, random = Math.random) {
   let target = null;
   let sinceLook = Infinity;
   let wander = 0; // radians off course, drifting slowly
+  let waited = 0; // ms since the race started, until the rival gets going
 
   return {
     step(seconds, radius) {
+      // Give you a head start: sit still for the first RIVAL_START_MS.
+      if (waited < MIXED.RIVAL_START_MS) {
+        waited += seconds * 1000;
+        return;
+      }
       sinceLook += seconds * 1000;
       const fx = leader.x / radius;
       const fy = leader.y / radius;
