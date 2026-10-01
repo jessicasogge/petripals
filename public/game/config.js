@@ -156,8 +156,8 @@ export const SPECIES = {
 export const MIXED = {
   TARGET: 64,
   NUTRIENTS: 14, // flecks on the agar at a time (two species are eating)
-  RIVAL_SPEED: 0.5, // fraction of the dish radius per second (you swim at GAME.SPEED)
-  RIVAL_REACT_MS: 550, // how often the rival looks around for a new nutrient
+  RIVAL_SPEED: 0.55, // fraction of the dish radius per second (you swim at GAME.SPEED)
+  RIVAL_REACT_MS: 500, // how often the rival looks around for a new nutrient
   RIVAL_WANDER: 0.5, // how much the rival weaves off course, in radians
   RIVAL_START_MS: 1000, // the rival waits this long before it starts, so you get a head start
 };
