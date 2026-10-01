@@ -113,7 +113,7 @@ describe('touchedDisk', () => {
     expect(GAME.TOUCH_MARGIN).toBeGreaterThan(0);
     expect(GAME.TOUCH_MARGIN).toBeLessThan(0.02);
     // Offspring still keep clear of the disks by more than this.
-    expect(GAME.DISK_BUFFER).toBeGreaterThan(GAME.TOUCH_MARGIN);
+    expect(GAME.ZONE_WIDTH).toBeGreaterThan(GAME.TOUCH_MARGIN);
   });
 });
 
@@ -203,11 +203,17 @@ describe('pushOffDisks', () => {
 
 });
 
-describe('disk buffer', () => {
-  it('leaves a visible gap without blocking the space between disks', () => {
-    expect(GAME.DISK_BUFFER).toBeGreaterThan(0);
-    // Even with the buffer on both disks, there's still room to swim between.
-    expect(GAME.DISK_MIN_GAP - 2 * (GAME.DISK_RADIUS + GAME.DISK_BUFFER)).toBeGreaterThan(0.15);
+describe('zone of inhibition', () => {
+  it('is wide enough to see without blocking the space between disks', () => {
+    expect(GAME.ZONE_WIDTH).toBeGreaterThan(0);
+    // Even with a zone around both disks, there's still room to swim between:
+    // more than a rod pal is tall (about 0.08 of the dish radius).
+    expect(GAME.DISK_MIN_GAP - 2 * (GAME.DISK_RADIUS + GAME.ZONE_WIDTH)).toBeGreaterThan(0.12);
+  });
+
+  it('never reaches the middle, where the pal starts', () => {
+    // A rod pal reaches about 0.12 of the dish radius from its center.
+    expect(GAME.DISK_MIN_DISTANCE - GAME.DISK_RADIUS - GAME.ZONE_WIDTH).toBeGreaterThan(0.2);
   });
 });
 

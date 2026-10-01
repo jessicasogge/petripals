@@ -171,10 +171,12 @@ export const GAME = {
   DISK_MIN_DISTANCE: 0.4,
   DISK_MAX_DISTANCE: 0.65,
   DISK_MIN_GAP: 0.4,
-  // How much clear space offspring keep around each disk, so they never look
-  // like they're touching it. (The player's game over still needs a real touch.)
-  DISK_BUFFER: 0.035,
-  // Extra room counted as touching a disk, so the player loses as soon as the
-  // edges meet (about a pixel, to cover the soft edge of the disk's border).
+  // The zone of inhibition: the clear ring around each disk where the drug
+  // has soaked into the agar, this wide (a fraction of the dish radius).
+  // Offspring grow right up to its edge but never into it, and the player
+  // touching it is game over.
+  ZONE_WIDTH: 0.045,
+  // Extra room counted as touching a zone, so the player loses as soon as the
+  // edges meet (about a pixel, to cover the zone's soft edge).
   TOUCH_MARGIN: 0.005,
 };

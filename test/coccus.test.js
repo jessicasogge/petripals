@@ -243,7 +243,7 @@ describe('antibiotic disks', () => {
   // (fractions of the dish radius). The usual spot for a new cell on that
   // side is just clear of the disk itself but inside its buffer, so the
   // buffer is the only thing keeping a cell out of it.
-  const clearOfDisk = SPACING * UNIT + (GAME.DISK_RADIUS + GAME.DISK_BUFFER / 2) * DISH_RADIUS + CELL_PX / 2;
+  const clearOfDisk = SPACING * UNIT + (GAME.DISK_RADIUS + GAME.ZONE_WIDTH / 2) * DISH_RADIUS + CELL_PX / 2;
   const diskRight = { fx: clearOfDisk / DISH_RADIUS, fy: 0, r: GAME.DISK_RADIUS };
 
   it('never attaches a new cell on or right next to a disk', () => {
@@ -256,7 +256,7 @@ describe('antibiotic disks', () => {
   });
 
   it('keeps every cell it does attach clear of the disk and its buffer', () => {
-    const reach = (diskRight.r + GAME.DISK_BUFFER) * DISH_RADIUS + CELL_PX / 2;
+    const reach = (diskRight.r + GAME.ZONE_WIDTH) * DISH_RADIUS + CELL_PX / 2;
     const diskCenter = [diskRight.fx * DISH_RADIUS, 0];
     for (let angle = 0; angle < 6.28; angle += 0.4) {
       const group = makeGroup('goldie');

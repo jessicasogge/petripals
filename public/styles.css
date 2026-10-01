@@ -452,6 +452,18 @@ body {
   letter-spacing: 0.02em;
 }
 
+/* The zone of inhibition around each disk: clear agar where the drug has
+   soaked in and nothing can grow. Sized by game/antibiotic.js. */
+.zone {
+  position: absolute;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 55%, rgba(255, 255, 255, 0.45) 100%);
+  box-shadow: 0 0 0 1.5px rgba(148, 163, 184, 0.55);
+  pointer-events: none;
+}
+
 /* The player's pal after touching the antibiotic. */
 .pal-mover.killed {
   filter: grayscale(1);

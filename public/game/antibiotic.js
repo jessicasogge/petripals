@@ -114,6 +114,14 @@ export function placeAntibiotics(antibiotics) {
   const agar = document.querySelector('.agar');
   return diskSpots(antibiotics.length).map((spot, i) => {
     const antibiotic = antibiotics[i];
+    // The zone of inhibition: a clear ring around the disk, drawn underneath it.
+    const zone = document.createElement('div');
+    zone.className = 'zone';
+    zone.style.left = `${50 + spot.fx * 50}%`;
+    zone.style.top = `${50 + spot.fy * 50}%`;
+    zone.style.width = `${(spot.r + GAME.ZONE_WIDTH) * 100}%`;
+    zone.setAttribute('aria-hidden', 'true');
+    agar.appendChild(zone);
     const el = document.createElement('div');
     el.className = 'antibiotic';
     el.style.left = `${50 + spot.fx * 50}%`;
@@ -121,9 +129,9 @@ export function placeAntibiotics(antibiotics) {
     el.style.width = `${spot.r * 100}%`;
     el.textContent = antibiotic.code;
     el.setAttribute('role', 'img');
-    el.setAttribute('aria-label', `Antibiotic disk: ${antibiotic.name}. Don't touch it!`);
+    el.setAttribute('aria-label', `Antibiotic disk: ${antibiotic.name}. Don't touch it or the clear zone around it!`);
     el.title = antibiotic.name;
     agar.appendChild(el);
-    return { ...spot, el, antibiotic };
+    return { ...spot, el, zone, antibiotic };
   });
 }
