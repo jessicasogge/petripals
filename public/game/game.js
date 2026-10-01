@@ -6,6 +6,7 @@ import { GAME, LEVELS } from './config.js';
 import { coccusGroup } from './coccus.js';
 import { keepInDish, pushApart } from './physics.js';
 import { rodGroup } from './rod.js';
+import { sporeBurst } from './spores.js';
 import { track } from './track.js';
 
 // `level` is which level this is (1 to 5) and `target` how many cells it
@@ -207,6 +208,7 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
   }
 
   function showWin() {
+    sporeBurst(playerMover, { big: level === LEVELS.length });
     const name = palEl.dataset.name;
     const pal = palEl.dataset.pal;
     track(`level-complete/${pal}/level-${level}`, `${name} finished level ${level}`);
