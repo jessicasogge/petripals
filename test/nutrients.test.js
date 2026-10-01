@@ -96,6 +96,31 @@ describe('eating nutrients', () => {
     expect(liveFlecks()).toHaveLength(COUNT - 1);
   });
 
+  // A fleck's radius as a fraction of the dish radius (see the CSS widths).
+  const fleckRadius = (el) => (el.classList.contains('small') ? 0.015 : 0.022);
+
+  it('eats a fleck as soon as its edge touches the pal', () => {
+    const nutrients = scatterNutrients();
+    const [target] = liveFlecks();
+    const reach = 0.05;
+    // The pal's circle is centered just far enough away for the edges to meet.
+    const gap = reach + fleckRadius(target.el) - 0.001;
+    expect(nutrients.eatNear(target.fx + gap, target.fy, reach)).toBe(1);
+  });
+
+  it('does not eat a fleck whose edge is just short of the pal', () => {
+    const nutrients = scatterNutrients();
+    const [target] = liveFlecks();
+    const reach = 0.05;
+    const gap = reach + fleckRadius(target.el) + 0.002;
+    // Make sure no other fleck happens to be at the test spot.
+    const others = liveFlecks().filter((f) => f !== target);
+    const spot = [target.fx + gap, target.fy];
+    const nearOther = others.some((f) => Math.hypot(f.fx - spot[0], f.fy - spot[1]) < reach + 0.03);
+    if (nearOther) return;
+    expect(nutrients.eatNear(spot[0], spot[1], reach)).toBe(0);
+  });
+
   it('does not eat flecks that are out of reach', () => {
     const nutrients = scatterNutrients();
     // The middle is kept clear, so nothing is within 0.2 of the center.

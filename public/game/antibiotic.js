@@ -69,8 +69,8 @@ export function pushOffDisks(disks, circles, dishRadius, buffer = 0) {
 }
 
 // The first disk the circles touch, or null if they touch none.
-export function touchedDisk(disks, circles, dishRadius) {
-  return disks.find((disk) => touchesDisk(disk, circles, dishRadius)) || null;
+export function touchedDisk(disks, circles, dishRadius, margin = 0) {
+  return disks.find((disk) => touchesDisk(disk, circles, dishRadius, margin)) || null;
 }
 
 // Put one disk per antibiotic on the agar and return where they are.

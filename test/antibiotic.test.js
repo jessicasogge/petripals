@@ -38,7 +38,7 @@ describe('diskSpots', () => {
         for (let b = a + 1; b < disks.length; b++) {
           const gap = Math.hypot(disks[a].fx - disks[b].fx, disks[a].fy - disks[b].fy);
           expect(gap).toBeGreaterThanOrEqual(GAME.DISK_MIN_GAP);
-          // The open space between their edges is wider than a pal (about 0.14).
+          // The open space between their edges is wider than a pal (about 0.12).
           expect(gap - 2 * GAME.DISK_RADIUS).toBeGreaterThan(0.2);
         }
       }
@@ -99,6 +99,21 @@ describe('touchedDisk', () => {
 
   it('returns null when no disk is touched', () => {
     expect(touchedDisk(disks, [[0, 0, 5]], dishRadius)).toBeNull();
+  });
+
+  it('counts edges within the margin as touching', () => {
+    // Disk A's edge is at x = 80. A circle of radius 5 at x = 73 is 2px short.
+    expect(touchedDisk(disks, [[73, 0, 5]], dishRadius)).toBeNull();
+    expect(touchedDisk(disks, [[73, 0, 5]], dishRadius, 0.012).antibiotic.code).toBe('A');
+    // But not ones farther away than the margin.
+    expect(touchedDisk(disks, [[70, 0, 5]], dishRadius, 0.012)).toBeNull();
+  });
+
+  it('uses a game margin about the width of the outlines', () => {
+    expect(GAME.TOUCH_MARGIN).toBeGreaterThan(0);
+    expect(GAME.TOUCH_MARGIN).toBeLessThan(0.02);
+    // Offspring still keep clear of the disks by more than this.
+    expect(GAME.DISK_BUFFER).toBeGreaterThan(GAME.TOUCH_MARGIN);
   });
 });
 
