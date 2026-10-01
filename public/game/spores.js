@@ -41,8 +41,9 @@ export function burstOrigin(rect, width, height) {
   };
 }
 
-// Burst spores out of `el` (the player's colony). `big` is for beating the
-// last level: more spores and a third wave.
+// Burst spores out of `el` (the player's colony). Beating a level gets a
+// quick little puff; `big` is for beating the last level: a full burst in
+// three waves that floats down slowly.
 export function sporeBurst(el, { big = false } = {}) {
   try {
     const base = {
@@ -50,20 +51,21 @@ export function sporeBurst(el, { big = false } = {}) {
       colors: AGAR_COLORS,
       shapes: [spore(), 'circle'],
       spread: 360, // every direction, like spores
-      gravity: 0.35, // light, so they float down
-      decay: 0.92,
-      ticks: 250,
       disableForReducedMotion: true,
     };
-    const scale = big ? 2 : 1;
-    // One big burst, then a smaller, slower wave of fine spores.
-    confetti({ ...base, particleCount: 120 * scale, startVelocity: 30, scalar: 1.1 });
-    setTimeout(() => {
-      confetti({ ...base, particleCount: 60 * scale, startVelocity: 15, scalar: 0.6, drift: 0.4 });
-    }, 180);
-    if (big) {
-      setTimeout(() => confetti({ ...base, particleCount: 150, startVelocity: 40, scalar: 0.9 }), 450);
+    if (!big) {
+      // About a second: fewer spores, not flung as far, and they fade fast.
+      confetti({ ...base, particleCount: 50, startVelocity: 18, scalar: 0.9,
+        gravity: 0.6, decay: 0.9, ticks: 110 });
+      return;
     }
+    const floaty = { ...base, gravity: 0.35, decay: 0.92, ticks: 250 };
+    // One big burst, then a slower wave of fine spores, then one more pop.
+    confetti({ ...floaty, particleCount: 240, startVelocity: 30, scalar: 1.1 });
+    setTimeout(() => {
+      confetti({ ...floaty, particleCount: 120, startVelocity: 15, scalar: 0.6, drift: 0.4 });
+    }, 180);
+    setTimeout(() => confetti({ ...floaty, particleCount: 150, startVelocity: 40, scalar: 0.9 }), 450);
   } catch {
     // A celebration is never worth breaking the game over.
   }
