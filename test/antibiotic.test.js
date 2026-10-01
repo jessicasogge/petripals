@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { diskSpot, diskSpots, pushOffDisks, touchedDisk, touchesDisk } from '../public/game/antibiotic.js';
-import { GAME, SPECIES } from '../public/game/config.js';
+import { GAME, LEVELS, SPECIES } from '../public/game/config.js';
 
 describe('diskSpot', () => {
   it('keeps the disk off the starting spot and away from the rim', () => {
@@ -193,15 +193,43 @@ describe('touch shapes', () => {
 });
 
 describe('antibiotic choices', () => {
-  it('gives every pal three different antibiotics, each with a code and a name', () => {
+  it('gives every pal a different antibiotic for each disk in the last level, each with a code and a name', () => {
+    const most = LEVELS[LEVELS.length - 1].disks;
     for (const [pal, species] of Object.entries(SPECIES)) {
-      expect(species.antibiotics, pal).toHaveLength(3);
+      expect(species.antibiotics, pal).toHaveLength(most);
       for (const antibiotic of species.antibiotics) {
         expect(antibiotic.code, pal).toMatch(/^[A-Z]{1,3}$/);
         expect(antibiotic.name, pal).toBeTruthy();
       }
       const codes = new Set(species.antibiotics.map((a) => a.code));
-      expect(codes.size, pal).toBe(3);
+      expect(codes.size, pal).toBe(most);
+    }
+  });
+});
+
+describe('levels', () => {
+  it('adds one disk and doubles the colony each level, from 1 disk and 4 cells to 5 and 64', () => {
+    expect(LEVELS).toEqual([
+      { disks: 1, target: 4 },
+      { disks: 2, target: 8 },
+      { disks: 3, target: 16 },
+      { disks: 4, target: 32 },
+      { disks: 5, target: 64 },
+    ]);
+  });
+
+  it('always finds room for every disk the level needs, spread apart', () => {
+    for (const { disks: count } of LEVELS) {
+      for (let dish = 0; dish < 200; dish++) {
+        const disks = diskSpots(count);
+        expect(disks).toHaveLength(count);
+        for (let i = 0; i < disks.length; i++) {
+          for (let j = i + 1; j < disks.length; j++) {
+            const gap = Math.hypot(disks[i].fx - disks[j].fx, disks[i].fy - disks[j].fy);
+            expect(gap).toBeGreaterThanOrEqual(GAME.DISK_MIN_GAP);
+          }
+        }
+      }
     }
   });
 });
