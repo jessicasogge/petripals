@@ -17,8 +17,10 @@ export function diskSpot(random = Math.random) {
 }
 
 // How wide a zone of inhibition `mm` across is in the game, as a fraction of
-// the dish radius (see the ZONE_* settings in config.js).
+// the dish radius (see the ZONE_* settings in config.js). A drug with no zone
+// size given has no zone.
 export function zoneWidth(mm) {
+  if (!Number.isFinite(mm)) return 0;
   const t = (mm - GAME.ZONE_MM_SMALL) / (GAME.ZONE_MM_BIG - GAME.ZONE_MM_SMALL);
   const clamped = Math.min(1, Math.max(0, t));
   return GAME.ZONE_MIN_WIDTH + clamped * (GAME.ZONE_MAX_WIDTH - GAME.ZONE_MIN_WIDTH);
@@ -156,7 +158,9 @@ export function placeAntibiotics(antibiotics) {
     el.textContent = antibiotic.code;
     el.setAttribute('role', 'img');
     el.setAttribute('aria-label', `Antibiotic disk: ${antibiotic.name}. Don't touch it or the clear zone around it!`);
-    el.title = antibiotic.name;
+    // Shown in a little label above the disk when you hover over it (see
+    // .antibiotic::after in styles.css), e.g. "Penicillin".
+    el.dataset.name = antibiotic.name[0].toUpperCase() + antibiotic.name.slice(1);
     agar.appendChild(el);
     return { ...spot, el, zoneEl, antibiotic };
   });

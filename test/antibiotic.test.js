@@ -213,6 +213,11 @@ describe('zone of inhibition', () => {
     expect(zoneWidth(50)).toBeCloseTo(GAME.ZONE_MAX_WIDTH);
   });
 
+  it('gives a drug with no zone size no zone, so its disk still gets placed', () => {
+    expect(zoneWidth(undefined)).toBe(0);
+    expect(diskSpots([zoneWidth(undefined), zoneWidth(undefined)])).toHaveLength(2);
+  });
+
   it('gives every antibiotic a zone in a believable range, different across each pal\'s drugs', () => {
     for (const [pal, species] of Object.entries(SPECIES)) {
       for (const { code, zone } of species.antibiotics) {
