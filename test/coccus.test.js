@@ -73,12 +73,13 @@ describe('a new coccus', () => {
       .toBe(SPECIES.scarlett.colors.fill);
   });
 
-  it('has a body of one circle, one cell wide, where the group is', () => {
+  it('has a body of one circle, one cell wide plus its outline, where the group is', () => {
     const group = makeGroup('goldie', { x: 30, y: -40 });
     const [[x, y, r]] = group.body();
     expect(x).toBeCloseTo(30);
     expect(y).toBeCloseTo(-40);
-    expect(r).toBeCloseTo(CELL_PX / 2);
+    const OUTLINE = 1.7;
+    expect(r).toBeCloseTo((R + OUTLINE / 2) * UNIT);
   });
 });
 

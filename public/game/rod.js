@@ -1,5 +1,5 @@
 import { GAME } from './config.js';
-import { newMover } from './mover.js';
+import { idlePose, newMover } from './mover.js';
 import { coaster } from './physics.js';
 
 // A rod-shaped cell (Mona, Vi). Each division it splits across the middle
@@ -17,7 +17,8 @@ export function rodGroup({ mover, svg, species, isPlayer }) {
     vy: 0,
     facing: 1,
     cellCount: () => 1,
-    halfWidth: () => svg.getBoundingClientRect().width / 2,
+    // The drawing's size before any idle animation stretches or turns it.
+    halfWidth: () => mover.offsetWidth / 2,
     reach: () => group.halfWidth(),
     update() {
       mover.style.width = `${ROD_WIDTH}%`;
@@ -25,16 +26,17 @@ export function rodGroup({ mover, svg, species, isPlayer }) {
     place() {
       mover.style.transform = `translate(${group.x}px, ${group.y}px) scaleX(${group.facing})`;
     },
-    mouths: () => [[group.x, group.y, group.halfWidth() * GAME.PICKUP_REACH]],
     // The rod's outline as circles in the dish, traced from its drawing (see
-    // `body` in config.js). Used to tell whether it touches an antibiotic disk.
+    // `body` in config.js). Used to tell whether it touches a nutrient or an
+    // antibiotic disk.
+    // The player's follows its idle animation, so touches match the screen.
     body() {
       const w = group.halfWidth() * 2;
-      return species.body.map(([fx, fy, fr]) => [
-        group.x + fx * w * group.facing,
-        group.y + fy * w,
-        fr * w,
-      ]);
+      const pose = isPlayer ? idlePose(svg) : (x, y, r) => [x, y, r];
+      return species.body.map(([fx, fy, fr]) => {
+        const [x, y, r] = pose(fx * w, fy * w, fr * w);
+        return [group.x + x * group.facing, group.y + y, r];
+      });
     },
     // Split into two rods that push apart end to end. An offspring that
     // divides slides back the other way and settles again.

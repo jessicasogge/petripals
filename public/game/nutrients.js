@@ -35,26 +35,29 @@ export function scatterNutrients({ avoid = [] } = {}) {
     if (!spot) return;
     const el = document.createElement('span');
     el.className = 'nutrient';
-    if (Math.random() < 0.4) el.classList.add('small');
+    // Its radius as a fraction of the dish radius, matching the CSS widths.
+    const small = Math.random() < 0.4;
+    if (small) el.classList.add('small');
     if (Math.random() < 0.5) el.classList.add('pale');
     el.style.left = `${50 + spot.fx * 50}%`;
     el.style.top = `${50 + spot.fy * 50}%`;
     el.setAttribute('aria-hidden', 'true');
     agar.appendChild(el);
-    flecks.push({ el, ...spot });
+    flecks.push({ el, ...spot, r: small ? 0.015 : 0.022 });
   }
 
   // Pals start in the middle, so the first batch avoids the center.
   for (let i = 0; i < COUNT; i++) addFleck(0, 0);
 
   return {
-    // Pick up every fleck within `reach` of the given spot (all values are
-    // fractions of the dish radius). Returns how many were picked up.
+    // Pick up every fleck touching a circle of radius `reach` at the given
+    // spot (all values are fractions of the dish radius). Returns how many
+    // were picked up.
     eatNear(bx, by, reach) {
       let count = 0;
       for (let i = flecks.length - 1; i >= 0; i--) {
         const fleck = flecks[i];
-        if (Math.hypot(fleck.fx - bx, fleck.fy - by) > reach) continue;
+        if (Math.hypot(fleck.fx - bx, fleck.fy - by) > reach + fleck.r) continue;
         flecks.splice(i, 1);
         fleck.el.classList.add('eaten');
         fleck.el.addEventListener('transitionend', () => fleck.el.remove(), { once: true });

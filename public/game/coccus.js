@@ -1,7 +1,7 @@
 import { touchesDisk } from './antibiotic.js';
 import { chainSpot, clusterSpot, R } from './attach.js';
 import { GAME } from './config.js';
-import { newMover } from './mover.js';
+import { idlePose, newMover } from './mover.js';
 import { coaster } from './physics.js';
 
 // A round cell (Scarlett, Goldie). The player is always a single coccus.
@@ -12,6 +12,7 @@ import { coaster } from './physics.js';
 // builds bunches wherever she lingers.
 export function coccusGroup({ mover, svg, species, isPlayer }) {
   const CELL_SIZE = 5; // one cell's width, as a percent of the dish
+  const OUTLINE = 1.7; // each cell's outline width, in SVG units
   const { layout, colors } = species;
 
   const group = {
@@ -55,7 +56,7 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
 
   function cellMarkup(c) {
     let out =
-      `<circle cx="${c.x}" cy="${c.y}" r="${R}" fill="${colors.fill}" stroke="${colors.stroke}" stroke-width="1.7" />` +
+      `<circle cx="${c.x}" cy="${c.y}" r="${R}" fill="${colors.fill}" stroke="${colors.stroke}" stroke-width="${OUTLINE}" />` +
       `<circle cx="${c.x - 2.7}" cy="${c.y - 3.2}" r="1.5" fill="${colors.highlight}" />`;
     if (c.face) {
       out +=
@@ -103,18 +104,16 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
     place() {
       mover.style.transform = `translate(${group.x}px, ${group.y}px) scaleX(${group.facing})`;
     },
-    // Every cell can pick up nutrients it swims over.
-    mouths() {
-      return group.cells.map((c) => {
-        const [wx, wy] = toWorld(c.x, c.y);
-        return [wx, wy, R * pxPerUnit() * 0.9];
-      });
-    },
-    // Every cell's circle, used to tell whether the group touches the disk.
+    // Every cell's circle, used to tell whether the group touches a nutrient
+    // or an antibiotic disk.
+    // Each circle includes the cell's outline. The player's follows its idle
+    // animation, so touches match the screen.
     body() {
+      const unit = pxPerUnit();
+      const pose = isPlayer ? idlePose(svg) : (x, y, r) => [x, y, r];
       return group.cells.map((c) => {
-        const [wx, wy] = toWorld(c.x, c.y);
-        return [wx, wy, R * pxPerUnit()];
+        const [x, y, r] = pose(c.x * unit, c.y * unit, (R + OUTLINE / 2) * unit);
+        return [group.x + x * group.facing, group.y + y, r];
       });
     },
     // Where a new cell would join this group if it came from (wx, wy) in the

@@ -84,11 +84,11 @@ export function playGame(palEl, species, nutrients, disks) {
       if (group === player) continue;
       group.pending ??= 0;
       group.sinceDivision = (group.sinceDivision ?? Infinity) + seconds * 1000;
-      for (const [mx, my, reach] of group.mouths()) {
+      for (const [mx, my, reach] of group.body()) {
         const ate = nutrients.eatNear(mx / radius, my / radius, reach / radius);
         if (ate === 0) continue;
         group.pending += ate;
-        group.from = [mx, my]; // the cell that ate is the one that divides
+        group.from = [mx, my]; // for cocci, the cell that ate is the one that divides
       }
       if (group.pending >= GAME.NUTRIENTS_PER_DIVISION && group.sinceDivision > GAME.DIVIDE_MS &&
           totalCells() < GAME.TARGET_CELLS) {
@@ -152,7 +152,7 @@ export function playGame(palEl, species, nutrients, disks) {
     }
 
     // Touching any antibiotic disk is game over.
-    const hit = finished ? null : touchedDisk(disks, player.body(), radius);
+    const hit = finished ? null : touchedDisk(disks, player.body(), radius, GAME.TOUCH_MARGIN);
     if (hit) {
       finished = true;
       held.clear();
@@ -163,7 +163,7 @@ export function playGame(palEl, species, nutrients, disks) {
 
     if (!finished) {
       let ate = 0;
-      for (const [px, py, reach] of player.mouths()) {
+      for (const [px, py, reach] of player.body()) {
         ate += nutrients.eatNear(px / radius, py / radius, reach / radius);
       }
       pending += ate;

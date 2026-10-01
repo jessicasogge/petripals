@@ -119,7 +119,6 @@ export const GAME = {
   BURST_SPEED: 0.9, // how hard a new group pushes away when it splits off
   SETTLE_RATE: 4, // how quickly a new group slows to a stop (higher = sooner)
   SETTLE_MS: 1500, // after this long, offspring stay put for good
-  PICKUP_REACH: 0.6, // how close a rod's middle must get to a nutrient
   DIVIDE_MS: 600,
   // The antibiotic disks: their radius, how far from the center they can go,
   // and how far apart they must be, center to center (all as fractions of the
@@ -131,4 +130,7 @@ export const GAME = {
   // How much clear space offspring keep around each disk, so they never look
   // like they're touching it. (The player's game over still needs a real touch.)
   DISK_BUFFER: 0.035,
+  // Extra room counted as touching a disk, so the player loses as soon as the
+  // edges meet (about a pixel, to cover the soft edge of the disk's border).
+  TOUCH_MARGIN: 0.005,
 };
