@@ -21,7 +21,8 @@ export function rodGroup({ mover, svg, species, isPlayer }) {
     halfWidth: () => mover.offsetWidth / 2,
     reach: () => group.halfWidth(),
     update() {
-      mover.style.width = `${ROD_WIDTH}%`;
+      const width = `${ROD_WIDTH}%`;
+      if (mover.style.width !== width) mover.style.width = width;
     },
     place() {
       mover.style.transform = `translate(${group.x}px, ${group.y}px) scaleX(${group.facing})`;

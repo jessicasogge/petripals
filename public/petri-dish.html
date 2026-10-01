@@ -134,15 +134,18 @@
         </div>
         <div class="win-banner" role="status" hidden>
           <h2>You won!</h2>
-          <p class="win-message">Your pal ate enough nutrients to divide into two.</p>
-          <button class="pick-btn play-again" type="button">Play again</button>
+          <p class="win-message"></p>
+          <div class="banner-buttons">
+            <button class="pick-btn play-again" type="button">Play again</button>
+            <button class="pick-btn start-over" type="button" hidden>Start over</button>
+          </div>
         </div>
       </div>
 
-      <p class="cell-count" aria-live="polite">1 / 16 cells</p>
+      <p class="cell-count" aria-live="polite">Level 1 · 1 / 4 cells</p>
 
       <p class="how-to-play">
-        Use the arrow keys to eat nutrients and grow to <span class="target-cells">16</span> cells.<br />
+        Use the arrow keys to eat nutrients and grow to <span class="target-cells">4</span> cells.<br />
         Any cell that eats a nutrient divides. Don't touch the antibiotic disks!
       </p>
 

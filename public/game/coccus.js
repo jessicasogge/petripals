@@ -88,6 +88,9 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       for (const c of group.cells) farthest = Math.max(farthest, Math.hypot(c.x, c.y) + R);
       return farthest * pxPerUnit();
     },
+    // Redraw only while a new cell is sliding into place; a still group
+    // looks the same every frame, and with hundreds of cells redrawing them
+    // all slows the game down.
     update(seconds) {
       if (group.moveFor !== null) {
         group.moveFor += seconds * 1000;
@@ -98,8 +101,8 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
           c.y = c.fromY + (c.toY - c.fromY) * ease;
         }
         if (t >= 1) group.moveFor = null;
+        draw();
       }
-      draw();
     },
     place() {
       mover.style.transform = `translate(${group.x}px, ${group.y}px) scaleX(${group.facing})`;
@@ -121,8 +124,10 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
     attachSpot(wx, wy, disks = [], dishRadius = 0) {
       if (group.cells.length >= GAME.GROUP_CAP) return null;
       const [px, py] = toLocal(wx, wy);
-      // Spots on or right next to an antibiotic disk are off-limits.
-      const cellRadius = R * pxPerUnit();
+      // Spots on or right next to an antibiotic disk are off-limits. Measure
+      // each cell the same way body() does (with its outline), or a new cell
+      // can land a hair inside the clear space and get shoved right away.
+      const cellRadius = (R + OUTLINE / 2) * pxPerUnit();
       const allowed = (x, y) => {
         const [sx, sy] = toWorld(x, y);
         return !disks.some((disk) =>

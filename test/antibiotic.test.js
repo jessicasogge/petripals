@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { diskSpot, diskSpots, pushOffDisks, touchedDisk, touchesDisk } from '../public/game/antibiotic.js';
-import { GAME, SPECIES } from '../public/game/config.js';
+import { antibioticsFor, diskSpot, diskSpots, pushOffDisks, touchedDisk, touchesDisk } from '../public/game/antibiotic.js';
+import { GAME, LEVELS, SPECIES } from '../public/game/config.js';
 
 describe('diskSpot', () => {
   it('keeps the disk off the starting spot and away from the rim', () => {
@@ -167,6 +167,40 @@ describe('pushOffDisks', () => {
       expect(touchedDisk(disks, moved, dishRadius)).toBeNull();
     }
   });
+
+  // A chain of cells curved around a disk, hugging it, each `inside` px too
+  // close. Like the ones that used to shake back and forth forever.
+  function curvedChain(clear, inside) {
+    const cells = [];
+    for (let i = -3; i <= 3; i++) {
+      const a = Math.PI / 2 + i * 0.45;
+      cells.push([Math.cos(a) * (clear + 7 - inside), Math.sin(a) * (clear + 7 - inside), 7]);
+    }
+    return cells;
+  }
+
+  it('pushes a chain curved around a disk clear in one go, without shaking', () => {
+    const dishRadius = 300;
+    const disk = { fx: 0, fy: 0, r: 0.1 };
+    const buffer = 0.035;
+    const clear = (disk.r + buffer) * dishRadius;
+    let cells = curvedChain(clear, 1);
+    const moves = [];
+    for (let frame = 0; frame < 10; frame++) {
+      const [dx, dy] = pushOffDisks([disk], cells, dishRadius, buffer);
+      moves.push([dx, dy]);
+      cells = cells.map(([x, y, r]) => [x + dx, y + dy, r]);
+    }
+    // The first push clears it, and after that it stays put.
+    expect(Math.hypot(...moves[0])).toBeGreaterThan(0);
+    for (const [dx, dy] of moves.slice(1)) expect(Math.hypot(dx, dy)).toBeLessThan(1e-9);
+    // It moved straight away from the disk (down, toward the chain's middle).
+    expect(Math.abs(moves[0][0])).toBeLessThan(1e-9);
+    expect(moves[0][1]).toBeGreaterThan(0);
+    // And every cell really is clear.
+    for (const [x, y, r] of cells) expect(Math.hypot(x, y)).toBeGreaterThanOrEqual(clear + r - 1e-9);
+  });
+
 });
 
 describe('disk buffer', () => {
@@ -193,15 +227,51 @@ describe('touch shapes', () => {
 });
 
 describe('antibiotic choices', () => {
-  it('gives every pal three different antibiotics, each with a code and a name', () => {
+  it('gives every pal five different antibiotics, each with a code and a name', () => {
     for (const [pal, species] of Object.entries(SPECIES)) {
-      expect(species.antibiotics, pal).toHaveLength(3);
+      expect(species.antibiotics, pal).toHaveLength(5);
       for (const antibiotic of species.antibiotics) {
         expect(antibiotic.code, pal).toMatch(/^[A-Z]{1,3}$/);
         expect(antibiotic.name, pal).toBeTruthy();
       }
       const codes = new Set(species.antibiotics.map((a) => a.code));
-      expect(codes.size, pal).toBe(3);
+      expect(codes.size, pal).toBe(5);
+    }
+  });
+
+  it('uses the list in order, starting over when a level has more disks than drugs', () => {
+    const list = ['A', 'B', 'C', 'D', 'E'];
+    expect(antibioticsFor(list, 1)).toEqual(['A']);
+    expect(antibioticsFor(list, 5)).toEqual(list);
+    expect(antibioticsFor(list, 7)).toEqual(['A', 'B', 'C', 'D', 'E', 'A', 'B']);
+  });
+});
+
+describe('levels', () => {
+  it('adds one disk and doubles the colony each level, from 1 disk and 4 cells to 7 and 256', () => {
+    expect(LEVELS).toEqual([
+      { disks: 1, target: 4 },
+      { disks: 2, target: 8 },
+      { disks: 3, target: 16 },
+      { disks: 4, target: 32 },
+      { disks: 5, target: 64 },
+      { disks: 6, target: 128 },
+      { disks: 7, target: 256 },
+    ]);
+  });
+
+  it('always finds room for every disk the level needs, spread apart', () => {
+    for (const { disks: count } of LEVELS) {
+      for (let dish = 0; dish < 200; dish++) {
+        const disks = diskSpots(count);
+        expect(disks).toHaveLength(count);
+        for (let i = 0; i < disks.length; i++) {
+          for (let j = i + 1; j < disks.length; j++) {
+            const gap = Math.hypot(disks[i].fx - disks[j].fx, disks[i].fy - disks[j].fy);
+            expect(gap).toBeGreaterThanOrEqual(GAME.DISK_MIN_GAP);
+          }
+        }
+      }
     }
   });
 });

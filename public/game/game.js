@@ -1,12 +1,15 @@
 // The game loop: arrow-key steering, dividing as the player eats, the cell
-// counter, the antibiotic disks, and the win or game-over banner.
+// counter, the antibiotic disks, and the level-complete, win or game-over
+// pop-up.
 import { pushOffDisks, touchedDisk } from './antibiotic.js';
-import { GAME } from './config.js';
+import { GAME, LEVELS } from './config.js';
 import { coccusGroup } from './coccus.js';
 import { keepInDish, pushApart } from './physics.js';
 import { rodGroup } from './rod.js';
 
-export function playGame(palEl, species, nutrients, disks) {
+// `level` is which level this is (1 to 5) and `target` how many cells it
+// takes to beat it.
+export function playGame(palEl, species, nutrients, disks, { level = 1, target = LEVELS[0].target } = {}) {
   const agar = document.querySelector('.agar');
   const counter = document.querySelector('.cell-count');
   const dishRadius = () => agar.clientWidth / 2;
@@ -41,15 +44,23 @@ export function playGame(palEl, species, nutrients, disks) {
   // Don't keep moving if the window loses focus while a key is down.
   window.addEventListener('blur', () => held.clear());
 
-  document.querySelector('.play-again').addEventListener('click', () => {
-    window.location.reload();
-  });
+  // The pop-up's buttons: the main one goes to the next level, back to
+  // level 1, or tries this level again; after a game over, "Start over" goes
+  // back to level 1.
+  let nextLevel = level;
+  function goToLevel(n) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('level', n);
+    window.location.href = url.toString();
+  }
+  document.querySelector('.play-again').addEventListener('click', () => goToLevel(nextLevel));
+  document.querySelector('.start-over').addEventListener('click', () => goToLevel(1));
 
   const totalCells = () => groups.reduce((sum, g) => sum + g.cellCount(), 0);
 
   function updateCounter() {
-    const shown = Math.min(totalCells(), GAME.TARGET_CELLS);
-    counter.textContent = `${shown} / ${GAME.TARGET_CELLS} cells`;
+    const shown = Math.min(totalCells(), target);
+    counter.textContent = `Level ${level} · ${shown} / ${target} cells`;
   }
 
   // Binary fission: a cell divides and the daughter stays behind. A rod's
@@ -91,7 +102,7 @@ export function playGame(palEl, species, nutrients, disks) {
         group.from = [mx, my]; // for cocci, the cell that ate is the one that divides
       }
       if (group.pending >= GAME.NUTRIENTS_PER_DIVISION && group.sinceDivision > GAME.DIVIDE_MS &&
-          totalCells() < GAME.TARGET_CELLS) {
+          totalCells() < target) {
         group.pending -= GAME.NUTRIENTS_PER_DIVISION;
         group.sinceDivision = 0;
         divideGroup(group, group.from);
@@ -169,7 +180,7 @@ export function playGame(palEl, species, nutrients, disks) {
       pending += ate;
       feedOffspring(seconds, radius);
 
-      const won = totalCells() >= GAME.TARGET_CELLS;
+      const won = totalCells() >= target;
       if (won && sinceAnyDivision > GAME.DIVIDE_MS + 300) {
         finished = true;
         held.clear();
@@ -184,27 +195,40 @@ export function playGame(palEl, species, nutrients, disks) {
     requestAnimationFrame(step);
   }
 
-  function showBanner(title, message) {
+  function showBanner(title, message, button, { startOver = false } = {}) {
     const banner = document.querySelector('.win-banner');
     banner.querySelector('h2').textContent = title;
     banner.querySelector('.win-message').textContent = message;
+    banner.querySelector('.play-again').textContent = button;
+    banner.querySelector('.start-over').hidden = !startOver;
     banner.removeAttribute('hidden');
     banner.querySelector('.play-again').focus();
   }
 
   function showWin() {
-    showBanner('You won!', `${palEl.dataset.name} grew a colony of ${GAME.TARGET_CELLS} cells!`);
+    const name = palEl.dataset.name;
+    if (level < LEVELS.length) {
+      nextLevel = level + 1;
+      showBanner(`Level ${level} complete!`, `${name} grew a colony of ${target} cells!`,
+        `Play level ${nextLevel}`);
+    } else {
+      nextLevel = 1;
+      showBanner('You won!', `${name} beat all ${LEVELS.length} levels with a colony of ${target} cells!`,
+        'Play again');
+    }
   }
 
   function showGameOver(disk) {
     showBanner(
       'Game over',
       `${palEl.dataset.name} touched the ${disk.antibiotic.name} disk. Antibiotics kill bacteria!`,
+      `Try level ${level} again`,
+      { startOver: level > 1 }, // on level 1 they'd do the same thing
     );
   }
 
   // Keep the how-to-play target in step with the real one.
-  for (const el of document.querySelectorAll('.target-cells')) el.textContent = GAME.TARGET_CELLS;
+  for (const el of document.querySelectorAll('.target-cells')) el.textContent = target;
   updateCounter();
   requestAnimationFrame(step);
 }

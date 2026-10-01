@@ -3,8 +3,10 @@
 // daughters stick together: in chains for Streptococcus (divides in one
 // plane) or grape-like clusters for Staphylococcus (divides in several).
 //
-// `antibiotics` are the three disks placed in each pal's dish: drugs
-// commonly used against that species, labeled with their standard disk codes.
+// `antibiotics` are the disks placed in each pal's dish, in order (level 1
+// uses the first, level 5 all five, and later levels start over from the
+// top): drugs commonly used against that species, labeled with their
+// standard disk codes.
 //
 // For rod-style pals, `body` traces the drawing's outline as circles
 // [x, y, radius], in fractions of the drawing's width from its center. It's
@@ -26,6 +28,8 @@ export const SPECIES = {
       { code: 'CIP', name: 'ciprofloxacin' },
       { code: 'GM', name: 'gentamicin' },
       { code: 'CAZ', name: 'ceftazidime' },
+      { code: 'TZP', name: 'piperacillin-tazobactam' },
+      { code: 'MEM', name: 'meropenem' },
     ],
   },
   vi: {
@@ -47,6 +51,8 @@ export const SPECIES = {
       { code: 'TE', name: 'tetracycline' },
       { code: 'CIP', name: 'ciprofloxacin' },
       { code: 'AZM', name: 'azithromycin' },
+      { code: 'DO', name: 'doxycycline' },
+      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole' },
     ],
   },
   // A spirochete: a long corkscrew-shaped cell that divides in two like a rod.
@@ -70,6 +76,8 @@ export const SPECIES = {
       { code: 'DO', name: 'doxycycline' },
       { code: 'AMX', name: 'amoxicillin' },
       { code: 'CXM', name: 'cefuroxime' },
+      { code: 'CRO', name: 'ceftriaxone' },
+      { code: 'AZM', name: 'azithromycin' },
     ],
   },
   // A coccobacillus: a short, plump rod with no flagellum. Divides in two like a rod.
@@ -84,6 +92,8 @@ export const SPECIES = {
       { code: 'CRO', name: 'ceftriaxone' },
       { code: 'AMC', name: 'amoxicillin-clavulanate' },
       { code: 'AZM', name: 'azithromycin' },
+      { code: 'LVX', name: 'levofloxacin' },
+      { code: 'CTX', name: 'cefotaxime' },
     ],
   },
   scarlett: {
@@ -94,6 +104,8 @@ export const SPECIES = {
       { code: 'P', name: 'penicillin' },
       { code: 'E', name: 'erythromycin' },
       { code: 'CC', name: 'clindamycin' },
+      { code: 'CRO', name: 'ceftriaxone' },
+      { code: 'VA', name: 'vancomycin' },
     ],
   },
   goldie: {
@@ -104,12 +116,24 @@ export const SPECIES = {
       { code: 'OX', name: 'oxacillin' },
       { code: 'VA', name: 'vancomycin' },
       { code: 'SXT', name: 'trimethoprim-sulfamethoxazole' },
+      { code: 'CC', name: 'clindamycin' },
+      { code: 'DO', name: 'doxycycline' },
     ],
   },
 };
 
+// Each level adds an antibiotic disk and doubles the colony you need to grow.
+export const LEVELS = [
+  { disks: 1, target: 4 },
+  { disks: 2, target: 8 },
+  { disks: 3, target: 16 },
+  { disks: 4, target: 32 },
+  { disks: 5, target: 64 },
+  { disks: 6, target: 128 },
+  { disks: 7, target: 256 },
+];
+
 export const GAME = {
-  TARGET_CELLS: 16, // grow the population to this many cells to win
   GROUP_CAP: 8, // chains and clusters stop growing at this many cells
   // A new coccus joins a chain or cluster if the player is within this
   // distance of where it would attach (a fraction of the dish radius).
