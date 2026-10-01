@@ -6,6 +6,7 @@ import { GAME, LEVELS } from './config.js';
 import { coccusGroup } from './coccus.js';
 import { keepInDish, pushApart } from './physics.js';
 import { rodGroup } from './rod.js';
+import { track } from './track.js';
 
 // `level` is which level this is (1 to 5) and `target` how many cells it
 // takes to beat it.
@@ -207,6 +208,9 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
 
   function showWin() {
     const name = palEl.dataset.name;
+    const pal = palEl.dataset.pal;
+    track(`level-complete/${pal}/level-${level}`, `${name} finished level ${level}`);
+    if (level === LEVELS.length) track(`won-all-levels/${pal}`, `${name} beat every level`);
     if (level < LEVELS.length) {
       nextLevel = level + 1;
       showBanner(`Level ${level} complete!`, `${name} grew a colony of ${target} cells!`,
@@ -219,6 +223,9 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
   }
 
   function showGameOver(disk) {
+    const { code, name } = disk.antibiotic;
+    track(`game-over/${palEl.dataset.pal}/level-${level}/${code}`,
+      `${palEl.dataset.name} hit ${name} on level ${level}`);
     showBanner(
       'Game over',
       `${palEl.dataset.name} touched the ${disk.antibiotic.name} disk. Antibiotics kill bacteria!`,
