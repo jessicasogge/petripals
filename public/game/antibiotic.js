@@ -70,6 +70,15 @@ export function touchedDisk(disks, circles, dishRadius, margin = 0) {
   return disks.find((disk) => touchesDisk(disk, circles, dishRadius, margin)) || null;
 }
 
+// What the game-over pop-up says when the pal called `name` touches `disk`.
+// A drug she's resistant to has no zone, so she can only have touched the
+// disk itself.
+export function touchMessage(name, disk) {
+  const drug = disk.antibiotic.name;
+  if (disk.zone > 0) return `${name} swam into the ${drug} zone of inhibition. Antibiotics kill bacteria!`;
+  return `${name} bumped into the ${drug} disk. She's resistant to ${drug}, so it has no zone, but the disk still counts!`;
+}
+
 // The antibiotics for a dish with `count` disks: the pal's list in order,
 // starting over from the top if there are more disks than drugs.
 export function antibioticsFor(list, count) {
@@ -101,7 +110,9 @@ export function placeAntibiotics(antibiotics) {
     el.style.width = `${spot.r * 100}%`;
     el.textContent = antibiotic.code;
     el.setAttribute('role', 'img');
-    el.setAttribute('aria-label', `Antibiotic disk: ${antibiotic.name}. Don't touch it or the clear zone around it!`);
+    el.setAttribute('aria-label', spot.zone > 0
+      ? `Antibiotic disk: ${antibiotic.name}. Don't touch it or the clear zone around it!`
+      : `Antibiotic disk: ${antibiotic.name}. No clear zone (resistant), but don't touch the disk!`);
     // Shown in a little label above the disk when you hover over it (see
     // .antibiotic::after in styles.css), e.g. "Penicillin".
     el.dataset.name = antibiotic.name[0].toUpperCase() + antibiotic.name.slice(1);

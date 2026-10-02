@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { antibioticsFor, diskSpot, diskSpots, touchedDisk, touchesDisk, zoneWidth } from '../public/game/antibiotic.js';
+import { antibioticsFor, diskSpot, diskSpots, touchedDisk, touchesDisk, touchMessage, zoneWidth } from '../public/game/antibiotic.js';
 import { GAME, LEVELS, SPECIES } from '../public/game/config.js';
 
 describe('diskSpot', () => {
@@ -129,10 +129,11 @@ describe('zone of inhibition', () => {
   it('gives every antibiotic a zone in a believable range, different across each pal\'s drugs', () => {
     for (const [pal, species] of Object.entries(SPECIES)) {
       for (const { code, zone } of species.antibiotics) {
+        if (zone === null) continue; // a drug she's resistant to: no zone (checked below)
         expect(zone, `${pal} ${code}`).toBeGreaterThanOrEqual(12);
         expect(zone, `${pal} ${code}`).toBeLessThanOrEqual(40);
       }
-      const sizes = species.antibiotics.map((a) => a.zone);
+      const sizes = species.antibiotics.map((a) => a.zone).filter((zone) => zone !== null);
       expect(Math.max(...sizes) - Math.min(...sizes), pal).toBeGreaterThanOrEqual(10);
     }
   });
@@ -249,5 +250,35 @@ describe('levels', () => {
         }
       }
     }
+  });
+});
+
+describe("a drug she's resistant to (no zone)", () => {
+  const gentamicin = { code: 'GM', name: 'gentamicin', zone: null };
+
+  it('only Ana has one, and it\'s gentamicin: bifidobacteria are naturally resistant to it', () => {
+    const resistant = Object.entries(SPECIES).flatMap(([pal, s]) =>
+      s.antibiotics.filter((a) => a.zone === null).map((a) => `${pal} ${a.code}`));
+    expect(resistant).toEqual(['ana GM']);
+  });
+
+  it('gets no zone at all, so only the disk itself counts as touching', () => {
+    expect(zoneWidth(gentamicin.zone)).toBe(0);
+    const disk = { fx: 0.5, fy: 0, r: 0.1, zone: zoneWidth(gentamicin.zone), antibiotic: gentamicin };
+    // The disk's edge is at 0.4 of the dish radius = 80px.
+    expect(touchesDisk(disk, [[70, 0, 5]], 200)).toBe(false); // right up close is fine
+    expect(touchesDisk(disk, [[76, 0, 5]], 200)).toBe(true); // touching the disk isn't
+  });
+
+  it('says so when the game ends on it, instead of mentioning a zone', () => {
+    const disk = { zone: 0, antibiotic: gentamicin };
+    expect(touchMessage('Ana', disk)).toBe(
+      "Ana bumped into the gentamicin disk. She's resistant to gentamicin, so it has no zone, but the disk still counts!");
+  });
+
+  it('still mentions the zone for a drug that has one', () => {
+    const disk = { zone: 0.05, antibiotic: { code: 'P', name: 'penicillin' } };
+    expect(touchMessage('Scarlett', disk)).toBe(
+      'Scarlett swam into the penicillin zone of inhibition. Antibiotics kill bacteria!');
   });
 });

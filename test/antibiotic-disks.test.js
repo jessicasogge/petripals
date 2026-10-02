@@ -34,3 +34,11 @@ describe('placing the disks', () => {
     expect(document.querySelector('.antibiotic').getAttribute('aria-label')).toMatch(/erythromycin/);
   });
 });
+
+describe("a disk for a drug she's resistant to", () => {
+  it("tells screen readers there's no clear zone, but the disk still counts", () => {
+    placeAntibiotics([{ code: 'GM', name: 'gentamicin', zone: null }]);
+    expect(document.querySelector('.antibiotic').getAttribute('aria-label'))
+      .toBe("Antibiotic disk: gentamicin. No clear zone (resistant), but don't touch the disk!");
+  });
+});

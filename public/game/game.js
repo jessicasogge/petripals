@@ -1,6 +1,6 @@
 // The classic game loop: steer with the arrow keys or by touch, grow a colony past the
 // antibiotic disks, and the level-complete, win or game-over pop-up.
-import { touchedDisk } from './antibiotic.js';
+import { touchedDisk, touchMessage } from './antibiotic.js';
 import { makeColony, moveGroups } from './colony.js';
 import { GAME, LEVELS } from './config.js';
 import { coccusGroup } from './coccus.js';
@@ -130,7 +130,7 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
       `${palEl.dataset.name} hit ${name} on level ${level}`);
     showBanner(
       'Game over',
-      `${palEl.dataset.name} swam into the ${disk.antibiotic.name} zone of inhibition. Antibiotics kill bacteria!`,
+      touchMessage(palEl.dataset.name, disk),
       `Try level ${level} again`,
       { startOver: level > 1 }, // on level 1 they'd do the same thing
     );

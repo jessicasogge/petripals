@@ -121,6 +121,41 @@ export const SPECIES = {
       { code: 'CTX', name: 'cefotaxime', zone: 37 },
     ],
   },
+  // Bifidobacterium bifidum, one of the "good" gut bacteria (a probiotic):
+  // a rod that splits into a Y at one end (bifidus means split in two), drawn
+  // upright like arms raised in a cheer. She divides like a rod. Her name is
+  // a nod to "anaerobe": oxygen is bad for her. Like Borrelia, there are no
+  // standard lab disk sizes for her, so her zones are estimates from how well
+  // each drug works on bifidobacteria. They're naturally resistant to
+  // gentamicin, so that disk has no zone at all.
+  ana: {
+    scientific: 'Bifidobacterium bifidum',
+    color: '#be185d', // for her name above the dish: strawberry-yogurt pink's deeper rose
+    kind: 'rod',
+    size: 11,
+    body: [
+      // stem, bottom to top
+      [0.0, 0.305, 0.128],
+      [0.0, 0.177, 0.128],
+      [0.0, 0.049, 0.128],
+      // where the branches meet (her face)
+      [0.0, -0.012, 0.134],
+      // the two branches, out to their tips
+      [-0.07, -0.149, 0.128],
+      [-0.121, -0.226, 0.128],
+      [-0.183, -0.305, 0.128],
+      [0.07, -0.149, 0.128],
+      [0.121, -0.226, 0.128],
+      [0.183, -0.305, 0.128],
+    ],
+    antibiotics: [
+      { code: 'AMX', name: 'amoxicillin', zone: 34 },
+      { code: 'VA', name: 'vancomycin', zone: 22 },
+      { code: 'GM', name: 'gentamicin', zone: null }, // resistant: no zone
+      { code: 'CC', name: 'clindamycin', zone: 28 },
+      { code: 'E', name: 'erythromycin', zone: 25 },
+    ],
+  },
   // Streptococcus pneumoniae, the pneumococcus: a Streptococcus like
   // Scarlett, but her chains stop at two, so she grows in pairs (a
   // diplococcus). Her glasses are because pneumococcus is the bacterium that
