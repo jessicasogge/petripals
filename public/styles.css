@@ -252,6 +252,21 @@ body {
   white-space: nowrap;
 }
 
+/* Each pal's name, with her species right under it. */
+.picker-grid .pal-card h2 {
+  margin: 0.35rem 0 0.2rem;
+  line-height: 1.2;
+}
+
+/* Her species, right under her name. Every card keeps room for two lines,
+   so a long one that wraps (Streptococcus pneumoniae) doesn't make her card
+   look different from the rest. */
+.picker-grid .species {
+  margin: 0 0 1rem;
+  line-height: 1.3;
+  min-height: 2.6em;
+}
+
 .pal-icon {
   width: 110px;
   height: 110px;
