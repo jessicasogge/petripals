@@ -62,3 +62,46 @@ describe('the home page title', () => {
     expect(css).toContain(`url(./${preloaded})`);
   });
 });
+
+describe('search engines and shared links', () => {
+  const SITE = 'https://jessicasogge.github.io/petripals/';
+  const meta = (html, attr, name) => html.match(new RegExp(`<meta ${attr}="${name}" content="([^"]*)"`))?.[1];
+
+  it('names the game and what it is in the home page title', () => {
+    expect(readFileSync(file('index.html'), 'utf8')).toContain('<title>PetriPals: A Microbiology Game</title>');
+  });
+
+  it.each(PAGES)('%s has a description short enough for a search result', (page) => {
+    const description = meta(readFileSync(file(page), 'utf8'), 'name', 'description');
+    expect(description).toBeTruthy();
+    expect(description.length).toBeLessThanOrEqual(160);
+  });
+
+  it.each(PAGES)('%s says where it lives, for search engines and shared links', (page) => {
+    const html = readFileSync(file(page), 'utf8');
+    const address = page === 'index.html' ? SITE : SITE + page;
+    expect(html).toContain(`<link rel="canonical" href="${address}" />`);
+    expect(meta(html, 'property', 'og:url')).toBe(address);
+  });
+
+  it.each(PAGES)('%s shows a picture when its link is shared', (page) => {
+    const html = readFileSync(file(page), 'utf8');
+    const image = meta(html, 'property', 'og:image');
+    expect(image.startsWith(SITE)).toBe(true); // apps need the full address
+    expect(existsSync(file(image.slice(SITE.length)))).toBe(true);
+    expect(meta(html, 'property', 'og:title')).toBeTruthy();
+    expect(meta(html, 'property', 'og:description')).toBe(meta(html, 'name', 'description'));
+    expect(meta(html, 'name', 'twitter:card')).toBe('summary_large_image');
+  });
+
+  it('lists real pages in the sitemap', () => {
+    const sitemap = readFileSync(file('sitemap.xml'), 'utf8');
+    const pages = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+    expect(pages).toContain(SITE);
+    for (const address of pages) {
+      expect(address.startsWith(SITE)).toBe(true);
+      expect(existsSync(file(address.slice(SITE.length) || 'index.html')), address).toBe(true);
+    }
+  });
+});
+
