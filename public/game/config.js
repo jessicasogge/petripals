@@ -365,8 +365,8 @@ export const GAME = {
   // the zone starts small and widens. Each zone starts at ZONE_START of its
   // full width and reaches full width after ZONE_SPREAD_SECONDS. (A real
   // zone takes hours to form while the plate incubates; sped up for the game.)
-  ZONE_START: 0.2,
-  ZONE_SPREAD_SECONDS: 12,
+  ZONE_START: 0.1,
+  ZONE_SPREAD_SECONDS: 20,
   // Room to swim between two neighboring zones, at least.
   SWIM_ROOM: 0.13,
 };
