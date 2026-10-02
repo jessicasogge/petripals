@@ -8,8 +8,11 @@ describe('every pal\'s facts', () => {
     const { facts } = SPECIES[pal];
     expect(facts).toHaveLength(10);
     expect(new Set(facts).size).toBe(10);
+    const name = pal[0].toUpperCase() + pal.slice(1);
     for (const fact of facts) {
       expect(fact.length, fact).toBeLessThanOrEqual(90); // fits the pop-up
+      // Says whose fact it is, so it's clear in a race against another pal.
+      expect(fact, fact).toContain(name);
       expect(fact, fact).toMatch(/^["A-Z0-9].*[.!"]$/); // a full sentence
     }
   });
