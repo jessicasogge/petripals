@@ -66,7 +66,9 @@ export const PALS = [
     homeWidth: 108,
     art: `
       <!-- flagellum -->
-      <path d="M34 92 C24 76 16 108 4 92" stroke="#c2410c" stroke-width="4" fill="none" stroke-linecap="round" />
+      <path class="flagellum" d="M34 92 C24 76 16 108 4 92" stroke="#c2410c" stroke-width="4" fill="none" stroke-linecap="round">
+        <animate attributeName="d" dur="0.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.25;0.5;0.75;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1" values="M34 92 C24 76 16 108 4 92;M34 92 C24 88.8 16 95.2 4 92;M34 92 C24 108 16 76 4 92;M34 92 C24 95.2 16 88.8 4 92;M34 92 C24 76 16 108 4 92" />
+      </path>
       <!-- comma-shaped body: outline, then fill -->
       <path d="M58 92 Q108 62 150 122" stroke="#c2410c" stroke-width="58" fill="none" stroke-linecap="round" />
       <path d="M58 92 Q108 62 150 122" stroke="#fdba74" stroke-width="50" fill="none" stroke-linecap="round" />
@@ -219,7 +221,10 @@ export const PALS = [
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '0 17 176 176', dish: '0 17 176 176' },
     art: `
-      <path d="M34 105 C24 88 16 122 6 105" stroke="#15803d" stroke-width="4" fill="none" stroke-linecap="round" />
+      <!-- flagellum -->
+      <path class="flagellum" d="M34 105 C24 88 16 122 6 105" stroke="#15803d" stroke-width="4" fill="none" stroke-linecap="round">
+        <animate attributeName="d" dur="0.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.25;0.5;0.75;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1" values="M34 105 C24 88 16 122 6 105;M34 105 C24 101.6 16 108.4 6 105;M34 105 C24 122 16 88 6 105;M34 105 C24 108.4 16 101.6 6 105;M34 105 C24 88 16 122 6 105" />
+      </path>
       <rect x="30" y="75" width="140" height="60" rx="30" fill="#86efac" stroke="#15803d" stroke-width="4" />
       <circle cx="145" cy="90" r="4" fill="#dcfce7" />
       <circle cx="55" cy="122" r="3" fill="#dcfce7" />
@@ -274,6 +279,11 @@ function drawing(pal, page) {
   const svg = document.createElementNS(SVG, 'svg');
   svg.setAttribute('viewBox', pal.frames[page]);
   svg.innerHTML = pal.art;
+  // A flagellum wiggles with SVG's own <animate>, which CSS can't pause, so
+  // leave it still for anyone who has asked for less motion.
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+    for (const wiggle of svg.querySelectorAll('.flagellum animate')) wiggle.remove();
+  }
   return svg;
 }
 
