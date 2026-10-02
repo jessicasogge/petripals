@@ -135,6 +135,12 @@ body {
   width: min(1000px, 100%);
 }
 
+/* A heading at the very top of the card sits on the card's own padding,
+   without the browser's extra margin on top. */
+.picker-shell > h1:first-child {
+  margin-top: 0;
+}
+
 /* Four across on a computer (two rows of four), two on a tablet, one on a
    phone, where the Select buttons wouldn't fit side by side. */
 .picker-grid {
