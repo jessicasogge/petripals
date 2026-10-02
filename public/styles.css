@@ -252,23 +252,10 @@ body {
   white-space: nowrap;
 }
 
-/* The picker's title and the pals' names, in Fredoka like the home page's
-   title, so the two pages feel like one game. */
-.picker-wide > h1,
-.picker-grid .pal-card h2 {
-  font-family: Fredoka, system-ui, sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-}
-
-.picker-wide > h1 {
-  font-size: 2.6rem;
-}
-
+/* Each pal's name, with her species right under it. */
 .picker-grid .pal-card h2 {
   margin: 0.35rem 0 0.2rem;
-  font-size: 1.7rem;
-  line-height: 1.1;
+  line-height: 1.2;
 }
 
 /* Her species, right under her name. Every card keeps room for two lines,
