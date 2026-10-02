@@ -122,9 +122,8 @@ export const SPECIES = {
     ],
   },
   // Streptococcus pneumoniae, the pneumococcus: a pair of slightly egg-shaped
-  // cells (a diplococcus) in a thick sugar capsule. She's drawn as one pair,
-  // and each division makes a new pair that sets off on its own, so she moves
-  // and divides like the rods. (Simplified for the game: each pair counts as
+  // cells (a diplococcus). She's drawn as one pair, and each division makes a
+  // new pair that sets off on its own, so she moves and divides like the rods. (Simplified for the game: each pair counts as
   // one cell toward the target.) Her glasses are because pneumococcus is the
   // bacterium that showed DNA carries genes (Griffith in 1928; Avery, MacLeod
   // and McCarty in 1944). Labs screen her for penicillin with an oxacillin disk.
@@ -134,7 +133,7 @@ export const SPECIES = {
     kind: 'rod',
     size: 11,
     body: [
-      // the two cells, each about two circles (not the faint capsule around them)
+      // the two cells, each about two circles
       [-0.3, 0.0, 0.156],
       [-0.167, 0.0, 0.194],
       [0.167, 0.0, 0.194],

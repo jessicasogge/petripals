@@ -33,7 +33,7 @@ No antibiotics this time. You share the plate with a rival pal, picked at random
 | **Scarlett** | *Streptococcus pyogenes* | Red chains of round cells |
 | **Elia** | *Borrelia burgdorferi* | Purple corkscrew (spirochete) |
 | **Coco** | *Haemophilus influenzae* | Small coffee-with-cream coccobacillus |
-| **Penny** | *Streptococcus pneumoniae* | Bluish-purple pair of round cells in a capsule, with glasses |
+| **Penny** | *Streptococcus pneumoniae* | Bluish-purple pair of round cells, with glasses |
 
 ## The real science
 
