@@ -7,11 +7,16 @@ import { antibioticsFor, placeAntibiotics } from './antibiotic.js';
 import { LEVELS, MIXED, SPECIES } from './config.js';
 import { playGame } from './game.js';
 import { scatterNutrients } from './nutrients.js';
+import { dishPal, PALS } from './pals.js';
 import { playRace } from './race.js';
 import { watchInputMode } from './touch.js';
 
 // Show touch or arrow-key directions, whichever fits the device.
 watchInputMode();
+
+// Every pal's drawing, hidden: yours is shown below, and in mixed culture the
+// rival's is copied from here.
+document.querySelector('.pal-mover').append(...PALS.map(dishPal));
 
 const params = new URLSearchParams(window.location.search);
 const choice = params.get('pal');

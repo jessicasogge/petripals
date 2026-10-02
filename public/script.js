@@ -1,3 +1,8 @@
+// The home page: the row of pals, and the "Press Start to Play" button.
+import { homePal, PALS } from './game/pals.js';
+
+document.querySelector('.friends')?.append(...PALS.map(homePal));
+
 const startButton = document.querySelector('.start-btn');
 
 if (startButton) {
