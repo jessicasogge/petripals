@@ -24,6 +24,22 @@ body {
   width: 120px;
 }
 
+/* Tap a pal on the home page and she divides in two (game/split.js). The
+   daughters can drift past the edge of her drawing while she's split. */
+.splittable .pal {
+  cursor: pointer;
+  overflow: visible;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation; /* no double-tap zoom when tapping twice */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.pal .cell {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
 .bob {
   animation: bob 2.4s ease-in-out infinite;
 }
