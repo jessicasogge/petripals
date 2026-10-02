@@ -4,16 +4,20 @@ import { GAME } from './config.js';
 import { idlePose, newMover } from './mover.js';
 import { coaster } from './physics.js';
 
-// A round cell (Scarlett, Goldie). The player is always a single coccus.
+// A round cell (Scarlett, Penny, Goldie). The player is always a single coccus.
 // Offspring are chains or clusters of cocci that grow one cell at a time as
-// daughters join them (the player's, or their own cells' when they eat), up to GROUP_CAP cells. A chain grows from
-// whichever end is nearer the player; a cluster grows on the side facing the
-// player. So Scarlett builds chains along the lines she swims, and Goldie
-// builds bunches wherever she lingers.
+// daughters join them (the player's, or their own cells' when they eat), up to
+// GROUP_CAP cells, or the pal's own maxCells. A chain grows from whichever end
+// is nearer the player; a cluster grows on the side facing the player. So
+// Scarlett builds chains along the lines she swims, Penny leaves a trail of
+// pairs, and Goldie builds bunches wherever she lingers.
 export function coccusGroup({ mover, svg, species, isPlayer }) {
   const CELL_SIZE = 5; // one cell's width, as a percent of the dish
   const OUTLINE = 1.7; // each cell's outline width, in SVG units
   const { layout, colors } = species;
+  // How many cells a chain or cluster grows to: GROUP_CAP, or fewer for a pal
+  // like Penny whose chains stop at two.
+  const cap = Math.min(species.maxCells ?? GAME.GROUP_CAP, GAME.GROUP_CAP);
 
   const group = {
     mover,
@@ -68,9 +72,25 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
         '<ellipse cx="-6.3" cy="3.8" rx="1.8" ry="1.2" fill="#f9a8d4" opacity="0.9" />' +
         '<ellipse cx="6.3" cy="3.8" rx="1.8" ry="1.2" fill="#f9a8d4" opacity="0.9" />' +
         `<path d="M-2 3.8 Q0 6 2 3.8" stroke="${colors.dark}" stroke-width="1.2" fill="none" stroke-linecap="round" />` +
+        (species.glasses ? glasses() : '') +
         '</g>';
     }
     return out;
+  }
+
+  // Round glasses over the eyes (Penny's), with a glint on one lens.
+  function glasses() {
+    const frame = `stroke="${colors.dark}" stroke-width="0.75" stroke-linecap="round"`;
+    return (
+      `<g class="glasses">` +
+      `<circle cx="-3.6" cy="0" r="3.1" fill="#eef2ff" fill-opacity="0.35" ${frame} />` +
+      `<circle cx="3.6" cy="0" r="3.1" fill="#eef2ff" fill-opacity="0.35" ${frame} />` +
+      `<path d="M-0.5 -0.3 Q0 -1 0.5 -0.3" fill="none" ${frame} />` +
+      `<path d="M-6.7 -0.4 L-8.2 -1.3" ${frame} />` +
+      `<path d="M6.7 -0.4 L8.2 -1.3" ${frame} />` +
+      '<path d="M-5.4 -1.7 Q-4.8 -2.3 -4 -2.3" stroke="white" stroke-width="0.5" fill="none" stroke-linecap="round" opacity="0.9" />' +
+      '</g>'
+    );
   }
 
   function draw() {
@@ -129,7 +149,7 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
     // Where a new cell would join this group if it came from (wx, wy) in the
     // dish, or null if the group is full or every open spot is on a disk.
     attachSpot(wx, wy, disks = [], dishRadius = 0) {
-      if (group.cells.length >= GAME.GROUP_CAP) return null;
+      if (group.cells.length >= cap) return null;
       const [px, py] = toLocal(wx, wy);
       // Spots on or right next to an antibiotic disk are off-limits. Measure
       // each cell the same way body() does (with its outline), or a new cell
