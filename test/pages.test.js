@@ -105,3 +105,12 @@ describe('search engines and shared links', () => {
   });
 });
 
+describe('Google Search Console', () => {
+  // Proves to Google that Jess owns the site. Google checks it again from
+  // time to time, so deleting or changing it would undo the verification.
+  it('keeps the verification file, exactly as Google gave it', () => {
+    const name = 'google32efa8321a61b455.html';
+    expect(readFileSync(file(name), 'utf8')).toBe(`google-site-verification: ${name}`);
+  });
+});
+
