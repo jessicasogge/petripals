@@ -38,6 +38,9 @@ export const SPECIES = {
       "Mona is naturally resistant to many antibiotics.",
       "Mona often infects the lungs of people with cystic fibrosis.",
       "Without oxygen, Mona can use nitrate for anaerobic respiration.",
+      "Mona can often grow at 42°C, unlike many of her close relatives.",
+      "Mona is oxidase-positive: a drop of test reagent turns her colonies dark purple.",
+      "Mona's cells signal to each other with chemicals, called quorum sensing.",
     ],
     scientific: 'Pseudomonas aeruginosa',
     color: '#15803d', // for her name above the dish
@@ -73,6 +76,9 @@ export const SPECIES = {
       "In 1854, Filippo Pacini described Vi, the comma-shaped bacterium linked to cholera.",
       "Oral rehydration (clean water, the right salt and sugar) saves most people Vi sickens.",
       "Filtering water through folded sari cloth kept Vi out and cut cholera in Bangladesh.",
+      "Vi has two chromosomes instead of the usual one.",
+      "On TCBS agar, Vi typically grows into yellow colonies—but other bacteria can do that too.",
+      "Vi's toxin makes the gut pour out water and salt, which is why cholera dehydrates people.",
     ],
     scientific: 'Vibrio cholerae',
     color: '#c2410c', // for her name above the dish
@@ -112,6 +118,9 @@ export const SPECIES = {
       "Unlike most bacteria, Elia doesn't need iron and relies heavily on manganese instead.",
       "Elia's chromosome is a straight line instead of a circle.",
       "Elia is difficult to grow in special lab media and can take days to weeks to multiply.",
+      "Elia's DNA was found in Ötzi, a 5,300-year-old Iceman frozen in the Alps.",
+      "Ticks usually feed a day or more before they're likely to pass Elia on. Remove them fast!",
+      "Elia can carry about 20 extra DNA pieces called plasmids—unusually many for a bacterium.",
     ],
     scientific: 'Borrelia burgdorferi',
     color: '#7e22ce', // for her name above the dish
@@ -153,6 +162,9 @@ export const SPECIES = {
       "Coco can live harmlessly in the nose and throat, especially in children.",
       "Before Hib vaccines, Coco's type b was a top cause of bacterial meningitis in young kids.",
       "The Hib vaccine made Coco's type b disease rare where vaccination coverage is high.",
+      "Coco is a coccobacillus: in between a round coccus and a rod-shaped bacillus.",
+      "Coco has six capsule types, a to f; the Hib vaccine targets type b.",
+      "Many Coco strains have no capsule at all and commonly cause ear infections.",
     ],
     scientific: 'Haemophilus influenzae',
     color: '#7c4a2d', // for her name above the dish
@@ -190,6 +202,9 @@ export const SPECIES = {
       "Ana is included in some probiotics and, occasionally, in fermented dairy foods.",
       "Ana has no flagellum, so she can't swim.",
       "Bifidobacteria like Ana are often most abundant in infancy and less dominant with age.",
+      "Ana is Gram-positive, so she stains purple under the microscope.",
+      "Some Ana strains can feed on parts of mucin, the slimy layer lining the gut.",
+      "Ana breaks down sugars with a pathway named for her group, the \"bifid shunt.\"",
     ],
     scientific: 'Bifidobacterium bifidum',
     color: '#be185d', // for her name above the dish: strawberry-yogurt pink's deeper rose
@@ -235,6 +250,9 @@ export const SPECIES = {
       "Penny can pick up loose DNA from her surroundings.",
       "In 1928, Griffith showed harmless Penny cells could be transformed into deadly ones.",
       "In 1944, Avery, MacLeod and McCarty used Penny to show DNA carried the transforming trait.",
+      "An optochin disk usually stops Penny growing, a classic test that helps tell her apart.",
+      "Penny's colonies often sink in the middle as they age, like tiny checkers pieces.",
+      "Vaccines protect against the Penny types that most often cause serious illness.",
     ],
     scientific: 'Streptococcus pneumoniae',
     color: '#4f46e5', // for her name above the dish: bluish purple, next to Elia's purple
@@ -263,6 +281,9 @@ export const SPECIES = {
       "Penicillin still works on Scarlett: confirmed clinical resistance to it hasn't emerged.",
       "Untreated, Scarlett's strep throat can lead to rheumatic fever, which can harm the heart.",
       "Rarely, Scarlett causes necrotizing fasciitis, often called a \"flesh-eating\" infection.",
+      "Scarlett is catalase-negative: no bubbles in hydrogen peroxide, unlike Goldie.",
+      "A bacitracin disk often stops Scarlett growing, a classic older clue for Group A strep.",
+      "A rapid strep test can find Scarlett on a throat swab in minutes.",
     ],
     scientific: 'Streptococcus pyogenes',
     color: '#b91c1c', // for her name above the dish
@@ -289,6 +310,9 @@ export const SPECIES = {
       "Goldie's toxins can cause food poisoning within hours.",
       "MRSA is Goldie resistant to methicillin and related antibiotics, and often to others too.",
       "Penicillin was discovered after Fleming saw mold stop Goldie growing on a culture plate.",
+      "Goldie is catalase-positive: she makes bubbles in a drop of hydrogen peroxide.",
+      "Goldie makes coagulase, which clots plasma, a classic test that helps identify her.",
+      "Goldie's food-poisoning toxins can survive cooking, even when Goldie herself doesn't.",
     ],
     scientific: 'Staphylococcus aureus',
     color: '#b45309', // for her name above the dish
