@@ -260,6 +260,10 @@ export const SPECIES = {
     layout: 'chain',
     maxCells: 2, // pairs
     glasses: true,
+    // Her cells are lancet-shaped, like in her picture: a little longer than
+    // they are wide, rounder where the pair meets and narrower at the outer
+    // ends. (Pneumococci are often called lancet-shaped diplococci.)
+    shape: 'lancet',
     colors: { fill: '#a5b4fc', stroke: '#4f46e5', highlight: '#e0e7ff', dark: '#312e81' },
     antibiotics: [
       { code: 'OX', name: 'oxacillin', zone: 27 },
