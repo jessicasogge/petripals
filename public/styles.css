@@ -412,6 +412,24 @@ body {
   margin: 0;
 }
 
+/* The "Did you know?" fact about your pal when you win. */
+.win-banner .fun-fact {
+  margin-top: 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 12px;
+  background: rgba(15, 118, 110, 0.08);
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.win-banner .fun-fact[hidden] {
+  display: none;
+}
+
+.win-banner .fun-fact strong {
+  color: #0f766e;
+}
+
 @keyframes pop-in {
   from {
     opacity: 0;

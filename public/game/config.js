@@ -23,8 +23,22 @@
 // For rod-style pals, `body` traces the drawing's outline as circles
 // [x, y, radius], in fractions of the drawing's width from its center. It's
 // what counts as touching an antibiotic disk.
+// `facts` are short fun facts about each pal; one is shown at random when
+// you finish a level or win (see game/facts.js).
 export const SPECIES = {
   mona: {
+    facts: [
+      "She swims with a single whip-like tail called a flagellum.",
+      "Her name means \"copper rust,\" after her blue-green color.",
+      "She makes a blue-green pigment called pyocyanin.",
+      "Her cultures smell a little like grapes.",
+      "Another of her pigments glows under UV light.",
+      "She loves damp places like sink drains and hot tubs.",
+      "She builds slimy shields called biofilms to protect herself.",
+      "She's naturally resistant to many antibiotics.",
+      "She often infects the lungs of people with cystic fibrosis.",
+      "She can survive without oxygen if she has nitrate to breathe instead.",
+    ],
     scientific: 'Pseudomonas aeruginosa',
     color: '#15803d', // for her name above the dish
     kind: 'rod',
@@ -48,6 +62,18 @@ export const SPECIES = {
     ],
   },
   vi: {
+    facts: [
+      "She's shaped like a comma.",
+      "She's one of the fastest-swimming bacteria.",
+      "She lives naturally in salty coastal water.",
+      "She hitches rides on tiny shrimp-like animals called copepods.",
+      "Her toxin genes were delivered by a virus that infected her.",
+      "It usually takes millions of her to make someone sick.",
+      "In 1854, John Snow traced a cholera outbreak to one London water pump.",
+      "That same year, Filippo Pacini first saw her under a microscope.",
+      "Simple salt-and-sugar water saves most people with cholera.",
+      "Filtering water through folded sari cloth cut cholera cases in Bangladesh.",
+    ],
     scientific: 'Vibrio cholerae',
     color: '#c2410c', // for her name above the dish
     kind: 'rod',
@@ -75,6 +101,18 @@ export const SPECIES = {
   },
   // A spirochete: a long corkscrew-shaped cell that divides in two like a rod.
   elia: {
+    facts: [
+      "She's a spirochete, shaped like a corkscrew.",
+      "Her flagella are inside her body, so she swims by twisting.",
+      "She's spread by blacklegged ticks, also called deer ticks.",
+      "She causes Lyme disease, named after Lyme, Connecticut.",
+      "She's named after Willy Burgdorfer, who discovered her in 1982.",
+      "Lyme disease often starts with a bull's-eye rash.",
+      "Mice are among her favorite hosts.",
+      "Unlike almost every living thing, she doesn't need iron.",
+      "Her chromosome is a straight line instead of a circle.",
+      "She's very hard to grow in a lab and takes weeks to multiply.",
+    ],
     scientific: 'Borrelia burgdorferi',
     color: '#7e22ce', // for her name above the dish
     kind: 'rod',
@@ -104,6 +142,18 @@ export const SPECIES = {
   // H. influenzae is one of the smallest bacteria, and her drawing fills
   // more of its box than the other rods', so she's drawn smaller.
   coco: {
+    facts: [
+      "Despite her name, she doesn't cause the flu.",
+      "She was wrongly blamed for an 1890s flu pandemic.",
+      "\"Haemophilus\" means blood-loving; she needs nutrients from blood.",
+      "She grows best on \"chocolate agar,\" made from heated blood.",
+      "She grows near Goldie on blood agar, borrowing a nutrient Goldie releases.",
+      "She was the first free-living organism to have its whole genome read, in 1995.",
+      "An enzyme from her helped launch genetic engineering.",
+      "She lives in the nose and throat of many healthy people.",
+      "One type of her was a leading cause of meningitis in kids.",
+      "The Hib vaccine made that type rare.",
+    ],
     scientific: 'Haemophilus influenzae',
     color: '#7c4a2d', // for her name above the dish
     kind: 'rod',
@@ -129,6 +179,18 @@ export const SPECIES = {
   // each drug works on bifidobacteria. They're naturally resistant to
   // gentamicin, so that disk has no zone at all.
   ana: {
+    facts: [
+      "She's a friendly bacterium that lives in our gut.",
+      "\"Bifidum\" means split in two, from her Y-shaped cells.",
+      "She was discovered in 1899 in a breastfed baby's diaper.",
+      "She's one of the first bacteria to move into babies' tummies.",
+      "She eats special sugars in breast milk that babies can't digest.",
+      "Oxygen is toxic to her.",
+      "She makes acids that help keep harmful germs away.",
+      "She's added to some yogurts and probiotics.",
+      "She has no flagellum, so she can't swim.",
+      "People usually have less of her as they get older.",
+    ],
     scientific: 'Bifidobacterium bifidum',
     color: '#be185d', // for her name above the dish: strawberry-yogurt pink's deeper rose
     kind: 'rod',
@@ -162,6 +224,18 @@ export const SPECIES = {
   // showed DNA carries genes (Griffith in 1928; Avery, MacLeod and McCarty in
   // 1944). Labs screen her for penicillin with an oxacillin disk.
   penny: {
+    facts: [
+      "She's often called \"pneumococcus.\"",
+      "Her cells usually come in pairs shaped like little footballs.",
+      "She's a leading cause of pneumonia.",
+      "She also causes many ear infections in kids.",
+      "She comes in about 100 different coat types.",
+      "She leaves a greenish halo on blood agar.",
+      "She dissolves in bile, a classic lab test for her.",
+      "She can pick up loose DNA from her surroundings.",
+      "In 1928, Griffith saw her \"transform\" from harmless to deadly.",
+      "In 1944, experiments with her proved DNA carries genes.",
+    ],
     scientific: 'Streptococcus pneumoniae',
     color: '#4f46e5', // for her name above the dish: bluish purple, next to Elia's purple
     kind: 'coccus',
@@ -178,6 +252,18 @@ export const SPECIES = {
     ],
   },
   scarlett: {
+    facts: [
+      "\"Strepto\" means twisted chain, how her cells line up.",
+      "\"Pyogenes\" means pus-making.",
+      "She's the cause of strep throat.",
+      "She also causes scarlet fever, a perfect match for her name.",
+      "Doctors call her \"Group A Strep.\"",
+      "She bursts red blood cells, leaving clear rings on blood agar.",
+      "She disguises herself with a coat made of the same stuff as our tissues.",
+      "Penicillin still works on her, decades after it was first used.",
+      "Untreated, she can lead to rheumatic fever, which can harm the heart.",
+      "Rarely, she causes \"flesh-eating\" infections.",
+    ],
     scientific: 'Streptococcus pyogenes',
     color: '#b91c1c', // for her name above the dish
     kind: 'coccus',
@@ -192,6 +278,18 @@ export const SPECIES = {
     ],
   },
   goldie: {
+    facts: [
+      "\"Staphylo\" is Greek for a bunch of grapes, how her cells cluster.",
+      "\"Aureus\" means golden, the color of her colonies.",
+      "Her golden pigment helps her fight off the immune system.",
+      "About 1 in 3 people carry her harmlessly in their nose.",
+      "She has no flagellum, so she can't swim at all.",
+      "She can survive on dry surfaces for weeks.",
+      "She tolerates lots of salt, so labs grow her on salty agar.",
+      "Her toxins can cause food poisoning within hours.",
+      "MRSA is a version of her that resists many antibiotics.",
+      "Penicillin was discovered when mold killed her colonies on Fleming's plate.",
+    ],
     scientific: 'Staphylococcus aureus',
     color: '#b45309', // for her name above the dish
     kind: 'coccus',
