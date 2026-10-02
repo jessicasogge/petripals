@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SPECIES } from '../public/game/config.js';
 import { hideFact, pickFact, showFact } from '../public/game/facts.js';
 
@@ -62,6 +62,27 @@ describe('the pop-up line', () => {
       showFact('vi', SPECIES.vi);
       expect(line().textContent).not.toBe(first);
     }
+  });
+
+  it('still shows a fact when the browser blocks storage (like some private windows)', () => {
+    const blocked = () => {
+      throw new Error('storage is blocked');
+    };
+    vi.spyOn(Storage.prototype, 'getItem').mockImplementation(blocked);
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(blocked);
+    try {
+      expect(() => showFact('mona', SPECIES.mona)).not.toThrow();
+      expect(line().hidden).toBe(false);
+      expect(SPECIES.mona.facts).toContain(line().querySelector('.fun-fact-text').textContent);
+    } finally {
+      vi.restoreAllMocks();
+    }
+  });
+
+  it('does nothing on a page without the fact line', () => {
+    document.body.innerHTML = '';
+    expect(() => showFact('mona', SPECIES.mona)).not.toThrow();
+    expect(() => hideFact()).not.toThrow();
   });
 
   it('stays hidden for a pal with no facts, and hides on a game over', () => {

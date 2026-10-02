@@ -117,6 +117,14 @@ describe('the cell counter', () => {
     onDivide();
     expect(document.querySelector('.cell-count').textContent).toBe('Level 1 · 4 / 4 cells');
   });
+
+  it('counts down when offspring pop in an antibiotic zone', () => {
+    start({ level: 2 });
+    const [{ onPop }] = vi.mocked(makeColony).mock.calls[0];
+    fake.colony.setCells(5);
+    onPop(2);
+    expect(document.querySelector('.cell-count').textContent).toBe('Level 2 · 5 / 8 cells');
+  });
 });
 
 describe('beating a level', () => {
