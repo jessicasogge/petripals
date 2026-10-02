@@ -7,7 +7,7 @@
 //   id      her key, matching SPECIES in config.js and ?pal= in addresses
 //   name    what she's called
 //   looks   what a screen reader says after her name
-//   motion  her idle animation in styles.css (bob, squish, wobble or slither)
+//   motion  her idle animation in css/shared.css (bob, squish, wobble or slither)
 //   frames  the part of the drawing each page shows (an SVG viewBox), so each
 //           page can frame her its own way: a little room around her on the
 //           home page, filling her tile on the picker, snug in the dish
@@ -15,7 +15,7 @@
 //           <g class="face">: offspring in the dish hide it.
 //
 // To add a pal: add her here and to SPECIES in config.js, and give her tile a
-// color in styles.css (.<id> next to .penny and the others).
+// color in css/menus.css (.<id> next to .penny and the others).
 
 const SVG = 'http://www.w3.org/2000/svg';
 

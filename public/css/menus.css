@@ -1,0 +1,180 @@
+/* The screens before the game: the home page, the pal picker and the mode
+   page. Loaded after shared.css. */
+
+/* ---- Home page ---- */
+
+.friends {
+  display: flex;
+  flex-wrap: wrap; /* on narrow screens, pals wrap onto a second row */
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.5rem;
+  padding: 0 1rem;
+}
+
+.pal {
+  width: 120px;
+}
+
+.start-btn {
+  margin-top: 1rem;
+  padding: 0.8rem 2rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+  background: #0f766e;
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0 4px 0 #134e4a;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.start-btn:hover {
+  background: #14b8a6;
+}
+
+.start-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #134e4a;
+}
+
+.start-btn:disabled {
+  cursor: wait;
+  opacity: 0.8;
+}
+
+/* On the home page, push it down to the bottom of the screen instead of
+   right under the start button. */
+body:not(.picker-page) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+body:not(.picker-page) .signature {
+  margin-top: auto;
+  padding-top: 2rem;
+}
+
+/* ---- Pal picker ---- */
+
+/* The pal picker is wider than the other cards, to fit four pals across. */
+.picker-wide {
+  width: min(1000px, 100%);
+}
+
+/* Four across on a computer (two rows of four), two on a tablet, one on a
+   phone, where the Select buttons wouldn't fit side by side. */
+.picker-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .picker-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .picker-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pal-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px solid rgba(15, 118, 110, 0.2);
+  border-radius: 18px;
+  padding: 1rem;
+}
+
+/* Line the Select buttons up along the bottom, however long the name above. */
+.pal-card .pick-btn {
+  margin-top: auto;
+  white-space: nowrap;
+}
+
+.pal-icon {
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 0.75rem;
+  border-radius: 22px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: inset 0 0 0 2px rgba(19, 78, 74, 0.06);
+}
+
+.pal-icon svg {
+  width: 90px;
+  height: 90px;
+  display: block;
+}
+
+.mona {
+  background: rgba(134, 239, 172, 0.45);
+}
+
+.goldie {
+  background: rgba(253, 230, 138, 0.45);
+}
+
+.scarlett {
+  background: rgba(252, 165, 165, 0.45);
+}
+
+.elia {
+  background: rgba(216, 180, 254, 0.45);
+}
+
+.penny {
+  background: rgba(165, 180, 252, 0.45);
+}
+
+.ana {
+  background: rgba(249, 168, 212, 0.4);
+}
+
+.coco {
+  background: rgba(212, 176, 140, 0.45);
+}
+
+.vi {
+  background: rgba(253, 186, 116, 0.45);
+}
+
+/* ---- Mode page ---- */
+
+/* The mode screen after picking a pal. */
+.mode-shell h1 {
+  margin: 0.75rem 0 0;
+}
+
+.mode-pal {
+  display: flex;
+  justify-content: center;
+}
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.mode-card h2 {
+  margin: 0.25rem 0 0.5rem;
+}
+
+.mode-card p {
+  margin: 0 0 1rem;
+  line-height: 1.45;
+}

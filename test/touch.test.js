@@ -196,7 +196,7 @@ describe('watchInputMode', () => {
 describe('the directions on the dish page', () => {
   // (jsdom changes import.meta.url to a web address, so find files from the project folder.)
   const page = readFileSync(resolve(process.cwd(), 'public/petri-dish.html'), 'utf8');
-  const css = readFileSync(resolve(process.cwd(), 'public/styles.css'), 'utf8');
+  const css = readFileSync(resolve(process.cwd(), 'public/css/dish.css'), 'utf8');
 
   it('has both touch and arrow-key wording', () => {
     expect(page).toContain('<span class="for-keys">Use the arrow keys to swim.</span>');

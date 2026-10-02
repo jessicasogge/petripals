@@ -114,7 +114,7 @@ export function placeAntibiotics(antibiotics) {
       ? `Antibiotic disk: ${antibiotic.name}. Don't touch it or the clear zone around it!`
       : `Antibiotic disk: ${antibiotic.name}. No clear zone (resistant), but don't touch the disk!`);
     // Shown in a little label above the disk when you hover over it (see
-    // .antibiotic::after in styles.css), e.g. "Penicillin".
+    // .antibiotic::after in css/dish.css), e.g. "Penicillin".
     el.dataset.name = antibiotic.name[0].toUpperCase() + antibiotic.name.slice(1);
     agar.appendChild(el);
     return { ...spot, el, zoneEl, antibiotic };

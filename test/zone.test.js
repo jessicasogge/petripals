@@ -65,7 +65,7 @@ describe('touching the zone', () => {
 
 describe('when the pal dies', () => {
   // Read the stylesheet from the project folder (jsdom changes import.meta.url).
-  const css = readFileSync(resolve(process.cwd(), 'public/styles.css'), 'utf8');
+  const css = readFileSync(resolve(process.cwd(), 'public/css/dish.css'), 'utf8');
   const rule = css.match(/\.pal-mover\.killed \.dish-pal \{([^}]*)\}/)[1];
 
   it('freezes her mid-wiggle, so she stays exactly where she touched the zone', () => {

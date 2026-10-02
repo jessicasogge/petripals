@@ -1,0 +1,153 @@
+/* Styles every page uses. Each page also loads menus.css (the home page,
+   pal picker and mode page) or dish.css (the game), after this one. */
+
+/* ---- Page basics ---- */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #ccfbf1;
+  color: #134e4a;
+  font-family: system-ui, sans-serif;
+  text-align: center;
+  padding-top: 3rem;
+}
+
+/* ---- The pals' idle animations (home page and dish) ---- */
+
+.bob {
+  animation: bob 2.4s ease-in-out infinite;
+}
+
+.squish {
+  animation: squish 2s ease-in-out infinite 0.5s;
+  transform-origin: bottom center;
+}
+
+@keyframes wobble {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+
+  50% {
+    transform: rotate(4deg);
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes squish {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+
+  50% {
+    transform: scale(1.08, 0.92);
+  }
+}
+
+/* Elia is a spirochete: she wiggles like a corkscrew. */
+@keyframes slither {
+  0%,
+  100% {
+    transform: skewX(-8deg);
+  }
+
+  50% {
+    transform: skewX(8deg);
+  }
+}
+
+.slither {
+  animation: slither 1.6s ease-in-out infinite;
+}
+
+.wobble {
+  animation: wobble 3s ease-in-out infinite;
+}
+
+/* ---- The card the picker, mode page and dish sit on ---- */
+
+.picker-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  /* Keep the card and the signature under it together in the middle, even
+     on a page whose card is short (like choose-mode.html). */
+  align-content: center;
+  padding: 2rem 1rem;
+}
+
+.picker-shell {
+  width: min(760px, 100%);
+  background: rgba(255, 255, 255, 0.35);
+  border: 2px solid rgba(19, 78, 74, 0.15);
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(19, 78, 74, 0.08);
+}
+
+/* ---- Buttons and links ---- */
+
+.pick-btn {
+  margin-top: 0.75rem;
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 999px;
+  background: #0f766e;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.pick-btn:hover {
+  background: #14b8a6;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: #0f766e;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* ---- Species names ---- */
+
+.species {
+  font-size: 0.95rem;
+}
+
+/* ---- Jess's signature ---- */
+
+/* Jess's signature at the foot of every page. */
+.signature {
+  margin: 2rem 0 1.5rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  opacity: 0.6;
+}
+
+.picker-page .signature {
+  margin: 1rem 0 0;
+}

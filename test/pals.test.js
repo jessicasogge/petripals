@@ -10,7 +10,8 @@ import { dishPal, homePal, palById, PALS, palTile } from '../public/game/pals.js
 
 // (jsdom changes import.meta.url to a web address, so find files from the project folder.)
 const file = (name) => readFileSync(resolve(process.cwd(), 'public', name), 'utf8');
-const css = file('styles.css');
+const shared = file('css/shared.css');
+const menus = file('css/menus.css');
 const IDS = PALS.map((pal) => pal.id);
 
 // Open `page` at `search` and run `script` on it.
@@ -42,9 +43,11 @@ describe('the pals', () => {
     expect(pal.looks).toContain(SPECIES[pal.id].scientific.split(' ')[0]);
   });
 
-  it.each(PALS)("$id's idle animation and tile color are in styles.css", (pal) => {
-    expect(css).toMatch(new RegExp(`\\n\\.${pal.motion} \\{[^}]*animation:`));
-    expect(css).toMatch(new RegExp(`\\n\\.${pal.id} \\{[^}]*background:`));
+  it.each(PALS)("$id's idle animation and tile color are in the stylesheets", (pal) => {
+    // The animation is used on the home page and in the dish; the tile on the
+    // picker and the mode page.
+    expect(shared).toMatch(new RegExp(`\\n\\.${pal.motion} \\{[^}]*animation:`));
+    expect(menus).toMatch(new RegExp(`\\n\\.${pal.id} \\{[^}]*background:`));
   });
 
   it.each(PALS)('$id is framed for every page', (pal) => {

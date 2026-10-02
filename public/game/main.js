@@ -72,7 +72,7 @@ function startMixed() {
   const howTo = document.querySelector('.how-to-play');
   howTo.replaceChildren(
     `Race ${rival.svg.dataset.name} to ${MIXED.TARGET} cells! `,
-    // Arrow-key or touch wording, whichever fits the device (see styles.css).
+    // Arrow-key or touch wording, whichever fits the device (see css/dish.css).
     wording('for-keys', 'Use the arrow keys to eat nutrients.'),
     wording('for-touch', 'Touch and hold where you want to swim to eat nutrients.'),
     document.createElement('br'),

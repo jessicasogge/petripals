@@ -133,7 +133,7 @@ function nudge(group, [dx, dy]) {
 }
 
 // A little "pop" where a cell died: a ring in the pal's color that bursts
-// outward and fades (see .pop in styles.css). `circle` is [x, y, r] in px
+// outward and fades (see .pop in css/dish.css). `circle` is [x, y, r] in px
 // from the dish center.
 export function showPop(dish, [x, y, r], color) {
   if (!dish) return;

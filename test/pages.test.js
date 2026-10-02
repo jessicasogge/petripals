@@ -20,6 +20,24 @@ describe('tab icon', () => {
   });
 });
 
+describe('stylesheets', () => {
+  // Every page loads the shared styles first, then its own: menus.css for the
+  // screens before the game, dish.css for the game. The order matters: a few
+  // rules in the second file override shared ones (like .start-over, an
+  // outlined .pick-btn).
+  it.each([
+    ['index.html', 'menus'], ['pal-picker.html', 'menus'], ['choose-mode.html', 'menus'], ['petri-dish.html', 'dish'],
+  ])('%s loads shared.css, then %s.css', (page, own) => {
+    const html = readFileSync(file(page), 'utf8');
+    const links = [...html.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)].map((m) => m[1]);
+    expect(links).toEqual(['./css/shared.css', `./css/${own}.css`]);
+  });
+
+  it.each(['shared', 'menus', 'dish'])('has css/%s.css', (name) => {
+    expect(existsSync(file(`css/${name}.css`))).toBe(true);
+  });
+});
+
 describe('signature', () => {
   it.each(PAGES)('%s is signed at the foot', (page) => {
     const html = readFileSync(file(page), 'utf8');
