@@ -3,7 +3,7 @@
 // a simulated browser page.
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { GAME, SPECIES } from '../public/game/config.js';
-import { rodGroup } from '../public/game/rod.js';
+import { MIN_STEP, rodGroup, STILL_FRAMES } from '../public/game/rod.js';
 
 // jsdom doesn't lay anything out, so every width reads as 0. Give the dish a
 // fixed size and work out each element's width from its percent width, the
@@ -218,5 +218,56 @@ describe('dividing', () => {
     const grandchild = child.divide();
     expect(grandchild.isPlayer).toBe(false);
     expect(document.querySelectorAll('.agar .pal-mover')).toHaveLength(3);
+  });
+});
+
+describe('the wiggling flagellum', () => {
+  // jsdom has no SVG animation, so record whether it's paused.
+  function swimmer() {
+    const rod = makeRod('mona', { isPlayer: true });
+    rod.svg.pauseAnimations = vi.fn(() => { rod.svg.paused = true; });
+    rod.svg.unpauseAnimations = vi.fn(() => { rod.svg.paused = false; });
+    return rod;
+  }
+  const still = (rod, frames) => { for (let i = 0; i < frames; i++) rod.place(); };
+  const swim = (rod, frames, step = 3) => {
+    for (let i = 0; i < frames; i++) { rod.x += step; rod.place(); }
+  };
+
+  it('stops once she has been still for a moment', () => {
+    const rod = swimmer();
+    still(rod, STILL_FRAMES - 1);
+    expect(rod.svg.paused).toBeUndefined(); // not quite yet
+    still(rod, 1);
+    expect(rod.svg.paused).toBe(true);
+  });
+
+  it('starts again as soon as she swims', () => {
+    const rod = swimmer();
+    still(rod, STILL_FRAMES + 1);
+    swim(rod, 1);
+    expect(rod.svg.paused).toBe(false);
+  });
+
+  it('keeps going through a brief pause, so it does not flicker', () => {
+    const rod = swimmer();
+    swim(rod, 5);
+    still(rod, STILL_FRAMES - 1);
+    swim(rod, 5);
+    expect(rod.svg.pauseAnimations).not.toHaveBeenCalled();
+  });
+
+  it("ignores tiny nudges, like a settled cell's", () => {
+    const rod = swimmer();
+    swim(rod, STILL_FRAMES * 3, MIN_STEP / 2);
+    expect(rod.svg.paused).toBe(true);
+  });
+
+  it('only tells the drawing when it changes, not every frame', () => {
+    const rod = swimmer();
+    still(rod, 30);
+    swim(rod, 30);
+    expect(rod.svg.pauseAnimations).toHaveBeenCalledTimes(1);
+    expect(rod.svg.unpauseAnimations).toHaveBeenCalledTimes(1);
   });
 });

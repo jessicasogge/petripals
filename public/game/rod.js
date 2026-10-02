@@ -27,6 +27,7 @@ export function rodGroup({ mover, svg, species, isPlayer }) {
     },
     place() {
       mover.style.transform = `translate(${group.x}px, ${group.y}px) scaleX(${group.facing})`;
+      wiggleWhileMoving();
     },
     // The rod's outline as circles in the dish, traced from its drawing (see
     // `body` in config.js). Used to tell whether it touches a nutrient or an
@@ -61,5 +62,31 @@ export function rodGroup({ mover, svg, species, isPlayer }) {
     coast: null,
   };
   group.coast = coaster(group);
+
+  // A flagellum (Mona's, Vi's) wiggles only while its rod is swimming. It
+  // keeps going for a few frames after a stop, so it doesn't flicker on and
+  // off between key presses, and ignores the tiny nudges of settled cells.
+  let lastX = null;
+  let lastY = null;
+  let stillFrames = 0;
+  let wiggling = true; // a new drawing's <animate> starts running
+  function wiggleWhileMoving() {
+    const moved = lastX !== null && Math.hypot(group.x - lastX, group.y - lastY) > MIN_STEP;
+    lastX = group.x;
+    lastY = group.y;
+    stillFrames = moved ? 0 : stillFrames + 1;
+    const wiggle = stillFrames < STILL_FRAMES;
+    if (wiggle === wiggling) return;
+    wiggling = wiggle;
+    // (pauseAnimations only stops the SVG's own <animate>, not the CSS bob.)
+    if (wiggle) svg.unpauseAnimations?.();
+    else svg.pauseAnimations?.();
+  }
+
   return group;
 }
+
+// How far, in pixels, a rod must move in one frame to count as swimming, and
+// how many still frames in a row before its flagellum stops.
+export const MIN_STEP = 0.3;
+export const STILL_FRAMES = 6;

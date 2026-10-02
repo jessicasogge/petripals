@@ -186,3 +186,20 @@ describe('for anyone who prefers less motion', () => {
     expect(dishPal(palById('mona')).querySelector('.flagellum animate')).not.toBeNull();
   });
 });
+
+describe('where the flagellum wiggles', () => {
+  const wiggles = (svg) => svg.querySelector('.flagellum animate') !== null;
+  const svgIn = (el) => (el.tagName.toLowerCase() === 'svg' ? el : el.querySelector('svg'));
+
+  it.each(['mona', 'vi'])('wiggles on the home page (%s)', (id) => {
+    expect(wiggles(svgIn(homePal(palById(id))))).toBe(true);
+  });
+
+  it.each(['mona', 'vi'])('stays still on the picker (%s)', (id) => {
+    expect(wiggles(svgIn(palTile(palById(id))))).toBe(false);
+  });
+
+  it.each(['mona', 'vi'])('can wiggle in the dish, while she swims (%s)', (id) => {
+    expect(wiggles(dishPal(palById(id)))).toBe(true);
+  });
+});

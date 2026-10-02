@@ -279,9 +279,11 @@ function drawing(pal, page) {
   const svg = document.createElementNS(SVG, 'svg');
   svg.setAttribute('viewBox', pal.frames[page]);
   svg.innerHTML = pal.art;
-  // A flagellum wiggles with SVG's own <animate>, which CSS can't pause, so
-  // leave it still for anyone who has asked for less motion.
-  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+  // A flagellum wiggles with SVG's own <animate> on the home page, and in the
+  // dish while she swims (see rod.js). It stays still on the picker, and for
+  // anyone who has asked for less motion (CSS can't pause <animate>).
+  const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  if (page === 'picker' || reduced) {
     for (const wiggle of svg.querySelectorAll('.flagellum animate')) wiggle.remove();
   }
   return svg;
