@@ -44,6 +44,20 @@ describe('pals', () => {
     expect(SPECIES.scarlett.layout).toBe('chain');
     expect(SPECIES.goldie.layout).toBe('cluster');
   });
+
+  it('makes Penny a Streptococcus whose chains stop at pairs (Streptococcus pneumoniae)', () => {
+    expect(SPECIES.penny.kind).toBe('coccus');
+    expect(SPECIES.penny.layout).toBe('chain');
+    expect(SPECIES.penny.maxCells).toBe(2);
+  });
+
+  it.each(PALS)("gives %s a sensible chain or cluster size, if she has her own", (pal) => {
+    const { maxCells } = SPECIES[pal];
+    if (maxCells === undefined) return;
+    expect(Number.isInteger(maxCells)).toBe(true);
+    expect(maxCells).toBeGreaterThanOrEqual(2);
+    expect(maxCells).toBeLessThanOrEqual(GAME.GROUP_CAP);
+  });
 });
 
 describe('names above the dish', () => {

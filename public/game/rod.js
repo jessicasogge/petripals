@@ -2,8 +2,8 @@ import { GAME } from './config.js';
 import { idlePose, newMover } from './mover.js';
 import { coaster } from './physics.js';
 
-// A rod-shaped cell (Mona, Vi, Elia, Coco), or Penny's pair of cells. Each
-// division it splits across the middle and the two go their separate ways.
+// A rod-shaped cell (Mona, Vi, Elia, Coco). Each division it splits across the
+// middle and the two cells go their separate ways.
 export function rodGroup({ mover, svg, species, isPlayer }) {
   // How wide the drawing is, as a percent of the dish (see `size` in config.js).
   const ROD_WIDTH = species.size ?? 12;

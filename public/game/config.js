@@ -121,24 +121,19 @@ export const SPECIES = {
       { code: 'CTX', name: 'cefotaxime', zone: 37 },
     ],
   },
-  // Streptococcus pneumoniae, the pneumococcus: a pair of slightly egg-shaped
-  // cells (a diplococcus). She's drawn as one pair, and each division makes a
-  // new pair that sets off on its own, so she moves and divides like the rods. (Simplified for the game: each pair counts as
-  // one cell toward the target.) Her glasses are because pneumococcus is the
-  // bacterium that showed DNA carries genes (Griffith in 1928; Avery, MacLeod
-  // and McCarty in 1944). Labs screen her for penicillin with an oxacillin disk.
+  // Streptococcus pneumoniae, the pneumococcus: a Streptococcus like
+  // Scarlett, but her chains stop at two, so she grows in pairs (a
+  // diplococcus). Her glasses are because pneumococcus is the bacterium that
+  // showed DNA carries genes (Griffith in 1928; Avery, MacLeod and McCarty in
+  // 1944). Labs screen her for penicillin with an oxacillin disk.
   penny: {
     scientific: 'Streptococcus pneumoniae',
     color: '#4f46e5', // for her name above the dish: bluish purple, next to Elia's purple
-    kind: 'rod',
-    size: 11,
-    body: [
-      // the two cells, each about two circles
-      [-0.3, 0.0, 0.156],
-      [-0.167, 0.0, 0.194],
-      [0.167, 0.0, 0.194],
-      [0.3, 0.0, 0.156],
-    ],
+    kind: 'coccus',
+    layout: 'chain',
+    maxCells: 2, // pairs
+    glasses: true,
+    colors: { fill: '#a5b4fc', stroke: '#4f46e5', highlight: '#e0e7ff', dark: '#312e81' },
     antibiotics: [
       { code: 'OX', name: 'oxacillin', zone: 26 },
       { code: 'E', name: 'erythromycin', zone: 30 },
@@ -200,7 +195,7 @@ export const LEVELS = [
 ];
 
 export const GAME = {
-  GROUP_CAP: 8, // chains and clusters stop growing at this many cells
+  GROUP_CAP: 8, // chains and clusters stop growing at this many cells (unless a pal's maxCells is smaller)
   // A new coccus joins a chain or cluster if the player is within this
   // distance of where it would attach (a fraction of the dish radius).
   SNAP_REACH: 0.3,

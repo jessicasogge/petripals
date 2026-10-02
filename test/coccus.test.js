@@ -336,3 +336,44 @@ describe('antibiotic disks', () => {
     expect(group.cellCount()).toBe(1);
   });
 });
+
+describe('Penny (Streptococcus pneumoniae)', () => {
+  it('grows in pairs: her chains stop at two cells', () => {
+    const pair = makeGroup('penny', { x: 30 });
+    const player = makeGroup('penny', { isPlayer: true, x: 50 });
+    expect(player.divide([pair], DISH_RADIUS)).toBeNull(); // the first daughter joins
+    pair.update(1);
+    expect(pair.cellCount()).toBe(2);
+    // The next daughter can't join the full pair, so it starts a new one.
+    const next = player.divide([pair], DISH_RADIUS);
+    expect(next).not.toBeNull();
+    expect(pair.cellCount()).toBe(2);
+    expect(next.cellCount()).toBe(1);
+  });
+
+  it('counts every cell, two to a pair', () => {
+    const pair = makeGroup('penny');
+    grow(pair, 2);
+    expect(pair.cellCount()).toBe(2);
+    expect(pair.body()).toHaveLength(2);
+  });
+
+  it('still lets Scarlett grow long chains', () => {
+    const chain = makeGroup('scarlett');
+    grow(chain, 5);
+    expect(chain.cellCount()).toBe(5);
+  });
+
+  it('wears glasses on her face, and only she does', () => {
+    expect(makeGroup('penny', { isPlayer: true }).svg.querySelector('.glasses')).not.toBeNull();
+    // Her offspring have no face, so no glasses either.
+    expect(makeGroup('penny').svg.querySelector('.glasses')).toBeNull();
+    // The other round pals don't wear glasses.
+    expect(makeGroup('scarlett', { isPlayer: true }).svg.querySelector('.glasses')).toBeNull();
+    expect(makeGroup('goldie', { isPlayer: true }).svg.querySelector('.glasses')).toBeNull();
+  });
+
+  it('draws in her bluish-purple colors', () => {
+    expect(makeGroup('penny').svg.querySelector('circle').getAttribute('fill')).toBe(SPECIES.penny.colors.fill);
+  });
+});
