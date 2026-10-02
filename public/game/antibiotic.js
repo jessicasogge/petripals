@@ -5,7 +5,9 @@
 // pop (see popInZones in colony.js).
 //
 // A disk is { fx, fy, r, zone } in fractions of the dish radius: its center,
-// its radius, and how wide its zone of inhibition is.
+// its radius, and how wide its zone of inhibition is right now. Disks placed
+// by placeAntibiotics also have `fullZone`, how wide the zone gets once the
+// drug has finished spreading (see spreadZones).
 import { GAME } from './config.js';
 
 // Pick a random spot for one disk, as fractions of the dish radius from the
@@ -54,6 +56,26 @@ export function diskSpots(zones, random = Math.random) {
   return best;
 }
 
+// How wide a zone `fullZone` wide is `seconds` after the level starts. A drug
+// spreads out from its disk by diffusion, which moves fast at first and then
+// slows down (the distance grows with the square root of the time), so the
+// zone widens quickly at first and then creeps out to its full width.
+export function zoneAt(fullZone, seconds) {
+  const t = Math.min(1, Math.max(0, seconds / GAME.ZONE_SPREAD_SECONDS));
+  return fullZone * (GAME.ZONE_START + (1 - GAME.ZONE_START) * Math.sqrt(t));
+}
+
+// Widen each disk's zone to how far its drug has spread `seconds` into the
+// level, both what counts as touching it and how it's drawn. Disks without a
+// `fullZone` keep the zone they have.
+export function spreadZones(disks, seconds) {
+  for (const disk of disks) {
+    if (!Number.isFinite(disk.fullZone)) continue;
+    disk.zone = zoneAt(disk.fullZone, seconds);
+    if (disk.zoneEl) disk.zoneEl.style.width = `${(disk.r + disk.zone) * 100}%`;
+  }
+}
+
 // Whether any of the given circles overlaps the disk or its zone. Circles are
 // [x, y, radius] in pixels from the dish center; the disk is in fractions of
 // the dish radius, so `dishRadius` converts between the two. `buffer` (also a
@@ -75,7 +97,7 @@ export function touchedDisk(disks, circles, dishRadius, margin = 0) {
 // disk itself.
 export function touchMessage(name, disk) {
   const drug = disk.antibiotic.name;
-  if (disk.zone > 0) return `${name} swam into the ${drug} zone of inhibition. Antibiotics kill bacteria!`;
+  if ((disk.fullZone ?? disk.zone) > 0) return `${name} swam into the ${drug} zone of inhibition. Antibiotics kill bacteria!`;
   return `${name} bumped into the ${drug} disk. She's resistant to ${drug}, so it has no zone, but the disk still counts!`;
 }
 
@@ -117,6 +139,8 @@ export function placeAntibiotics(antibiotics) {
     // .antibiotic::after in styles.css), e.g. "Penicillin".
     el.dataset.name = antibiotic.name[0].toUpperCase() + antibiotic.name.slice(1);
     agar.appendChild(el);
-    return { ...spot, el, zoneEl, antibiotic };
+    // Drawn at full width here; the game shrinks it back to where it starts
+    // spreading from before the first frame (see spreadZones).
+    return { ...spot, fullZone: spot.zone, el, zoneEl, antibiotic };
   });
 }

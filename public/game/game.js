@@ -1,6 +1,6 @@
 // The classic game loop: steer with the arrow keys or by touch, grow a colony past the
 // antibiotic disks, and the level-complete, win or game-over pop-up.
-import { touchedDisk, touchMessage } from './antibiotic.js';
+import { spreadZones, touchedDisk, touchMessage } from './antibiotic.js';
 import { makeColony, moveGroups } from './colony.js';
 import { GAME, LEVELS } from './config.js';
 import { coccusGroup } from './coccus.js';
@@ -30,6 +30,10 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
 
   let finished = false;
   let lastTime = null;
+  // How long the level has been running, for how far the zones have spread.
+  // Built from the same capped frame times as everything else, so the zones
+  // don't jump ahead after the tab was hidden for a while.
+  let elapsed = 0;
   const keys = arrowKeys();
   // On a touch screen (or with a mouse), touch and hold where to swim.
   const touch = touchSteering(agar);
@@ -55,6 +59,12 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
     const seconds = lastTime === null ? 0 : Math.min(0.05, (time - lastTime) / 1000);
     lastTime = time;
     const radius = dishRadius();
+
+    // The drugs keep soaking outward until the level ends.
+    if (!finished) {
+      elapsed += seconds;
+      spreadZones(disks, elapsed);
+    }
 
     // Steer the player's pal.
     if (!finished) {
@@ -138,6 +148,9 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
       { startOver: level > 1 }, // on level 1 they'd do the same thing
     );
   }
+
+  // The zones start small and spread from there (drawn before the first frame).
+  spreadZones(disks, 0);
 
   // Keep the how-to-play target in step with the real one.
   for (const el of document.querySelectorAll('.target-cells')) el.textContent = target;

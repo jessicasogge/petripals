@@ -361,6 +361,12 @@ export const GAME = {
   ZONE_MM_BIG: 40,
   ZONE_MIN_WIDTH: 0.02,
   ZONE_MAX_WIDTH: 0.075,
+  // Zones spread: on a real plate the drug soaks outward from the disk, so
+  // the zone starts small and widens. Each zone starts at ZONE_START of its
+  // full width and reaches full width after ZONE_SPREAD_SECONDS. (A real
+  // zone takes hours to form while the plate incubates; sped up for the game.)
+  ZONE_START: 0.2,
+  ZONE_SPREAD_SECONDS: 12,
   // Room to swim between two neighboring zones, at least.
   SWIM_ROOM: 0.13,
 };

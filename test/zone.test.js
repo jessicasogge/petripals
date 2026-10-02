@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 // The zone of inhibition: the clear ring around each antibiotic disk.
 import { beforeEach, describe, expect, it } from 'vitest';
-import { placeAntibiotics, touchedDisk, zoneWidth } from '../public/game/antibiotic.js';
+import { placeAntibiotics, spreadZones, touchedDisk, zoneAt, zoneWidth } from '../public/game/antibiotic.js';
 import { GAME } from '../public/game/config.js';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -73,5 +73,64 @@ describe('when the pal dies', () => {
     // up to 10px away, so she looked like she never touched it.
     expect(rule).toMatch(/animation-play-state:\s*paused/);
     expect(rule).not.toMatch(/animation:\s*none/);
+  });
+});
+
+describe('spreading zones', () => {
+  it('starts each zone small and widens it to full size as the drug soaks in', () => {
+    expect(zoneAt(0.06, 0)).toBeCloseTo(0.06 * GAME.ZONE_START);
+    expect(zoneAt(0.06, GAME.ZONE_SPREAD_SECONDS)).toBeCloseTo(0.06);
+    expect(zoneAt(0.06, GAME.ZONE_SPREAD_SECONDS / 2)).toBeGreaterThan(zoneAt(0.06, GAME.ZONE_SPREAD_SECONDS / 4));
+  });
+
+  it('spreads quickly at first and then slows down, like diffusion', () => {
+    const quarter = GAME.ZONE_SPREAD_SECONDS / 4;
+    const firstQuarter = zoneAt(0.06, quarter) - zoneAt(0.06, 0);
+    const lastQuarter = zoneAt(0.06, GAME.ZONE_SPREAD_SECONDS) - zoneAt(0.06, 3 * quarter);
+    expect(firstQuarter).toBeGreaterThan(lastQuarter);
+  });
+
+  it('stops at full size, and never shrinks below the start', () => {
+    expect(zoneAt(0.06, GAME.ZONE_SPREAD_SECONDS * 10)).toBeCloseTo(0.06);
+    expect(zoneAt(0.06, -5)).toBeCloseTo(0.06 * GAME.ZONE_START);
+  });
+
+  it('keeps no zone for a drug the pal is resistant to', () => {
+    expect(zoneAt(0, 0)).toBe(0);
+    expect(zoneAt(0, GAME.ZONE_SPREAD_SECONDS)).toBe(0);
+  });
+
+  it("remembers each disk's full zone, so it knows how far to spread", () => {
+    const [disk] = placeAntibiotics([{ code: 'P', name: 'penicillin', zone: 30 }]);
+    expect(disk.fullZone).toBeCloseTo(zoneWidth(30));
+  });
+
+  it('widens both what counts as touching and the drawn ring', () => {
+    const [disk] = placeAntibiotics([{ code: 'P', name: 'penicillin', zone: 30 }]);
+    spreadZones([disk], 0);
+    expect(disk.zone).toBeCloseTo(disk.fullZone * GAME.ZONE_START);
+    expect(parseFloat(disk.zoneEl.style.width)).toBeCloseTo((disk.r + disk.zone) * 100);
+    const startWidth = parseFloat(disk.zoneEl.style.width);
+    spreadZones([disk], GAME.ZONE_SPREAD_SECONDS);
+    expect(disk.zone).toBeCloseTo(disk.fullZone);
+    expect(parseFloat(disk.zoneEl.style.width)).toBeGreaterThan(startWidth);
+  });
+
+  it('lets the pal swim closer at first than once the zone has spread', () => {
+    const disk = { fx: 0, fy: 0, r: 0.1, fullZone: 0.06, zone: 0.06 };
+    const dishRadius = 100;
+    // A cell just outside where the zone starts, inside where it ends up.
+    const edge = (disk.r + 0.06 * GAME.ZONE_START) * dishRadius + 2;
+    const cell = [[edge + 1, 0, 1]];
+    spreadZones([disk], 0);
+    expect(touchedDisk([disk], cell, dishRadius)).toBeNull();
+    spreadZones([disk], GAME.ZONE_SPREAD_SECONDS);
+    expect(touchedDisk([disk], cell, dishRadius)).toBe(disk);
+  });
+
+  it("leaves disks that weren't set up to spread alone", () => {
+    const disk = { fx: 0, fy: 0, r: 0.1, zone: 0.05 };
+    spreadZones([disk], 0);
+    expect(disk.zone).toBe(0.05);
   });
 });
