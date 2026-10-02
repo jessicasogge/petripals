@@ -7,6 +7,7 @@ import { coccusGroup } from './coccus.js';
 import { arrowKeys } from './keyboard.js';
 import { rivalBrain } from './rival.js';
 import { rodGroup } from './rod.js';
+import { showFact } from './facts.js';
 import { sporeBurst } from './spores.js';
 import { steer, touchSteering } from './touch.js';
 import { track } from './track.js';
@@ -114,6 +115,8 @@ export function playRace({ you, rival, nutrients }) {
     const pals = `${you.svg.dataset.pal}/vs-${rival.svg.dataset.pal}`;
     track(`mixed/${won ? 'won' : 'lost'}/${pals}`, `${yourName} ${won ? 'beat' : 'lost to'} ${rivalName} in mixed culture`);
     setTimeout(() => {
+      // A fun fact about your pal, win or lose.
+      showFact(you.svg.dataset.pal, you.species);
       if (won) {
         showBanner('You won the race!', `Your colony reached ${target} cells before ${rivalName}'s did.`);
       } else {
