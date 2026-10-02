@@ -28,9 +28,9 @@ No antibiotics this time. You share the plate with a rival pal, picked at random
 | Pal | Species | Shape |
 |---|---|---|
 | **Penny** | *Streptococcus pneumoniae* | Bluish-purple pair of round cells, with glasses |
-| **Ana** | *Bifidobacterium bifidum* | Pink Y-shaped rod, cheering with her arms up |
-| **Goldie** | *Staphylococcus aureus* | Golden grape-like clusters of round cells |
 | **Vi** | *Vibrio cholerae* | Orange comma-shaped rod |
+| **Goldie** | *Staphylococcus aureus* | Golden grape-like clusters of round cells |
+| **Ana** | *Bifidobacterium bifidum* | Pink Y-shaped rod, cheering with her arms up |
 | **Scarlett** | *Streptococcus pyogenes* | Red chains of round cells |
 | **Coco** | *Haemophilus influenzae* | Small coffee-with-cream coccobacillus |
 | **Mona** | *Pseudomonas aeruginosa* | Green rod with one flagellum |
