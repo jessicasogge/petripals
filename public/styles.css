@@ -135,11 +135,30 @@ body {
 }
 
 
+/* The pal picker is wider than the other cards, to fit four pals across. */
+.picker-wide {
+  width: min(1000px, 100%);
+}
+
+/* Four across on a computer (two rows of four), two on a tablet, one on a
+   phone, where the Select buttons wouldn't fit side by side. */
 .picker-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); /* 3 across on wide screens */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
   margin-top: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .picker-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .picker-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .pal-card {
