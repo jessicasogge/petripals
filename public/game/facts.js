@@ -1,4 +1,4 @@
-// "Did you know?" facts on the win pop-up: a random fact about your pal from
+// "Did you know?" facts on the end-of-level pop-up, win or lose: a random fact about your pal from
 // her `facts` in config.js, never the same one twice in a row.
 
 // A random fact from `facts`, avoiding `last` if there's any other choice.

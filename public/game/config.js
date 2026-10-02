@@ -23,8 +23,8 @@
 // For rod-style pals, `body` traces the drawing's outline as circles
 // [x, y, radius], in fractions of the drawing's width from its center. It's
 // what counts as touching an antibiotic disk.
-// `facts` are short fun facts about each pal; one is shown at random when
-// you finish a level or win (see game/facts.js).
+// `facts` are short fun facts about each pal; one is shown at random in the
+// pop-up at the end of every level or race, win or lose (see game/facts.js).
 export const SPECIES = {
   mona: {
     facts: [
@@ -32,7 +32,7 @@ export const SPECIES = {
       "Her name means \"copper rust,\" after her blue-green color.",
       "She makes a blue-green pigment called pyocyanin.",
       "Her cultures smell a little like grapes.",
-      "Another of her pigments glows under UV light.",
+      "One of her pigments glows under UV light.",
       "She loves damp places like sink drains and hot tubs.",
       "She builds slimy shields called biofilms to protect herself.",
       "She's naturally resistant to many antibiotics.",
@@ -70,7 +70,7 @@ export const SPECIES = {
       "Her toxin genes were delivered by a virus that infected her.",
       "It usually takes millions of her to make someone sick.",
       "In 1854, John Snow traced a cholera outbreak to one London water pump.",
-      "That same year, Filippo Pacini first saw her under a microscope.",
+      "In 1854, Filippo Pacini first saw her under a microscope.",
       "Simple salt-and-sugar water saves most people with cholera.",
       "Filtering water through folded sari cloth cut cholera cases in Bangladesh.",
     ],
@@ -152,7 +152,7 @@ export const SPECIES = {
       "An enzyme from her helped launch genetic engineering.",
       "She lives in the nose and throat of many healthy people.",
       "One type of her was a leading cause of meningitis in kids.",
-      "The Hib vaccine made that type rare.",
+      "The Hib vaccine made her most dangerous type rare.",
     ],
     scientific: 'Haemophilus influenzae',
     color: '#7c4a2d', // for her name above the dish

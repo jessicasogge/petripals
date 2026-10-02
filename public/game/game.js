@@ -4,7 +4,7 @@ import { touchedDisk, touchMessage } from './antibiotic.js';
 import { makeColony, moveGroups } from './colony.js';
 import { GAME, LEVELS } from './config.js';
 import { coccusGroup } from './coccus.js';
-import { hideFact, showFact } from './facts.js';
+import { showFact } from './facts.js';
 import { arrowKeys } from './keyboard.js';
 import { rodGroup } from './rod.js';
 import { sporeBurst } from './spores.js';
@@ -127,7 +127,7 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
   }
 
   function showGameOver(disk) {
-    hideFact();
+    showFact(palEl.dataset.pal, species);
     const { code, name } = disk.antibiotic;
     track(`game-over/${palEl.dataset.pal}/level-${level}/${code}`,
       `${palEl.dataset.name} hit ${name} on level ${level}`);
