@@ -20,11 +20,6 @@ body {
   padding: 0 1rem;
 }
 
-.microbe {
-  width: 108px;
-  animation: wobble 3s ease-in-out infinite;
-}
-
 .pal {
   width: 120px;
 }

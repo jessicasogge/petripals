@@ -1,11 +1,9 @@
-// Checks that the game's settings in config.js are complete, sensible, and
-// match what the pages show.
-import { readFileSync } from 'node:fs';
+// Checks that the game's settings in config.js are complete and sensible.
+// (The pals' names and drawings are checked in pals.test.js.)
 import { describe, expect, it } from 'vitest';
 import { GAME, LEVELS, SPECIES } from '../public/game/config.js';
 
 const PALS = Object.keys(SPECIES);
-const page = (name) => readFileSync(new URL(`../public/${name}`, import.meta.url), 'utf8');
 
 // How readable one color is on another (WCAG contrast ratio, 1 to 21).
 function contrast(a, b) {
@@ -63,18 +61,6 @@ describe('pals', () => {
 describe('names above the dish', () => {
   it.each(PALS)("writes %s's species the scientific way: Genus species", (pal) => {
     expect(SPECIES[pal].scientific).toMatch(/^[A-Z][a-z]+ [a-z]+$/);
-  });
-
-  it.each(PALS)("matches %s's species name on the picker", (pal) => {
-    const picker = page('pal-picker.html');
-    // The picker card for this pal links to her dish and shows her species.
-    const card = picker.slice(0, picker.indexOf(`choose-mode.html?pal=${pal}"`));
-    const shown = [...card.matchAll(/<i>([^<]+)<\/i>/g)].at(-1)[1];
-    expect(SPECIES[pal].scientific).toBe(shown);
-  });
-
-  it.each(PALS)("has a drawing for %s on the dish page", (pal) => {
-    expect(page('petri-dish.html')).toContain(`data-pal="${pal}"`);
   });
 
   it.each(PALS)("colors %s's name so it's easy to read on the page", (pal) => {
