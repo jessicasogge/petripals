@@ -60,11 +60,11 @@ function makeFakeColony() {
 }
 
 // Start a level as Mona (or `pal`) and return the pop-up.
-function start({ level = 1, target = LEVELS[level - 1].target, pal = 'mona' } = {}) {
+function start({ level = 1, target = LEVELS[level - 1].target, pal = 'mona', disks = [] } = {}) {
   const palEl = document.createElement('div');
   palEl.dataset.pal = pal;
   palEl.dataset.name = pal[0].toUpperCase() + pal.slice(1);
-  playGame(palEl, SPECIES[pal], nutrients, [], { level, target });
+  playGame(palEl, SPECIES[pal], nutrients, disks, { level, target });
   return document.querySelector('.win-banner');
 }
 
@@ -309,5 +309,43 @@ describe('the fun fact', () => {
     frame();
     vi.runAllTimers();
     expect(SPECIES.vi.facts).toContain(factShown());
+  });
+});
+
+describe('spreading zones', () => {
+  const spreading = () => ({ ...disk(0.06), fullZone: 0.06 });
+
+  it('starts the zones small before the first frame', () => {
+    const d = spreading();
+    start({ disks: [d] });
+    expect(d.zone).toBeCloseTo(0.06 * GAME.ZONE_START);
+  });
+
+  it('widens them as the level goes on', () => {
+    const d = spreading();
+    start({ disks: [d] });
+    frame();
+    const early = d.zone;
+    for (let i = 0; i < 100; i++) frame(50);
+    expect(d.zone).toBeGreaterThan(early);
+  });
+
+  it("doesn't jump ahead after a long pause, like a hidden tab", () => {
+    const d = spreading();
+    start({ disks: [d] });
+    frame();
+    frame(60_000);
+    expect(d.zone).toBeLessThan(0.06 * 0.5);
+  });
+
+  it('stops spreading once the level is over', () => {
+    const d = spreading();
+    start({ disks: [d] });
+    frame();
+    fake.hit = d;
+    frame(50);
+    const atGameOver = d.zone;
+    for (let i = 0; i < 50; i++) frame(50);
+    expect(d.zone).toBe(atGameOver);
   });
 });
