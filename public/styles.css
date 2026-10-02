@@ -144,6 +144,16 @@ body {
   color: #0f766e;
 }
 
+/* A sentence or two under the Start button saying what the game is, for
+   new players (and search engines). */
+.about {
+  max-width: 34rem;
+  margin: 2rem auto 0;
+  padding: 0 1.25rem;
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
 .start-btn {
   margin-top: 1rem;
   padding: 0.8rem 2rem;

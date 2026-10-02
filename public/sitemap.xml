@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The pages for search engines to find. The mode page and the petri dish
+     need a pal in their address (like ?pal=mona), so they're reached from
+     the picker rather than listed here. Submit this in Google Search Console:
+     https://jessicasogge.github.io/petripals/sitemap.xml -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://jessicasogge.github.io/petripals/</loc></url>
+  <url><loc>https://jessicasogge.github.io/petripals/pal-picker.html</loc></url>
+</urlset>
