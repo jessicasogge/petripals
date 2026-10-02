@@ -4,10 +4,10 @@ import { SPECIES } from '../public/game/config.js';
 import { hideFact, pickFact, showFact } from '../public/game/facts.js';
 
 describe('every pal\'s facts', () => {
-  it.each(Object.keys(SPECIES))('%s has 10 short, different facts', (pal) => {
+  it.each(Object.keys(SPECIES))('%s has at least 10 short, different facts', (pal) => {
     const { facts } = SPECIES[pal];
-    expect(facts).toHaveLength(10);
-    expect(new Set(facts).size).toBe(10);
+    expect(facts.length).toBeGreaterThanOrEqual(10);
+    expect(new Set(facts).size).toBe(facts.length);
     const name = pal[0].toUpperCase() + pal.slice(1);
     for (const fact of facts) {
       expect(fact.length, fact).toBeLessThanOrEqual(90); // fits the pop-up
