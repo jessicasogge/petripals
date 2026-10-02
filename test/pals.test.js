@@ -153,3 +153,53 @@ describe('the pages', () => {
     }
   });
 });
+
+describe('wiggly flagella', () => {
+  const swimmers = PALS.filter((pal) => pal.art.includes('class="flagellum"'));
+
+  it('gives Mona and Vi, who swim with a flagellum, a wiggling tail', () => {
+    expect(swimmers.map((pal) => pal.id).sort()).toEqual(['mona', 'vi']);
+  });
+
+  it.each(swimmers.map((pal) => pal.id))("starts %s's wiggle from the tail as drawn and loops smoothly", (id) => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.innerHTML = PALS.find((pal) => pal.id === id).art;
+    const tail = svg.querySelector('.flagellum');
+    const frames = tail.querySelector('animate').getAttribute('values').split(';');
+    expect(frames[0]).toBe(tail.getAttribute('d'));
+    expect(frames.at(-1)).toBe(frames[0]);
+    // Every frame keeps the same shape of path, so the browser can blend them.
+    for (const frame of frames) expect(frame).toMatch(/^M[\d.]+ [\d.]+ C([\d.]+ ){5}[\d.]+$/);
+  });
+});
+
+describe('for anyone who prefers less motion', () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  it('leaves the flagellum still', () => {
+    vi.stubGlobal('matchMedia', (query) => ({ matches: query.includes('reduce') }));
+    expect(dishPal(palById('mona')).querySelector('.flagellum animate')).toBeNull();
+  });
+
+  it('wiggles it otherwise', () => {
+    vi.stubGlobal('matchMedia', () => ({ matches: false }));
+    expect(dishPal(palById('mona')).querySelector('.flagellum animate')).not.toBeNull();
+  });
+});
+
+describe('where the flagellum wiggles', () => {
+  const wiggles = (svg) => svg.querySelector('.flagellum animate') !== null;
+  const svgIn = (el) => (el.tagName.toLowerCase() === 'svg' ? el : el.querySelector('svg'));
+
+  it.each(['mona', 'vi'])('wiggles on the home page (%s)', (id) => {
+    expect(wiggles(svgIn(homePal(palById(id))))).toBe(true);
+  });
+
+  it.each(['mona', 'vi'])('stays still on the picker (%s)', (id) => {
+    expect(wiggles(svgIn(palTile(palById(id))))).toBe(false);
+  });
+
+  it.each(['mona', 'vi'])('can wiggle in the dish, while she swims (%s)', (id) => {
+    expect(wiggles(dishPal(palById(id)))).toBe(true);
+  });
+});
