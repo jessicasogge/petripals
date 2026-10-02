@@ -58,9 +58,43 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
     return [group.x + lx * unit * group.facing, group.y + ly * unit];
   }
 
+  // A lancet-shaped cell (Penny's), traced from her picture in pals.js:
+  // longer than wide, rounder at the end that meets her partner (+x) and
+  // narrower at the outer end (-x). It fits inside the cell's circle, so
+  // what she touches doesn't change.
+  const LANCET = (() => {
+    // Her picture's cells are 72 units long and 66 tall. In the dish she's
+    // small, and that barely reads as anything but round, so she's drawn a
+    // bit slimmer here: end to end one cell across, and 82% as tall.
+    const sx = R / 36;
+    const sy = (R * 0.82) / 33;
+    const p = (x, y) => `${((x - 62) * sx).toFixed(2)} ${((y - 100) * sy).toFixed(2)}`;
+    return `M${p(98, 100)} C${p(98, 79)} ${p(84, 67)} ${p(64, 67)} C${p(41, 67)} ${p(26, 84)} ${p(26, 100)} ` +
+      `C${p(26, 116)} ${p(41, 133)} ${p(64, 133)} C${p(84, 133)} ${p(98, 121)} ${p(98, 100)} Z`;
+  })();
+
+  // Which way a cell's outer end points, in degrees: away from her partner in
+  // a pair, or to the right for a cell on her own (like the one with the face
+  // in her picture). Flipped with the group when she turns around.
+  function outward(c) {
+    const other = group.cells.find((o) => o !== c);
+    if (!other || (other.x === c.x && other.y === c.y)) return 0;
+    return (Math.atan2(c.y - other.y, c.x - other.x) * 180) / Math.PI;
+  }
+
+  function cellBody(c) {
+    const paint = `fill="${colors.fill}" stroke="${colors.stroke}" stroke-width="${OUTLINE}"`;
+    if (species.shape === 'lancet') {
+      // The traced shape's outer end points left, so turn it half around more.
+      const turn = (outward(c) + 180).toFixed(1);
+      return `<path class="cell-body" d="${LANCET}" transform="translate(${c.x} ${c.y}) rotate(${turn})" ${paint} stroke-linejoin="round" />`;
+    }
+    return `<circle class="cell-body" cx="${c.x}" cy="${c.y}" r="${R}" ${paint} />`;
+  }
+
   function cellMarkup(c) {
     let out =
-      `<circle cx="${c.x}" cy="${c.y}" r="${R}" fill="${colors.fill}" stroke="${colors.stroke}" stroke-width="${OUTLINE}" />` +
+      cellBody(c) +
       `<circle cx="${c.x - 2.7}" cy="${c.y - 3.2}" r="1.5" fill="${colors.highlight}" />`;
     if (c.face) {
       out +=

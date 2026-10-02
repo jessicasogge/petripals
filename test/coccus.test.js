@@ -374,6 +374,46 @@ describe('Penny (Streptococcus pneumoniae)', () => {
   });
 
   it('draws in her bluish-purple colors', () => {
-    expect(makeGroup('penny').svg.querySelector('circle').getAttribute('fill')).toBe(SPECIES.penny.colors.fill);
+    expect(makeGroup('penny').svg.querySelector('.cell-body').getAttribute('fill')).toBe(SPECIES.penny.colors.fill);
+  });
+
+  // How a cell's lancet shape is turned: "translate(x y) rotate(deg)".
+  const turn = (el) => Number(el.getAttribute('transform').match(/rotate\((-?[\d.]+)\)/)[1]);
+
+  it('has lancet-shaped cells like her picture, not circles', () => {
+    const cell = makeGroup('penny', { isPlayer: true }).svg.querySelector('.cell-body');
+    expect(cell.tagName).toBe('path');
+    // On her own, her narrow end points right, like the cell with her face in
+    // her picture (the traced shape's narrow end points left, so 180).
+    expect(turn(cell)).toBe(180);
+  });
+
+  it('points the narrow ends of a pair away from each other', () => {
+    const pair = makeGroup('penny');
+    grow(pair, 2);
+    const [a, b] = pair.cells;
+    const bodies = [...pair.svg.querySelectorAll('.cell-body')];
+    // Each cell's narrow end points away from her partner.
+    for (const [cell, other] of [[a, b], [b, a]]) {
+      const el = bodies.find((x) => x.getAttribute('transform').startsWith(`translate(${cell.x} ${cell.y})`));
+      const away = (Math.atan2(cell.y - other.y, cell.x - other.x) * 180) / Math.PI;
+      expect(((turn(el) - 180 - away) % 360 + 360) % 360).toBeCloseTo(0, 0);
+    }
+  });
+
+  it('keeps every lancet cell inside her cell circle, so what she touches is unchanged', () => {
+    const d = makeGroup('penny').svg.querySelector('.cell-body').getAttribute('d');
+    // The points the outline passes through: the start, then the end of each
+    // curve (every third point after it).
+    const points = [...d.matchAll(/(-?[\d.]+) (-?[\d.]+)/g)].map((m) => [Number(m[1]), Number(m[2])]);
+    const onOutline = points.filter((_, i) => i === 0 || i % 3 === 0);
+    expect(onOutline).toHaveLength(5);
+    for (const [x, y] of onOutline) expect(Math.hypot(x, y)).toBeLessThanOrEqual(R);
+  });
+
+  it("leaves Scarlett's and Goldie's cells round", () => {
+    for (const name of ['scarlett', 'goldie']) {
+      expect(makeGroup(name).svg.querySelector('.cell-body').tagName).toBe('circle');
+    }
   });
 });
