@@ -207,8 +207,21 @@ describe('the directions on the dish page', () => {
     expect(css).toMatch(/@media \(pointer: coarse\)\s*\{[^@]*\.for-keys\s*\{\s*display: none;/);
   });
 
-  it("doesn't let touching the dish scroll or zoom the page", () => {
-    const agar = css.match(/\n\.agar \{([^}]*)\}/)[1];
-    expect(agar).toMatch(/touch-action: none/);
+  // The touch-action values set in a rule, in order (the last one a browser
+  // understands is the one it uses).
+  const touchActions = (selector) => {
+    const rule = css.match(new RegExp(`\\n${selector.replace('.', '\\.')} \\{([^}]*)\\}`))[1];
+    return [...rule.matchAll(/touch-action: ([^;]+);/g)].map((m) => m[1]);
+  };
+
+  it("doesn't let steering on the dish scroll the page, but a pinch still zooms", () => {
+    // pinch-zoom, so a player zoomed in over the dish can always zoom back
+    // out; none first, for browsers that don't know pinch-zoom.
+    expect(touchActions('.agar')).toEqual(['none', 'pinch-zoom']);
+  });
+
+  it("turns off double-tap zoom on the game page, so quick taps while steering don't zoom in", () => {
+    expect(page).toMatch(/<body class="[^"]*\bdish-page\b/);
+    expect(touchActions('.dish-page')).toEqual(['manipulation']);
   });
 });

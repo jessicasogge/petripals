@@ -330,6 +330,13 @@ body {
   text-decoration: underline;
 }
 
+/* The game page: no double-tap zoom anywhere on it. Two quick taps while
+   steering can land just off the agar (on the rim, say), and Safari on an
+   iPhone would zoom in. Pinching still zooms, for anyone who wants to. */
+.dish-page {
+  touch-action: manipulation;
+}
+
 .dish-shell {
   width: min(760px, 100%);
 }
@@ -364,9 +371,12 @@ body {
     radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.75), transparent 32%),
     radial-gradient(circle at 50% 50%, #fef9c3, #e7eeab);
   border: 2px solid rgba(180, 83, 9, 0.2);
-  /* Touch and hold on the agar to steer (game/touch.js): don't scroll or zoom
-     the page, select text, or pop up the long-press menu instead. */
+  /* Touch and hold on the agar to steer (game/touch.js): don't scroll the
+     page, select text, or pop up the long-press menu instead. A two-finger
+     pinch still zooms, so a player who ends up zoomed in over the dish can
+     always zoom back out. (Browsers that don't know pinch-zoom use none.) */
   touch-action: none;
+  touch-action: pinch-zoom;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
