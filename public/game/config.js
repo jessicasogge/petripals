@@ -186,7 +186,7 @@ export const GAME = {
   // How hard a new group pushes away when it splits off. It slides about
   // BURST_SPEED / SETTLE_RATE of the dish radius (half that for cocci) before
   // it stops: far enough to see, short enough not to slide into a zone easily.
-  BURST_SPEED: 0.65,
+  BURST_SPEED: 0.5,
   SETTLE_RATE: 4, // how quickly a new group slows to a stop (higher = sooner)
   SETTLE_MS: 1500, // after this long, offspring stay put for good
   DIVIDE_MS: 600,
