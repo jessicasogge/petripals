@@ -19,11 +19,11 @@
 
 const SVG = 'http://www.w3.org/2000/svg';
 
-// Elia's corkscrew body is a wave along her length: 4 waves from her tail
-// (x 14) to where it meets her head (x 166), 11 units high, a little smaller
+// Elia's corkscrew body is a wave along her length: 3½ waves from her tail
+// (x 33) to where it meets her head (x 166), 11 units high, a little smaller
 // over the last half-wave so her neck doesn't wobble. `phase` slides the wave
 // along her (2π is one whole wave).
-const ELIA_TAIL = 14;
+const ELIA_TAIL = 33;
 const ELIA_NECK = 166;
 const ELIA_WAVE = 38; // one wave's length
 function eliaY(x, phase = 0) {
@@ -281,7 +281,7 @@ export const PALS = [
     name: 'Elia',
     looks: 'a light purple corkscrew-shaped Borrelia burgdorferi',
     motion: 'slither',
-    frames: { home: '0 0 200 200', picker: '4 4 192 192', dish: '4 4 192 192' },
+    frames: { home: '8 0 200 200', picker: '12 4 192 192', dish: '12 4 192 192' },
     art: `
       <!-- corkscrew body: outline, then fill (her flagella are inside the cell) -->
       <path class="wave" d="${eliaBody()}" stroke="#7e22ce" stroke-width="18" fill="none" stroke-linecap="round" stroke-linejoin="round">${eliaWave()}</path>
