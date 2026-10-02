@@ -63,9 +63,10 @@ export function rodGroup({ mover, svg, species, isPlayer }) {
   };
   group.coast = coaster(group);
 
-  // A flagellum (Mona's, Vi's) wiggles only while its rod is swimming. It
-  // keeps going for a few frames after a stop, so it doesn't flicker on and
-  // off between key presses, and ignores the tiny nudges of settled cells.
+  // A flagellum (Mona's, Vi's), or Elia's wavy body, wiggles only while its
+  // rod is swimming. It keeps going for a few frames after a stop, so it
+  // doesn't flicker on and off between key presses, and ignores the tiny
+  // nudges of settled cells.
   let lastX = null;
   let lastY = null;
   let stillFrames = 0;

@@ -203,3 +203,53 @@ describe('where the flagellum wiggles', () => {
     expect(wiggles(dishPal(palById(id)))).toBe(true);
   });
 });
+
+describe("Elia's swimming wave", () => {
+  afterEach(() => vi.unstubAllGlobals());
+  const elia = () => dishPal(palById('elia'));
+  // The y of each point along a path's "M x y L x y ..." data.
+  const ys = (d) => [...d.matchAll(/(-?[\d.]+) (-?[\d.]+)/g)].map((m) => Number(m[2]));
+  const xs = (d) => [...d.matchAll(/(-?[\d.]+) (-?[\d.]+)/g)].map((m) => Number(m[1]));
+
+  it('moves her outline and fill together, from her drawing as she is now', () => {
+    const bodies = [...elia().querySelectorAll('path.wave')];
+    expect(bodies).toHaveLength(2); // outline, then fill
+    for (const body of bodies) {
+      const frames = body.querySelector('animate').getAttribute('values').split(';');
+      // It starts and ends where her drawing is, so it loops without a jump.
+      expect(frames[0]).toBe(body.getAttribute('d'));
+      expect(frames.at(-1)).toBe(frames[0]);
+      // Every frame has the same points, so the browser can blend them.
+      for (const frame of frames) expect(xs(frame)).toEqual(xs(frames[0]));
+    }
+  });
+
+  it('rolls from her head to her tail, the way a spirochete swims forward', () => {
+    const frames = elia().querySelector('path.wave animate').getAttribute('values').split(';');
+    // Her head is on the right. Follow the first crest (lowest y, as SVG's y
+    // points down) a little way along: it should move left, toward her tail.
+    const crest = (frame) => {
+      const [x, y] = [xs(frame), ys(frame)];
+      const firstWave = x.map((v, i) => [v, y[i]]).filter(([v]) => v > 20 && v < 58);
+      return firstWave.reduce((best, p) => (p[1] < best[1] ? p : best))[0];
+    };
+    expect(crest(frames[1])).toBeLessThan(crest(frames[0]));
+  });
+
+  it("keeps her neck steady where her body meets her head", () => {
+    const frames = elia().querySelector('path.wave animate').getAttribute('values').split(';');
+    // The last point of every frame stays near the middle of her head (y 100).
+    for (const frame of frames) expect(Math.abs(ys(frame).at(-1) - 100)).toBeLessThan(4);
+  });
+
+  it('carries the shine on her body along with the wave', () => {
+    expect(elia().querySelectorAll('circle > animate[attributeName="cy"]')).toHaveLength(2);
+  });
+
+  it('holds still on the picker, and for anyone who prefers less motion', () => {
+    expect(palTile(palById('elia')).querySelector('animate')).toBeNull();
+    vi.stubGlobal('matchMedia', (query) => ({ matches: query.includes('reduce') }));
+    expect(elia().querySelector('animate')).toBeNull();
+  });
+});
+
