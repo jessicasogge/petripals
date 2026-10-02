@@ -132,7 +132,7 @@ export const SPECIES = {
     scientific: 'Bifidobacterium bifidum',
     color: '#be185d', // for her name above the dish: strawberry-yogurt pink's deeper rose
     kind: 'rod',
-    size: 11,
+    size: 9.5,
     body: [
       // stem, bottom to top
       [0.0, 0.305, 0.128],
