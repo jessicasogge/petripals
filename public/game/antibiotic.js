@@ -1,7 +1,8 @@
 // The antibiotic disks: small white paper disks soaked in drugs, like the ones
 // used in the lab (the Kirby-Bauer disk test). Each has a zone of inhibition
 // around it, sized by how well that drug works on the pal. If the player's pal
-// touches a disk or its zone, the game is over.
+// touches a disk or its zone, the game is over; offspring cells that touch one
+// pop (see popInZones in colony.js).
 //
 // A disk is { fx, fy, r, zone } in fractions of the dish radius: its center,
 // its radius, and how wide its zone of inhibition is.
@@ -62,63 +63,6 @@ export function touchesDisk(disk, circles, dishRadius, buffer = 0) {
   const dy = disk.fy * dishRadius;
   const reach = (disk.r + (disk.zone ?? 0) + buffer) * dishRadius;
   return circles.some(([x, y, r]) => Math.hypot(x - dx, y - dy) < reach + r);
-}
-
-// How far to move a body (circles as above) so it no longer overlaps any
-// disk or zone, as [dx, dy] in pixels. [0, 0] if it's already clear.
-// `buffer` keeps that much extra clear space around each zone.
-//
-// Each disk pushes the whole body one way: straight out from the disk's
-// center toward the middle of the body, just far enough that every circle
-// is clear. (Pushing along whichever circle overlaps most would flip back and
-// forth for a chain curved around a disk: clearing one end shoves the other
-// end in, and the next frame does the opposite, so it shakes forever.)
-export function pushOffDisks(disks, circles, dishRadius, buffer = 0) {
-  let moveX = 0;
-  let moveY = 0;
-  if (circles.length === 0) return [0, 0];
-  const midX = circles.reduce((sum, [x]) => sum + x, 0) / circles.length;
-  const midY = circles.reduce((sum, [, y]) => sum + y, 0) / circles.length;
-  for (const disk of disks) {
-    const cx = disk.fx * dishRadius;
-    const cy = disk.fy * dishRadius;
-    const reach = (disk.r + (disk.zone ?? 0) + buffer) * dishRadius;
-    const overlapping = circles.filter(([x, y, r]) =>
-      Math.hypot(x + moveX - cx, y + moveY - cy) < reach + r);
-    if (overlapping.length === 0) continue;
-    // Which way to push: from the disk's center toward the body's middle
-    // (or straight out through the one circle, or right if dead center).
-    let ux = midX + moveX - cx;
-    let uy = midY + moveY - cy;
-    let length = Math.hypot(ux, uy);
-    if (length < 1e-6) {
-      const [x, y] = overlapping[0];
-      ux = x + moveX - cx;
-      uy = y + moveY - cy;
-      length = Math.hypot(ux, uy);
-    }
-    if (length < 1e-6) {
-      ux = 1;
-      uy = 0;
-      length = 1;
-    }
-    ux /= length;
-    uy /= length;
-    // How far along that way each overlapping circle must go to be clear:
-    // solve |d + t u| = reach + r for the larger t.
-    let push = 0;
-    for (const [x, y, r] of overlapping) {
-      const dx = x + moveX - cx;
-      const dy = y + moveY - cy;
-      const along = dx * ux + dy * uy;
-      const need = reach + r;
-      const t = -along + Math.sqrt(Math.max(0, along * along - (dx * dx + dy * dy) + need * need));
-      push = Math.max(push, t);
-    }
-    moveX += ux * push;
-    moveY += uy * push;
-  }
-  return [moveX, moveY];
 }
 
 // The first disk (or zone) the circles touch, or null if they touch none.

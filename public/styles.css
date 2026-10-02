@@ -636,3 +636,34 @@ body:not(.picker-page) .signature {
     padding: 8px;
   }
 }
+
+/* An offspring cell popping in an antibiotic zone (game/colony.js): a ring
+   in the pal's color that bursts outward and fades. */
+.pop {
+  position: absolute;
+  aspect-ratio: 1;
+  border: 3px solid;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: pop 0.35s ease-out forwards;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(0.7);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.8);
+    border-width: 1px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pop {
+    animation-duration: 0.01s;
+  }
+}

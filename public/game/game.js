@@ -23,7 +23,8 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
   const makeGroup = species.kind === 'rod' ? rodGroup : coccusGroup;
   const player = makeGroup({ mover: playerMover, svg: palEl, species, isPlayer: true });
   const colony = makeColony({
-    leader: player, nutrients, disks, dishRadius, target, onDivide: () => updateCounter(),
+    leader: player, nutrients, disks, dishRadius, target, color: species.color,
+    onDivide: () => updateCounter(), onPop: () => updateCounter(),
   });
 
   let finished = false;
@@ -60,7 +61,9 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
     }
 
     colony.tick(seconds);
-    moveGroups(colony.groups, { agar, radius, seconds, disks });
+    moveGroups(colony.groups, { agar, radius, seconds });
+    // Offspring that wander into an antibiotic zone pop.
+    if (!finished) colony.popInZones(radius);
 
     // Touching any antibiotic disk, or the zone of inhibition around it, is
     // game over.
