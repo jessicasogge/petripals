@@ -39,3 +39,26 @@ describe('the mode choice page', () => {
     expect(html).toContain(`a colony of ${MIXED.TARGET} cells first`);
   });
 });
+
+describe('the home page title', () => {
+  const html = readFileSync(file('index.html'), 'utf8');
+  const css = readFileSync(file('styles.css'), 'utf8');
+
+  it('says what the game is under its name', () => {
+    expect(html).toContain('<h1 class="logo">PetriPals</h1>');
+    expect(html).toContain('<p class="tagline">Grow your colony. Dodge antibiotics.</p>');
+  });
+
+  it("has every font file the stylesheet uses, each with its license", () => {
+    const fonts = [...css.matchAll(/url\(\.\/(fonts\/[^)]+\.woff2)\)/g)].map((m) => m[1]);
+    expect(fonts.length).toBeGreaterThan(0);
+    for (const font of fonts) expect(existsSync(file(font)), font).toBe(true);
+    expect(existsSync(file('fonts/Fredoka-OFL.txt'))).toBe(true);
+    expect(existsSync(file('fonts/Nunito-OFL.txt'))).toBe(true);
+  });
+
+  it('preloads the title font, so the name shows up in it quickly', () => {
+    const [, preloaded] = html.match(/<link rel="preload" href="\.\/([^"]+)" as="font"/);
+    expect(css).toContain(`url(./${preloaded})`);
+  });
+});

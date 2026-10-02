@@ -1,3 +1,28 @@
+/* The home page's title, tagline and Start button fonts: Fredoka and Nunito,
+   both under the SIL Open Font License (public/fonts/*-OFL.txt). They're kept
+   here rather than loaded from Google Fonts, so the page doesn't wait on, or
+   tell, another site. Until they load, the page uses its usual font. */
+@font-face {
+  font-family: Fredoka;
+  font-weight: 600;
+  font-display: swap;
+  src: url(./fonts/fredoka-600.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: Fredoka;
+  font-weight: 700;
+  font-display: swap;
+  src: url(./fonts/fredoka-700.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: Nunito;
+  font-weight: 700;
+  font-display: swap;
+  src: url(./fonts/nunito-700.woff2) format('woff2');
+}
+
 * {
   box-sizing: border-box;
 }
@@ -98,11 +123,34 @@ body {
   animation: slither 1.6s ease-in-out infinite;
 }
 
+/* The game's name on the home page, big and round like a game logo. */
+.logo {
+  margin: 1.6rem 0 0.4rem;
+  font-family: Fredoka, system-ui, sans-serif;
+  font-size: clamp(3.2rem, 15vw, 5.2rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+/* What the game is, in a few words, under its name. */
+.tagline {
+  margin: 0 0 1.4rem;
+  padding: 0 1rem;
+  font-family: Nunito, system-ui, sans-serif;
+  font-size: clamp(1.05rem, 4.6vw, 1.3rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #0f766e;
+}
+
 .start-btn {
   margin-top: 1rem;
   padding: 0.8rem 2rem;
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-family: Fredoka, system-ui, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   color: white;
   background: #0f766e;
   border: none;
