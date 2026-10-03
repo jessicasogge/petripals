@@ -207,6 +207,98 @@ body {
 /* The pal picker is wider than the other cards, to fit four pals across. */
 .picker-wide {
   width: min(1000px, 100%);
+  position: relative; /* for the microscope button in its corner */
+}
+
+/* Microscope mode (game/pal-picker.js): a button in the picker's corner that
+   shows every pal as she'd look after a Gram stain, purple or pink. */
+.scope-btn {
+  position: absolute;
+  top: 1.75rem;
+  right: 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.45em 0.85em;
+  border: 2px solid #99f6e4;
+  border-radius: 999px;
+  background: #f0fdfa;
+  color: #0f766e;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.scope-btn:hover {
+  background: #ccfbf1;
+}
+
+.scope-btn[aria-pressed='true'] {
+  background: #0f766e;
+  border-color: #0f766e;
+  color: #fff;
+}
+
+.scope-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.scope-caption {
+  margin: -0.5rem 0 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+.scope-caption b {
+  white-space: nowrap;
+}
+
+.scope-caption .gram-positive {
+  color: #6d28d9;
+}
+
+.scope-caption .gram-negative {
+  color: #db2777;
+}
+
+/* On a phone or small tablet, where the corner is too close to the heading,
+   the button sits under it instead. */
+@media (max-width: 760px) {
+  .scope-btn {
+    position: static;
+    margin: -0.5rem auto 1rem;
+  }
+}
+
+/* Stained, each pal sits on a white slide. Her stain colors themselves are
+   set on her drawing by game/stain.js; here they just fade in and out. */
+.stained .pal-icon {
+  background: radial-gradient(circle, #fff 0 58%, #f1f5f9 72%, #e2e8f0 100%);
+  box-shadow: inset 0 0 0 2px #cbd5e1;
+}
+
+.pal-icon svg * {
+  transition: fill 0.4s ease, stroke 0.4s ease;
+}
+
+.stain-note {
+  display: none;
+}
+
+.stained .stain-note {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #db2777;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pal-icon svg * {
+    transition: none;
+  }
 }
 
 /* A heading at the very top of the card sits on the card's own padding,

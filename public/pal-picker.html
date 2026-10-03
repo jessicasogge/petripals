@@ -24,6 +24,16 @@
   <body class="picker-page">
     <main class="picker-shell picker-wide">
       <h1>Pick a Pal</h1>
+      <!-- Microscope mode: shows each pal as she'd look after a Gram stain. -->
+      <button class="scope-btn" type="button" aria-pressed="false">
+        <span class="scope-icon" aria-hidden="true">🔬</span>
+        <span class="scope-label">Gram stain</span>
+      </button>
+      <p class="scope-caption" hidden>
+        Under the microscope after a Gram stain:
+        <b class="gram-positive">purple = Gram-positive</b>,
+        <b class="gram-negative">pink = Gram-negative</b>
+      </p>
 
       <!-- A card for each pal, made by game/pal-picker.js from game/pals.js -->
       <div class="picker-grid"></div>
