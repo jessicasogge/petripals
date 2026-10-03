@@ -48,7 +48,7 @@ export const SPECIES = {
     scientific: 'Pseudomonas aeruginosa',
     color: '#15803d', // for her name above the dish
     kind: 'rod',
-    size: 10.5,
+    size: 9.5,
     body: [
       // tail (flagellum)
       [-0.443, 0.0, 0.057],
@@ -89,7 +89,7 @@ export const SPECIES = {
     scientific: 'Vibrio cholerae',
     color: '#c2410c', // for her name above the dish
     kind: 'rod',
-    size: 10.5,
+    size: 9.5,
     body: [
       // tail (flagellum)
       [-0.444, -0.072, 0.056],
@@ -134,6 +134,7 @@ export const SPECIES = {
     scientific: 'Borrelia burgdorferi',
     color: '#7e22ce', // for her name above the dish
     kind: 'rod',
+    size: 9.5,
     body: [
       [-0.333, 0.0, 0.104],
       [-0.266, 0.0, 0.104],
@@ -394,6 +395,11 @@ export const GAME = {
   BURST_SPEED: 0.1,
   SETTLE_RATE: 4, // how quickly a new group slows to a stop (higher = sooner)
   SETTLE_MS: 1500, // after this long, offspring stay put for good
+  // How close two new cells can settle before they nudge each other apart:
+  // their centers stay at least SPACING times their combined reach apart.
+  // Lower lets them pile up more, the way cells on a plate grow on top of
+  // each other, which leaves room for big colonies on crowded levels.
+  SPACING: 0.5,
   DIVIDE_MS: 600,
   // The antibiotic disks: their radius, how far from the center they can go,
   // and how far apart they must be, center to center (all as fractions of the

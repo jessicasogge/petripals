@@ -64,6 +64,14 @@ describe('the pals', () => {
     },
   );
 
+  it("draws Elia's offspring a touch paler than the others'", () => {
+    const rule = css.match(/\.pal-mover\.offspring \.dish-pal\[data-pal="elia"\] \{([^}]*)\}/);
+    expect(rule).not.toBeNull();
+    expect(Number(rule[1].match(/opacity: ([\d.]+)/)[1])).toBeLessThan(1);
+    // Her offspring are copies of her dish drawing, so they keep her id.
+    expect(dishPal(palById('elia')).dataset.pal).toBe('elia');
+  });
+
   it('are found by id, and nothing else is', () => {
     expect(palById('ana').name).toBe('Ana');
     expect(palById('toString')).toBeUndefined();

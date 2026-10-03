@@ -105,6 +105,17 @@ describe('pushApart', () => {
     expect([offspring.x, offspring.y]).toEqual([5, 0]);
   });
 
+  it('lets new cells overlap a fair bit before nudging them apart', () => {
+    // Combined reach 40px: they're only nudged closer than SPACING * 40.
+    const close = [group(0, 0), group(40 * GAME.SPACING - 1, 0)];
+    pushApart(close, null);
+    expect(close[1].x - close[0].x).toBeGreaterThan(40 * GAME.SPACING - 1);
+    const overlapping = [group(0, 0), group(40 * GAME.SPACING + 1, 0)];
+    pushApart(overlapping, null);
+    expect([overlapping[0].x, overlapping[1].x]).toEqual([0, 40 * GAME.SPACING + 1]);
+    expect(GAME.SPACING).toBeLessThanOrEqual(0.5);
+  });
+
   it('leaves groups that are not overlapping alone', () => {
     const a = group(0, 0);
     const b = group(100, 0);

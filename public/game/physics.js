@@ -64,7 +64,7 @@ export function pushApart(groups, player) {
       const dx = b.x - a.x;
       const dy = b.y - a.y;
       const distance = Math.hypot(dx, dy) || 0.01;
-      const overlap = (a.size + b.size) * 0.75 - distance;
+      const overlap = (a.size + b.size) * GAME.SPACING - distance;
       if (overlap <= 0) continue;
       const nx = dx / distance;
       const ny = dy / distance;
