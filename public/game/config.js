@@ -80,7 +80,7 @@ export const SPECIES = {
       "Oral rehydration (clean water, the right salt and sugar) saves most people Vi sickens.",
       "Filtering water through folded sari cloth kept Vi out and cut cholera in Bangladesh.",
       "Vi has two chromosomes instead of the usual one.",
-      "On TCBS agar, Vi typically grows into yellow colonies—but other bacteria can do that too.",
+      "On TCBS agar, Vi typically grows into yellow colonies, but other bacteria can do that too.",
       "Vi's toxin makes the gut pour out water and salt, which is why cholera dehydrates people.",
       "Vi's cholera has caused seven pandemics since 1817.",
       "In 1884, Robert Koch isolated Vi in pure culture and linked her to cholera.",
@@ -126,7 +126,7 @@ export const SPECIES = {
       "Elia is difficult to grow in special lab media and can take days to weeks to multiply.",
       "Elia's DNA was found in Ötzi, a 5,300-year-old Iceman frozen in the Alps.",
       "Ticks usually feed a day or more before they're likely to pass Elia on. Remove them fast!",
-      "Elia can carry about 20 extra DNA pieces called plasmids—unusually many for a bacterium.",
+      "Elia can carry about 20 extra DNA pieces called plasmids, unusually many for a bacterium.",
       "Lyme disease, mainly from Elia, is the most commonly reported U.S. tick-borne disease.",
       "Elia can move through thick, gel-like body tissues that slow many other bacteria.",
       "Deer rarely infect ticks with Elia, but they feed adult ticks and keep tick numbers up.",
@@ -161,7 +161,7 @@ export const SPECIES = {
   coco: {
     facts: [
       "Despite her name, Coco doesn't cause the flu.",
-      "During the 1889-90 flu pandemic, Coco was mistakenly thought to cause influenza.",
+      "During the 1889 to 1890 flu pandemic, Coco was mistakenly thought to cause influenza.",
       "\"Haemophilus\" means blood-loving: Coco needs X and V growth factors that blood provides.",
       "Coco grows best on \"chocolate agar,\" made from heated blood.",
       "On blood agar, Coco can grow near Goldie, borrowing growth factors Goldie releases.",
