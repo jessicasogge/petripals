@@ -41,6 +41,9 @@ export const SPECIES = {
       "Mona can often grow at 42°C, unlike many of her close relatives.",
       "Mona is oxidase-positive: a drop of test reagent turns her colonies dark purple.",
       "Mona's cells signal to each other with chemicals, called quorum sensing.",
+      "Mona is a common cause of swimmer's ear, an infection of the outer ear canal.",
+      "Mona can survive in distilled water, where there are almost no nutrients.",
+      "Mona's colonies may have a metallic sheen and can make blue-green pigments.",
     ],
     scientific: 'Pseudomonas aeruginosa',
     color: '#15803d', // for her name above the dish
@@ -79,6 +82,9 @@ export const SPECIES = {
       "Vi has two chromosomes instead of the usual one.",
       "On TCBS agar, Vi typically grows into yellow colonies—but other bacteria can do that too.",
       "Vi's toxin makes the gut pour out water and salt, which is why cholera dehydrates people.",
+      "Vi's cholera has caused seven pandemics since 1817.",
+      "In 1884, Robert Koch isolated Vi in pure culture and linked her to cholera.",
+      "Vi has 200+ serogroups, but only O1 and O139 are linked to epidemic cholera.",
     ],
     scientific: 'Vibrio cholerae',
     color: '#c2410c', // for her name above the dish
@@ -121,6 +127,9 @@ export const SPECIES = {
       "Elia's DNA was found in Ötzi, a 5,300-year-old Iceman frozen in the Alps.",
       "Ticks usually feed a day or more before they're likely to pass Elia on. Remove them fast!",
       "Elia can carry about 20 extra DNA pieces called plasmids—unusually many for a bacterium.",
+      "Lyme disease, mainly from Elia, is the most commonly reported U.S. tick-borne disease.",
+      "Elia can move through thick, gel-like body tissues that slow many other bacteria.",
+      "Deer rarely infect ticks with Elia, but they feed adult ticks and keep tick numbers up.",
     ],
     scientific: 'Borrelia burgdorferi',
     color: '#7e22ce', // for her name above the dish
@@ -164,6 +173,9 @@ export const SPECIES = {
       "Coco is a coccobacillus: in between a round coccus and a rod-shaped bacillus.",
       "Coco has six capsule types, a to f; the Hib vaccine targets type b.",
       "Many Coco strains have no capsule at all and commonly cause ear infections.",
+      "Richard Pfeiffer described Coco in 1892; she was once called Pfeiffer's bacillus.",
+      "Coco is a small Gram-negative coccobacillus, so she stains pink on a Gram stain.",
+      "Nontypeable Coco is a common cause of pink eye, especially in children.",
     ],
     scientific: 'Haemophilus influenzae',
     color: '#7c4a2d', // for her name above the dish
@@ -204,6 +216,9 @@ export const SPECIES = {
       "Ana is Gram-positive, so she stains purple under the microscope.",
       "Some Ana strains can feed on parts of mucin, the slimy layer lining the gut.",
       "Ana breaks down sugars with a pathway named for her group, the \"bifid shunt.\"",
+      "Ana was first isolated by Henri Tissier, a pediatrician at the Pasteur Institute.",
+      "Some Ana strains use tiny hair-like pili to stick to the gut lining.",
+      "Babies born by C-section often acquire bifidobacteria like Ana later than others.",
     ],
     scientific: 'Bifidobacterium bifidum',
     color: '#be185d', // for her name above the dish: strawberry-yogurt pink's deeper rose
@@ -252,6 +267,9 @@ export const SPECIES = {
       "An optochin disk usually stops Penny growing, a classic test that helps tell her apart.",
       "Penny's colonies often sink in the middle as they age, like tiny checkers pieces.",
       "Vaccines protect against the Penny types that most often cause serious illness.",
+      "Penny was independently described by Louis Pasteur and George Sternberg in 1881.",
+      "Penny's polysaccharide capsule helps her avoid being eaten by immune cells.",
+      "Besides pneumonia, Penny can cause meningitis and sinus infections.",
     ],
     scientific: 'Streptococcus pneumoniae',
     color: '#4f46e5', // for her name above the dish: bluish purple, next to Elia's purple
@@ -287,6 +305,9 @@ export const SPECIES = {
       "Scarlett is catalase-negative: no bubbles in hydrogen peroxide, unlike Goldie.",
       "A bacitracin disk often stops Scarlett growing, a classic older clue for Group A strep.",
       "A rapid strep test can find Scarlett on a throat swab in minutes.",
+      "In the 1930s, Rebecca Lancefield sorted strep like Scarlett into lettered groups.",
+      "Scarlett's M protein helps her dodge the immune system.",
+      "There are 200+ M protein types of Scarlett, one reason people can get strep throat again.",
     ],
     scientific: 'Streptococcus pyogenes',
     color: '#b91c1c', // for her name above the dish
@@ -316,6 +337,9 @@ export const SPECIES = {
       "Goldie is catalase-positive: she makes bubbles in a drop of hydrogen peroxide.",
       "Goldie makes coagulase, which clots plasma, a classic test that helps identify her.",
       "Goldie's food-poisoning toxins can survive cooking, even when Goldie herself doesn't.",
+      "Goldie is a common cause of skin infections such as boils and impetigo.",
+      "Rarely, toxins from some Goldie strains cause toxic shock syndrome, a serious illness.",
+      "Goldie was named in 1884 by Friedrich Rosenbach after her golden colonies.",
     ],
     scientific: 'Staphylococcus aureus',
     color: '#b45309', // for her name above the dish
