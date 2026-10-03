@@ -590,6 +590,13 @@ body {
   filter: saturate(0.45) brightness(1.08);
 }
 
+/* Elia's offspring are a touch paler still: her purple stays strong even
+   washed out, so they stood out more than the others'. */
+.pal-mover.offspring .dish-pal[data-pal="elia"] {
+  opacity: 0.85;
+  filter: saturate(0.8) brightness(1.05);
+}
+
 /* Only the player's pal has a face. */
 .pal-mover.offspring .face {
   display: none;
