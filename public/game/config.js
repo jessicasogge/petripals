@@ -89,7 +89,7 @@ export const SPECIES = {
     scientific: 'Vibrio cholerae',
     color: '#c2410c', // for her name above the dish
     kind: 'rod',
-    size: 10.5,
+    size: 9.5,
     body: [
       // tail (flagellum)
       [-0.444, -0.072, 0.056],
