@@ -19,6 +19,42 @@
 
 const SVG = 'http://www.w3.org/2000/svg';
 
+// Elia's corkscrew body is a wave along her length: 3½ waves from her tail
+// (x 33) to where it meets her head (x 166), 11 units high, a little smaller
+// over the last half-wave so her neck doesn't wobble. `phase` slides the wave
+// along her (2π is one whole wave).
+const ELIA_TAIL = 33;
+const ELIA_NECK = 166;
+const ELIA_WAVE = 38; // one wave's length
+function eliaY(x, phase = 0) {
+  const nearHead = Math.min(1, (ELIA_NECK - x) / (ELIA_WAVE / 2));
+  const height = 11 * (0.35 + 0.65 * nearHead);
+  return 100 + height * Math.sin((2 * Math.PI * (x - ELIA_TAIL)) / ELIA_WAVE + phase);
+}
+function eliaBody(phase = 0) {
+  const points = [];
+  for (let x = ELIA_TAIL; x <= ELIA_NECK + 0.01; x += 1.9) {
+    points.push(`${x.toFixed(1)} ${eliaY(x, phase).toFixed(1)}`);
+  }
+  return `M${points.join(' L')}`;
+}
+// Her swimming: the wave travels from her head to her tail, the way a
+// spirochete's inner flagella push her forward. Played with SVG's own
+// <animate>, like Mona's and Vi's flagella, so in the dish it only runs
+// while she swims (rod.js), and not at all on the picker or for anyone who
+// has asked for less motion (drawing() below).
+const ELIA_SWIM = '0.9s';
+const ELIA_STEPS = 8;
+const eliaPhases = Array.from({ length: ELIA_STEPS + 1 }, (_, i) => (2 * Math.PI * i) / ELIA_STEPS);
+const eliaWave = () =>
+  `<animate attributeName="d" dur="${ELIA_SWIM}" repeatCount="indefinite" values="${eliaPhases.map(eliaBody).join(';')}" />`;
+// A shine dot that rides along on her body, 2 units above it.
+const eliaShine = (x) => {
+  const y = (phase) => (eliaY(x, phase) - 2).toFixed(1);
+  return `<circle cx="${x}" cy="${y(0)}" r="2" fill="#f3e8ff">` +
+    `<animate attributeName="cy" dur="${ELIA_SWIM}" repeatCount="indefinite" values="${eliaPhases.map(y).join(';')}" /></circle>`;
+};
+
 export const PALS = [
   // Penny: Streptococcus pneumoniae, a bluish-purple pair of cells, with glasses
   {
@@ -245,15 +281,15 @@ export const PALS = [
     name: 'Elia',
     looks: 'a light purple corkscrew-shaped Borrelia burgdorferi',
     motion: 'slither',
-    frames: { home: '0 0 200 200', picker: '4 4 192 192', dish: '4 4 192 192' },
+    frames: { home: '8 0 200 200', picker: '12 4 192 192', dish: '12 4 192 192' },
     art: `
       <!-- corkscrew body: outline, then fill (her flagella are inside the cell) -->
-      <path d="M14.0 100.0 L14.9 101.7 L15.9 103.4 L16.9 105.0 L17.8 106.5 L18.8 107.8 L19.7 108.9 L20.6 109.8 L21.6 110.5 L22.6 110.9 L23.5 111.0 L24.5 110.9 L25.4 110.5 L26.4 109.8 L27.3 108.9 L28.2 107.8 L29.2 106.5 L30.1 105.0 L31.1 103.4 L32.0 101.7 L33.0 100.0 L34.0 98.3 L34.9 96.6 L35.8 95.0 L36.8 93.5 L37.8 92.2 L38.7 91.1 L39.7 90.2 L40.6 89.5 L41.5 89.1 L42.5 89.0 L43.5 89.1 L44.4 89.5 L45.3 90.2 L46.3 91.1 L47.2 92.2 L48.2 93.5 L49.1 95.0 L50.1 96.6 L51.0 98.3 L52.0 100.0 L52.9 101.7 L53.9 103.4 L54.9 105.0 L55.8 106.5 L56.8 107.8 L57.7 108.9 L58.6 109.8 L59.6 110.5 L60.6 110.9 L61.5 111.0 L62.4 110.9 L63.4 110.5 L64.3 109.8 L65.3 108.9 L66.2 107.8 L67.2 106.5 L68.2 105.0 L69.1 103.4 L70.1 101.7 L71.0 100.0 L71.9 98.3 L72.9 96.6 L73.8 95.0 L74.8 93.5 L75.8 92.2 L76.7 91.1 L77.7 90.2 L78.6 89.5 L79.5 89.1 L80.5 89.0 L81.5 89.1 L82.4 89.5 L83.3 90.2 L84.3 91.1 L85.2 92.2 L86.2 93.5 L87.2 95.0 L88.1 96.6 L89.0 98.3 L90.0 100.0 L91.0 101.7 L91.9 103.4 L92.9 105.0 L93.8 106.5 L94.8 107.8 L95.7 108.9 L96.6 109.8 L97.6 110.5 L98.5 110.9 L99.5 111.0 L100.5 110.9 L101.4 110.5 L102.4 109.8 L103.3 108.9 L104.2 107.8 L105.2 106.5 L106.1 105.0 L107.1 103.4 L108.0 101.7 L109.0 100.0 L110.0 98.3 L110.9 96.6 L111.9 95.0 L112.8 93.5 L113.8 92.2 L114.7 91.1 L115.6 90.2 L116.6 89.5 L117.5 89.1 L118.5 89.0 L119.5 89.1 L120.4 89.5 L121.4 90.2 L122.3 91.1 L123.2 92.2 L124.2 93.5 L125.1 95.0 L126.1 96.6 L127.0 98.3 L128.0 100.0 L128.9 101.7 L129.9 103.4 L130.9 105.0 L131.8 106.5 L132.8 107.8 L133.7 108.9 L134.6 109.8 L135.6 110.5 L136.6 110.9 L137.5 111.0 L138.4 110.9 L139.4 110.5 L140.4 109.8 L141.3 108.9 L142.2 107.8 L143.2 106.5 L144.2 105.0 L145.1 103.4 L146.1 101.7 L147.0 100.0 L147.9 98.3 L148.9 96.6 L149.8 95.0 L150.8 93.5 L151.8 92.2 L152.7 91.1 L153.7 90.2 L154.6 89.5 L155.6 89.1 L156.5 89.0 L157.4 89.1 L158.4 89.5 L159.3 90.2 L160.3 91.1 L161.2 92.2 L162.2 93.5 L163.2 95.0 L164.1 96.6 L165.1 98.3 L166.0 100.0" stroke="#7e22ce" stroke-width="18" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+      <path class="wave" d="${eliaBody()}" stroke="#7e22ce" stroke-width="18" fill="none" stroke-linecap="round" stroke-linejoin="round">${eliaWave()}</path>
       <circle cx="176" cy="100" r="16" fill="#7e22ce" />
-      <path d="M14.0 100.0 L14.9 101.7 L15.9 103.4 L16.9 105.0 L17.8 106.5 L18.8 107.8 L19.7 108.9 L20.6 109.8 L21.6 110.5 L22.6 110.9 L23.5 111.0 L24.5 110.9 L25.4 110.5 L26.4 109.8 L27.3 108.9 L28.2 107.8 L29.2 106.5 L30.1 105.0 L31.1 103.4 L32.0 101.7 L33.0 100.0 L34.0 98.3 L34.9 96.6 L35.8 95.0 L36.8 93.5 L37.8 92.2 L38.7 91.1 L39.7 90.2 L40.6 89.5 L41.5 89.1 L42.5 89.0 L43.5 89.1 L44.4 89.5 L45.3 90.2 L46.3 91.1 L47.2 92.2 L48.2 93.5 L49.1 95.0 L50.1 96.6 L51.0 98.3 L52.0 100.0 L52.9 101.7 L53.9 103.4 L54.9 105.0 L55.8 106.5 L56.8 107.8 L57.7 108.9 L58.6 109.8 L59.6 110.5 L60.6 110.9 L61.5 111.0 L62.4 110.9 L63.4 110.5 L64.3 109.8 L65.3 108.9 L66.2 107.8 L67.2 106.5 L68.2 105.0 L69.1 103.4 L70.1 101.7 L71.0 100.0 L71.9 98.3 L72.9 96.6 L73.8 95.0 L74.8 93.5 L75.8 92.2 L76.7 91.1 L77.7 90.2 L78.6 89.5 L79.5 89.1 L80.5 89.0 L81.5 89.1 L82.4 89.5 L83.3 90.2 L84.3 91.1 L85.2 92.2 L86.2 93.5 L87.2 95.0 L88.1 96.6 L89.0 98.3 L90.0 100.0 L91.0 101.7 L91.9 103.4 L92.9 105.0 L93.8 106.5 L94.8 107.8 L95.7 108.9 L96.6 109.8 L97.6 110.5 L98.5 110.9 L99.5 111.0 L100.5 110.9 L101.4 110.5 L102.4 109.8 L103.3 108.9 L104.2 107.8 L105.2 106.5 L106.1 105.0 L107.1 103.4 L108.0 101.7 L109.0 100.0 L110.0 98.3 L110.9 96.6 L111.9 95.0 L112.8 93.5 L113.8 92.2 L114.7 91.1 L115.6 90.2 L116.6 89.5 L117.5 89.1 L118.5 89.0 L119.5 89.1 L120.4 89.5 L121.4 90.2 L122.3 91.1 L123.2 92.2 L124.2 93.5 L125.1 95.0 L126.1 96.6 L127.0 98.3 L128.0 100.0 L128.9 101.7 L129.9 103.4 L130.9 105.0 L131.8 106.5 L132.8 107.8 L133.7 108.9 L134.6 109.8 L135.6 110.5 L136.6 110.9 L137.5 111.0 L138.4 110.9 L139.4 110.5 L140.4 109.8 L141.3 108.9 L142.2 107.8 L143.2 106.5 L144.2 105.0 L145.1 103.4 L146.1 101.7 L147.0 100.0 L147.9 98.3 L148.9 96.6 L149.8 95.0 L150.8 93.5 L151.8 92.2 L152.7 91.1 L153.7 90.2 L154.6 89.5 L155.6 89.1 L156.5 89.0 L157.4 89.1 L158.4 89.5 L159.3 90.2 L160.3 91.1 L161.2 92.2 L162.2 93.5 L163.2 95.0 L164.1 96.6 L165.1 98.3 L166.0 100.0" stroke="#d8b4fe" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+      <path class="wave" d="${eliaBody()}" stroke="#d8b4fe" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round">${eliaWave()}</path>
       <circle cx="176" cy="100" r="13" fill="#d8b4fe" />
-      <circle cx="42.5" cy="87.0" r="2" fill="#f3e8ff" />
-      <circle cx="99.5" cy="109.0" r="2" fill="#f3e8ff" />
+      ${eliaShine(42.5)}
+      ${eliaShine(99.5)}
       <circle cx="171" cy="93" r="2.5" fill="#f3e8ff" />
       <g class="face">
         <circle cx="171.5" cy="99" r="3" fill="#581c87" />
@@ -279,12 +315,13 @@ function drawing(pal, page) {
   const svg = document.createElementNS(SVG, 'svg');
   svg.setAttribute('viewBox', pal.frames[page]);
   svg.innerHTML = pal.art;
-  // A flagellum wiggles with SVG's own <animate> on the home page, and in the
-  // dish while she swims (see rod.js). It stays still on the picker, and for
-  // anyone who has asked for less motion (CSS can't pause <animate>).
+  // A flagellum (Mona's, Vi's) and Elia's body wiggle with SVG's own
+  // <animate> on the home page, and in the dish while she swims (see rod.js).
+  // They stay still on the picker, and for anyone who has asked for less
+  // motion (CSS can't pause <animate>).
   const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
   if (page === 'picker' || reduced) {
-    for (const wiggle of svg.querySelectorAll('.flagellum animate')) wiggle.remove();
+    for (const wiggle of svg.querySelectorAll('animate')) wiggle.remove();
   }
   return svg;
 }
