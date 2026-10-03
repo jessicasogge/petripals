@@ -394,6 +394,11 @@ export const GAME = {
   BURST_SPEED: 0.1,
   SETTLE_RATE: 4, // how quickly a new group slows to a stop (higher = sooner)
   SETTLE_MS: 1500, // after this long, offspring stay put for good
+  // How close two new cells can settle before they nudge each other apart:
+  // their centers stay at least SPACING times their combined reach apart.
+  // Lower lets them pile up more, the way cells on a plate grow on top of
+  // each other, which leaves room for big colonies on crowded levels.
+  SPACING: 0.5,
   DIVIDE_MS: 600,
   // The antibiotic disks: their radius, how far from the center they can go,
   // and how far apart they must be, center to center (all as fractions of the
