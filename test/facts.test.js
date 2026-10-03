@@ -14,6 +14,9 @@ describe('every pal\'s facts', () => {
       // Says whose fact it is, so it's clear in a race against another pal.
       expect(fact, fact).toContain(name);
       expect(fact, fact).toMatch(/^["A-Z0-9].*[.!"]$/); // a full sentence
+      // Commas and other punctuation instead of dashes (hyphenated words,
+      // like whip-like, are fine).
+      expect(fact, fact).not.toMatch(/[\u2013\u2014]|\s-\s|\d-\d/);
     }
   });
 });
