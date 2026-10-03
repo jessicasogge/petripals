@@ -3,7 +3,7 @@
 // button shows every pal as she'd look after a Gram stain.
 import { SPECIES } from './config.js';
 import { PALS, palTile } from './pals.js';
-import { setStainOn, stainOn, stainPal, unstainPal } from './stain.js';
+import { stainPal, unstainPal } from './stain.js';
 
 document.querySelector('.picker-grid').append(...PALS.map(card));
 
@@ -42,8 +42,7 @@ function card(pal) {
 }
 
 // The microscope button: switch every pal between her colors and her Gram
-// stain colors. It's remembered, so she stays stained in the game, and the
-// picker opens the way it was left.
+// stain colors.
 const shell = document.querySelector('.picker-shell');
 const scope = document.querySelector('.scope-btn');
 
@@ -59,11 +58,4 @@ function showStain(stained) {
   }
 }
 
-if (shell && scope) {
-  if (stainOn()) showStain(true);
-  scope.addEventListener('click', () => {
-    const stained = !shell.classList.contains('stained');
-    setStainOn(stained);
-    showStain(stained);
-  });
-}
+scope?.addEventListener('click', () => showStain(!shell.classList.contains('stained')));

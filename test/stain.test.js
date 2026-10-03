@@ -1,12 +1,10 @@
 // @vitest-environment jsdom
 // Microscope mode (stain.js): every pal in her Gram stain colors, the same
 // few shades for every pal of a stain, and Elia only faintly.
-import { afterEach, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { SPECIES } from '../public/game/config.js';
 import { dishPal, PALS, palById } from '../public/game/pals.js';
-import { setStainOn, STAINS, stainedSpecies, stainOf, stainOn, stainPal, unstainPal } from '../public/game/stain.js';
-
-afterEach(() => localStorage.clear());
+import { STAINS, stainOf, stainPal, unstainPal } from '../public/game/stain.js';
 
 // Every color her drawing shows: inline style if set, otherwise its own attribute.
 function shown(svg, { skipFace = true } = {}) {
@@ -71,33 +69,5 @@ describe('the stain shades', () => {
     expect(shown(svg)).not.toEqual(before);
     unstainPal(svg);
     expect(shown(svg)).toEqual(before);
-  });
-
-  it("stains a round pal's own cell colors, which coccus.js draws with", () => {
-    expect(stainedSpecies(SPECIES.goldie).colors).toEqual({
-      fill: STAINS.positive.body, stroke: STAINS.positive.outline, highlight: STAINS.positive.light, dark: STAINS.positive.eyes,
-    });
-    // Everything else about her stays the same.
-    expect(stainedSpecies(SPECIES.goldie).antibiotics).toBe(SPECIES.goldie.antibiotics);
-    expect(SPECIES.goldie.colors.fill).not.toBe(STAINS.positive.body);
-    // Rods have no cell colors to change.
-    expect(stainedSpecies(SPECIES.vi)).toBe(SPECIES.vi);
-  });
-});
-
-describe('remembering microscope mode', () => {
-  it('is off until turned on, and remembered after', () => {
-    expect(stainOn()).toBe(false);
-    setStainOn(true);
-    expect(stainOn()).toBe(true);
-    setStainOn(false);
-    expect(stainOn()).toBe(false);
-  });
-
-  it("copes when the browser won't store anything", () => {
-    const broken = { getItem() { throw new Error('blocked'); }, setItem() { throw new Error('blocked'); }, removeItem() { throw new Error('blocked'); } };
-    expect(() => setStainOn(true, broken)).not.toThrow();
-    expect(stainOn(broken)).toBe(false);
-    expect(stainOn(undefined)).toBe(false);
   });
 });

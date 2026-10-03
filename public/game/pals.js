@@ -20,7 +20,7 @@
 const SVG = 'http://www.w3.org/2000/svg';
 
 // Elia's corkscrew body is a wave along her length: 3½ waves from her tail
-// (x 33) to where it meets her head (x 166), 11 units high, a little smaller
+// (x 33) to where it meets her head (x 166), 14 units high, a little smaller
 // over the last half-wave so her neck doesn't wobble. `phase` slides the wave
 // along her (2π is one whole wave).
 const ELIA_TAIL = 33;
@@ -28,7 +28,7 @@ const ELIA_NECK = 166;
 const ELIA_WAVE = 38; // one wave's length
 function eliaY(x, phase = 0) {
   const nearHead = Math.min(1, (ELIA_NECK - x) / (ELIA_WAVE / 2));
-  const height = 11 * (0.35 + 0.65 * nearHead);
+  const height = 14 * (0.275 + 0.725 * nearHead);
   return 100 + height * Math.sin((2 * Math.PI * (x - ELIA_TAIL)) / ELIA_WAVE + phase);
 }
 function eliaBody(phase = 0) {
