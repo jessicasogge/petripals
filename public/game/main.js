@@ -9,6 +9,7 @@ import { playGame } from './game.js';
 import { scatterNutrients } from './nutrients.js';
 import { dishPal, PALS } from './pals.js';
 import { playRace } from './race.js';
+import { stainedSpecies, stainOn, stainPal } from './stain.js';
 import { watchInputMode } from './touch.js';
 
 // Show touch or arrow-key directions, whichever fits the device.
@@ -28,6 +29,15 @@ const levelNumber = Math.min(Math.max(parseInt(params.get('level'), 10) || 1, 1)
 const level = LEVELS[levelNumber - 1];
 
 const drawingOf = (name) => [...document.querySelectorAll('.dish-pal')].find((el) => el.dataset.pal === name);
+
+// In microscope mode (see stain.js), a pal and all her offspring are in her
+// Gram stain colors: her drawing for a rod, her colors for round cells.
+const stained = stainOn();
+function inPlay(svg, species) {
+  if (!stained) return species;
+  stainPal(svg, species);
+  return stainedSpecies(species);
+}
 
 if (!pal) {
   // No pal (or an unknown one) in the URL: send them back to choose.
@@ -49,7 +59,7 @@ function startClassic() {
   document.querySelector('.species-name').textContent = species.scientific;
   const disks = placeAntibiotics(antibioticsFor(species.antibiotics, level.disks));
   const nutrients = scatterNutrients({ avoid: disks });
-  playGame(pal, species, nutrients, disks, { level: levelNumber, target: level.target });
+  playGame(pal, inPlay(pal, species), nutrients, disks, { level: levelNumber, target: level.target });
 }
 
 function startMixed() {
@@ -80,7 +90,11 @@ function startMixed() {
   );
 
   const nutrients = scatterNutrients({ count: MIXED.NUTRIENTS });
-  playRace({ you: { svg: pal, species }, rival, nutrients });
+  playRace({
+    you: { svg: pal, species: inPlay(pal, species) },
+    rival: { svg: rival.svg, species: inPlay(rival.svg, rival.species) },
+    nutrients,
+  });
 }
 
 function named(text, color) {

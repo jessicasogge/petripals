@@ -35,6 +35,34 @@ beforeEach(() => {
 afterEach(() => {
   vi.unstubAllGlobals();
   vi.clearAllMocks();
+  localStorage.clear();
+});
+
+describe('microscope mode', () => {
+  it('plays in her Gram stain colors if it was turned on in the picker', async () => {
+    localStorage.setItem('petripals-gram-stain', 'on');
+    const playGame = await open('?pal=goldie');
+    const [svg, species] = playGame.mock.calls[0];
+    expect(species.colors.fill).not.toBe(SPECIES.goldie.colors.fill); // her round cells, stained
+    expect(species.antibiotics).toEqual(SPECIES.goldie.antibiotics);
+    expect(svg.querySelector('[style*="fill"]')).not.toBeNull();
+  });
+
+  it('plays in her own colors otherwise', async () => {
+    const playGame = await open('?pal=goldie');
+    const [svg, species] = playGame.mock.calls[0];
+    expect(species).toEqual(SPECIES.goldie);
+    expect(svg.querySelector('[style*="fill"]')).toBeNull();
+  });
+
+  it('stains both pals in mixed culture', async () => {
+    localStorage.setItem('petripals-gram-stain', 'on');
+    await open('?pal=vi&mode=mixed&rival=scarlett');
+    const { playRace } = await import('../public/game/race.js');
+    const { you, rival } = playRace.mock.calls[0][0];
+    expect(you.svg.querySelector('[style*="fill"]')).not.toBeNull();
+    expect(rival.species.colors.fill).not.toBe(SPECIES.scarlett.colors.fill);
+  });
 });
 
 describe('picking the pal', () => {

@@ -24,6 +24,7 @@ async function open(page, script, search = '') {
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  localStorage.clear();
 });
 
 describe('the pals', () => {
@@ -172,18 +173,39 @@ describe('the pages', () => {
     expect(document.querySelector('.stain-note').textContent).toBe("Doesn't stain well");
   });
 
-  it('stains Gram-positive pals and Gram-negative pals differently, Elia faintest', () => {
-    const filter = (selector) => css.match(new RegExp(`${selector} svg \\{\\s*filter: ([^;]+);`))?.[1];
-    const positive = filter('\\.stained \\.pal-icon\\.gram-positive');
-    const negative = filter('\\.stained \\.pal-icon\\.gram-negative');
-    const faint = filter('\\.stained \\.pal-icon\\.faint-stain');
-    expect(positive).toBeTruthy();
-    expect(negative).toBeTruthy();
-    expect(positive).not.toBe(negative);
-    expect(faint).toContain('opacity(');
+  it("fades the picker's pals between colors, without filters (which flash rainbow)", () => {
+    expect(css).toMatch(/\.pal-icon svg \* \{\s*transition: fill [^;]+, stroke [^;]+;/);
+    expect(css).not.toMatch(/hue-rotate/);
     // The note under Elia only shows in microscope mode.
     expect(css).toMatch(/\n\.stain-note \{\s*display: none;/);
     expect(css).toMatch(/\n\.stained \.stain-note \{\s*display: block;/);
+  });
+
+  it('remembers microscope mode, so the picker opens stained if it was left that way', async () => {
+    localStorage.setItem('petripals-gram-stain', 'on');
+    await open('pal-picker.html', 'game/pal-picker.js');
+    expect(document.querySelector('.picker-shell').classList.contains('stained')).toBe(true);
+    expect(document.querySelector('.scope-btn').getAttribute('aria-pressed')).toBe('true');
+    expect(document.querySelector('.pal-icon.goldie svg [style*="fill"]')).not.toBeNull();
+    document.querySelector('.scope-btn').click();
+    expect(localStorage.getItem('petripals-gram-stain')).toBeNull();
+    expect(document.querySelector('.pal-icon.goldie svg [style*="fill"]')).toBeNull();
+  });
+
+  it('turning it on stains the pals and remembers it', async () => {
+    await open('pal-picker.html', 'game/pal-picker.js');
+    document.querySelector('.scope-btn').click();
+    expect(localStorage.getItem('petripals-gram-stain')).toBe('on');
+    expect(document.querySelector('.pal-icon.vi svg [style*="fill"]')).not.toBeNull();
+  });
+
+  it('the mode page shows her stained in microscope mode, and in her colors otherwise', async () => {
+    await open('choose-mode.html', 'game/choose-mode.js', '?pal=goldie');
+    expect(document.querySelector('.mode-pal svg [style*="fill"]')).toBeNull();
+    localStorage.setItem('petripals-gram-stain', 'on');
+    await open('choose-mode.html', 'game/choose-mode.js', '?pal=goldie');
+    expect(document.querySelector('.mode-pal svg [style*="fill"]')).not.toBeNull();
+    expect(document.body.classList.contains('stained')).toBe(true);
   });
 
   it('the mode page shows the pal picked, with her name in her color', async () => {
