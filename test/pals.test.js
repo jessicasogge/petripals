@@ -137,6 +137,55 @@ describe('the pages', () => {
     }
   });
 
+  it("the picker's microscope button shows every pal in her Gram stain color, and back", async () => {
+    await open('pal-picker.html', 'game/pal-picker.js');
+    const shell = document.querySelector('.picker-shell');
+    const button = document.querySelector('.scope-btn');
+    const caption = document.querySelector('.scope-caption');
+    expect(button.getAttribute('aria-pressed')).toBe('false');
+    expect(caption.hidden).toBe(true);
+    expect(shell.classList.contains('stained')).toBe(false);
+
+    button.click();
+    expect(shell.classList.contains('stained')).toBe(true);
+    expect(button.getAttribute('aria-pressed')).toBe('true');
+    expect(button.textContent).toContain('Back to color');
+    expect(caption.hidden).toBe(false);
+
+    button.click();
+    expect(shell.classList.contains('stained')).toBe(false);
+    expect(button.getAttribute('aria-pressed')).toBe('false');
+    expect(button.textContent).toContain('Gram stain');
+    expect(caption.hidden).toBe(true);
+  });
+
+  it("marks each pal's tile with her Gram stain, and Elia's as faint, with a note", async () => {
+    await open('pal-picker.html', 'game/pal-picker.js');
+    for (const card of document.querySelectorAll('.pal-card')) {
+      const tile = card.querySelector('.pal-icon');
+      const id = IDS.find((pal) => tile.classList.contains(pal));
+      expect(tile.classList.contains(`gram-${SPECIES[id].gram}`), id).toBe(true);
+      expect(tile.classList.contains('faint-stain'), id).toBe(id === 'elia');
+      const note = card.querySelector('.stain-note');
+      expect(Boolean(note), id).toBe(id === 'elia');
+    }
+    expect(document.querySelector('.stain-note').textContent).toBe('Barely takes the stain');
+  });
+
+  it('stains Gram-positive pals and Gram-negative pals differently, Elia faintest', () => {
+    const filter = (selector) => css.match(new RegExp(`${selector} svg \\{\\s*filter: ([^;]+);`))?.[1];
+    const positive = filter('\\.stained \\.pal-icon\\.gram-positive');
+    const negative = filter('\\.stained \\.pal-icon\\.gram-negative');
+    const faint = filter('\\.stained \\.pal-icon\\.faint-stain');
+    expect(positive).toBeTruthy();
+    expect(negative).toBeTruthy();
+    expect(positive).not.toBe(negative);
+    expect(faint).toContain('opacity(');
+    // The note under Elia only shows in microscope mode.
+    expect(css).toMatch(/\n\.stain-note \{\s*display: none;/);
+    expect(css).toMatch(/\n\.stained \.stain-note \{\s*display: block;/);
+  });
+
   it('the mode page shows the pal picked, with her name in her color', async () => {
     await open('choose-mode.html', 'game/choose-mode.js', '?pal=coco');
     expect(document.querySelector('.mode-pal .pal-icon').classList).toContain('coco');

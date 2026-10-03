@@ -108,3 +108,20 @@ describe('game settings', () => {
     expect(GAME.GROUP_CAP).toBeGreaterThanOrEqual(4);
   });
 });
+
+describe('Gram stains', () => {
+  it('says whether each pal is Gram-positive or Gram-negative', () => {
+    for (const [name, species] of Object.entries(SPECIES)) {
+      expect(['positive', 'negative'], name).toContain(species.gram);
+    }
+  });
+
+  it('matches the real bacteria: the cocci and Ana are Gram-positive, the other rods negative', () => {
+    const positive = Object.keys(SPECIES).filter((name) => SPECIES[name].gram === 'positive').sort();
+    expect(positive).toEqual(['ana', 'goldie', 'penny', 'scarlett']);
+  });
+
+  it('marks only Elia as barely taking the stain', () => {
+    expect(Object.keys(SPECIES).filter((name) => SPECIES[name].faintStain)).toEqual(['elia']);
+  });
+});

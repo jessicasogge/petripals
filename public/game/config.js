@@ -18,6 +18,9 @@
 // `scientific` is the species name shown above the dish, with the pal's name
 // in her `color`.
 //
+// `gram` is how she looks after a Gram stain: 'positive' cells stay purple,
+// 'negative' ones turn pink (the picker's microscope mode shows this).
+// `faintStain` marks a pal who barely takes the stain at all.
 // Rod-style pals are drawn `size` percent of the dish wide (12 unless set).
 //
 // For rod-style pals, `body` traces the drawing's outline as circles
@@ -48,6 +51,7 @@ export const SPECIES = {
     scientific: 'Pseudomonas aeruginosa',
     color: '#15803d', // for her name above the dish
     kind: 'rod',
+    gram: 'negative',
     size: 9.5,
     body: [
       // tail (flagellum)
@@ -89,6 +93,7 @@ export const SPECIES = {
     scientific: 'Vibrio cholerae',
     color: '#c2410c', // for her name above the dish
     kind: 'rod',
+    gram: 'negative',
     size: 9.5,
     body: [
       // tail (flagellum)
@@ -134,6 +139,8 @@ export const SPECIES = {
     scientific: 'Borrelia burgdorferi',
     color: '#7e22ce', // for her name above the dish
     kind: 'rod',
+    gram: 'negative',
+    faintStain: true, // too thin to show up well on a Gram stain
     size: 9.5,
     body: [
       [-0.333, 0.0, 0.104],
@@ -181,6 +188,7 @@ export const SPECIES = {
     scientific: 'Haemophilus influenzae',
     color: '#7c4a2d', // for her name above the dish
     kind: 'rod',
+    gram: 'negative',
     size: 8.5,
     body: [
       [-0.142, 0.008, 0.275],
@@ -224,6 +232,7 @@ export const SPECIES = {
     scientific: 'Bifidobacterium bifidum',
     color: '#be185d', // for her name above the dish: strawberry-yogurt pink's deeper rose
     kind: 'rod',
+    gram: 'positive',
     size: 8.5,
     body: [
       // stem, bottom to top
@@ -275,6 +284,7 @@ export const SPECIES = {
     scientific: 'Streptococcus pneumoniae',
     color: '#4f46e5', // for her name above the dish: bluish purple, next to Elia's purple
     kind: 'coccus',
+    gram: 'positive',
     layout: 'chain',
     maxCells: 2, // pairs
     glasses: true,
@@ -313,6 +323,7 @@ export const SPECIES = {
     scientific: 'Streptococcus pyogenes',
     color: '#b91c1c', // for her name above the dish
     kind: 'coccus',
+    gram: 'positive',
     layout: 'chain',
     colors: { fill: '#fca5a5', stroke: '#b91c1c', highlight: '#fee2e2', dark: '#7f1d1d' },
     antibiotics: [
@@ -345,6 +356,7 @@ export const SPECIES = {
     scientific: 'Staphylococcus aureus',
     color: '#b45309', // for her name above the dish
     kind: 'coccus',
+    gram: 'positive',
     layout: 'cluster',
     colors: { fill: '#fde68a', stroke: '#b45309', highlight: '#fef3c7', dark: '#78350f' },
     antibiotics: [
