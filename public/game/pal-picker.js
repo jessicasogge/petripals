@@ -23,7 +23,7 @@ function card(pal) {
   if (faintStain) {
     const note = document.createElement('span');
     note.className = 'stain-note';
-    note.textContent = 'Barely takes the stain';
+    note.textContent = "Doesn't stain well";
     species.append(note);
   }
 

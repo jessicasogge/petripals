@@ -169,7 +169,7 @@ describe('the pages', () => {
       const note = card.querySelector('.stain-note');
       expect(Boolean(note), id).toBe(id === 'elia');
     }
-    expect(document.querySelector('.stain-note').textContent).toBe('Barely takes the stain');
+    expect(document.querySelector('.stain-note').textContent).toBe("Doesn't stain well");
   });
 
   it('stains Gram-positive pals and Gram-negative pals differently, Elia faintest', () => {
