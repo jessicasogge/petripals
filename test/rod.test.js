@@ -58,12 +58,20 @@ describe('a rod', () => {
 
   it('is sized to 12% of the dish unless its species says otherwise, and reaches half its width', () => {
     const rod = makeRod('elia');
-    expect(rod.mover.style.width).toBe('12%');
+    expect(rod.mover.style.width).toBe(`${SPECIES.elia.size}%`);
     expect(rod.reach()).toBeCloseTo(rodPx('elia') / 2);
+    const noSize = { ...SPECIES.elia };
+    delete noSize.size;
+    const mover = document.createElement('div');
+    document.querySelector('.agar').appendChild(mover);
+    const plain = rodGroup({ mover, svg: document.createElementNS('http://www.w3.org/2000/svg', 'svg'), species: noSize, isPlayer: false });
+    plain.update(0);
+    expect(mover.style.width).toBe('12%');
   });
 
-  it('draws Mona and Vi a bit smaller than Elia, and Coco smallest', () => {
-    for (const name of ['mona', 'vi']) {
+  it('draws Mona, Vi and Elia the same size, a bit bigger than Coco', () => {
+    for (const name of ['mona', 'vi', 'elia']) {
+      expect(SPECIES[name].size).toBe(SPECIES.vi.size);
       expect(makeRod(name).mover.style.width).toBe(`${SPECIES[name].size}%`);
       expect(SPECIES[name].size).toBeLessThan(12);
       expect(SPECIES[name].size).toBeGreaterThan(SPECIES.coco.size);

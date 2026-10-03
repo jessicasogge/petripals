@@ -48,7 +48,7 @@ export const SPECIES = {
     scientific: 'Pseudomonas aeruginosa',
     color: '#15803d', // for her name above the dish
     kind: 'rod',
-    size: 10.5,
+    size: 9.5,
     body: [
       // tail (flagellum)
       [-0.443, 0.0, 0.057],
@@ -134,6 +134,7 @@ export const SPECIES = {
     scientific: 'Borrelia burgdorferi',
     color: '#7e22ce', // for her name above the dish
     kind: 'rod',
+    size: 9.5,
     body: [
       [-0.333, 0.0, 0.104],
       [-0.266, 0.0, 0.104],
