@@ -3,6 +3,7 @@
 // a simulated browser page.
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { GAME, SPECIES } from '../public/game/config.js';
+import { touchesDisk } from '../public/game/antibiotic.js';
 import { MIN_STEP, rodGroup, STILL_FRAMES } from '../public/game/rod.js';
 
 // jsdom doesn't lay anything out, so every width reads as 0. Give the dish a
@@ -218,6 +219,105 @@ describe('dividing', () => {
     const grandchild = child.divide();
     expect(grandchild.isPlayer).toBe(false);
     expect(document.querySelectorAll('.agar .pal-mover')).toHaveLength(3);
+  });
+});
+
+describe('dividing near an antibiotic zone', () => {
+  // A disk with its zone, in fractions of the dish radius like the game's.
+  const disk = (fx, fy, zone = 0.15) => ({ fx, fy, r: GAME.DISK_RADIUS, zone, fullZone: zone });
+  // Where a rod ends up once its burst has settled.
+  function settle(rod) {
+    rod.update(0); // the game sizes a new rod as soon as it's made
+    for (let i = 0; i < 200; i++) rod.coast(1 / 60);
+    return rod;
+  }
+  // How far her body reaches ahead of (or behind) her center, as a fraction
+  // of the dish radius.
+  const nose = (rod, side = 1) =>
+    Math.max(...rod.body().map(([x, , r]) => side * (x - rod.x) + r)) / DISH_RADIUS;
+  // A disk (with a zone `zone` wide) off toward `angle` from the rod, placed
+  // so its zone is just `gap` (fractions of the dish radius) from her body.
+  function diskNear(rod, angle, gap, zone) {
+    const room = (d) => Math.min(...rod.body().map(([x, y, r]) =>
+      Math.hypot(x - d * Math.cos(angle) * DISH_RADIUS, y - d * Math.sin(angle) * DISH_RADIUS) - r)) / DISH_RADIUS
+      - GAME.DISK_RADIUS - zone;
+    let d = 1;
+    while (room(d) > gap) d -= 0.0005;
+    return disk(d * Math.cos(angle), d * Math.sin(angle), zone);
+  }
+  const inZone = (rod, disks) => disks.some((d) => touchesDisk(d, rod.body(), DISH_RADIUS));
+
+  it('slides the way the parent faces when that way is clear', () => {
+    const burst = GAME.BURST_SPEED * DISH_RADIUS;
+    // A zone well off behind her.
+    const child = makeRod('vi', { isPlayer: true, x: 0, y: 0, facing: 1 }).divide([], DISH_RADIUS, [disk(-0.7, 0)]);
+    expect(child.vx).toBeCloseTo(burst, 0);
+    expect(Math.abs(child.vy)).toBeLessThanOrEqual(burst * 0.2);
+  });
+
+  it("turns away from a zone just ahead, so the new rod doesn't pop", () => {
+    for (const name of RODS) {
+      const rod = makeRod(name, { isPlayer: true, x: 0, y: 0, facing: 1 });
+      // The zone's edge sits just past her nose: one burst would carry her in.
+      const edge = nose(rod) + 0.01;
+      const disks = [disk(edge + 0.15 + GAME.DISK_RADIUS, 0)];
+      expect(inZone(rod, disks)).toBe(false);
+      const child = settle(rod.divide([], DISH_RADIUS, disks));
+      expect(inZone(child, disks), name).toBe(false);
+      expect(child.vx).toBe(0); // settled
+    }
+  });
+
+  it('keeps an offspring that divides, sliding back, clear of a zone behind it too', () => {
+    const offspring = makeRod('vi', { x: 0, y: 0, facing: 1 });
+    offspring.coast(5);
+    // Ahead is clear, but the parent slides back into this zone if the new
+    // rod just goes forward.
+    const disks = [disk(-(nose(offspring, -1) + 0.01 + 0.15 + GAME.DISK_RADIUS), 0)];
+    const child = offspring.divide([], DISH_RADIUS, disks);
+    settle(child);
+    settle(offspring);
+    expect(inZone(child, disks)).toBe(false);
+    expect(inZone(offspring, disks)).toBe(false);
+  });
+
+  it('picks a clear way close to the one it wanted, not just any way', () => {
+    // A small zone ahead and below: veering up is enough.
+    vi.spyOn(Math, 'random').mockReturnValue(0.5); // no sideways drift wanted
+    const rod = makeRod('mona', { isPlayer: true, facing: 1 });
+    const child = rod.divide([], DISH_RADIUS, [diskNear(rod, 0.8, 0.015, 0.03)]);
+    // It veers up, away from the zone, but still goes forward.
+    expect(child.vy).toBeLessThan(0);
+    expect(child.vx).toBeGreaterThan(0);
+  });
+
+  it('leaves room to spare, not just a touch away', () => {
+    // A zone ahead at many distances and angles: wherever the new rod goes,
+    // it settles with a little room between it and the zone.
+    for (let gap = 0; gap <= 0.05; gap += 0.005) {
+      for (let angle = -0.6; angle <= 0.6; angle += 0.1) {
+        const rod = makeRod('vi', { isPlayer: true, facing: 1 });
+        const d = nose(rod) + gap + 0.08 + GAME.DISK_RADIUS;
+        const disks = [disk(d * Math.cos(angle), d * Math.sin(angle), 0.08)];
+        const child = settle(rod.divide([], DISH_RADIUS, disks));
+        const near = disks.some((z) => touchesDisk(z, child.body(), DISH_RADIUS, 0.015));
+        expect(near, `gap ${gap.toFixed(3)}, angle ${angle.toFixed(1)}`).toBe(false);
+      }
+    }
+  });
+
+  it('goes the way with the most room when every way is close to a zone', () => {
+    // Zones on three sides, the open side above (negative y).
+    const rod = makeRod('vi', { isPlayer: true, facing: 1 });
+    const zone = 0.15 + GAME.DISK_RADIUS;
+    const disks = [disk(nose(rod) + 0.005 + zone, 0), disk(-(nose(rod, -1) + 0.005 + zone), 0), disk(0, 0.05 + zone)];
+    const child = rod.divide([], DISH_RADIUS, disks);
+    expect(child.vy).toBeLessThan(0);
+  });
+
+  it('ignores zones when there are none', () => {
+    const child = makeRod('vi', { isPlayer: true, facing: -1 }).divide([], DISH_RADIUS, []);
+    expect(child.vx).toBeCloseTo(-GAME.BURST_SPEED * DISH_RADIUS);
   });
 });
 

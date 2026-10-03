@@ -43,15 +43,21 @@ export function rodGroup({ mover, svg, species, isPlayer }) {
     },
     // Split into two rods that push apart end to end. An offspring that
     // divides slides back the other way and settles again.
-    divide() {
+    // The new rod slides off the way the parent faces, unless that would
+    // carry it (or the parent, sliding back) into an antibiotic zone: then it
+    // goes the nearest way that's clear, or failing that the way that keeps
+    // furthest from the zones.
+    divide(others, dishRadius, disks = []) {
+      const radius = dishRadius ?? document.querySelector('.agar').clientWidth / 2;
       const copy = svg.cloneNode(true);
       const child = rodGroup({ mover: newMover(copy), svg: copy, species, isPlayer: false });
       child.x = group.x;
       child.y = group.y;
       child.facing = group.facing;
-      const burst = GAME.BURST_SPEED * (document.querySelector('.agar').clientWidth / 2);
-      child.vx = group.facing * burst;
-      child.vy = (Math.random() - 0.5) * burst * 0.4;
+      const burst = GAME.BURST_SPEED * radius;
+      const [vx, vy] = burstDirection(group, disks, radius, [group.facing, (Math.random() - 0.5) * 0.4]);
+      child.vx = vx * burst;
+      child.vy = vy * burst;
       if (!isPlayer) {
         group.vx = -child.vx;
         group.vy = -child.vy;
@@ -91,3 +97,64 @@ export function rodGroup({ mover, svg, species, isPlayer }) {
 // how many still frames in a row before its flagellum stops.
 export const MIN_STEP = 0.3;
 export const STILL_FRAMES = 6;
+
+// How many ways a dividing rod tries for its new rod, all around the circle.
+export const BURST_TRIES = 16;
+// How far from a zone (as a fraction of the dish radius) the new rod should
+// land to count as clear.
+export const BURST_CLEARANCE = 0.02;
+
+// Which way (a [x, y] step, about 1 long) the new rod slides when `rod`
+// divides: `wanted` if that's clear of every zone, else the clear way closest
+// to it, else the way that keeps furthest from the zones.
+export function burstDirection(rod, disks, dishRadius, wanted) {
+  if (!disks.length) return wanted;
+  const speed = Math.hypot(...wanted);
+  const start = Math.atan2(wanted[1], wanted[0]);
+  // How far a burst carries a rod before it settles (see coaster in physics.js).
+  const travel = (GAME.BURST_SPEED * dishRadius) / GAME.SETTLE_RATE;
+  const body = rod.body();
+  const reach = rod.reach();
+  const maxDistance = Math.max(0, dishRadius - reach);
+  // How far the rod's body is from the nearest zone, in fractions of the
+  // dish radius, if it moves by (dx, dy), kept inside the rim.
+  const roomAt = (dx, dy) => {
+    let [x, y] = [rod.x + dx, rod.y + dy];
+    const fromCenter = Math.hypot(x, y);
+    if (fromCenter > maxDistance) [x, y] = [(x / fromCenter) * maxDistance, (y / fromCenter) * maxDistance];
+    const [sx, sy] = [x - rod.x, y - rod.y];
+    let room = Infinity;
+    for (const disk of disks) {
+      const reachOfZone = (disk.r + (disk.zone ?? 0)) * dishRadius;
+      for (const [cx, cy, r] of body) {
+        const gap = Math.hypot(cx + sx - disk.fx * dishRadius, cy + sy - disk.fy * dishRadius) - reachOfZone - r;
+        room = Math.min(room, gap / dishRadius);
+      }
+    }
+    return room;
+  };
+  // The least room anywhere along the slide, for the new rod and, if it
+  // moves too, the parent sliding the other way.
+  const roomFor = (angle) => {
+    const [dx, dy] = [Math.cos(angle), Math.sin(angle)];
+    let room = Infinity;
+    for (const part of [1 / 3, 2 / 3, 1]) {
+      const d = part * travel;
+      room = Math.min(room, roomAt(dx * d, dy * d));
+      if (!rod.isPlayer) room = Math.min(room, roomAt(-dx * d, -dy * d));
+    }
+    return room;
+  };
+  let best = { angle: start, room: roomFor(start) };
+  if (best.room >= BURST_CLEARANCE) return wanted;
+  for (let i = 1; i < BURST_TRIES; i++) {
+    // Try the nearest ways first: a little either side, then further round.
+    const turn = Math.ceil(i / 2) * (i % 2 ? 1 : -1) * ((2 * Math.PI) / BURST_TRIES);
+    const angle = start + turn;
+    const room = roomFor(angle);
+    if (room >= BURST_CLEARANCE) return [Math.cos(angle) * speed, Math.sin(angle) * speed];
+    if (room > best.room) best = { angle, room };
+  }
+  if (best.angle === start) return wanted;
+  return [Math.cos(best.angle) * speed, Math.sin(best.angle) * speed];
+}
