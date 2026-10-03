@@ -1,6 +1,8 @@
 // Checks the things every page shares: the PetriPals tab icon (not the
-// browser's generic globe) and Jess's signature at the foot.
+// browser's generic globe), Jess's signature at the foot, and the
+// Buy Me a Coffee link on the menu pages.
 import { existsSync, readFileSync } from 'node:fs';
+import { JSDOM } from 'jsdom';
 import { describe, expect, it } from 'vitest';
 import { LEVELS, MIXED } from '../public/game/config.js';
 
@@ -20,10 +22,41 @@ describe('tab icon', () => {
   });
 });
 
+const footerOf = (page) =>
+  new JSDOM(readFileSync(file(page), 'utf8')).window.document.querySelector('footer.signature');
+
 describe('signature', () => {
   it.each(PAGES)('%s is signed at the foot', (page) => {
-    const html = readFileSync(file(page), 'utf8');
-    expect(html).toContain('<footer class="signature">jsogge 2026</footer>');
+    const footer = footerOf(page);
+    expect(footer).not.toBeNull();
+    // Only the footer's own text, so a link tucked in beside it doesn't count.
+    const ownText = [...footer.childNodes]
+      .filter((node) => node.nodeType === node.TEXT_NODE)
+      .map((node) => node.textContent)
+      .join('')
+      .trim();
+    expect(ownText).toBe('jsogge 2026');
+  });
+});
+
+describe('buy me a coffee link', () => {
+  // The menu pages carry it; the game page stays clear while you play.
+  const COFFEE_PAGES = ['index.html', 'pal-picker.html', 'choose-mode.html'];
+
+  it.each(COFFEE_PAGES)('%s has the coffee link in its footer', (page) => {
+    const link = footerOf(page).querySelector('a.lab-support-button');
+    expect(link).not.toBeNull();
+    expect(link.getAttribute('href')).toBe('https://www.buymeacoffee.com/jessicasogge');
+    expect(link.textContent.trim()).toBe('☕️');
+  });
+
+  it.each(COFFEE_PAGES)('%s opens it safely in a new tab with a readable label', (page) => {
+    const link = footerOf(page).querySelector('a.lab-support-button');
+    expect(link.getAttribute('target')).toBe('_blank');
+    expect(link.getAttribute('rel').split(/\s+/)).toEqual(
+      expect.arrayContaining(['noopener', 'noreferrer']),
+    );
+    expect(link.getAttribute('aria-label')).toMatch(/Buy Me a Coffee/);
   });
 });
 
