@@ -55,6 +55,34 @@ const eliaShine = (x) => {
     `<animate attributeName="cy" dur="${ELIA_SWIM}" repeatCount="indefinite" values="${eliaPhases.map(y).join(';')}" /></circle>`;
 };
 
+// Sallie's flagella, all over her body (peritrichous): each one starts at
+// (x, y) on her outline and heads off at `angle` degrees, `length` long,
+// waving 12 units to each side. Wiggled with SVG's own <animate>, like Mona's
+// and Vi's tails, each at its own speed so they don't move in lockstep.
+const SALLIE_STROKE = '#52525b';
+const SPLINES = 'calcMode="spline" keyTimes="0;0.25;0.5;0.75;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"';
+function sallieFlagellum(x, y, angle, length, duration) {
+  const a = (angle * Math.PI) / 180;
+  const [ux, uy] = [Math.cos(a), Math.sin(a)];
+  const at = (t, wave) => `${(x + ux * length * t - uy * wave).toFixed(1)} ${(y + uy * length * t + ux * wave).toFixed(1)}`;
+  const d = (wave) => `M${x} ${y} C${at(0.33, wave)} ${at(0.66, -wave)} ${at(1, 0)}`;
+  const frames = [12, 3, -12, -3, 12].map(d).join(';');
+  return `<path class="flagellum" d="${d(12)}" stroke="${SALLIE_STROKE}" stroke-width="3.5" fill="none" stroke-linecap="round">` +
+    `<animate attributeName="d" dur="${duration}" repeatCount="indefinite" ${SPLINES} values="${frames}" /></path>`;
+}
+const SALLIE_FLAGELLA = [
+  [62, 76, -120, 34, '0.7s'],
+  [100, 74, -90, 32, '0.65s'],
+  [138, 76, -60, 34, '0.75s'],
+  [62, 124, 120, 34, '0.72s'],
+  [100, 126, 90, 32, '0.68s'],
+  [138, 124, 60, 34, '0.7s'],
+  [40, 100, 180, 32, '0.6s'],
+  [160, 100, 0, 30, '0.66s'],
+]
+  .map((f) => sallieFlagellum(...f))
+  .join('');
+
 export const PALS = [
   // Penny: Streptococcus pneumoniae, a bluish-purple pair of cells, with glasses
   {
@@ -331,6 +359,32 @@ export const PALS = [
         <ellipse cx="80" cy="113" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
         <ellipse cx="120" cy="113" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
         <path d="M94 112 Q100 118 106 112" stroke="#0c4a6e" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
+  // Sallie: Salmonella Typhi, a grey rod with flagella all over
+  {
+    id: 'sallie',
+    name: 'Sallie',
+    looks: 'a grey rod-shaped Salmonella Typhi with flagella all around her',
+    motion: 'bob',
+    frames: { home: '0 0 200 200', picker: '10 10 180 180', dish: '8 8 184 184' },
+    // Drawn a little smaller than the others on the home page.
+    homeWidth: 104,
+    art: `
+      <!-- flagella all over her body -->
+      ${SALLIE_FLAGELLA}
+      <rect x="40" y="74" width="120" height="52" rx="26" fill="#d4d4d8" stroke="#52525b" stroke-width="4" />
+      <circle cx="140" cy="87" r="4" fill="#f4f4f5" />
+      <circle cx="58" cy="115" r="3" fill="#f4f4f5" />
+      <g class="face">
+        <circle cx="87" cy="98" r="6" fill="#27272a" />
+        <circle cx="113" cy="98" r="6" fill="#27272a" />
+        <circle cx="89" cy="96" r="2" fill="white" />
+        <circle cx="115" cy="96" r="2" fill="white" />
+        <ellipse cx="72" cy="110" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="128" cy="110" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
+        <path d="M94 110 Q100 116 106 110" stroke="#27272a" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
   },

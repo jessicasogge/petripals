@@ -55,6 +55,13 @@ describe('picking the pal', () => {
     expect(document.querySelector('.species-name').textContent).toBe(SPECIES.goldie.scientific);
   });
 
+  it("puts Sallie's genus in italics above the dish, and her serovar upright", async () => {
+    await open('?pal=sallie');
+    const species = document.querySelector('.species-name');
+    expect(species.textContent).toBe('Salmonella Typhi');
+    expect([...species.querySelectorAll('i')].map((i) => i.textContent)).toEqual(['Salmonella']);
+  });
+
   it('names the pal and level in the tab title', async () => {
     await open('?pal=mona&level=3');
     expect(document.title).toBe('PetriPals | Mona | Level 3');
@@ -156,6 +163,13 @@ describe('mixed culture mode', () => {
       const playRace = await openMixed(`?pal=mona&mode=mixed&rival=${rival}`);
       expect(playRace.mock.calls.at(-1)[0].rival.svg.dataset.pal).not.toMatch(new RegExp(`^(${rival})$`));
     }
+  });
+
+  it("keeps Sallie's serovar upright in a race, too", async () => {
+    await openMixed('?pal=sallie&mode=mixed&rival=mona');
+    const line = document.querySelector('.species');
+    expect(line.textContent).toBe('Salmonella Typhi vs. Pseudomonas aeruginosa');
+    expect([...line.querySelectorAll('i')].map((i) => i.textContent)).toEqual(['Salmonella', 'Pseudomonas aeruginosa']);
   });
 
   it('shows "Mona vs. Vi" above the dish with both species', async () => {

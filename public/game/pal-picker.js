@@ -5,6 +5,7 @@
 // with Back and More pals buttons to move between them. The microscope button shows every pal as she'd look after a
 // Gram stain.
 import { SPECIES } from './config.js';
+import { speciesName } from './italics.js';
 import { inRandomOrder, PALS, palTile, pickerPages } from './pals.js';
 import { stainPal, unstainPal } from './stain.js';
 
@@ -56,9 +57,7 @@ function card(pal) {
   const { scientific, gram, faintStain } = SPECIES[pal.id];
   const species = document.createElement('p');
   species.className = 'species';
-  const italic = document.createElement('i');
-  italic.textContent = scientific;
-  species.append(italic);
+  species.append(...speciesName(scientific));
   // In microscope mode, a pal who barely takes the stain says so.
   if (faintStain) {
     const note = document.createElement('span');

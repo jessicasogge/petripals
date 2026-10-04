@@ -6,6 +6,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SPECIES } from '../public/game/config.js';
+import { plainText } from '../public/game/italics.js';
 import { dishPal, homePal, inRandomOrder, PAGE_SIZE, palById, PALS, palTile, pickerPages } from '../public/game/pals.js';
 
 // (jsdom changes import.meta.url to a web address, so find files from the project folder.)
@@ -33,13 +34,13 @@ describe('the pals', () => {
   });
 
   it('are in the order they appear on the home page and picker', () => {
-    expect(IDS).toEqual(['penny', 'vi', 'goldie', 'ana', 'scarlett', 'coco', 'mona', 'elia', 'ceres']);
+    expect(IDS).toEqual(['penny', 'vi', 'goldie', 'ana', 'scarlett', 'coco', 'mona', 'elia', 'ceres', 'sallie']);
   });
 
   it('splits into pages of eight for the picker (a tidy four-by-two), with the rest on the last page', () => {
     expect(PAGE_SIZE).toBe(8);
     const pages = pickerPages();
-    expect(pages.map((page) => page.length)).toEqual([8, 1]);
+    expect(pages.map((page) => page.length)).toEqual([8, 2]);
     expect(pages.flat()).toEqual(PALS);
     expect(pickerPages(['a', 'b', 'c', 'd', 'e'], 2)).toEqual([['a', 'b'], ['c', 'd'], ['e']]);
     expect(pickerPages(['a', 'b'], 2)).toEqual([['a', 'b']]);
@@ -48,7 +49,7 @@ describe('the pals', () => {
   it.each(PALS)('$id has a name and a description', (pal) => {
     expect(pal.name).toMatch(/^[A-Z][a-z]+$/);
     // Her species is in the description, so a screen reader says what she is.
-    expect(pal.looks).toContain(SPECIES[pal.id].scientific.split(' ')[0]);
+    expect(pal.looks).toContain(plainText(SPECIES[pal.id].scientific).split(' ')[0]);
   });
 
   it.each(PALS)("$id's idle animation and tile color are in styles.css", (pal) => {
@@ -72,6 +73,14 @@ describe('the pals', () => {
       expect(palTile(pal).querySelector('.face')).not.toBeNull();
     },
   );
+
+  it("the picker shows Sallie's genus in italics and her serovar upright", async () => {
+    await open('pal-picker.html', 'game/pal-picker.js');
+    const card = [...document.querySelectorAll('.pal-card')].find((c) => c.querySelector('h2').textContent === 'Sallie');
+    const species = card.querySelector('.species');
+    expect(species.textContent).toBe('Salmonella Typhi');
+    expect([...species.querySelectorAll('i')].map((i) => i.textContent)).toEqual(['Salmonella']);
+  });
 
   it("draws Elia's offspring a touch paler than the others'", () => {
     const rule = css.match(/\.pal-mover\.offspring \.dish-pal\[data-pal="elia"\] \{([^}]*)\}/);
@@ -105,8 +114,9 @@ describe('her drawing', () => {
     expect(svg.getAttribute('aria-label')).toBe(`Ana, ${ana.looks}`);
   });
 
-  it('on the home page, keeps Vi a little smaller', () => {
+  it('on the home page, keeps Vi and Sallie a little smaller', () => {
     expect(homePal(palById('vi')).style.width).toBe('108px');
+    expect(homePal(palById('sallie')).style.width).toBe('104px');
     expect(homePal(ana).style.width).toBe('');
   });
 
@@ -165,7 +175,9 @@ describe('the pages', () => {
     for (const card of cards) {
       const { id, name } = PALS.find((pal) => pal.name === card.querySelector('h2').textContent);
       expect(card.querySelector('.pal-icon').classList).toContain(id);
-      expect(card.querySelector('.species i').textContent).toBe(SPECIES[id].scientific);
+      // Her species, without Elia's "Doesn't stain well" note.
+      const species = [...card.querySelector('.species').childNodes].filter((n) => !n.classList?.contains('stain-note'));
+      expect(species.map((n) => n.textContent).join('')).toBe(plainText(SPECIES[id].scientific));
       expect(card.querySelector('a').getAttribute('href')).toBe(`./choose-mode.html?pal=${id}`);
       expect(card.querySelector('a').textContent).toBe(`Select ${name}`);
     }
@@ -178,9 +190,9 @@ describe('the pages', () => {
     const grids = [...document.querySelectorAll('.picker-grid')];
     const names = grids.map((grid) => [...grid.querySelectorAll('.pal-card h2')].map((h) => h.textContent));
     expect(names).toEqual(pickerPages(inRandomOrder(PALS, () => 0)).map((page) => page.map((pal) => pal.name)));
-    // So Ceres is on the first page here, and Penny is the one on the second.
+    // So Ceres is on the first page here, and Sallie and Penny are on the second.
     expect(names[0]).toContain('Ceres');
-    expect(names[1]).toEqual(['Penny']);
+    expect(names[1]).toEqual(['Sallie', 'Penny']);
     vi.restoreAllMocks();
   });
 
@@ -207,7 +219,7 @@ describe('the pages', () => {
 
     more.click();
     expect(showing()).toEqual(['2']);
-    expect(grids[1].querySelectorAll('.pal-card')).toHaveLength(1); // whoever didn't fit on the first
+    expect(grids[1].querySelectorAll('.pal-card')).toHaveLength(2); // whoever didn't fit on the first
     expect(back.hidden).toBe(false);
     expect(more.hidden).toBe(true);
     expect(document.activeElement).toBe(back); // the keyboard stays on the pager
@@ -321,8 +333,23 @@ describe('the pages', () => {
 describe('wiggly flagella', () => {
   const swimmers = PALS.filter((pal) => pal.art.includes('class="flagellum"'));
 
-  it('gives Mona and Vi, who swim with a flagellum, a wiggling tail', () => {
-    expect(swimmers.map((pal) => pal.id).sort()).toEqual(['mona', 'vi']);
+  it('gives Mona, Vi and Sallie, who swim with flagella, wiggling tails', () => {
+    expect(swimmers.map((pal) => pal.id).sort()).toEqual(['mona', 'sallie', 'vi']);
+  });
+
+  it('gives Sallie flagella all over her body (peritrichous), each wiggling at its own speed', () => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.innerHTML = palById('sallie').art;
+    const flagella = [...svg.querySelectorAll('.flagellum')];
+    expect(flagella.length).toBeGreaterThanOrEqual(6);
+    // Some above her, some below, and one at each end.
+    const starts = flagella.map((f) => f.getAttribute('d').match(/^M([\d.]+) ([\d.]+)/).slice(1).map(Number));
+    expect(starts.some(([, y]) => y < 80)).toBe(true);
+    expect(starts.some(([, y]) => y > 120)).toBe(true);
+    expect(starts.some(([x]) => x <= 40)).toBe(true);
+    expect(starts.some(([x]) => x >= 160)).toBe(true);
+    const speeds = flagella.map((f) => f.querySelector('animate').getAttribute('dur'));
+    expect(new Set(speeds).size).toBeGreaterThan(1);
   });
 
   it.each(swimmers.map((pal) => pal.id))("starts %s's wiggle from the tail as drawn and loops smoothly", (id) => {
@@ -355,15 +382,15 @@ describe('where the flagellum wiggles', () => {
   const wiggles = (svg) => svg.querySelector('.flagellum animate') !== null;
   const svgIn = (el) => (el.tagName.toLowerCase() === 'svg' ? el : el.querySelector('svg'));
 
-  it.each(['mona', 'vi'])('wiggles on the home page (%s)', (id) => {
+  it.each(['mona', 'vi', 'sallie'])('wiggles on the home page (%s)', (id) => {
     expect(wiggles(svgIn(homePal(palById(id))))).toBe(true);
   });
 
-  it.each(['mona', 'vi'])('stays still on the picker (%s)', (id) => {
+  it.each(['mona', 'vi', 'sallie'])('stays still on the picker (%s)', (id) => {
     expect(wiggles(svgIn(palTile(palById(id))))).toBe(false);
   });
 
-  it.each(['mona', 'vi'])('can wiggle in the dish, while she swims (%s)', (id) => {
+  it.each(['mona', 'vi', 'sallie'])('can wiggle in the dish, while she swims (%s)', (id) => {
     expect(wiggles(dishPal(palById(id)))).toBe(true);
   });
 });
