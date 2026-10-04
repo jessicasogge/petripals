@@ -1,7 +1,7 @@
 # Publish the game to GitHub Pages whenever something lands on main.
 # The game is just the files in public/ (HTML, CSS and JavaScript), so Pages
-# can serve it with no server. The tests run first; if they fail, nothing is
-# published.
+# can serve it with no server. The tests run first; if they fail, or leave
+# too much of the game untested (see vitest.config.js), nothing is published.
 name: Deploy to GitHub Pages
 
 on:
@@ -29,7 +29,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm test
+      - run: npm run test:coverage # the tests, plus a check that they cover the game
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

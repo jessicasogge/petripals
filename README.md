@@ -4,7 +4,7 @@ A cute microbiology game for the browser. Pick a bacterial pal and eat nutrients
 
 **[▶ Play PetriPals](https://jessicasogge.github.io/petripals/)**: works on computers, phones and tablets.
 
-<img src="docs/screenshot.png" alt="Classic mode: Scarlett, a red Streptococcus pyogenes, swimming in a petri dish between antibiotic disks labeled P, CC and E, each with a clear zone around it" width="400"> <img src="docs/mixed-culture.png" alt="Mixed culture mode: Goldie vs. Mona, with Goldie's round cells and Mona's green rods spread across the plate, and a counter reading Goldie 4, Mona 13 out of 64 cells" width="400">
+<img src="docs/screenshot.png" alt="Classic mode: Scarlett, a red Streptococcus pyogenes, swimming in a petri dish between antibiotic disks labeled E, CC and P, each with a clear zone around it" width="400"> <img src="docs/mixed-culture.png" alt="Mixed culture mode: Goldie vs. Mona, with Goldie's round cells and Mona's green rods spread across the plate, and a counter reading Goldie 4, Mona 13 out of 64 cells" width="400">
 
 ## How to play
 
@@ -68,10 +68,11 @@ Then open http://localhost:3000.
 ## Tests
 
 ```sh
-npm test
+npm test                # run the tests
+npm run test:coverage   # run them and check how much of the game they cover
 ```
 
-The tests use [Vitest](https://vitest.dev/). Most of the game logic runs in [jsdom](https://github.com/jsdom/jsdom), a simulated browser page.
+The tests use [Vitest](https://vitest.dev/). Most of the game logic runs in [jsdom](https://github.com/jsdom/jsdom), a simulated browser page. The coverage check fails if the tests leave game code untested (the thresholds are in [`vitest.config.js`](vitest.config.js)), and the deploy runs it, so untested code doesn't ship.
 
 ## Project layout
 
@@ -81,14 +82,14 @@ The tests use [Vitest](https://vitest.dev/). Most of the game logic runs in [jsd
 | `public/pal-picker.html` | Pick a pal |
 | `public/choose-mode.html` | Choose classic or mixed culture |
 | `public/petri-dish.html` | The game, in either mode |
-| `public/game/` | Game code: classic mode (`game.js`), mixed culture mode (`race.js`, with the rival in `rival.js`), what both share (a colony eating and dividing in `colony.js`, steering in `keyboard.js` and `touch.js`), how the pals grow (`rod.js`, `coccus.js`), antibiotics (`antibiotic.js`), nutrients, physics, settings (`config.js`), and a little surprise on the home page (`split.js`) |
+| `public/game/` | Game code: classic mode (`game.js`), mixed culture mode (`race.js`, with the rival in `rival.js`), what both share (a colony eating and dividing in `colony.js`, steering in `keyboard.js` and `touch.js`), how the pals grow (`rod.js`, `coccus.js`), antibiotics (`antibiotic.js`), nutrients, physics, settings and fun facts (`config.js`), the fun-fact pop-up (`facts.js`, with italics for scientific names from `italics.js`), the picker's microscope mode (`stain.js`), the win confetti (`spores.js`), and a little surprise on the home page (`split.js`) |
 | `public/game/pals.js` | Every pal's name and drawing, in one place. All the pages draw the pals from here, in the order listed (except the picker, which shuffles them each visit), eight to a page (`PAGE_SIZE`). To add a pal, see the notes at the top. |
 | `test/` | Tests |
 | `src/index.ts` | Small Express server for local development |
 
 ## Deployment
 
-Every push to `main` runs the tests and, if they pass, publishes `public/` to GitHub Pages (see [`.github/workflows/pages.yml`](.github/workflows/pages.yml)).
+Every push to `main` runs the tests and the coverage check and, if they pass, publishes `public/` to GitHub Pages (see [`.github/workflows/pages.yml`](.github/workflows/pages.yml)).
 
 ## Contributing
 

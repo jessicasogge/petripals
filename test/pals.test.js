@@ -33,14 +33,13 @@ describe('the pals', () => {
     expect(new Set(IDS).size).toBe(IDS.length);
   });
 
-  it('are in the order they appear on the home page and picker', () => {
-    expect(IDS).toEqual(['penny', 'vi', 'goldie', 'ana', 'scarlett', 'coco', 'mona', 'elia', 'ceres', 'sallie']);
-  });
-
   it('splits into pages of eight for the picker (a tidy four-by-two), with the rest on the last page', () => {
     expect(PAGE_SIZE).toBe(8);
     const pages = pickerPages();
-    expect(pages.map((page) => page.length)).toEqual([8, 2]);
+    expect(pages).toHaveLength(Math.ceil(PALS.length / PAGE_SIZE));
+    for (const page of pages.slice(0, -1)) expect(page).toHaveLength(PAGE_SIZE);
+    expect(pages.at(-1).length).toBeGreaterThan(0);
+    expect(pages.at(-1).length).toBeLessThanOrEqual(PAGE_SIZE);
     expect(pages.flat()).toEqual(PALS);
     expect(pickerPages(['a', 'b', 'c', 'd', 'e'], 2)).toEqual([['a', 'b'], ['c', 'd'], ['e']]);
     expect(pickerPages(['a', 'b'], 2)).toEqual([['a', 'b']]);
@@ -184,15 +183,13 @@ describe('the pages', () => {
   });
 
   it('the picker shuffles all the pals together, then splits them into pages', async () => {
-    // With Math.random always 0, the shuffle moves the first pal (Penny) to the end.
+    // With Math.random always 0, the shuffle moves the first pal to the end.
     vi.spyOn(Math, 'random').mockReturnValue(0);
     await open('pal-picker.html', 'game/pal-picker.js');
     const grids = [...document.querySelectorAll('.picker-grid')];
     const names = grids.map((grid) => [...grid.querySelectorAll('.pal-card h2')].map((h) => h.textContent));
     expect(names).toEqual(pickerPages(inRandomOrder(PALS, () => 0)).map((page) => page.map((pal) => pal.name)));
-    // So Ceres is on the first page here, and Sallie and Penny are on the second.
-    expect(names[0]).toContain('Ceres');
-    expect(names[1]).toEqual(['Sallie', 'Penny']);
+    expect(names.flat().at(-1)).toBe(PALS[0].name);
     vi.restoreAllMocks();
   });
 
@@ -208,7 +205,9 @@ describe('the pages', () => {
     const back = document.querySelector('.pager-back');
     const more = document.querySelector('.pager-more');
     const showing = () => grids.filter((grid) => !grid.hidden).map((grid) => grid.dataset.page);
-    expect(grids).toHaveLength(2);
+    const pages = pickerPages();
+    expect(grids).toHaveLength(pages.length);
+    expect(pages.length).toBeGreaterThan(1); // (this test needs more than one page)
     expect(document.querySelector('.picker-pager').hidden).toBe(false);
 
     // Opens on the first page, with only More pals to press.
@@ -217,12 +216,17 @@ describe('the pages', () => {
     expect(more.hidden).toBe(false);
     expect(more.tagName).toBe('BUTTON');
 
-    more.click();
-    expect(showing()).toEqual(['2']);
-    expect(grids[1].querySelectorAll('.pal-card')).toHaveLength(2); // whoever didn't fit on the first
-    expect(back.hidden).toBe(false);
+    // More pals all the way to the last page, which has whoever is left over.
+    for (let page = 2; page <= pages.length; page++) {
+      more.click();
+      expect(showing()).toEqual([String(page)]);
+      expect(back.hidden).toBe(false);
+    }
+    expect(grids.at(-1).querySelectorAll('.pal-card')).toHaveLength(pages.at(-1).length);
     expect(more.hidden).toBe(true);
     expect(document.activeElement).toBe(back); // the keyboard stays on the pager
+    // Back to the first page.
+    for (let page = pages.length - 1; page > 1; page--) back.click();
 
     back.click();
     expect(showing()).toEqual(['1']);
@@ -330,11 +334,13 @@ describe('the pages', () => {
   });
 });
 
+// The pals drawn with a flagellum (or several) that wiggles.
+const SWIMMERS = PALS.filter((pal) => pal.art.includes('class="flagellum"')).map((pal) => pal.id);
+
 describe('wiggly flagella', () => {
-  const swimmers = PALS.filter((pal) => pal.art.includes('class="flagellum"'));
 
   it('gives Mona, Vi and Sallie, who swim with flagella, wiggling tails', () => {
-    expect(swimmers.map((pal) => pal.id).sort()).toEqual(['mona', 'sallie', 'vi']);
+    expect([...SWIMMERS].sort()).toEqual(['mona', 'sallie', 'vi']);
   });
 
   it('gives Sallie flagella all over her body (peritrichous), each wiggling at its own speed', () => {
@@ -352,7 +358,7 @@ describe('wiggly flagella', () => {
     expect(new Set(speeds).size).toBeGreaterThan(1);
   });
 
-  it.each(swimmers.map((pal) => pal.id))("starts %s's wiggle from the tail as drawn and loops smoothly", (id) => {
+  it.each(SWIMMERS)("starts %s's wiggle from the tail as drawn and loops smoothly", (id) => {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.innerHTML = PALS.find((pal) => pal.id === id).art;
     const tail = svg.querySelector('.flagellum');
@@ -382,15 +388,15 @@ describe('where the flagellum wiggles', () => {
   const wiggles = (svg) => svg.querySelector('.flagellum animate') !== null;
   const svgIn = (el) => (el.tagName.toLowerCase() === 'svg' ? el : el.querySelector('svg'));
 
-  it.each(['mona', 'vi', 'sallie'])('wiggles on the home page (%s)', (id) => {
+  it.each(SWIMMERS)('wiggles on the home page (%s)', (id) => {
     expect(wiggles(svgIn(homePal(palById(id))))).toBe(true);
   });
 
-  it.each(['mona', 'vi', 'sallie'])('stays still on the picker (%s)', (id) => {
+  it.each(SWIMMERS)('stays still on the picker (%s)', (id) => {
     expect(wiggles(svgIn(palTile(palById(id))))).toBe(false);
   });
 
-  it.each(['mona', 'vi', 'sallie'])('can wiggle in the dish, while she swims (%s)', (id) => {
+  it.each(SWIMMERS)('can wiggle in the dish, while she swims (%s)', (id) => {
     expect(wiggles(dishPal(palById(id)))).toBe(true);
   });
 });

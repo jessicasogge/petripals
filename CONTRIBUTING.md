@@ -24,10 +24,10 @@ Everyone taking part is expected to follow the [Code of Conduct](CODE_OF_CONDUCT
    Then open http://localhost:3000.
 
 3. Make your change. The game is plain HTML, CSS and JavaScript in `public/`, with no build step. See the [README](README.md#project-layout) for where things live.
-4. Add or update tests for what you changed, and make sure they all pass:
+4. Add or update tests for what you changed, and make sure they all pass and still cover the game:
 
    ```sh
-   npm test
+   npm run test:coverage
    ```
 
 5. Open a pull request saying what you changed and why. For anything you can see, such as how a pal looks or moves, include a screenshot.
