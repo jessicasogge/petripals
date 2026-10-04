@@ -304,15 +304,14 @@ export const PALS = [
       </g>
     `,
   },
-  // Ceres: Bacillus cereus, a sky-blue chain of three square-ended rods,
-  // with a sprig of wheat for Ceres, the Roman goddess of grain
+  // Ceres: Bacillus cereus, a sky-blue chain of three square-ended rods
   {
     id: 'ceres',
     name: 'Ceres',
-    looks: 'a sky-blue chain of three Bacillus cereus rods, with a sprig of wheat',
+    looks: 'a sky-blue chain of three Bacillus cereus rods',
     motion: 'wobble',
     page: 2,
-    frames: { home: '0 -4 200 200', picker: '6 -2 188 188', dish: '6 -2 188 188' },
+    frames: { home: '0 0 200 200', picker: '6 10 188 188', dish: '6 10 188 188' },
     art: `
       <!-- left rod, tipped down at its outer end -->
       <g transform="rotate(14 42 112)">
@@ -335,15 +334,6 @@ export const PALS = [
         <ellipse cx="80" cy="113" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
         <ellipse cx="120" cy="113" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
         <path d="M94 112 Q100 118 106 112" stroke="#0c4a6e" stroke-width="3" fill="none" stroke-linecap="round" />
-        <!-- a sprig of wheat on her head -->
-        <path d="M105 80 Q107 62 116 46" stroke="#a16207" stroke-width="3" fill="none" stroke-linecap="round" />
-        <g fill="#facc15" stroke="#a16207" stroke-width="1.8">
-          <ellipse cx="102" cy="69" rx="3.8" ry="7" transform="rotate(-25 102 69)" />
-          <ellipse cx="112" cy="71" rx="3.8" ry="7" transform="rotate(35 112 71)" />
-          <ellipse cx="106" cy="57" rx="3.8" ry="7" transform="rotate(-20 106 57)" />
-          <ellipse cx="116" cy="60" rx="3.8" ry="7" transform="rotate(40 116 60)" />
-          <ellipse cx="117" cy="44" rx="3.8" ry="7" transform="rotate(25 117 44)" />
-        </g>
       </g>
     `,
   },
