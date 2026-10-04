@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SPECIES } from '../public/game/config.js';
-import { hideFact, pickFact, plainFact, showFact, writeFact } from '../public/game/facts.js';
+import { hideFact, pickFact, showFact, writeFact } from '../public/game/facts.js';
+import { plainText } from '../public/game/italics.js';
 
 describe('every pal\'s facts', () => {
   it.each(Object.keys(SPECIES))('%s has at least 10 short, different facts', (pal) => {
@@ -13,7 +14,7 @@ describe('every pal\'s facts', () => {
       // Italics markers come in pairs, around at least one word.
       expect(raw.split('*').length % 2, raw).toBe(1);
       expect(raw, raw).not.toMatch(/\*\s*\*/);
-      const fact = plainFact(raw); // as it reads on screen
+      const fact = plainText(raw); // as it reads on screen
       expect(fact.length, fact).toBeLessThanOrEqual(90); // fits the pop-up
       // Says whose fact it is, so it's clear in a race against another pal.
       expect(fact, fact).toContain(name);

@@ -4,10 +4,7 @@
 // A fact can put words in italics between asterisks, for scientific names
 // of other bacteria: "Ceres's cousin *Bacillus thuringiensis* is ...".
 
-import { plainText, withItalics } from './italics.js';
-
-// `fact` without its italics markers: the words as they read on screen.
-export const plainFact = plainText;
+import { withItalics } from './italics.js';
 
 // Write `fact` into `element`, with the parts between asterisks in <i>.
 export function writeFact(element, fact) {
