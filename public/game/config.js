@@ -376,7 +376,8 @@ export const SPECIES = {
   // and to Ceres, the Roman goddess of grain (B. cereus is famous for growing
   // on rice). There are no standard lab disk sizes for Bacillus, so her zones
   // are estimates from how well each drug works on it. She makes
-  // beta-lactamases that break down penicillin, so that disk has no zone.
+  // beta-lactamases that break down penicillin and its relatives, so her
+  // disks are all drugs that work on her (no penicillin disk).
   ceres: {
     facts: [
       "Ceres is a large Gram-positive rod, so she stains purple on a Gram stain.",
@@ -408,7 +409,7 @@ export const SPECIES = {
     antibiotics: [
       { code: 'VA', name: 'vancomycin', zone: 17 },
       { code: 'CIP', name: 'ciprofloxacin', zone: 28 },
-      { code: 'P', name: 'penicillin', zone: null }, // beta-lactamases: no zone
+      { code: 'E', name: 'erythromycin', zone: 23 },
       { code: 'GM', name: 'gentamicin', zone: 22 },
       { code: 'CC', name: 'clindamycin', zone: 21 },
     ],
