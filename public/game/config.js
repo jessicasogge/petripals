@@ -469,13 +469,6 @@ export const SPECIES = {
       { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 25 },
     ],
   },
-  // Clostridium tetani, the cause of tetanus. A slim rod that makes a round
-  // spore at one end, so she looks like a drumstick. She has flagella all
-  // over (peritrichous) and splits and swims apart like Mona. Her name is
-  // Latin for earth, since her spores live in soil. She's an anaerobe, and
-  // there are no standard lab disk sizes for anaerobes like her, so her zones
-  // are estimates from how well each drug works on her (metronidazole, the
-  // usual drug for tetanus, comes first).
   terra: {
     facts: [
       "Terra is a Gram-positive rod, so young cells stain purple on a Gram stain.",
