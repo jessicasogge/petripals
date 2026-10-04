@@ -492,7 +492,7 @@ export const SPECIES = {
     color: '#5f6f12', // for her name above the dish
     kind: 'rod',
     gram: 'positive',
-    size: 11.5,
+    size: 10.5,
     body: [
       // tail (the flagellum behind her)
       [-0.424, 0.0, 0.04],
