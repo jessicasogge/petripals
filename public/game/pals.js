@@ -55,19 +55,18 @@ const eliaShine = (x) => {
     `<animate attributeName="cy" dur="${ELIA_SWIM}" repeatCount="indefinite" values="${eliaPhases.map(y).join(';')}" /></circle>`;
 };
 
-// Sallie's flagella, all over her body (peritrichous): each one starts at
-// (x, y) on her outline and heads off at `angle` degrees, `length` long,
-// waving 12 units to each side. Wiggled with SVG's own <animate>, like Mona's
-// and Vi's tails, each at its own speed so they don't move in lockstep.
-const SALLIE_STROKE = '#52525b';
+// Flagella all over the body (peritrichous), for Sallie and Terra: each one
+// starts at (x, y) on her outline and heads off at `angle` degrees, `length`
+// long, waving 12 units to each side. Wiggled with SVG's own <animate>, like
+// Mona's and Vi's tails, each at its own speed so they don't move in lockstep.
 const SPLINES = 'calcMode="spline" keyTimes="0;0.25;0.5;0.75;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"';
-function sallieFlagellum(x, y, angle, length, duration) {
+function flagellum(stroke, x, y, angle, length, duration) {
   const a = (angle * Math.PI) / 180;
   const [ux, uy] = [Math.cos(a), Math.sin(a)];
   const at = (t, wave) => `${(x + ux * length * t - uy * wave).toFixed(1)} ${(y + uy * length * t + ux * wave).toFixed(1)}`;
   const d = (wave) => `M${x} ${y} C${at(0.33, wave)} ${at(0.66, -wave)} ${at(1, 0)}`;
   const frames = [12, 3, -12, -3, 12].map(d).join(';');
-  return `<path class="flagellum" d="${d(12)}" stroke="${SALLIE_STROKE}" stroke-width="3.5" fill="none" stroke-linecap="round">` +
+  return `<path class="flagellum" d="${d(12)}" stroke="${stroke}" stroke-width="3.5" fill="none" stroke-linecap="round">` +
     `<animate attributeName="d" dur="${duration}" repeatCount="indefinite" ${SPLINES} values="${frames}" /></path>`;
 }
 const SALLIE_FLAGELLA = [
@@ -80,10 +79,49 @@ const SALLIE_FLAGELLA = [
   [40, 100, 180, 32, '0.6s'],
   [160, 100, 0, 30, '0.66s'],
 ]
-  .map((f) => sallieFlagellum(...f))
+  .map((f) => flagellum('#52525b', ...f))
+  .join('');
+// Terra's: fewer, along her slim rod (her spore end has none).
+const TERRA_FLAGELLA = [
+  [56, 80, -115, 30, '0.7s'],
+  [98, 80, -80, 30, '0.66s'],
+  [56, 120, 115, 30, '0.72s'],
+  [98, 120, 80, 30, '0.68s'],
+  [30, 100, 180, 28, '0.6s'],
+]
+  .map((f) => flagellum('#65751c', ...f))
   .join('');
 
 export const PALS = [
+  // Terra: Clostridium tetani, an olive rod with a round spore at one end (a "drumstick")
+  {
+    id: 'terra',
+    name: 'Terra',
+    looks: 'an olive drumstick-shaped Clostridium tetani rod with a round spore at one end',
+    motion: 'bob',
+    frames: { home: '0 0 200 200', picker: '10 12 176 176', dish: '0 8 184 184' },
+    // Drawn a little smaller than the others on the home page.
+    homeWidth: 108,
+    art: `
+      <!-- flagella along her rod -->
+      ${TERRA_FLAGELLA}
+      <!-- one outline: a slim rod that swells into a round spore at the right end -->
+      <path d="M50 80 L133.9 80 A27 27 0 1 1 133.9 120 L50 120 A20 20 0 0 1 50 80 Z" fill="#d9dfa0" stroke="#65751c" stroke-width="4" stroke-linejoin="round" />
+      <circle cx="44" cy="90" r="3.5" fill="#f4f7d9" />
+      <!-- the spore: bright and glassy, and pure white so a Gram stain leaves it clear, as on a real slide -->
+      <circle cx="153" cy="100" r="16" fill="#ffffff" stroke="#65751c" stroke-width="2" stroke-opacity="0.45" />
+      <circle cx="157" cy="104" r="8" fill="#f4f7d9" opacity="0.7" />
+      <g class="face">
+        <circle cx="74" cy="97" r="5.5" fill="#3a4410" />
+        <circle cx="98" cy="97" r="5.5" fill="#3a4410" />
+        <circle cx="75.8" cy="95.2" r="1.9" fill="white" />
+        <circle cx="99.8" cy="95.2" r="1.9" fill="white" />
+        <ellipse cx="62" cy="108" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="110" cy="108" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <path d="M81 108 Q86 113 91 108" stroke="#3a4410" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
   // Penny: Streptococcus pneumoniae, a bluish-purple pair of cells, with glasses
   {
     id: 'penny',

@@ -339,8 +339,8 @@ const SWIMMERS = PALS.filter((pal) => pal.art.includes('class="flagellum"')).map
 
 describe('wiggly flagella', () => {
 
-  it('gives Mona, Vi and Sallie, who swim with flagella, wiggling tails', () => {
-    expect([...SWIMMERS].sort()).toEqual(['mona', 'sallie', 'vi']);
+  it('gives Mona, Vi, Sallie and Terra, who swim with flagella, wiggling tails', () => {
+    expect([...SWIMMERS].sort()).toEqual(['mona', 'sallie', 'terra', 'vi']);
   });
 
   it('gives Sallie flagella all over her body (peritrichous), each wiggling at its own speed', () => {

@@ -459,6 +459,10 @@ body {
   background: rgba(161, 161, 170, 0.4);
 }
 
+.terra {
+  background: rgba(217, 223, 160, 0.5);
+}
+
 .pick-btn {
   margin-top: 0.75rem;
   padding: 0.7rem 1rem;
