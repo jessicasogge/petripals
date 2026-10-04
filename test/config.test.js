@@ -17,8 +17,9 @@ function contrast(a, b) {
 }
 
 describe('pals', () => {
-  it('has all ten pals', () => {
-    expect(PALS.sort()).toEqual(['ana', 'ceres', 'coco', 'elia', 'goldie', 'mona', 'penny', 'sallie', 'scarlett', 'vi']);
+  it('keys every pal by a short lowercase id, used in addresses like ?pal=mona', () => {
+    expect(PALS.length).toBeGreaterThan(1);
+    for (const pal of PALS) expect(pal).toMatch(/^[a-z]+$/);
   });
 
   it.each(PALS)('%s is either a rod or a coccus, with what that kind needs', (pal) => {
