@@ -74,13 +74,6 @@ describe('the pals', () => {
     },
   );
 
-  it("puts Sallie's bat-wing bow with her face, so her offspring don't wear one", () => {
-    const tile = palTile(palById('sallie'));
-    const bow = tile.querySelector('.face g[transform]');
-    expect(bow).not.toBeNull();
-    expect(bow.querySelectorAll('path')).toHaveLength(2); // two wings
-  });
-
   it("the picker shows Sallie's genus in italics and her serovar upright", async () => {
     await open('pal-picker.html', 'game/pal-picker.js');
     const card = [...document.querySelectorAll('.pal-card')].find((c) => c.querySelector('h2').textContent === 'Sallie');

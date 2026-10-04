@@ -425,8 +425,7 @@ export const SPECIES = {
   // genus for italics, between asterisks. Her zones are ballpark sizes for a
   // susceptible strain, and every disk is a drug that works on one (many
   // strains now resist ciprofloxacin, so she doesn't get it). Requested by
-  // u/prioryofthebat, whose favorite color is grey, hence her grey and her
-  // bat-wing bow.
+  // u/prioryofthebat, whose favorite color is grey, hence her grey.
   sallie: {
     facts: [
       "Sallie is a Gram-negative rod, so she stains pink on a Gram stain.",

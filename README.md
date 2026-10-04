@@ -36,7 +36,7 @@ No antibiotics this time. You share the plate with a rival pal, picked at random
 | **Mona** | *Pseudomonas aeruginosa* | Green rod with one flagellum |
 | **Elia** | *Borrelia burgdorferi* | Purple corkscrew (spirochete) |
 | **Ceres** | *Bacillus cereus* | Sky-blue chain of three square-ended rods |
-| **Sallie** | *Salmonella* Typhi | Grey rod with flagella all around, in a bat-wing bow |
+| **Sallie** | *Salmonella* Typhi | Grey rod with flagella all around |
 
 The picker shuffles all the pals each visit and shows them eight to a page, with **More pals** for the rest, so any pal can turn up on any page.
 

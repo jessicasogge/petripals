@@ -362,11 +362,11 @@ export const PALS = [
       </g>
     `,
   },
-  // Sallie: Salmonella Typhi, a grey rod with flagella all over, in a bat-wing bow
+  // Sallie: Salmonella Typhi, a grey rod with flagella all over
   {
     id: 'sallie',
     name: 'Sallie',
-    looks: 'a grey rod-shaped Salmonella Typhi with flagella all around her, wearing a bat-wing bow',
+    looks: 'a grey rod-shaped Salmonella Typhi with flagella all around her',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '10 10 180 180', dish: '8 8 184 184' },
     // Drawn a little smaller than the others on the home page.
@@ -385,12 +385,6 @@ export const PALS = [
         <ellipse cx="72" cy="110" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
         <ellipse cx="128" cy="110" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
         <path d="M94 110 Q100 116 106 110" stroke="#27272a" stroke-width="3" fill="none" stroke-linecap="round" />
-        <!-- bat-wing bow (with her face, so only she wears it, not her offspring) -->
-        <g transform="translate(141 75) rotate(18) scale(1.35)">
-          <path d="M0 0 C-6 -12 -22 -16 -26 -8 C-22 -6 -21 -2 -18 0 C-15 -3 -11 -2 -9 2 C-6 0 -3 1 0 0 Z" fill="#3f3f46" stroke="#18181b" stroke-width="2" stroke-linejoin="round" />
-          <path d="M0 0 C6 -12 22 -16 26 -8 C22 -6 21 -2 18 0 C15 -3 11 -2 9 2 C6 0 3 1 0 0 Z" fill="#3f3f46" stroke="#18181b" stroke-width="2" stroke-linejoin="round" />
-          <circle cx="0" cy="-1" r="4.5" fill="#52525b" stroke="#18181b" stroke-width="2" />
-        </g>
       </g>
     `,
   },
