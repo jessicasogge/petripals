@@ -6,6 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
@@ -22,6 +23,7 @@
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^26.6.3",
+    "@vitest/coverage-v8": "^5.0.3",
     "jsdom": "^30.1.1",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
