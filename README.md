@@ -37,6 +37,7 @@ No antibiotics this time. You share the plate with a rival pal, picked at random
 | **Elia** | *Borrelia burgdorferi* | Purple corkscrew (spirochete) |
 | **Ceres** | *Bacillus cereus* | Sky-blue chain of three square-ended rods |
 | **Sallie** | *Salmonella* Typhi | Grey rod with flagella all around |
+| **Terra** | *Clostridium tetani* | Olive drumstick: a slim rod with a round spore at one end |
 
 The picker shuffles all the pals each visit and shows them eight to a page, with **More pals** for the rest, so any pal can turn up on any page.
 
@@ -46,6 +47,7 @@ The game is loosely based on real lab microbiology:
 
 - **How each pal grows:** rods split and swim apart after dividing. Round cells (cocci) stay stuck together, in chains for *Streptococcus*, which divides in one plane, and in grape-like clusters for *Staphylococcus*, which divides in several. *Streptococcus pneumoniae* is a *Streptococcus* too, but it grows in pairs (diplococci), so Penny's chains stop at two cells. *Bacillus cereus* is a rod, but its cells often stay stuck end to end in short chains, so Ceres grows like a chain too, with rod-shaped cells, up to three at a time.
 - **Sallie's flagella** cover her whole body (peritrichous flagella), unlike Mona's and Vi's single tail. Her species line reads *Salmonella* Typhi with Typhi upright: she's *Salmonella enterica* serovar Typhi, and serovar names are capitalized and never in italics.
+- **Terra's drumstick shape** is how *Clostridium tetani* really looks under a microscope: she makes a round spore at one end of her rod, wider than the rod itself. In microscope mode her rod turns purple but her spore stays clear, since spores don't take up a Gram stain. Her name is Latin for earth, where her spores wait in the soil. She's an anaerobe, and there are no standard disk sizes for anaerobes, so her zones are estimates too.
 - **Ceres's name** is a nod to *cereus*, which means "waxy" in Latin but sounds like Ceres, the Roman goddess of grain. Fitting, since *B. cereus* is famous for growing on rice.
 - **Ana's Y shape** is in her name: *bifidus* means "split in two," and bifidobacteria are rods that branch into a Y. She's one of the "good" gut bacteria (a probiotic), and her name is a nod to "anaerobe," since oxygen is bad for her.
 - **Penny's glasses** are a nod to history: pneumococcus is the bacterium that helped show DNA carries genes, in experiments by Frederick Griffith (1928) and by Oswald Avery, Colin MacLeod and Maclyn McCarty (1944).

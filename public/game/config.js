@@ -469,6 +469,57 @@ export const SPECIES = {
       { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 25 },
     ],
   },
+  // Clostridium tetani, the cause of tetanus. A slim rod that makes a round
+  // spore at one end, so she looks like a drumstick. She has flagella all
+  // over (peritrichous) and splits and swims apart like Mona. Her name is
+  // Latin for earth, since her spores live in soil. She's an anaerobe, and
+  // there are no standard lab disk sizes for anaerobes like her, so her zones
+  // are estimates from how well each drug works on her (metronidazole, the
+  // usual drug for tetanus, comes first).
+  terra: {
+    facts: [
+      "Terra is a Gram-positive rod, so young cells stain purple on a Gram stain.",
+      "Terra makes a round spore at one end, so she looks like a drumstick or a tennis racket.",
+      "Terra's spores can persist for years in soil, dust, and animal droppings.",
+      "Terra is an obligate anaerobe: oxygen is toxic to her growing cells.",
+      "Terra usually swims with flagella spread all over her body.",
+      "Terra causes tetanus when her spores sprout in a deep or dirty wound with little oxygen.",
+      "Terra makes tetanospasmin, one of the most potent neurotoxins known.",
+      "Terra's toxin blocks nerve signals that let muscles relax, so they lock up and spasm.",
+      "Tetanus is nicknamed \"lockjaw\" because Terra's toxin often stiffens the jaw muscles first.",
+      "The tetanus vaccine is a toxoid: an inactivated, harmless version of Terra's toxin.",
+      "Adults are advised to get a booster against Terra's toxin about every 10 years.",
+      "Tetanus isn't contagious: people pick up Terra from the environment, not from each other.",
+      "Rust doesn't cause tetanus, but a dirty nail can carry Terra's spores deep into a wound.",
+      "In 1889, Kitasato Shibasaburo isolated Terra and grew her in pure culture.",
+      "Terra's cousin, *Clostridium botulinum*, makes the toxin that causes botulism.",
+      "\"Clostridium,\" the first part of Terra's name, comes from a Greek word for spindle.",
+    ],
+    scientific: 'Clostridium tetani',
+    color: '#5f6f12', // for her name above the dish
+    kind: 'rod',
+    gram: 'positive',
+    size: 11.5,
+    body: [
+      // tail (the flagellum behind her)
+      [-0.424, 0.0, 0.04],
+      [-0.37, 0.0, 0.04],
+      // her rod
+      [-0.217, 0.0, 0.12],
+      [-0.109, 0.0, 0.12],
+      [0.0, 0.0, 0.12],
+      [0.109, 0.0, 0.12],
+      // her spore end, rounder and wider
+      [0.326, 0.0, 0.158],
+    ],
+    antibiotics: [
+      { code: 'MTZ', name: 'metronidazole', zone: 30 },
+      { code: 'P', name: 'penicillin', zone: 27 },
+      { code: 'VA', name: 'vancomycin', zone: 19 },
+      { code: 'CC', name: 'clindamycin', zone: 23 },
+      { code: 'DO', name: 'doxycycline', zone: 24 },
+    ],
+  },
 };
 
 // Mixed culture mode: no disks, just you and a rival pal (picked at random,

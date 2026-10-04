@@ -62,6 +62,15 @@ describe('the stain shades', () => {
     expect([...svg.querySelectorAll('.face [fill="white"]')].every((el) => !el.style.fill)).toBe(true);
   });
 
+  it("leaves Terra's spore clear, the way spores don't take a Gram stain, while her rod turns purple", () => {
+    const svg = dishPal(palById('terra'));
+    stainPal(svg, SPECIES.terra);
+    const spore = svg.querySelector('circle[r="16"]');
+    expect(spore.getAttribute('fill')).toBe('#ffffff');
+    expect(spore.style.fill).toBe('');
+    expect(svg.querySelector('path[d^="M50 80"]').style.fill).toBe(rgb(STAINS.positive.body));
+  });
+
   it('puts her own colors back', () => {
     const svg = dishPal(palById('mona'));
     const before = shown(svg);

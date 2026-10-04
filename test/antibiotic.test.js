@@ -275,6 +275,11 @@ describe("a drug she's resistant to (no zone)", () => {
     for (const { zone } of SPECIES.sallie.antibiotics) expect(zone).not.toBeNull();
   });
 
+  it('starts Terra with metronidazole, the usual drug for tetanus, and gives her only drugs that work on her', () => {
+    expect(SPECIES.terra.antibiotics[0].code).toBe('MTZ');
+    for (const { zone } of SPECIES.terra.antibiotics) expect(zone).not.toBeNull();
+  });
+
   it('gets no zone at all, so only the disk itself counts as touching', () => {
     expect(zoneWidth(gentamicin.zone)).toBe(0);
     const disk = { fx: 0.5, fy: 0, r: 0.1, zone: zoneWidth(gentamicin.zone), antibiotic: gentamicin };
