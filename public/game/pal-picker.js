@@ -1,11 +1,12 @@
-// The pal picker: a card for each pal, in the order of PALS (pals.js), with
-// her picture, name and species, and a button to pick her. The microscope
+// The pal picker: a card for each pal, in a new random order each visit so
+// no pal is always first, with her picture, name and species, and a button
+// to pick her. The microscope
 // button shows every pal as she'd look after a Gram stain.
 import { SPECIES } from './config.js';
-import { PALS, palTile } from './pals.js';
+import { inRandomOrder, PALS, palTile } from './pals.js';
 import { stainPal, unstainPal } from './stain.js';
 
-document.querySelector('.picker-grid').append(...PALS.map(card));
+document.querySelector('.picker-grid').append(...inRandomOrder(PALS).map(card));
 
 function card(pal) {
   const article = document.createElement('article');

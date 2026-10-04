@@ -304,6 +304,17 @@ export const PALS = [
   },
 ];
 
+// A copy of `pals` in a random order (a Fisher-Yates shuffle, so every order
+// is equally likely). The picker uses it so no pal is always first.
+export function inRandomOrder(pals, random = Math.random) {
+  const order = [...pals];
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  return order;
+}
+
 // The pal with this id, or undefined. Compares ids rather than looking one
 // up by name, so an address like ?pal=toString finds nothing.
 export function palById(id) {
