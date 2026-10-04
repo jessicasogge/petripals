@@ -464,3 +464,18 @@ describe('Ceres (Bacillus cereus)', () => {
     expect(makeGroup('ceres').svg.querySelector('.cell-body').getAttribute('fill')).toBe(SPECIES.ceres.colors.fill);
   });
 });
+
+describe("Ceres's face in the dish", () => {
+  const faceTransform = (name) =>
+    [...makeGroup(name, { isPlayer: true }).svg.querySelectorAll('g')]
+      .map((g) => g.getAttribute('transform') ?? '')
+      .find((t) => t.startsWith('translate('));
+
+  it('is drawn smaller, to fit her rod', () => {
+    expect(faceTransform('ceres')).toMatch(/scale\(0\.75\)$/);
+  });
+
+  it("leaves the round pals' faces their usual size", () => {
+    for (const name of ['scarlett', 'goldie', 'penny']) expect(faceTransform(name)).not.toMatch(/scale/);
+  });
+});

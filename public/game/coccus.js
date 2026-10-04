@@ -78,6 +78,11 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
   // corner radius, in SVG units. Its corners stay inside the cell's circle.
   const ROD = { half: R * 0.95, tall: R * 0.6, corner: R * 0.45 };
 
+  // How big the face is drawn: a rod (Ceres's) is shorter than a round
+  // cell, so her eyes, cheeks and smile are drawn smaller to sit inside it
+  // with room to spare.
+  const FACE_SCALE = species.shape === 'rod' ? 0.75 : 1;
+
   // Which way a cell's outer end points, in degrees: away from her partner in
   // a pair, or to the right for a cell on her own (like the one with the face
   // in her picture). Flipped with the group when she turns around.
@@ -121,7 +126,7 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       `<circle cx="${c.x - 2.7}" cy="${c.y - 3.2}" r="1.5" fill="${colors.highlight}" />`;
     if (c.face) {
       out +=
-        `<g transform="translate(${c.x} ${c.y})">` +
+        `<g transform="translate(${c.x} ${c.y})${FACE_SCALE === 1 ? '' : ` scale(${FACE_SCALE})`}">` +
         `<circle cx="-3.6" cy="0" r="2" fill="${colors.dark}" />` +
         `<circle cx="3.6" cy="0" r="2" fill="${colors.dark}" />` +
         '<circle cx="-3" cy="-0.6" r="0.75" fill="white" />' +
