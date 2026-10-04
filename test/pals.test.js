@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SPECIES } from '../public/game/config.js';
-import { dishPal, homePal, inRandomOrder, palById, PALS, palTile } from '../public/game/pals.js';
+import { dishPal, homePal, inRandomOrder, PAGE_SIZE, palById, PALS, palTile, pickerPages } from '../public/game/pals.js';
 
 // (jsdom changes import.meta.url to a web address, so find files from the project folder.)
 const file = (name) => readFileSync(resolve(process.cwd(), 'public', name), 'utf8');
@@ -33,7 +33,16 @@ describe('the pals', () => {
   });
 
   it('are in the order they appear on the home page and picker', () => {
-    expect(IDS).toEqual(['penny', 'vi', 'goldie', 'ana', 'scarlett', 'coco', 'mona', 'elia']);
+    expect(IDS).toEqual(['penny', 'vi', 'goldie', 'ana', 'scarlett', 'coco', 'mona', 'elia', 'ceres']);
+  });
+
+  it('splits into pages of eight for the picker (a tidy four-by-two), with the rest on the last page', () => {
+    expect(PAGE_SIZE).toBe(8);
+    const pages = pickerPages();
+    expect(pages.map((page) => page.length)).toEqual([8, 1]);
+    expect(pages.flat()).toEqual(PALS);
+    expect(pickerPages(['a', 'b', 'c', 'd', 'e'], 2)).toEqual([['a', 'b'], ['c', 'd'], ['e']]);
+    expect(pickerPages(['a', 'b'], 2)).toEqual([['a', 'b']]);
   });
 
   it.each(PALS)('$id has a name and a description', (pal) => {
@@ -162,14 +171,66 @@ describe('the pages', () => {
     }
   });
 
-  it('the picker shows the pals in a random order', async () => {
-    // With Math.random always 0, the shuffle moves the first pal to the end.
+  it('the picker shuffles all the pals together, then splits them into pages', async () => {
+    // With Math.random always 0, the shuffle moves the first pal (Penny) to the end.
     vi.spyOn(Math, 'random').mockReturnValue(0);
     await open('pal-picker.html', 'game/pal-picker.js');
-    const names = [...document.querySelectorAll('.pal-card h2')].map((h) => h.textContent);
-    expect(names).toEqual(inRandomOrder(PALS, () => 0).map((pal) => pal.name));
-    expect(names).not.toEqual(PALS.map((pal) => pal.name));
+    const grids = [...document.querySelectorAll('.picker-grid')];
+    const names = grids.map((grid) => [...grid.querySelectorAll('.pal-card h2')].map((h) => h.textContent));
+    expect(names).toEqual(pickerPages(inRandomOrder(PALS, () => 0)).map((page) => page.map((pal) => pal.name)));
+    // So Ceres is on the first page here, and Penny is the one on the second.
+    expect(names[0]).toContain('Ceres');
+    expect(names[1]).toEqual(['Penny']);
     vi.restoreAllMocks();
+  });
+
+  it('can put any pal on the second page of the picker', () => {
+    const second = new Set();
+    for (let i = 0; i < 1000; i++) second.add(pickerPages(inRandomOrder(PALS))[1][0].id);
+    expect([...second].sort()).toEqual(PALS.map((pal) => pal.id).sort());
+  });
+
+  it('the picker shows one page at a time, with More pals and Back buttons between them', async () => {
+    await open('pal-picker.html', 'game/pal-picker.js');
+    const grids = [...document.querySelectorAll('.picker-grid')];
+    const back = document.querySelector('.pager-back');
+    const more = document.querySelector('.pager-more');
+    const showing = () => grids.filter((grid) => !grid.hidden).map((grid) => grid.dataset.page);
+    expect(grids).toHaveLength(2);
+    expect(document.querySelector('.picker-pager').hidden).toBe(false);
+
+    // Opens on the first page, with only More pals to press.
+    expect(showing()).toEqual(['1']);
+    expect(back.hidden).toBe(true);
+    expect(more.hidden).toBe(false);
+    expect(more.tagName).toBe('BUTTON');
+
+    more.click();
+    expect(showing()).toEqual(['2']);
+    expect(grids[1].querySelectorAll('.pal-card')).toHaveLength(1); // whoever didn't fit on the first
+    expect(back.hidden).toBe(false);
+    expect(more.hidden).toBe(true);
+    expect(document.activeElement).toBe(back); // the keyboard stays on the pager
+
+    back.click();
+    expect(showing()).toEqual(['1']);
+    expect(back.hidden).toBe(true);
+    expect(document.activeElement).toBe(more);
+  });
+
+  it("the picker's microscope button stains the pals on every page, and they stay stained across pages", async () => {
+    await open('pal-picker.html', 'game/pal-picker.js');
+    document.querySelector('.scope-btn').click();
+    document.querySelector('.pager-more').click();
+    const second = document.querySelector('.picker-grid[data-page="2"] .pal-icon svg');
+    expect(second.querySelector('[style*="fill"]')).not.toBeNull();
+    document.querySelector('.scope-btn').click();
+    expect(second.querySelector('[style*="fill"]')).toBeNull();
+  });
+
+  it("keeps a short page's pals in the middle, and hides pages that aren't showing", () => {
+    expect(css).toMatch(/\n\.picker-grid \{[^}]*justify-content: center;/);
+    expect(css).toMatch(/\n\.picker-grid\[hidden\] \{\s*display: none;/);
   });
 
   it("the picker's microscope button shows every pal in her Gram stain color, and back", async () => {

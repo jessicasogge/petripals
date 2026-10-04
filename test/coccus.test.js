@@ -417,3 +417,65 @@ describe('Penny (Streptococcus pneumoniae)', () => {
     }
   });
 });
+
+describe('Ceres (Bacillus cereus)', () => {
+  // How a cell's rod is turned: "translate(x y) rotate(deg)".
+  const turn = (el) => Number(el.getAttribute('transform').match(/rotate\((-?[\d.]+)\)/)[1]);
+  const rodAt = (group, cell) =>
+    [...group.svg.querySelectorAll('.cell-body')].find((el) =>
+      el.getAttribute('transform').startsWith(`translate(${cell.x} ${cell.y})`));
+
+  it('has square-ended rods like her picture, not circles, lying level on her own', () => {
+    const cell = makeGroup('ceres', { isPlayer: true }).svg.querySelector('.cell-body');
+    expect(cell.tagName).toBe('rect');
+    expect(Number(cell.getAttribute('width'))).toBeGreaterThan(Number(cell.getAttribute('height')));
+    expect(turn(cell)).toBe(0);
+  });
+
+  it('grows chains of at most three rods', () => {
+    const chain = makeGroup('ceres');
+    grow(chain, 3);
+    expect(chain.cellCount()).toBe(3);
+    expect(chain.attachSpot(0, 0)).toBeNull();
+  });
+
+  it('lines each rod up along the chain, end to end', () => {
+    const chain = makeGroup('ceres');
+    grow(chain, 3);
+    const cells = chain.cells;
+    cells.forEach((cell, i) => {
+      const a = cells[i - 1] ?? cell;
+      const b = cells[i + 1] ?? cell;
+      const along = (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI;
+      const off = ((turn(rodAt(chain, cell)) - along) % 360 + 360) % 360;
+      expect(Math.min(off, 360 - off)).toBeLessThan(0.1);
+    });
+  });
+
+  it('keeps every rod inside her cell circle, so what she touches is unchanged', () => {
+    const rod = makeGroup('ceres').svg.querySelector('.cell-body');
+    const [w, h, rx] = ['width', 'height', 'rx'].map((a) => Number(rod.getAttribute(a)));
+    // The farthest point of a rounded rectangle from its center is on a corner's curve.
+    const farthest = Math.hypot(w / 2 - rx, h / 2 - rx) + rx;
+    expect(farthest).toBeLessThanOrEqual(R);
+  });
+
+  it('draws in her sky-blue colors', () => {
+    expect(makeGroup('ceres').svg.querySelector('.cell-body').getAttribute('fill')).toBe(SPECIES.ceres.colors.fill);
+  });
+});
+
+describe("Ceres's face in the dish", () => {
+  const faceTransform = (name) =>
+    [...makeGroup(name, { isPlayer: true }).svg.querySelectorAll('g')]
+      .map((g) => g.getAttribute('transform') ?? '')
+      .find((t) => t.startsWith('translate('));
+
+  it('is drawn smaller, to fit her rod', () => {
+    expect(faceTransform('ceres')).toMatch(/scale\(0\.75\)$/);
+  });
+
+  it("leaves the round pals' faces their usual size", () => {
+    for (const name of ['scarlett', 'goldie', 'penny']) expect(faceTransform(name)).not.toMatch(/scale/);
+  });
+});

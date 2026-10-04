@@ -309,23 +309,66 @@ body {
 
 /* Four across on a computer (two rows of four), two on a tablet, one on a
    phone, where the Select buttons wouldn't fit side by side. */
+/* Four cards across (two on a tablet, one on a phone), each the same
+   width. Flex instead of grid so a page with fewer pals than a full row
+   (like the second page, while it fills up) keeps them in the middle. */
 .picker-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 1rem;
   margin-top: 1.5rem;
 }
 
+.picker-grid[hidden] {
+  display: none;
+}
+
+.picker-grid > .pal-card {
+  flex: 0 0 calc((100% - 3rem) / 4);
+  box-sizing: border-box;
+  min-width: 0;
+}
+
 @media (max-width: 900px) {
-  .picker-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .picker-grid > .pal-card {
+    flex-basis: calc((100% - 1rem) / 2);
   }
 }
 
 @media (max-width: 520px) {
-  .picker-grid {
-    grid-template-columns: 1fr;
+  .picker-grid > .pal-card {
+    flex-basis: 100%;
   }
+}
+
+/* Back and More pals, under the cards. */
+.picker-pager {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.picker-pager[hidden],
+.pager-btn[hidden] {
+  display: none;
+}
+
+.pager-btn {
+  min-height: 44px;
+  padding: 0.6rem 1.3rem;
+  border: 2px solid #0f766e;
+  border-radius: 999px;
+  background: #f0fdfa;
+  color: #0f766e;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pager-btn:hover {
+  background: #ccfbf1;
 }
 
 .pal-card {
@@ -406,6 +449,10 @@ body {
 
 .vi {
   background: rgba(253, 186, 116, 0.45);
+}
+
+.ceres {
+  background: rgba(125, 211, 252, 0.4);
 }
 
 .pick-btn {

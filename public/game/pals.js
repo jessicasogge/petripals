@@ -302,7 +302,50 @@ export const PALS = [
       </g>
     `,
   },
+  // Ceres: Bacillus cereus, a sky-blue chain of three square-ended rods
+  {
+    id: 'ceres',
+    name: 'Ceres',
+    looks: 'a sky-blue chain of three Bacillus cereus rods',
+    motion: 'wobble',
+    frames: { home: '0 0 200 200', picker: '6 10 188 188', dish: '6 10 188 188' },
+    art: `
+      <!-- left rod, tipped down at its outer end -->
+      <g transform="rotate(14 42 112)">
+        <rect x="14" y="93" width="56" height="38" rx="11" fill="#bae6fd" stroke="#0369a1" stroke-width="4" />
+        <circle cx="26" cy="103" r="4" fill="#f0f9ff" />
+      </g>
+      <!-- right rod -->
+      <g transform="rotate(-14 158 112)">
+        <rect x="130" y="93" width="56" height="38" rx="11" fill="#bae6fd" stroke="#0369a1" stroke-width="4" />
+        <circle cx="142" cy="103" r="4" fill="#f0f9ff" />
+      </g>
+      <!-- middle rod, with her face -->
+      <rect x="67" y="80" width="66" height="46" rx="13" fill="#bae6fd" stroke="#0369a1" stroke-width="4" />
+      <circle cx="79" cy="90" r="4.5" fill="#f0f9ff" />
+      <g class="face">
+        <circle cx="90" cy="101" r="5.5" fill="#0c4a6e" />
+        <circle cx="110" cy="101" r="5.5" fill="#0c4a6e" />
+        <circle cx="91.8" cy="99.2" r="1.9" fill="white" />
+        <circle cx="111.8" cy="99.2" r="1.9" fill="white" />
+        <ellipse cx="80" cy="113" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="120" cy="113" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
+        <path d="M94 112 Q100 118 106 112" stroke="#0c4a6e" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
 ];
+
+// How many pals fit on one page of the picker: four across, two down.
+export const PAGE_SIZE = 8;
+
+// `pals` split into the picker's pages, in order, PAGE_SIZE to a page (the
+// last page has whoever is left over).
+export function pickerPages(pals = PALS, size = PAGE_SIZE) {
+  const pages = [];
+  for (let i = 0; i < pals.length; i += size) pages.push(pals.slice(i, i + size));
+  return pages;
+}
 
 // A copy of `pals` in a random order (a Fisher-Yates shuffle, so every order
 // is equally likely). The picker uses it so no pal is always first.

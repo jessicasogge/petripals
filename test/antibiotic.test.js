@@ -262,6 +262,12 @@ describe("a drug she's resistant to (no zone)", () => {
     expect(resistant).toEqual(['ana GM']);
   });
 
+  it("gives Ceres only drugs that work on her: no penicillin or its relatives, which her beta-lactamases break down", () => {
+    const codes = SPECIES.ceres.antibiotics.map((a) => a.code);
+    for (const betaLactam of ['P', 'AMP', 'AMX', 'AMC', 'OX', 'CRO', 'CTX']) expect(codes).not.toContain(betaLactam);
+    for (const { zone } of SPECIES.ceres.antibiotics) expect(zone).not.toBeNull();
+  });
+
   it('gets no zone at all, so only the disk itself counts as touching', () => {
     expect(zoneWidth(gentamicin.zone)).toBe(0);
     const disk = { fx: 0.5, fy: 0, r: 0.1, zone: zoneWidth(gentamicin.zone), antibiotic: gentamicin };

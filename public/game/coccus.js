@@ -4,7 +4,8 @@ import { GAME } from './config.js';
 import { idlePose, newMover } from './mover.js';
 import { coaster } from './physics.js';
 
-// A round cell (Scarlett, Penny, Goldie). The player is always a single coccus.
+// A round cell (Scarlett, Penny, Goldie), or a rod whose daughters stick
+// together in chains like cocci do (Ceres). The player is always a single cell.
 // Offspring are chains or clusters of cocci that grow one cell at a time as
 // daughters join them (the player's, or their own cells' when they eat), up to
 // GROUP_CAP cells, or the pal's own maxCells. A chain grows from whichever end
@@ -73,6 +74,15 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       `C${p(26, 116)} ${p(41, 133)} ${p(64, 133)} C${p(84, 133)} ${p(98, 121)} ${p(98, 100)} Z`;
   })();
 
+  // A rod-shaped cell (Ceres's): half its length, half its height and its
+  // corner radius, in SVG units. Its corners stay inside the cell's circle.
+  const ROD = { half: R * 0.95, tall: R * 0.6, corner: R * 0.45 };
+
+  // How big the face is drawn: a rod (Ceres's) is shorter than a round
+  // cell, so her eyes, cheeks and smile are drawn smaller to sit inside it
+  // with room to spare.
+  const FACE_SCALE = species.shape === 'rod' ? 0.75 : 1;
+
   // Which way a cell's outer end points, in degrees: away from her partner in
   // a pair, or to the right for a cell on her own (like the one with the face
   // in her picture). Flipped with the group when she turns around.
@@ -82,8 +92,26 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
     return (Math.atan2(c.y - other.y, c.x - other.x) * 180) / Math.PI;
   }
 
+  // Which way a rod-shaped cell (Ceres's) lies, in degrees: along the chain,
+  // from the cell before her to the cell after, or level on her own.
+  function along(c) {
+    const i = group.cells.indexOf(c);
+    const a = group.cells[i - 1] ?? c;
+    const b = group.cells[i + 1] ?? c;
+    if (a.x === b.x && a.y === b.y) return 0;
+    return (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI;
+  }
+
   function cellBody(c) {
     const paint = `fill="${colors.fill}" stroke="${colors.stroke}" stroke-width="${OUTLINE}"`;
+    if (species.shape === 'rod') {
+      // A square-ended rod, like her picture, that fits inside the cell's
+      // circle, so what she touches doesn't change. Rods next to each other
+      // in a chain overlap a little, so they look joined end to end.
+      const turn = along(c).toFixed(1);
+      return `<rect class="cell-body" x="${-ROD.half}" y="${-ROD.tall}" width="${2 * ROD.half}" height="${2 * ROD.tall}" ` +
+        `rx="${ROD.corner}" transform="translate(${c.x} ${c.y}) rotate(${turn})" ${paint} />`;
+    }
     if (species.shape === 'lancet') {
       // The traced shape's outer end points left, so turn it half around more.
       const turn = (outward(c) + 180).toFixed(1);
@@ -98,7 +126,7 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       `<circle cx="${c.x - 2.7}" cy="${c.y - 3.2}" r="1.5" fill="${colors.highlight}" />`;
     if (c.face) {
       out +=
-        `<g transform="translate(${c.x} ${c.y})">` +
+        `<g transform="translate(${c.x} ${c.y})${FACE_SCALE === 1 ? '' : ` scale(${FACE_SCALE})`}">` +
         `<circle cx="-3.6" cy="0" r="2" fill="${colors.dark}" />` +
         `<circle cx="3.6" cy="0" r="2" fill="${colors.dark}" />` +
         '<circle cx="-3" cy="-0.6" r="0.75" fill="white" />' +
