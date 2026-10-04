@@ -35,18 +35,22 @@ No antibiotics this time. You share the plate with a rival pal, picked at random
 | **Coco** | *Haemophilus influenzae* | Small coffee-with-cream coccobacillus |
 | **Mona** | *Pseudomonas aeruginosa* | Green rod with one flagellum |
 | **Elia** | *Borrelia burgdorferi* | Purple corkscrew (spirochete) |
+| **Ceres** | *Bacillus cereus* | Sky-blue chain of three square-ended rods, with a sprig of wheat |
+
+The picker shows the pals a page at a time: the first eight, then **More pals** for the rest (just Ceres, for now).
 
 ## The real science
 
 The game is loosely based on real lab microbiology:
 
-- **How each pal grows:** rods split and swim apart after dividing. Round cells (cocci) stay stuck together, in chains for *Streptococcus*, which divides in one plane, and in grape-like clusters for *Staphylococcus*, which divides in several. *Streptococcus pneumoniae* is a *Streptococcus* too, but it grows in pairs (diplococci), so Penny's chains stop at two cells.
+- **How each pal grows:** rods split and swim apart after dividing. Round cells (cocci) stay stuck together, in chains for *Streptococcus*, which divides in one plane, and in grape-like clusters for *Staphylococcus*, which divides in several. *Streptococcus pneumoniae* is a *Streptococcus* too, but it grows in pairs (diplococci), so Penny's chains stop at two cells. *Bacillus cereus* is a rod, but its cells often stay stuck end to end in short chains, so Ceres grows like a chain too, with rod-shaped cells, up to three at a time.
+- **Ceres's wheat** is for her name: *cereus* means "waxy" in Latin, but it sounds like Ceres, the Roman goddess of grain. Fitting, since *B. cereus* is famous for growing on rice.
 - **Ana's Y shape** is in her name: *bifidus* means "split in two," and bifidobacteria are rods that branch into a Y. She's one of the "good" gut bacteria (a probiotic), and her name is a nod to "anaerobe," since oxygen is bad for her.
 - **Penny's glasses** are a nod to history: pneumococcus is the bacterium that helped show DNA carries genes, in experiments by Frederick Griffith (1928) and by Oswald Avery, Colin MacLeod and Maclyn McCarty (1944).
 - **The antibiotic disks** are modeled on the Kirby-Bauer disk test. Each disk is a drug commonly used against that pal's species, labeled with its standard disk code (CIP for ciprofloxacin, P for penicillin, and so on).
 - **A mixed culture** is a plate growing more than one species at once, all competing for the same nutrients. That's the idea behind the mixed culture race.
 - **The zones spread** because the drug diffuses outward from the disk into the agar. Diffusion is quick at first and then slows down, so each zone widens fast and then creeps out to its full size. On a real plate this happens over hours of incubation; the game speeds it up to a few seconds.
-- **The zones of inhibition** are sized from ballpark zone diameters a lab would measure for a susceptible strain of that species, scaled down to fit the dish. A bigger zone means the drug works better. *Borrelia* can't be grown for disk tests, so Elia's zones are made up from how well each drug works on her, and the same goes for Ana's. Bifidobacteria are naturally resistant to gentamicin, so Ana's gentamicin disk has **no zone at all**: you can swim right up to it, but don't touch the disk itself.
+- **The zones of inhibition** are sized from ballpark zone diameters a lab would measure for a susceptible strain of that species, scaled down to fit the dish. A bigger zone means the drug works better. *Borrelia* can't be grown for disk tests, so Elia's zones are made up from how well each drug works on her, and the same goes for Ana's and Ceres's (there are no standard disk sizes for bifidobacteria or *Bacillus*). Bifidobacteria are naturally resistant to gentamicin, so Ana's gentamicin disk has **no zone at all**: you can swim right up to it, but don't touch the disk itself. Ceres's penicillin disk is the same, because *B. cereus* makes beta-lactamases, enzymes that break penicillin down.
 
 ## Running it locally
 
@@ -76,7 +80,7 @@ The tests use [Vitest](https://vitest.dev/). Most of the game logic runs in [jsd
 | `public/choose-mode.html` | Choose classic or mixed culture |
 | `public/petri-dish.html` | The game, in either mode |
 | `public/game/` | Game code: classic mode (`game.js`), mixed culture mode (`race.js`, with the rival in `rival.js`), what both share (a colony eating and dividing in `colony.js`, steering in `keyboard.js` and `touch.js`), how the pals grow (`rod.js`, `coccus.js`), antibiotics (`antibiotic.js`), nutrients, physics, settings (`config.js`), and a little surprise on the home page (`split.js`) |
-| `public/game/pals.js` | Every pal's name and drawing, in one place. All the pages draw the pals from here, in the order listed (except the picker, which shuffles them each visit). To add a pal, see the notes at the top. |
+| `public/game/pals.js` | Every pal's name and drawing, in one place. All the pages draw the pals from here, in the order listed (except the picker, which shuffles them each visit), and each pal's `page` says which page of the picker she's on. To add a pal, see the notes at the top. |
 | `test/` | Tests |
 | `src/index.ts` | Small Express server for local development |
 

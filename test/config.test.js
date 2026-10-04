@@ -17,8 +17,8 @@ function contrast(a, b) {
 }
 
 describe('pals', () => {
-  it('has all eight pals', () => {
-    expect(PALS.sort()).toEqual(['ana', 'coco', 'elia', 'goldie', 'mona', 'penny', 'scarlett', 'vi']);
+  it('has all nine pals', () => {
+    expect(PALS.sort()).toEqual(['ana', 'ceres', 'coco', 'elia', 'goldie', 'mona', 'penny', 'scarlett', 'vi']);
   });
 
   it.each(PALS)('%s is either a rod or a coccus, with what that kind needs', (pal) => {
@@ -47,6 +47,13 @@ describe('pals', () => {
     expect(SPECIES.penny.kind).toBe('coccus');
     expect(SPECIES.penny.layout).toBe('chain');
     expect(SPECIES.penny.maxCells).toBe(2);
+  });
+
+  it('makes Ceres a Bacillus: rod-shaped cells in short chains of up to three', () => {
+    expect(SPECIES.ceres.kind).toBe('coccus'); // grows with the chain code
+    expect(SPECIES.ceres.layout).toBe('chain');
+    expect(SPECIES.ceres.maxCells).toBe(3);
+    expect(SPECIES.ceres.shape).toBe('rod');
   });
 
   it.each(PALS)("gives %s a sensible chain or cluster size, if she has her own", (pal) => {
@@ -116,9 +123,9 @@ describe('Gram stains', () => {
     }
   });
 
-  it('matches the real bacteria: the cocci and Ana are Gram-positive, the other rods negative', () => {
+  it('matches the real bacteria: the cocci, Ana and Ceres are Gram-positive, the other rods negative', () => {
     const positive = Object.keys(SPECIES).filter((name) => SPECIES[name].gram === 'positive').sort();
-    expect(positive).toEqual(['ana', 'goldie', 'penny', 'scarlett']);
+    expect(positive).toEqual(['ana', 'ceres', 'goldie', 'penny', 'scarlett']);
   });
 
   it('marks only Elia as barely taking the stain', () => {

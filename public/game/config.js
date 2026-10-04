@@ -2,6 +2,8 @@
 // eats. Rods (Mona, Vi) separate after dividing. Cocci are round cells whose
 // daughters stick together: in chains for Streptococcus (divides in one
 // plane) or grape-like clusters for Staphylococcus (divides in several).
+// Ceres is a rod whose daughters stick together too, so she grows like a
+// coccus chain, with rod-shaped cells (`shape: 'rod'`).
 //
 // Each antibiotic's `zone` is the zone of inhibition around its disk, as the
 // diameter in millimeters a lab would measure for a susceptible strain of
@@ -365,6 +367,50 @@ export const SPECIES = {
       { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 31 },
       { code: 'CC', name: 'clindamycin', zone: 30 },
       { code: 'DO', name: 'doxycycline', zone: 28 },
+    ],
+  },
+  // Bacillus cereus: a big rod that grows in short chains, like train cars
+  // (drawn here as chains of up to three). She's a rod, but her daughters
+  // stay stuck end to end the way Scarlett's do, so she grows with the chain
+  // code in coccus.js, with rod-shaped cells. Her name is a nod to "cereus"
+  // and to Ceres, the Roman goddess of grain (B. cereus is famous for growing
+  // on rice). There are no standard lab disk sizes for Bacillus, so her zones
+  // are estimates from how well each drug works on it. She makes
+  // beta-lactamases that break down penicillin, so that disk has no zone.
+  ceres: {
+    facts: [
+      "Ceres is a large Gram-positive rod, so she stains purple on a Gram stain.",
+      "Ceres often grows in chains of rods, lined up like a little train.",
+      "Ceres makes endospores: tough, dormant cells that can survive cooking.",
+      "\"Bacillus,\" the first part of Ceres's species name, means little rod in Latin.",
+      "\"Cereus\" means waxy in Latin, and it sounds like Ceres, the Roman goddess of grain.",
+      "On agar, Ceres grows large, flat colonies that can look waxy or frosted.",
+      "Ceres lives in soil and dust, so she often turns up on rice, vegetables, and spices.",
+      "If cooked rice sits out too long, Ceres's spores can wake up, grow, and make toxins.",
+      "Food poisoning from Ceres is sometimes nicknamed \"fried rice syndrome.\"",
+      "Ceres makes a toxin called cereulide that can cause vomiting within 1 to 6 hours.",
+      "Ceres's cereulide survives heat, so reheating rice won't destroy it once it's made.",
+      "Ceres can also make different toxins that cause diarrhea 6 to 15 hours after eating.",
+      "On blood agar, Ceres is usually beta-hemolytic, clearing the blood around her colonies.",
+      "Ceres usually swims using flagella all over her body.",
+      "Ceres is a close cousin of Bacillus anthracis, the bacterium that causes anthrax.",
+      "Ceres's cousin Bacillus thuringiensis is used by farmers as a natural insecticide.",
+      "Ceres often makes beta-lactamases, enzymes that break down penicillin and its relatives.",
+    ],
+    scientific: 'Bacillus cereus',
+    color: '#0369a1', // for her name above the dish
+    kind: 'coccus', // grows in chains (see above), though her cells are rods
+    gram: 'positive',
+    layout: 'chain',
+    maxCells: 3, // short chains
+    shape: 'rod',
+    colors: { fill: '#bae6fd', stroke: '#0369a1', highlight: '#f0f9ff', dark: '#0c4a6e' },
+    antibiotics: [
+      { code: 'VA', name: 'vancomycin', zone: 17 },
+      { code: 'CIP', name: 'ciprofloxacin', zone: 28 },
+      { code: 'P', name: 'penicillin', zone: null }, // beta-lactamases: no zone
+      { code: 'GM', name: 'gentamicin', zone: 22 },
+      { code: 'CC', name: 'clindamycin', zone: 21 },
     ],
   },
 };

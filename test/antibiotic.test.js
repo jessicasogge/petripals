@@ -256,10 +256,10 @@ describe('levels', () => {
 describe("a drug she's resistant to (no zone)", () => {
   const gentamicin = { code: 'GM', name: 'gentamicin', zone: null };
 
-  it('only Ana has one, and it\'s gentamicin: bifidobacteria are naturally resistant to it', () => {
+  it("only Ana and Ceres have one: Ana's gentamicin (bifidobacteria are naturally resistant) and Ceres's penicillin (her beta-lactamases break it down)", () => {
     const resistant = Object.entries(SPECIES).flatMap(([pal, s]) =>
       s.antibiotics.filter((a) => a.zone === null).map((a) => `${pal} ${a.code}`));
-    expect(resistant).toEqual(['ana GM']);
+    expect(resistant.sort()).toEqual(['ana GM', 'ceres P']);
   });
 
   it('gets no zone at all, so only the disk itself counts as touching', () => {

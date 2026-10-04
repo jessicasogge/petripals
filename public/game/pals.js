@@ -13,6 +13,8 @@
 //           home page, filling her tile on the picker, snug in the dish
 //   art     the drawing itself, in a 200 x 200 space. Wrap the face in
 //           <g class="face">: offspring in the dish hide it.
+//   page    which page of the picker she's on (1 unless set). The picker
+//           shows one page of pals at a time, with a More pals button.
 //
 // To add a pal: add her here and to SPECIES in config.js, and give her tile a
 // color in styles.css (.<id> next to .penny and the others).
@@ -302,7 +304,59 @@ export const PALS = [
       </g>
     `,
   },
+  // Ceres: Bacillus cereus, a sky-blue chain of three square-ended rods,
+  // with a sprig of wheat for Ceres, the Roman goddess of grain
+  {
+    id: 'ceres',
+    name: 'Ceres',
+    looks: 'a sky-blue chain of three Bacillus cereus rods, with a sprig of wheat',
+    motion: 'wobble',
+    page: 2,
+    frames: { home: '0 -4 200 200', picker: '6 -2 188 188', dish: '6 -2 188 188' },
+    art: `
+      <!-- left rod, tipped down at its outer end -->
+      <g transform="rotate(14 42 112)">
+        <rect x="14" y="93" width="56" height="38" rx="11" fill="#bae6fd" stroke="#0369a1" stroke-width="4" />
+        <circle cx="26" cy="103" r="4" fill="#f0f9ff" />
+      </g>
+      <!-- right rod -->
+      <g transform="rotate(-14 158 112)">
+        <rect x="130" y="93" width="56" height="38" rx="11" fill="#bae6fd" stroke="#0369a1" stroke-width="4" />
+        <circle cx="142" cy="103" r="4" fill="#f0f9ff" />
+      </g>
+      <!-- middle rod, with her face -->
+      <rect x="67" y="80" width="66" height="46" rx="13" fill="#bae6fd" stroke="#0369a1" stroke-width="4" />
+      <circle cx="79" cy="90" r="4.5" fill="#f0f9ff" />
+      <g class="face">
+        <circle cx="90" cy="101" r="5.5" fill="#0c4a6e" />
+        <circle cx="110" cy="101" r="5.5" fill="#0c4a6e" />
+        <circle cx="91.8" cy="99.2" r="1.9" fill="white" />
+        <circle cx="111.8" cy="99.2" r="1.9" fill="white" />
+        <ellipse cx="80" cy="113" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="120" cy="113" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
+        <path d="M94 112 Q100 118 106 112" stroke="#0c4a6e" stroke-width="3" fill="none" stroke-linecap="round" />
+        <!-- a sprig of wheat on her head -->
+        <path d="M105 80 Q107 62 116 46" stroke="#a16207" stroke-width="3" fill="none" stroke-linecap="round" />
+        <g fill="#facc15" stroke="#a16207" stroke-width="1.8">
+          <ellipse cx="102" cy="69" rx="3.8" ry="7" transform="rotate(-25 102 69)" />
+          <ellipse cx="112" cy="71" rx="3.8" ry="7" transform="rotate(35 112 71)" />
+          <ellipse cx="106" cy="57" rx="3.8" ry="7" transform="rotate(-20 106 57)" />
+          <ellipse cx="116" cy="60" rx="3.8" ry="7" transform="rotate(40 116 60)" />
+          <ellipse cx="117" cy="44" rx="3.8" ry="7" transform="rotate(25 117 44)" />
+        </g>
+      </g>
+    `,
+  },
 ];
+
+// Which page of the picker `pal` is on.
+export const pageOf = (pal) => pal.page ?? 1;
+
+// The picker's pages, in order: each a list of pals.
+export function pickerPages(pals = PALS) {
+  const count = Math.max(...pals.map(pageOf));
+  return Array.from({ length: count }, (_, i) => pals.filter((pal) => pageOf(pal) === i + 1));
+}
 
 // A copy of `pals` in a random order (a Fisher-Yates shuffle, so every order
 // is equally likely). The picker uses it so no pal is always first.
