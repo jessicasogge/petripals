@@ -76,7 +76,7 @@ The tests use [Vitest](https://vitest.dev/). Most of the game logic runs in [jsd
 | `public/choose-mode.html` | Choose classic or mixed culture |
 | `public/petri-dish.html` | The game, in either mode |
 | `public/game/` | Game code: classic mode (`game.js`), mixed culture mode (`race.js`, with the rival in `rival.js`), what both share (a colony eating and dividing in `colony.js`, steering in `keyboard.js` and `touch.js`), how the pals grow (`rod.js`, `coccus.js`), antibiotics (`antibiotic.js`), nutrients, physics, settings (`config.js`), and a little surprise on the home page (`split.js`) |
-| `public/game/pals.js` | Every pal's name and drawing, in one place. All the pages draw the pals from here, in the order listed. To add a pal, see the notes at the top. |
+| `public/game/pals.js` | Every pal's name and drawing, in one place. All the pages draw the pals from here, in the order listed (except the picker, which shuffles them each visit). To add a pal, see the notes at the top. |
 | `test/` | Tests |
 | `src/index.ts` | Small Express server for local development |
 

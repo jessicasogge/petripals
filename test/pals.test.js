@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SPECIES } from '../public/game/config.js';
-import { dishPal, homePal, palById, PALS, palTile } from '../public/game/pals.js';
+import { dishPal, homePal, inRandomOrder, palById, PALS, palTile } from '../public/game/pals.js';
 
 // (jsdom changes import.meta.url to a web address, so find files from the project folder.)
 const file = (name) => readFileSync(resolve(process.cwd(), 'public', name), 'utf8');
@@ -117,6 +117,30 @@ describe('her drawing', () => {
   });
 });
 
+describe('inRandomOrder', () => {
+  it('keeps every pal, each once, and leaves PALS as it was', () => {
+    const before = [...PALS];
+    const order = inRandomOrder(PALS);
+    expect(order).not.toBe(PALS);
+    expect([...order].sort((a, b) => a.id.localeCompare(b.id))).toEqual(
+      [...PALS].sort((a, b) => a.id.localeCompare(b.id)),
+    );
+    expect(PALS).toEqual(before);
+  });
+
+  it('can put any pal first', () => {
+    // Over many shuffles, every pal leads at least once.
+    const firsts = new Set();
+    for (let i = 0; i < 500; i++) firsts.add(inRandomOrder(PALS)[0].id);
+    expect(firsts.size).toBe(PALS.length);
+  });
+
+  it('follows the random numbers it is given', () => {
+    expect(inRandomOrder(['a', 'b', 'c'], () => 0)).toEqual(['b', 'c', 'a']);
+    expect(inRandomOrder(['a', 'b', 'c'], () => 0.99)).toEqual(['a', 'b', 'c']);
+  });
+});
+
 describe('the pages', () => {
   it('home shows every pal, in order', async () => {
     await open('index.html', 'script.js');
@@ -124,17 +148,28 @@ describe('the pages', () => {
     expect(labels).toEqual(PALS.map((pal) => `${pal.name}, ${pal.looks}`));
   });
 
-  it('the picker has a card for every pal, in order, linking to her', async () => {
+  it('the picker has a card for every pal, each once, linking to her', async () => {
     await open('pal-picker.html', 'game/pal-picker.js');
     const cards = [...document.querySelectorAll('.pal-card')];
-    expect(cards.map((c) => c.querySelector('h2').textContent)).toEqual(PALS.map((pal) => pal.name));
-    for (const [i, card] of cards.entries()) {
-      const { id, name } = PALS[i];
+    const names = cards.map((c) => c.querySelector('h2').textContent);
+    expect([...names].sort()).toEqual(PALS.map((pal) => pal.name).sort());
+    for (const card of cards) {
+      const { id, name } = PALS.find((pal) => pal.name === card.querySelector('h2').textContent);
       expect(card.querySelector('.pal-icon').classList).toContain(id);
       expect(card.querySelector('.species i').textContent).toBe(SPECIES[id].scientific);
       expect(card.querySelector('a').getAttribute('href')).toBe(`./choose-mode.html?pal=${id}`);
       expect(card.querySelector('a').textContent).toBe(`Select ${name}`);
     }
+  });
+
+  it('the picker shows the pals in a random order', async () => {
+    // With Math.random always 0, the shuffle moves the first pal to the end.
+    vi.spyOn(Math, 'random').mockReturnValue(0);
+    await open('pal-picker.html', 'game/pal-picker.js');
+    const names = [...document.querySelectorAll('.pal-card h2')].map((h) => h.textContent);
+    expect(names).toEqual(inRandomOrder(PALS, () => 0).map((pal) => pal.name));
+    expect(names).not.toEqual(PALS.map((pal) => pal.name));
+    vi.restoreAllMocks();
   });
 
   it("the picker's microscope button shows every pal in her Gram stain color, and back", async () => {
