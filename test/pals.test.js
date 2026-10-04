@@ -121,8 +121,9 @@ describe('her drawing', () => {
     expect(svg.getAttribute('aria-label')).toBe(`Ana, ${ana.looks}`);
   });
 
-  it('on the home page, keeps Vi a little smaller', () => {
+  it('on the home page, keeps Vi and Sallie a little smaller', () => {
     expect(homePal(palById('vi')).style.width).toBe('108px');
+    expect(homePal(palById('sallie')).style.width).toBe('104px');
     expect(homePal(ana).style.width).toBe('');
   });
 

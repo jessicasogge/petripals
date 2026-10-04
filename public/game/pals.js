@@ -369,6 +369,8 @@ export const PALS = [
     looks: 'a grey rod-shaped Salmonella Typhi with flagella all around her, wearing a bat-wing bow',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '10 10 180 180', dish: '8 8 184 184' },
+    // Drawn a little smaller than the others on the home page.
+    homeWidth: 104,
     art: `
       <!-- flagella all over her body -->
       ${SALLIE_FLAGELLA}
