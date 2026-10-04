@@ -1,8 +1,8 @@
 // The pal picker: a card for each pal, with her picture, name and species,
-// and a button to pick her. The pals come in pages (see `page` in pals.js),
-// one page at a time, with Back and More pals buttons to move between them.
-// Each page's pals are in a new random order every visit, so no pal is
-// always first. The microscope button shows every pal as she'd look after a
+// and a button to pick her. All the pals are shuffled into a new random
+// order every visit, so no pal is always first or always on a later page,
+// then split into pages of eight (PAGE_SIZE in pals.js), shown one at a time
+// with Back and More pals buttons to move between them. The microscope button shows every pal as she'd look after a
 // Gram stain.
 import { SPECIES } from './config.js';
 import { inRandomOrder, PALS, palTile, pickerPages } from './pals.js';
@@ -11,11 +11,11 @@ import { stainPal, unstainPal } from './stain.js';
 // Every page is made up front and the ones not showing are hidden, so the
 // microscope button can stain every pal, and a page you come back to looks
 // the same as when you left it.
-const pages = pickerPages().map((pals, i) => {
+const pages = pickerPages(inRandomOrder(PALS)).map((pals, i) => {
   const grid = document.createElement('div');
   grid.className = 'picker-grid';
   grid.dataset.page = String(i + 1);
-  grid.append(...inRandomOrder(pals).map(card));
+  grid.append(...pals.map(card));
   return grid;
 });
 document.querySelector('.picker-pages').append(...pages);

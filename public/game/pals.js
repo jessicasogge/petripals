@@ -13,8 +13,6 @@
 //           home page, filling her tile on the picker, snug in the dish
 //   art     the drawing itself, in a 200 x 200 space. Wrap the face in
 //           <g class="face">: offspring in the dish hide it.
-//   page    which page of the picker she's on (1 unless set). The picker
-//           shows one page of pals at a time, with a More pals button.
 //
 // To add a pal: add her here and to SPECIES in config.js, and give her tile a
 // color in styles.css (.<id> next to .penny and the others).
@@ -310,7 +308,6 @@ export const PALS = [
     name: 'Ceres',
     looks: 'a sky-blue chain of three Bacillus cereus rods',
     motion: 'wobble',
-    page: 2,
     frames: { home: '0 0 200 200', picker: '6 10 188 188', dish: '6 10 188 188' },
     art: `
       <!-- left rod, tipped down at its outer end -->
@@ -339,13 +336,15 @@ export const PALS = [
   },
 ];
 
-// Which page of the picker `pal` is on.
-export const pageOf = (pal) => pal.page ?? 1;
+// How many pals fit on one page of the picker: four across, two down.
+export const PAGE_SIZE = 8;
 
-// The picker's pages, in order: each a list of pals.
-export function pickerPages(pals = PALS) {
-  const count = Math.max(...pals.map(pageOf));
-  return Array.from({ length: count }, (_, i) => pals.filter((pal) => pageOf(pal) === i + 1));
+// `pals` split into the picker's pages, in order, PAGE_SIZE to a page (the
+// last page has whoever is left over).
+export function pickerPages(pals = PALS, size = PAGE_SIZE) {
+  const pages = [];
+  for (let i = 0; i < pals.length; i += size) pages.push(pals.slice(i, i + size));
+  return pages;
 }
 
 // A copy of `pals` in a random order (a Fisher-Yates shuffle, so every order

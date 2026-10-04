@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SPECIES } from '../public/game/config.js';
-import { dishPal, homePal, inRandomOrder, pageOf, palById, PALS, palTile, pickerPages } from '../public/game/pals.js';
+import { dishPal, homePal, inRandomOrder, PAGE_SIZE, palById, PALS, palTile, pickerPages } from '../public/game/pals.js';
 
 // (jsdom changes import.meta.url to a web address, so find files from the project folder.)
 const file = (name) => readFileSync(resolve(process.cwd(), 'public', name), 'utf8');
@@ -36,19 +36,13 @@ describe('the pals', () => {
     expect(IDS).toEqual(['penny', 'vi', 'goldie', 'ana', 'scarlett', 'coco', 'mona', 'elia', 'ceres']);
   });
 
-  it('puts the first eight on the first page of the picker, and Ceres on the second', () => {
+  it('splits into pages of eight for the picker (a tidy four-by-two), with the rest on the last page', () => {
+    expect(PAGE_SIZE).toBe(8);
     const pages = pickerPages();
-    expect(pages.map((page) => page.map((pal) => pal.id))).toEqual([
-      ['penny', 'vi', 'goldie', 'ana', 'scarlett', 'coco', 'mona', 'elia'],
-      ['ceres'],
-    ]);
-    // A full first page is a tidy four-by-two.
-    expect(pages[0]).toHaveLength(8);
-  });
-
-  it('gives every pal a page that is a whole number from 1, with no empty pages between', () => {
-    for (const pal of PALS) expect(Number.isInteger(pageOf(pal)) && pageOf(pal) >= 1, pal.id).toBe(true);
-    for (const page of pickerPages()) expect(page.length).toBeGreaterThan(0);
+    expect(pages.map((page) => page.length)).toEqual([8, 1]);
+    expect(pages.flat()).toEqual(PALS);
+    expect(pickerPages(['a', 'b', 'c', 'd', 'e'], 2)).toEqual([['a', 'b'], ['c', 'd'], ['e']]);
+    expect(pickerPages(['a', 'b'], 2)).toEqual([['a', 'b']]);
   });
 
   it.each(PALS)('$id has a name and a description', (pal) => {
@@ -177,15 +171,23 @@ describe('the pages', () => {
     }
   });
 
-  it('the picker shows the pals in a random order, page by page', async () => {
-    // With Math.random always 0, the shuffle moves each page's first pal to its end.
+  it('the picker shuffles all the pals together, then splits them into pages', async () => {
+    // With Math.random always 0, the shuffle moves the first pal (Penny) to the end.
     vi.spyOn(Math, 'random').mockReturnValue(0);
     await open('pal-picker.html', 'game/pal-picker.js');
     const grids = [...document.querySelectorAll('.picker-grid')];
     const names = grids.map((grid) => [...grid.querySelectorAll('.pal-card h2')].map((h) => h.textContent));
-    expect(names).toEqual(pickerPages().map((page) => inRandomOrder(page, () => 0).map((pal) => pal.name)));
-    expect(names[0]).not.toEqual(pickerPages()[0].map((pal) => pal.name));
+    expect(names).toEqual(pickerPages(inRandomOrder(PALS, () => 0)).map((page) => page.map((pal) => pal.name)));
+    // So Ceres is on the first page here, and Penny is the one on the second.
+    expect(names[0]).toContain('Ceres');
+    expect(names[1]).toEqual(['Penny']);
     vi.restoreAllMocks();
+  });
+
+  it('can put any pal on the second page of the picker', () => {
+    const second = new Set();
+    for (let i = 0; i < 1000; i++) second.add(pickerPages(inRandomOrder(PALS))[1][0].id);
+    expect([...second].sort()).toEqual(PALS.map((pal) => pal.id).sort());
   });
 
   it('the picker shows one page at a time, with More pals and Back buttons between them', async () => {
@@ -205,7 +207,7 @@ describe('the pages', () => {
 
     more.click();
     expect(showing()).toEqual(['2']);
-    expect(grids[1].querySelector('h2').textContent).toBe('Ceres');
+    expect(grids[1].querySelectorAll('.pal-card')).toHaveLength(1); // whoever didn't fit on the first
     expect(back.hidden).toBe(false);
     expect(more.hidden).toBe(true);
     expect(document.activeElement).toBe(back); // the keyboard stays on the pager
@@ -220,9 +222,10 @@ describe('the pages', () => {
     await open('pal-picker.html', 'game/pal-picker.js');
     document.querySelector('.scope-btn').click();
     document.querySelector('.pager-more').click();
-    expect(document.querySelector('.pal-icon.ceres svg [style*="fill"]')).not.toBeNull();
+    const second = document.querySelector('.picker-grid[data-page="2"] .pal-icon svg');
+    expect(second.querySelector('[style*="fill"]')).not.toBeNull();
     document.querySelector('.scope-btn').click();
-    expect(document.querySelector('.pal-icon.ceres svg [style*="fill"]')).toBeNull();
+    expect(second.querySelector('[style*="fill"]')).toBeNull();
   });
 
   it("keeps a short page's pals in the middle, and hides pages that aren't showing", () => {
