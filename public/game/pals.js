@@ -93,6 +93,35 @@ const TERRA_FLAGELLA = [
   .join('');
 
 export const PALS = [
+  // Terra: Clostridium tetani, an olive rod with a round spore at one end (a "drumstick")
+  {
+    id: 'terra',
+    name: 'Terra',
+    looks: 'an olive drumstick-shaped Clostridium tetani rod with a round spore at one end',
+    motion: 'bob',
+    frames: { home: '0 0 200 200', picker: '10 12 176 176', dish: '0 8 184 184' },
+    // Drawn a little smaller than the others on the home page.
+    homeWidth: 108,
+    art: `
+      <!-- flagella along her rod -->
+      ${TERRA_FLAGELLA}
+      <!-- one outline: a slim rod that swells into a round spore at the right end -->
+      <path d="M50 80 L133.9 80 A27 27 0 1 1 133.9 120 L50 120 A20 20 0 0 1 50 80 Z" fill="#d9dfa0" stroke="#65751c" stroke-width="4" stroke-linejoin="round" />
+      <circle cx="44" cy="90" r="3.5" fill="#f4f7d9" />
+      <!-- the spore: bright and glassy, and pure white so a Gram stain leaves it clear, as on a real slide -->
+      <circle cx="153" cy="100" r="16" fill="#ffffff" stroke="#65751c" stroke-width="2" stroke-opacity="0.45" />
+      <circle cx="157" cy="104" r="8" fill="#f4f7d9" opacity="0.7" />
+      <g class="face">
+        <circle cx="74" cy="97" r="5.5" fill="#3a4410" />
+        <circle cx="98" cy="97" r="5.5" fill="#3a4410" />
+        <circle cx="75.8" cy="95.2" r="1.9" fill="white" />
+        <circle cx="99.8" cy="95.2" r="1.9" fill="white" />
+        <ellipse cx="62" cy="108" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="110" cy="108" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <path d="M81 108 Q86 113 91 108" stroke="#3a4410" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
   // Penny: Streptococcus pneumoniae, a bluish-purple pair of cells, with glasses
   {
     id: 'penny',
@@ -336,35 +365,6 @@ export const PALS = [
         <ellipse cx="167.5" cy="104.5" rx="2.4" ry="1.6" fill="#f9a8d4" opacity="0.9" />
         <ellipse cx="184.5" cy="104.5" rx="2.4" ry="1.6" fill="#f9a8d4" opacity="0.9" />
         <path d="M173.5 104.5 Q176 107.5 178.5 104.5" stroke="#581c87" stroke-width="1.8" fill="none" stroke-linecap="round" />
-      </g>
-    `,
-  },
-  // Terra: Clostridium tetani, an olive rod with a round spore at one end (a "drumstick")
-  {
-    id: 'terra',
-    name: 'Terra',
-    looks: 'an olive drumstick-shaped Clostridium tetani rod with a round spore at one end',
-    motion: 'bob',
-    frames: { home: '0 0 200 200', picker: '10 12 176 176', dish: '0 8 184 184' },
-    // Drawn a little smaller than the others on the home page.
-    homeWidth: 108,
-    art: `
-      <!-- flagella along her rod -->
-      ${TERRA_FLAGELLA}
-      <!-- one outline: a slim rod that swells into a round spore at the right end -->
-      <path d="M50 80 L133.9 80 A27 27 0 1 1 133.9 120 L50 120 A20 20 0 0 1 50 80 Z" fill="#d9dfa0" stroke="#65751c" stroke-width="4" stroke-linejoin="round" />
-      <circle cx="44" cy="90" r="3.5" fill="#f4f7d9" />
-      <!-- the spore: bright and glassy, and pure white so a Gram stain leaves it clear, as on a real slide -->
-      <circle cx="153" cy="100" r="16" fill="#ffffff" stroke="#65751c" stroke-width="2" stroke-opacity="0.45" />
-      <circle cx="157" cy="104" r="8" fill="#f4f7d9" opacity="0.7" />
-      <g class="face">
-        <circle cx="74" cy="97" r="5.5" fill="#3a4410" />
-        <circle cx="98" cy="97" r="5.5" fill="#3a4410" />
-        <circle cx="75.8" cy="95.2" r="1.9" fill="white" />
-        <circle cx="99.8" cy="95.2" r="1.9" fill="white" />
-        <ellipse cx="62" cy="108" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
-        <ellipse cx="110" cy="108" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
-        <path d="M81 108 Q86 113 91 108" stroke="#3a4410" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
   },
