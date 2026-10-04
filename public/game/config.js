@@ -30,6 +30,8 @@
 // what counts as touching an antibiotic disk.
 // `facts` are short fun facts about each pal; one is shown at random in the
 // pop-up at the end of every level or race, win or lose (see game/facts.js).
+// Put other bacteria's scientific names between asterisks (*Bacillus
+// anthracis*) and the pop-up shows them in italics.
 export const SPECIES = {
   mona: {
     facts: [
@@ -394,8 +396,8 @@ export const SPECIES = {
       "Ceres can also make different toxins that cause diarrhea 6 to 15 hours after eating.",
       "On blood agar, Ceres is usually beta-hemolytic, clearing the blood around her colonies.",
       "Ceres usually swims using flagella all over her body.",
-      "Ceres is a close cousin of Bacillus anthracis, the bacterium that causes anthrax.",
-      "Ceres's cousin Bacillus thuringiensis is used by farmers as a natural insecticide.",
+      "Ceres is a close cousin of *Bacillus anthracis*, the bacterium that causes anthrax.",
+      "Ceres's cousin *Bacillus thuringiensis* is used by farmers as a natural insecticide.",
       "Ceres often makes beta-lactamases, enzymes that break down penicillin and its relatives.",
     ],
     scientific: 'Bacillus cereus',

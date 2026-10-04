@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SPECIES } from '../public/game/config.js';
-import { hideFact, pickFact, showFact } from '../public/game/facts.js';
+import { hideFact, pickFact, plainFact, showFact, writeFact } from '../public/game/facts.js';
 
 describe('every pal\'s facts', () => {
   it.each(Object.keys(SPECIES))('%s has at least 10 short, different facts', (pal) => {
@@ -9,7 +9,11 @@ describe('every pal\'s facts', () => {
     expect(facts.length).toBeGreaterThanOrEqual(10);
     expect(new Set(facts).size).toBe(facts.length);
     const name = pal[0].toUpperCase() + pal.slice(1);
-    for (const fact of facts) {
+    for (const raw of facts) {
+      // Italics markers come in pairs, around at least one word.
+      expect(raw.split('*').length % 2, raw).toBe(1);
+      expect(raw, raw).not.toMatch(/\*\s*\*/);
+      const fact = plainFact(raw); // as it reads on screen
       expect(fact.length, fact).toBeLessThanOrEqual(90); // fits the pop-up
       // Says whose fact it is, so it's clear in a race against another pal.
       expect(fact, fact).toContain(name);
@@ -18,6 +22,48 @@ describe('every pal\'s facts', () => {
       // like whip-like, are fine).
       expect(fact, fact).not.toMatch(/[\u2013\u2014]|\s-\s|\d-\d/);
     }
+  });
+});
+
+describe('scientific names of other bacteria', () => {
+  // Every genus our pals' facts mention, besides each pal's own.
+  const GENERA = /\b(Bacillus|Clostridium|Escherichia|Salmonella|Listeria|Mycobacterium) [a-z]+/g;
+
+  it('are in italics wherever a fact names one', () => {
+    for (const [pal, { facts }] of Object.entries(SPECIES)) {
+      for (const fact of facts) {
+        for (const [name] of fact.matchAll(GENERA)) expect(fact, `${pal}: ${fact}`).toContain(`*${name}*`);
+      }
+    }
+  });
+
+  it("puts Ceres's cousins in italics", () => {
+    const italic = SPECIES.ceres.facts.flatMap((fact) => [...fact.matchAll(/\*([^*]+)\*/g)].map((m) => m[1]));
+    expect(italic.sort()).toEqual(['Bacillus anthracis', 'Bacillus thuringiensis']);
+  });
+});
+
+describe('writeFact', () => {
+  it('writes the parts between asterisks in italics, and the rest as plain text', () => {
+    const el = document.createElement('span');
+    writeFact(el, "Ceres's cousin *Bacillus thuringiensis* is used by farmers.");
+    expect(el.textContent).toBe("Ceres's cousin Bacillus thuringiensis is used by farmers.");
+    expect([...el.querySelectorAll('i')].map((i) => i.textContent)).toEqual(['Bacillus thuringiensis']);
+  });
+
+  it('copes with italics at the start or end, and with none', () => {
+    const el = document.createElement('span');
+    writeFact(el, '*Bacillus* means little rod.');
+    expect(el.innerHTML).toBe('<i>Bacillus</i> means little rod.');
+    writeFact(el, 'Plain words.');
+    expect(el.innerHTML).toBe('Plain words.');
+  });
+
+  it('never reads a fact as HTML', () => {
+    const el = document.createElement('span');
+    writeFact(el, 'A <b>bold</b> *<img src=x>* fact.');
+    expect(el.querySelector('b, img')).toBeNull();
+    expect(el.textContent).toBe('A <b>bold</b> <img src=x> fact.');
   });
 });
 
@@ -56,6 +102,14 @@ describe('the pop-up line', () => {
     showFact('mona', SPECIES.mona);
     expect(line().hidden).toBe(false);
     expect(SPECIES.mona.facts).toContain(line().querySelector('.fun-fact-text').textContent);
+  });
+
+  it('shows the names of other bacteria in italics, without the asterisks', () => {
+    const species = { facts: ["Ceres is a close cousin of *Bacillus anthracis*, the bacterium that causes anthrax."] };
+    showFact('ceres', species);
+    const text = line().querySelector('.fun-fact-text');
+    expect(text.querySelector('i').textContent).toBe('Bacillus anthracis');
+    expect(text.textContent).not.toContain('*');
   });
 
   it('shows a different fact on the next win', () => {

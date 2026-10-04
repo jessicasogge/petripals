@@ -1,5 +1,23 @@
 // "Did you know?" facts on the end-of-level pop-up, win or lose: a random fact about your pal from
 // her `facts` in config.js, never the same one twice in a row.
+//
+// A fact can put words in italics between asterisks, for scientific names
+// of other bacteria: "Ceres's cousin *Bacillus thuringiensis* is ...".
+
+// `fact` without its italics markers: the words as they read on screen.
+export const plainFact = (fact) => fact.replaceAll('*', '');
+
+// Write `fact` into `element`, with the parts between asterisks in <i>. Built
+// from text nodes, never HTML, so a fact can't break the page.
+export function writeFact(element, fact) {
+  const parts = fact.split('*').map((text, i) => {
+    if (i % 2 === 0) return document.createTextNode(text);
+    const italic = document.createElement('i');
+    italic.textContent = text;
+    return italic;
+  });
+  element.replaceChildren(...parts.filter((part) => part.textContent !== ''));
+}
 
 // A random fact from `facts`, avoiding `last` if there's any other choice.
 export function pickFact(facts = [], last = null, random = Math.random) {
@@ -26,7 +44,7 @@ export function showFact(pal, species) {
     line.hidden = true;
     return;
   }
-  line.querySelector('.fun-fact-text').textContent = fact;
+  writeFact(line.querySelector('.fun-fact-text'), fact);
   line.hidden = false;
   try {
     sessionStorage.setItem(key, fact);
