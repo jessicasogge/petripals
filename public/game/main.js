@@ -6,6 +6,7 @@
 import { antibioticsFor, placeAntibiotics } from './antibiotic.js';
 import { LEVELS, MIXED, SPECIES } from './config.js';
 import { playGame } from './game.js';
+import { speciesName } from './italics.js';
 import { scatterNutrients } from './nutrients.js';
 import { dishPal, PALS } from './pals.js';
 import { playRace } from './race.js';
@@ -46,7 +47,7 @@ function startClassic() {
   const title = document.querySelector('.pal-name');
   title.textContent = pal.dataset.name;
   title.style.color = species.color;
-  document.querySelector('.species-name').textContent = species.scientific;
+  document.querySelector('.species-name').replaceChildren(...speciesName(species.scientific));
   const disks = placeAntibiotics(antibioticsFor(species.antibiotics, level.disks));
   const nutrients = scatterNutrients({ avoid: disks });
   playGame(pal, species, nutrients, disks, { level: levelNumber, target: level.target });
@@ -67,7 +68,7 @@ function startMixed() {
   const title = document.querySelector('.pal-name');
   title.replaceChildren(named(pal.dataset.name, species.color), ' vs. ', named(rival.svg.dataset.name, rival.species.color));
   const speciesLine = document.querySelector('.species');
-  speciesLine.replaceChildren(italic(species.scientific), ' vs. ', italic(rival.species.scientific));
+  speciesLine.replaceChildren(...speciesName(species.scientific), ' vs. ', ...speciesName(rival.species.scientific));
 
   const howTo = document.querySelector('.how-to-play');
   howTo.replaceChildren(
@@ -88,12 +89,6 @@ function named(text, color) {
   span.textContent = text;
   span.style.color = color;
   return span;
-}
-
-function italic(text) {
-  const i = document.createElement('i');
-  i.textContent = text;
-  return i;
 }
 
 function wording(className, text) {

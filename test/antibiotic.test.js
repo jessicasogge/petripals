@@ -268,6 +268,13 @@ describe("a drug she's resistant to (no zone)", () => {
     for (const { zone } of SPECIES.ceres.antibiotics) expect(zone).not.toBeNull();
   });
 
+  it("gives Sallie only drugs that work on her: no ciprofloxacin, which many typhoid strains now resist", () => {
+    const codes = SPECIES.sallie.antibiotics.map((a) => a.code);
+    expect(codes).not.toContain('CIP');
+    expect(codes[0]).toBe('CRO'); // ceftriaxone, a first choice for typhoid, on level 1
+    for (const { zone } of SPECIES.sallie.antibiotics) expect(zone).not.toBeNull();
+  });
+
   it('gets no zone at all, so only the disk itself counts as touching', () => {
     expect(zoneWidth(gentamicin.zone)).toBe(0);
     const disk = { fx: 0.5, fy: 0, r: 0.1, zone: zoneWidth(gentamicin.zone), antibiotic: gentamicin };

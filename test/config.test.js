@@ -17,8 +17,8 @@ function contrast(a, b) {
 }
 
 describe('pals', () => {
-  it('has all nine pals', () => {
-    expect(PALS.sort()).toEqual(['ana', 'ceres', 'coco', 'elia', 'goldie', 'mona', 'penny', 'scarlett', 'vi']);
+  it('has all ten pals', () => {
+    expect(PALS.sort()).toEqual(['ana', 'ceres', 'coco', 'elia', 'goldie', 'mona', 'penny', 'sallie', 'scarlett', 'vi']);
   });
 
   it.each(PALS)('%s is either a rod or a coccus, with what that kind needs', (pal) => {
@@ -49,6 +49,12 @@ describe('pals', () => {
     expect(SPECIES.penny.maxCells).toBe(2);
   });
 
+  it('makes Sallie a rod that swims apart after dividing, like Mona', () => {
+    expect(SPECIES.sallie.kind).toBe('rod');
+    expect(SPECIES.sallie.layout).toBeUndefined();
+    expect(SPECIES.sallie.gram).toBe('negative');
+  });
+
   it('makes Ceres a Bacillus: rod-shaped cells in short chains of up to three', () => {
     expect(SPECIES.ceres.kind).toBe('coccus'); // grows with the chain code
     expect(SPECIES.ceres.layout).toBe('chain');
@@ -66,8 +72,14 @@ describe('pals', () => {
 });
 
 describe('names above the dish', () => {
-  it.each(PALS)("writes %s's species the scientific way: Genus species", (pal) => {
-    expect(SPECIES[pal].scientific).toMatch(/^[A-Z][a-z]+ [a-z]+$/);
+  it.each(PALS)("writes %s's species the scientific way: Genus species, or *Genus* Serovar", (pal) => {
+    // A serovar (Typhi) is capitalized and never in italics, so a name with
+    // one marks just the genus for italics.
+    expect(SPECIES[pal].scientific).toMatch(/^([A-Z][a-z]+ [a-z]+|\*[A-Z][a-z]+\* [A-Z][a-z]+)$/);
+  });
+
+  it('writes Sallie as Salmonella Typhi, with only the genus in italics', () => {
+    expect(SPECIES.sallie.scientific).toBe('*Salmonella* Typhi');
   });
 
   it.each(PALS)("colors %s's name so it's easy to read on the page", (pal) => {

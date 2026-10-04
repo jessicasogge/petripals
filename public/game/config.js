@@ -18,7 +18,9 @@
 // standard disk codes.
 //
 // `scientific` is the species name shown above the dish, with the pal's name
-// in her `color`.
+// in her `color`. It's all in italics, unless it marks the italic part
+// between asterisks: Sallie's is *Salmonella* Typhi, since Typhi is a
+// serovar, which is never in italics.
 //
 // `gram` is how she looks after a Gram stain: 'positive' cells stay purple,
 // 'negative' ones turn pink (the picker's microscope mode shows this).
@@ -414,6 +416,58 @@ export const SPECIES = {
       { code: 'E', name: 'erythromycin', zone: 23 },
       { code: 'GM', name: 'gentamicin', zone: 22 },
       { code: 'CC', name: 'clindamycin', zone: 21 },
+    ],
+  },
+  // Salmonella Typhi (Salmonella enterica serovar Typhi), the cause of
+  // typhoid fever. A rod with flagella all over her body (peritrichous), so
+  // she splits and swims apart like Mona. Typhi is a serovar, not a species,
+  // so it's capitalized and not in italics: her `scientific` marks just the
+  // genus for italics, between asterisks. Her zones are ballpark sizes for a
+  // susceptible strain, and every disk is a drug that works on one (many
+  // strains now resist ciprofloxacin, so she doesn't get it). Requested by
+  // u/prioryofthebat, whose favorite color is grey, hence her grey and her
+  // bat-wing bow.
+  sallie: {
+    facts: [
+      "Sallie is a Gram-negative rod, so she stains pink on a Gram stain.",
+      "Sallie usually swims with many flagella spread all over her body.",
+      "Sallie's full name is *Salmonella enterica* serovar Typhi.",
+      "Sallie causes typhoid fever and is human-restricted: humans are her only known reservoir.",
+      "Sallie spreads in food or water tainted by infected stool, and sometimes urine.",
+      "Sallie's genus, *Salmonella*, is named for Daniel Salmon, an American veterinary scientist.",
+      "Mary Mallon, known as \"Typhoid Mary,\" carried Sallie for years without getting sick.",
+      "Sallie can hide in the gallbladder, so some people carry her long after they recover.",
+      "Sallie wears a sugary capsule, the Vi antigen, that helps her hide from immune defenses.",
+      "Many typhoid vaccines teach the body to spot Sallie's Vi capsule. No relation to Vi!",
+      "Sallie can survive inside macrophages, the immune cells that are supposed to eat her.",
+      "On MacConkey agar, Sallie's colonies stay pale because she can't ferment lactose.",
+      "On XLD agar, Sallie's colonies are usually red, often with a small black center.",
+      "Sallie's typhoid fever can cause faint pink rose spots on the belly or upper chest.",
+      "Sallie's \"typhoid\" means \"like typhus,\" from a Greek word for smoke, haze, or stupor.",
+      "In 2016, an extensively drug-resistant strain of Sallie began spreading in Pakistan.",
+    ],
+    scientific: '*Salmonella* Typhi',
+    color: '#52525b', // for her name above the dish
+    kind: 'rod',
+    gram: 'negative',
+    size: 12,
+    body: [
+      // tail (the flagellum behind her)
+      [-0.435, 0.0, 0.04],
+      [-0.397, 0.0, 0.04],
+      [-0.359, 0.0, 0.04],
+      [-0.174, 0.0, 0.152],
+      [-0.087, 0.0, 0.152],
+      [0.0, 0.0, 0.152],
+      [0.087, 0.0, 0.152],
+      [0.174, 0.0, 0.152],
+    ],
+    antibiotics: [
+      { code: 'CRO', name: 'ceftriaxone', zone: 32 },
+      { code: 'AZM', name: 'azithromycin', zone: 20 },
+      { code: 'MEM', name: 'meropenem', zone: 31 },
+      { code: 'CFM', name: 'cefixime', zone: 27 },
+      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 25 },
     ],
   },
 };

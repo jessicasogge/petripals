@@ -455,6 +455,10 @@ body {
   background: rgba(125, 211, 252, 0.4);
 }
 
+.sallie {
+  background: rgba(161, 161, 170, 0.4);
+}
+
 .pick-btn {
   margin-top: 0.75rem;
   padding: 0.7rem 1rem;
