@@ -184,6 +184,28 @@ body {
   opacity: 0.8;
 }
 
+/* The home page's second button, under Start: Who’s That Pal?
+   (whos-that-pal.html). Outlined, so Start stays the main thing to press. */
+.guess-link {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.6rem 1.6rem;
+  font-family: Fredoka, system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #0f766e;
+  background: #f0fdfa;
+  border: 2px solid #0f766e;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.guess-link:hover {
+  background: #ccfbf1;
+}
+
 .picker-page {
   min-height: 100vh;
   display: grid;
@@ -702,6 +724,89 @@ body {
   display: inline-flex;
   align-items: center;
   text-decoration: none;
+}
+
+/* Who’s That Pal? (game/whos-that-pal.js): a fact with "this pal" in place of
+   her name, over a tile for every pal (the rival screen's tiles). */
+.guess-shell {
+  width: min(860px, 100%);
+}
+
+.guess-counter {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0f766e;
+  opacity: 0.75;
+}
+
+.guess-fact {
+  max-width: 38rem;
+  margin: 0.75rem auto 0;
+  padding: 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.7);
+  border: 2px solid rgba(15, 118, 110, 0.2);
+  border-radius: 18px;
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+
+/* Where her name goes: "this pal" in plain text, then her name, in her
+   color, once she's found. */
+.fact-blank.filled {
+  font-weight: 700;
+}
+
+.guess-status {
+  margin: 1rem 0 0;
+  min-height: 1.5em;
+  font-weight: 700;
+  color: #0f766e;
+}
+
+/* Her species under her name on each tile, shortened: P. aeruginosa. It
+   shrinks a little with the tile on a phone, and a long one
+   (L. monocytogenes) wraps onto two lines if it still won't fit. */
+.guess-btn {
+  container-type: inline-size;
+}
+
+.guess-species {
+  margin-top: -0.25rem;
+  font-size: clamp(0.68rem, 11.5cqi, 0.8rem);
+  font-weight: 400;
+  color: #134e4a;
+  line-height: 1.2;
+}
+
+/* The right pal: a thick teal border and a check, like a picked rival. */
+.guess-btn.right {
+  background: #f0fdfa;
+  border: 3px solid #0f766e;
+  padding: calc(0.6rem - 1px) calc(0.4rem - 1px) calc(0.7rem - 1px);
+}
+
+.guess-btn.right::after {
+  content: '\2713';
+  position: absolute;
+  top: -0.55rem;
+  right: -0.55rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: #0f766e;
+  color: white;
+  font-size: 0.9rem;
+  line-height: 1.6rem;
+}
+
+/* Keep room for Next fact, so the page doesn't jump when it shows up. */
+.guess-shell .rivals-actions {
+  min-height: 44px;
+}
+
+.next-fact[hidden] {
+  display: none;
 }
 
 .pal-mover {
