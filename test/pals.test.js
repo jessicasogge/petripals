@@ -319,7 +319,6 @@ describe('the pages', () => {
     expect(name.style.color).toBe(expected.style.color);
     expect(document.title).toBe('PetriPals | Coco | Choose a Mode');
     expect(document.querySelector('.mode-mixed').getAttribute('href')).toBe('./petri-dish.html?pal=coco&mode=mixed');
-    expect(document.querySelector('.mode-detective').getAttribute('href')).toBe('./detective.html?pal=coco');
   });
 
   it('the mode page sends an unknown pal back to the picker', async () => {

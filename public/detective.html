@@ -23,13 +23,8 @@
   </head>
   <body class="picker-page">
     <main class="picker-shell detective-shell">
-      <header class="detective-head">
-        <div class="detective-pal" aria-hidden="true"></div>
-        <div>
-          <h1>Who's this pal?</h1>
-          <p class="case-line">Detective <span class="detective-name">pal</span> is on the case.</p>
-        </div>
-      </header>
+      <h1>Who's this pal?</h1>
+      <p class="case-line">Run lab tests to find out which pal is the mystery.</p>
 
       <!-- The case: the suspects, the trail through the key so far, and the
            next test. Filled in by game/detective.js from game/key.js. -->
@@ -52,22 +47,25 @@
         </section>
       </section>
 
-      <!-- The answer, once the key reaches a single pal. -->
+      <!-- The answer, once the key reaches a single pal, and the whole key
+           with the path to her highlighted. -->
       <section class="solved" hidden>
         <div class="solved-pal" aria-hidden="true"></div>
         <h2 class="solved-name" tabindex="-1"></h2>
         <p class="species solved-species"></p>
         <p class="stars"></p>
-        <ol class="recap" aria-label="How you found her"></ol>
         <p class="fun-fact"><strong>Did you know?</strong> <span class="fun-fact-text"></span></p>
-        <h3 class="book-title">Pal Book <span class="book-count"></span></h3>
-        <ul class="pal-book"></ul>
+
+        <h3 class="key-title">The dichotomous key</h3>
+        <p class="key-intro">Start at 1 and follow the answers. <span class="key-legend">Your path</span> is highlighted.</p>
+        <ol class="key-chart"></ol>
+
         <div class="banner-buttons">
           <a class="pick-btn next-case" href="./detective.html">Next case</a>
         </div>
       </section>
 
-      <a class="back-link other-mode" href="./pal-picker.html">Choose a different mode</a>
+      <a class="back-link" href="./index.html">Back to home</a>
     </main>
     <footer class="signature">jsogge 2026</footer>
     <script type="module" src="./game/detective.js"></script>

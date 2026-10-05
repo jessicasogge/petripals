@@ -1,6 +1,6 @@
 # PetriPals 🧫
 
-A cute microbiology game for the browser. Pick a bacterial pal and eat nutrients to grow your colony. In **classic** mode, steer clear of the antibiotic disks and their zones of inhibition. In **mixed culture** mode, race a rival pal to take over the plate. In **detective** mode, run lab tests to identify a mystery pal.
+A cute microbiology game for the browser. Pick a bacterial pal and eat nutrients to grow your colony. In **classic** mode, steer clear of the antibiotic disks and their zones of inhibition. In **mixed culture** mode, race a rival pal to take over the plate. Or play **detective** from the home page, and run lab tests to identify a mystery pal.
 
 **[▶ Play PetriPals](https://jessicasogge.github.io/petripals/)**: works on computers, phones and tablets.
 
@@ -9,7 +9,7 @@ A cute microbiology game for the browser. Pick a bacterial pal and eat nutrients
 ## How to play
 
 1. **Pick a pal.** Each one is a real bacterium, drawn as a cartoon.
-2. **Choose a mode:** classic, mixed culture or detective.
+2. **Choose a mode:** classic or mixed culture.
 3. **Swim around the dish.** Use the arrow keys, or on a touch screen, touch and hold where you want to swim.
 4. **Eat nutrients to divide.** Every cell that eats a nutrient divides in two, just like binary fission.
 
@@ -25,9 +25,9 @@ No antibiotics this time. You share the plate with a rival pal, picked at random
 
 ### Detective
 
-Your pal is the detective, and the case is a mystery pal. Name her by following a **dichotomous key**: a chain of two-way questions where each answer rules out some of the suspects, until only one is left. Each step is a real lab test (a Gram stain, a look under the microscope, a catalase test, blood agar and more). Run the test, look at the result, and pick the answer that matches. After each right answer you learn the science behind the test.
+Tap **Play Detective** on the home page; there's no pal to pick first. A mystery pal is chosen at random, and you name her by following a **dichotomous key**: a chain of two-way questions where each answer rules out some of the suspects, until only one is left. Each step is a real lab test (a Gram stain, a look under the microscope, a catalase test, blood agar and more). Run the test, look at the result, and pick the answer that matches. After each right answer you learn the science behind the test.
 
-Solve the case with no wrong answers for three stars; each wrong answer costs one, but every solved case earns at least one. Every pal you identify goes in your **Pal Book**, which this browser remembers between visits.
+Solve the case with no wrong answers for three stars; each wrong answer costs one, but every solved case earns at least one. At the end you see the whole dichotomous key, numbered the way a textbook prints one, with your path through it highlighted.
 
 ## The pals
 
@@ -89,8 +89,8 @@ The tests use [Vitest](https://vitest.dev/). Most of the game logic runs in [jsd
 |---|---|
 | `public/index.html` | Home page |
 | `public/pal-picker.html` | Pick a pal |
-| `public/choose-mode.html` | Choose classic, mixed culture or detective |
-| `public/detective.html` | Detective mode: the key, the lab bench and the Pal Book (`game/detective.js`, with the key in `game/key.js`, the test drawings in `game/lab.js` and the Pal Book in `game/book.js`) |
+| `public/choose-mode.html` | Choose classic or mixed culture |
+| `public/detective.html` | Detective mode, opened from the home page: the lab bench and the key (`game/detective.js`, with the key in `game/key.js` and the test drawings in `game/lab.js`) |
 | `public/petri-dish.html` | The game, in either mode |
 | `public/game/` | Game code: classic mode (`game.js`), mixed culture mode (`race.js`, with the rival in `rival.js`), what both share (a colony eating and dividing in `colony.js`, steering in `keyboard.js` and `touch.js`), how the pals grow (`rod.js`, `coccus.js`), antibiotics (`antibiotic.js`), nutrients, physics, settings and fun facts (`config.js`), the fun-fact pop-up (`facts.js`, with italics for scientific names from `italics.js`), the picker's microscope mode (`stain.js`), the win confetti (`spores.js`), and a little surprise on the home page (`split.js`) |
 | `public/game/pals.js` | Every pal's name and drawing, in one place. All the pages draw the pals from here, in the order listed (except the picker, which shuffles them each visit), eight to a page (`PAGE_SIZE`). To add a pal, see the notes at the top. |

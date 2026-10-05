@@ -85,3 +85,10 @@ describe('pages without a start button', () => {
     await expect(open('pal-picker.html')).resolves.toBeNull();
   });
 });
+
+describe('the detective button', () => {
+  it('opens detective mode, with no pal to pick first', async () => {
+    await open();
+    expect(document.querySelector('.detective-btn').getAttribute('href')).toBe('./detective.html');
+  });
+});

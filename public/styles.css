@@ -184,6 +184,28 @@ body {
   opacity: 0.8;
 }
 
+/* Detective mode, under the Start button: outlined, so Start stays the main
+   way in, and on its own line. */
+.detective-btn {
+  display: block;
+  width: fit-content;
+  margin: 1rem auto 0;
+  padding: 0.6rem 1.6rem;
+  font-family: Fredoka, system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #0f766e;
+  background: white;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 2px #0f766e;
+  text-decoration: none;
+}
+
+.detective-btn:hover {
+  background: #ccfbf1;
+}
+
 .picker-page {
   min-height: 100vh;
   display: grid;
@@ -959,33 +981,13 @@ body:not(.picker-page) .signature {
 
 /* Detective mode (detective.html, game/detective.js): your pal, the
    suspects, the trail through the key, and the lab bench for each test. */
-.detective-head {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  text-align: left;
-}
-
-.detective-head h1 {
+.detective-shell h1 {
   margin: 0;
 }
 
 .case-line {
-  margin: 0.2rem 0 0;
+  margin: 0.3rem 0 0;
   font-weight: 700;
-}
-
-.detective-pal .pal-icon {
-  width: 72px;
-  height: 72px;
-  margin: 0;
-  border-radius: 16px;
-}
-
-.detective-pal .pal-icon svg {
-  width: 58px;
-  height: 58px;
 }
 
 .suspects-title {
@@ -999,8 +1001,7 @@ body:not(.picker-page) .signature {
 }
 
 /* Every suspect, small. The ones the key has ruled out fade to grey. */
-.suspects,
-.pal-book {
+.suspects {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -1009,8 +1010,7 @@ body:not(.picker-page) .signature {
   gap: 0.5rem;
 }
 
-.suspects li,
-.pal-book li {
+.suspects li {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1019,16 +1019,14 @@ body:not(.picker-page) .signature {
   transition: opacity 0.4s ease, filter 0.4s ease;
 }
 
-.suspects .pal-icon,
-.pal-book .pal-icon {
+.suspects .pal-icon {
   width: 56px;
   height: 56px;
   margin: 0 0 0.2rem;
   border-radius: 14px;
 }
 
-.suspects .pal-icon svg,
-.pal-book .pal-icon svg {
+.suspects .pal-icon svg {
   width: 44px;
   height: 44px;
 }
@@ -1053,8 +1051,7 @@ body:not(.picker-page) .signature {
   gap: 0.4rem;
 }
 
-.trail li,
-.recap li {
+.trail li {
   padding: 0.3rem 0.7rem;
   border-radius: 999px;
   background: #0f766e;
@@ -1223,7 +1220,7 @@ body:not(.picker-page) .signature {
   display: none;
 }
 
-/* The case solved: her picture in color, stars, and the Pal Book. */
+/* The case solved: her picture in color, stars, and the whole key. */
 .solved {
   animation: result-in 0.45s ease-out;
 }
@@ -1255,16 +1252,6 @@ body:not(.picker-page) .signature {
   color: #d97706;
 }
 
-.recap {
-  list-style: none;
-  margin: 0.75rem 0 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.4rem;
-}
-
 .solved .fun-fact {
   margin: 1rem auto 0;
   max-width: 34rem;
@@ -1278,33 +1265,132 @@ body:not(.picker-page) .signature {
   color: #0f766e;
 }
 
-.book-title {
-  margin: 1.5rem 0 0.5rem;
+/* The whole key, printed the way a textbook prints one: numbered couplets,
+   each a test and its two answers. The path to the mystery pal is filled in
+   teal. */
+.key-title {
+  margin: 1.75rem 0 0.25rem;
 }
 
-.book-count {
-  font-weight: 400;
+.key-intro {
+  margin: 0 0 0.75rem;
   color: #475569;
 }
 
-.pal-book .unfound {
-  width: 56px;
-  height: 56px;
-  margin: 0 auto;
+.key-legend {
+  padding: 0.05rem 0.45rem;
+  border-radius: 6px;
+  background: #0f766e;
+  color: white;
+  font-weight: 700;
+}
+
+.key-chart {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: grid;
-  place-items: center;
-  border: 2px dashed rgba(15, 118, 110, 0.35);
+  gap: 0.6rem;
+  text-align: left;
+}
+
+.couplet {
+  padding: 0.7rem 0.8rem;
+  border: 2px solid rgba(15, 118, 110, 0.2);
   border-radius: 14px;
+  background: rgba(255, 255, 255, 0.5);
+  scroll-margin-top: 1rem;
+}
+
+.couplet.on-path {
+  border-color: #0f766e;
+}
+
+.couplet:target {
+  box-shadow: 0 0 0 3px #99f6e4;
+}
+
+.couplet-step {
+  margin: 0 0 0.5rem;
+  line-height: 1.35;
+}
+
+.leads {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.lead {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+  padding: 0.25rem 0.6rem;
+  border-radius: 10px;
+  background: rgba(15, 118, 110, 0.06);
+  font-weight: 700;
+}
+
+.lead.on-path {
+  background: #0f766e;
+  color: white;
+}
+
+.lead-letter {
+  min-width: 2.2em;
   color: #475569;
-  font-size: 1.3rem;
+}
+
+.lead.on-path .lead-letter {
+  color: #ccfbf1;
+}
+
+.lead-label {
+  flex: 1;
+}
+
+.lead-to {
+  color: #0f766e;
+  white-space: nowrap;
+}
+
+.lead.on-path .lead-to {
+  color: white;
+}
+
+.lead-pal {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.lead-pal .pal-icon {
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  border-radius: 10px;
+}
+
+.lead-pal .pal-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* Read out by screen readers, but not shown. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 @media (max-width: 520px) {
-  .detective-head {
-    flex-direction: column;
-    text-align: center;
-  }
-
   .lab-step {
     padding: 1rem 0.75rem;
   }
