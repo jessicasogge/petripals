@@ -280,6 +280,13 @@ describe("a drug she's resistant to (no zone)", () => {
     for (const { zone } of SPECIES.terra.antibiotics) expect(zone).not.toBeNull();
   });
 
+  it("starts Lissie with ampicillin, the usual drug for listeriosis, and never gives her a cephalosporin", () => {
+    const codes = SPECIES.lissie.antibiotics.map((a) => a.code);
+    expect(codes[0]).toBe('AMP');
+    for (const cephalosporin of ['CRO', 'CTX', 'CAZ', 'CFM', 'FEP', 'CZ']) expect(codes).not.toContain(cephalosporin);
+    for (const { zone } of SPECIES.lissie.antibiotics) expect(zone).not.toBeNull();
+  });
+
   it('gets no zone at all, so only the disk itself counts as touching', () => {
     expect(zoneWidth(gentamicin.zone)).toBe(0);
     const disk = { fx: 0.5, fy: 0, r: 0.1, zone: zoneWidth(gentamicin.zone), antibiotic: gentamicin };

@@ -513,6 +513,54 @@ export const SPECIES = {
       { code: 'DO', name: 'doxycycline', zone: 24 },
     ],
   },
+  // Listeria monocytogenes, the cause of listeriosis. A short rod with a few
+  // flagella all around her, so she splits and tumbles apart like Sallie.
+  // Her zones are ballpark sizes for a susceptible strain, and every disk is
+  // a drug that works on her: no cephalosporins, which aren't reliable
+  // against Listeria. Ampicillin, the usual treatment, comes first.
+  lissie: {
+    facts: [
+      "Lissie is a Gram-positive rod, so she typically stains purple on a Gram stain.",
+      "Lissie can keep growing at fridge temperatures, where most food germs stall.",
+      "Lissie tumbles end over end at 25°C, but usually stops making flagella at 37°C.",
+      "Inside our cells, Lissie grabs the cell's actin and builds a comet tail to zoom around.",
+      "Lissie's comet tail pushes her into the next cell, hidden from the immune system.",
+      "Lissie causes listeriosis, which can come from deli meats, soft cheeses, and smoked fish.",
+      "In 2011, cantaloupes carrying Lissie caused one of the deadliest U.S. food outbreaks.",
+      "Lissie can cross the placenta, so pregnant people are told to skip some risky foods.",
+      "Lissie's genus honors surgeon Joseph Lister, and so does Listerine mouthwash.",
+      "Lissie was first described in 1926, after she sickened lab rabbits in Cambridge, England.",
+      "Lissie's \"monocytogenes\" comes from the monocytes that piled up in those rabbits' blood.",
+      "On blood agar, Lissie makes a narrow, faint ring of beta-hemolysis.",
+      "Lissie is catalase-positive, which helps tell her apart from *Streptococcus*.",
+      "Lit at an angle, Lissie's colonies can look blue-green.",
+      "Lissie can grow in salty foods that stop many other bacteria.",
+      "Cephalosporins aren't reliable on Lissie, so doctors often use ampicillin or amoxicillin.",
+    ],
+    scientific: 'Listeria monocytogenes',
+    color: '#2c4f7c', // for her name above the dish
+    kind: 'rod',
+    gram: 'positive',
+    size: 10.5,
+    body: [
+      // tail (the flagellum behind her)
+      [-0.39, 0.0, 0.04],
+      [-0.33, 0.0, 0.04],
+      // her short rod
+      [-0.13, 0.0, 0.141],
+      [-0.065, 0.0, 0.141],
+      [0.0, 0.0, 0.141],
+      [0.065, 0.0, 0.141],
+      [0.13, 0.0, 0.141],
+    ],
+    antibiotics: [
+      { code: 'AMP', name: 'ampicillin', zone: 28 },
+      { code: 'P', name: 'penicillin', zone: 26 },
+      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 30 },
+      { code: 'GM', name: 'gentamicin', zone: 20 },
+      { code: 'MEM', name: 'meropenem', zone: 32 },
+    ],
+  },
 };
 
 // Mixed culture mode: no disks, just you and a rival pal (picked at random,

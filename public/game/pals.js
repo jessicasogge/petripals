@@ -55,7 +55,7 @@ const eliaShine = (x) => {
     `<animate attributeName="cy" dur="${ELIA_SWIM}" repeatCount="indefinite" values="${eliaPhases.map(y).join(';')}" /></circle>`;
 };
 
-// Flagella all over the body (peritrichous), for Sallie and Terra: each one
+// Flagella all over the body (peritrichous), for Sallie, Terra and Lissie: each one
 // starts at (x, y) on her outline and heads off at `angle` degrees, `length`
 // long, waving 12 units to each side. Wiggled with SVG's own <animate>, like
 // Mona's and Vi's tails, each at its own speed so they don't move in lockstep.
@@ -90,6 +90,17 @@ const TERRA_FLAGELLA = [
   [30, 100, 180, 28, '0.6s'],
 ]
   .map((f) => flagellum('#65751c', ...f))
+  .join('');
+// Lissie's: just a few around her short rod, since she tumbles rather than
+// swims fast.
+const LISSIE_FLAGELLA = [
+  [72, 78, -110, 28, '0.8s'],
+  [128, 78, -70, 28, '0.75s'],
+  [72, 122, 110, 28, '0.78s'],
+  [128, 122, 70, 28, '0.82s'],
+  [50, 100, 180, 26, '0.7s'],
+]
+  .map((f) => flagellum('#2c4f7c', ...f))
   .join('');
 
 export const PALS = [
@@ -423,6 +434,30 @@ export const PALS = [
         <ellipse cx="72" cy="110" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
         <ellipse cx="128" cy="110" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
         <path d="M94 110 Q100 116 106 110" stroke="#27272a" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
+  // Lissie: Listeria monocytogenes, a short denim-blue rod with a few flagella
+  {
+    id: 'lissie',
+    name: 'Lissie',
+    looks: 'a short denim-blue rod-shaped Listeria monocytogenes with a few flagella around her',
+    motion: 'bob',
+    frames: { home: '0 0 200 200', picker: '10 10 180 180', dish: '8 8 184 184' },
+    art: `
+      <!-- a few flagella around her short rod -->
+      ${LISSIE_FLAGELLA}
+      <rect x="52" y="76" width="96" height="48" rx="24" fill="#9fbbdc" stroke="#2c4f7c" stroke-width="4" />
+      <circle cx="131" cy="88" r="3.8" fill="#e6eef8" />
+      <circle cx="66" cy="114" r="2.8" fill="#e6eef8" />
+      <g class="face">
+        <circle cx="89" cy="98" r="5.5" fill="#1b3150" />
+        <circle cx="111" cy="98" r="5.5" fill="#1b3150" />
+        <circle cx="90.8" cy="96.2" r="1.9" fill="white" />
+        <circle cx="112.8" cy="96.2" r="1.9" fill="white" />
+        <ellipse cx="76" cy="109" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="124" cy="109" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <path d="M95 109 Q100 114 105 109" stroke="#1b3150" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
   },

@@ -463,6 +463,10 @@ body {
   background: rgba(217, 223, 160, 0.5);
 }
 
+.lissie {
+  background: rgba(122, 156, 199, 0.42);
+}
+
 .pick-btn {
   margin-top: 0.75rem;
   padding: 0.7rem 1rem;
