@@ -497,6 +497,10 @@ body {
   background: rgba(150, 190, 120, 0.3);
 }
 
+.astrid {
+  background: rgba(90, 169, 245, 0.3);
+}
+
 .pick-btn {
   margin-top: 0.75rem;
   padding: 0.7rem 1rem;

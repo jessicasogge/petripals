@@ -350,10 +350,23 @@ describe("Ivy, who can't swim", () => {
   });
 });
 
+describe('Astrid, with two stalks', () => {
+  it('has two stalks from her sides near her back end, a holdfast, and her swarmer tail hidden', () => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.innerHTML = palById('astrid').art;
+    const stalked = svg.querySelector('.stalked');
+    const ends = [...stalked.querySelectorAll('path')].map((p) => p.getAttribute('d').match(/L([\d.]+) ([\d.]+)/).slice(1).map(Number));
+    expect(ends.some(([, y]) => y < 60)).toBe(true); // one up
+    expect(ends.some(([, y]) => y > 140)).toBe(true); // one down
+    expect(stalked.querySelector('ellipse')).not.toBeNull(); // the holdfast
+    expect(svg.querySelector('.swarmer').getAttribute('display')).toBe('none');
+  });
+});
+
 describe('wiggly flagella', () => {
 
-  it('gives Mona, Vi, Sallie, Terra, Lissie and Sara, who swim with flagella, wiggling tails', () => {
-    expect([...SWIMMERS].sort()).toEqual(['lissie', 'mona', 'sallie', 'sara', 'terra', 'vi']);
+  it("gives Mona, Vi, Sallie, Terra, Lissie, Sara and Astrid's swarmers, who swim with flagella, wiggling tails", () => {
+    expect([...SWIMMERS].sort()).toEqual(['astrid', 'lissie', 'mona', 'sallie', 'sara', 'terra', 'vi']);
   });
 
   it('gives Sallie flagella all over her body (peritrichous), each wiggling at its own speed', () => {

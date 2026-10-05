@@ -123,4 +123,11 @@ export const QUIZ_FACTS = {
     "Some Ivy strains are used to help sugar beets fight off a leaf spot disease.",
     "Ivy was first described by the German scientist Carl Flügge in 1886.",
   ],
+  astrid: [
+    "\"Biprosthecum\" means two prosthecae: Astrid grows two stalks.",
+    "Astrid's two stalks grow out of her sides near one end, not from the very tip.",
+    "Astrid's glue is on her cell body, not on a stalk tip like her cousin *Caulobacter*'s.",
+    "Scientists study Astrid to learn how stalks evolved to grow in new places on the cell.",
+    "Astrid was first described as a new species in 1973.",
+  ],
 };

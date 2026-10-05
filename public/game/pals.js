@@ -58,7 +58,8 @@ const eliaShine = (x) => {
     `<animate attributeName="cy" dur="${ELIA_SWIM}" repeatCount="indefinite" values="${eliaPhases.map(y).join(';')}" /></circle>`;
 };
 
-// Flagella all over the body (peritrichous), for Sallie, Terra, Lissie and Sara: each one
+// Flagella all over the body (peritrichous), for Sallie, Terra, Lissie and Sara
+// (and the single tail of Astrid's swimmers): each one
 // starts at (x, y) on her outline and heads off at `angle` degrees, `length`
 // long, waving 12 units to each side. Wiggled with SVG's own <animate>, like
 // Mona's and Vi's tails, each at its own speed so they don't move in lockstep.
@@ -125,6 +126,12 @@ const ivyRod = (x, y, angle, w, h) =>
   `<g transform="rotate(${angle} ${x} ${y})">` +
   `<rect x="${x - w / 2}" y="${y - h / 2}" width="${w}" height="${h}" rx="${(h * 0.36).toFixed(1)}" fill="#b8d8a0" stroke="#4d6b3c" stroke-width="4" />` +
   `<circle cx="${x - w / 2 + 9}" cy="${y - h / 2 + 8}" r="3.2" fill="#f0f7e8" /></g>`;
+
+// Astrid's two stalks (prosthecae), from her sides near her back end out to
+// (x2, y2): an outline with a lighter middle, like the rest of her.
+const astridStalk = (x1, y1, x2, y2) =>
+  `<path d="M${x1} ${y1} L${x2} ${y2}" stroke="#1a4f9c" stroke-width="13" stroke-linecap="round" />` +
+  `<path d="M${x1} ${y1} L${x2} ${y2}" stroke="#5aa9f5" stroke-width="6" stroke-linecap="round" />`;
 
 export const PALS = [
   // Terra: Clostridium tetani, an olive rod with a round spore at one end (a "drumstick")
@@ -530,6 +537,41 @@ export const PALS = [
         <ellipse cx="102" cy="140" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
         <ellipse cx="146" cy="136" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
         <path d="M118 139 Q124 145 131 138" stroke="#2f4224" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
+  // Astrid: Asticcacaulis biprosthecum, an azure rod with two stalks near one end
+  {
+    id: 'astrid',
+    name: 'Astrid',
+    looks: 'an azure rod-shaped Asticcacaulis biprosthecum with two stalks near one end',
+    motion: 'bob',
+    frames: { home: '0 0 200 200', picker: '18 18 164 164', dish: '20 20 160 160' },
+    // She comes in two forms (see rod.js): this one, with stalks and a
+    // holdfast, and the swimmer her divisions make, with a flagellum instead.
+    // The swimmer's parts are hidden until then.
+    art: `
+      <g class="stalked">
+        <!-- two stalks (prosthecae) from her sides, near her back end -->
+        ${astridStalk(70, 84, 34, 34)}
+        ${astridStalk(70, 116, 34, 166)}
+        <!-- holdfast: a dab of glue right at her back end -->
+        <ellipse cx="40" cy="100" rx="9" ry="12" fill="#fde68a" stroke="#d4a017" stroke-width="3" />
+      </g>
+      <g class="swarmer" display="none">
+        ${flagellum('#1a4f9c', 44, 100, 180, 24, '0.6s')}
+      </g>
+      <rect x="44" y="74" width="122" height="52" rx="26" fill="#5aa9f5" stroke="#1a4f9c" stroke-width="4" />
+      <circle cx="146" cy="87" r="4" fill="#e3effd" />
+      <circle cx="62" cy="115" r="3" fill="#e3effd" />
+      <g class="face">
+        <circle cx="103" cy="98" r="6" fill="#0f2f5e" />
+        <circle cx="129" cy="98" r="6" fill="#0f2f5e" />
+        <circle cx="105" cy="96" r="2" fill="white" />
+        <circle cx="131" cy="96" r="2" fill="white" />
+        <ellipse cx="89" cy="110" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="143" cy="110" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
+        <path d="M110 110 Q116 116 122 110" stroke="#0f2f5e" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
   },
