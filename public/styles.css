@@ -1087,12 +1087,6 @@ body:not(.picker-page) .signature {
   box-shadow: inset 0 0 0 2px #bae6fd;
 }
 
-.bench-hint {
-  margin: 0;
-  color: #475569;
-  font-weight: 700;
-}
-
 .lab-view {
   animation: result-in 0.45s ease-out;
 }
@@ -1136,10 +1130,6 @@ body:not(.picker-page) .signature {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.75rem;
-}
-
-.answers[hidden] {
-  display: none;
 }
 
 .answer-btn {
@@ -1194,7 +1184,6 @@ body:not(.picker-page) .signature {
   font-weight: 700;
 }
 
-.run-test[hidden],
 .next-step[hidden] {
   display: none;
 }
@@ -1320,21 +1309,21 @@ body:not(.picker-page) .signature {
   gap: 0.5rem;
   min-height: 38px;
   padding: 0.2rem 0.75rem;
-  border: 2px solid rgba(15, 118, 110, 0.2);
+  border: 2px solid #cbd5e1;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.6);
+  background: white;
+  color: #334155;
 }
 
 /* A pal at the end of a branch: rounder, with her picture. */
 .node-pal {
   border-radius: 999px;
-  background: rgba(15, 118, 110, 0.06);
 }
 
 .node-answer {
   flex: 1;
   font-size: 0.85rem;
-  color: #475569;
+  color: #64748b;
 }
 
 .node-name {
@@ -1347,6 +1336,9 @@ body:not(.picker-page) .signature {
   height: 30px;
   margin: 0 0 0 auto;
   border-radius: 8px;
+  /* Just her drawing: her tile color would add more colors to the key. */
+  background: none;
+  box-shadow: none;
 }
 
 .node-pal .pal-icon svg {
@@ -1357,6 +1349,7 @@ body:not(.picker-page) .signature {
 .on-path > .node-box {
   border-color: #0f766e;
   background: #ccfbf1;
+  color: #134e4a;
 }
 
 .on-path > .node-box .node-answer {

@@ -21,9 +21,8 @@ async function open(search = '') {
   await import('../public/game/detective.js');
 }
 
-// Run the current test and tap answer `index`.
+// Tap answer `index` to the current test.
 function answer(index) {
-  if (!$('.run-test').hidden) $('.run-test').click();
   $$('.answer-btn')[index].click();
 }
 
@@ -66,25 +65,17 @@ describe('opening a case', () => {
     expect($('.solved-name').textContent).toBe(`It's ${last.name}!`);
   });
 
-  it('starts at the Gram stain, with the sample waiting', async () => {
+  it("starts at the Gram stain, with its result and both answers showing: there's nothing to tap first", async () => {
     await open('?case=vi');
     expect($('.step-question').textContent).toBe('What color are the cells?');
-    expect($('.bench-hint').textContent).toBe('The sample is ready.');
-    expect($('.answers').hidden).toBe(true);
+    expect($('.run-test')).toBeNull();
+    expect($('.lab-bench .lab-view').getAttribute('aria-label')).toBe('The cells are stained pink.');
+    expect($$('.answer-btn').map((b) => b.textContent)).toEqual(['Purple', 'Pink']);
     expect($('.next-step').hidden).toBe(true);
   });
 });
 
-describe('running tests', () => {
-  it('shows the result and the two answers when you run a test', async () => {
-    await open('?case=vi');
-    $('.run-test').click();
-    expect($('.lab-bench .lab-view').getAttribute('aria-label')).toBe('The cells are stained pink.');
-    expect($('.run-test').hidden).toBe(true);
-    expect($$('.answer-btn').map((b) => b.textContent)).toEqual(['Purple', 'Pink']);
-    expect(document.activeElement).toBe($('.answer-btn'));
-  });
-
+describe('answering', () => {
   it('marks a wrong answer and lets you try again', async () => {
     await open('?case=vi');
     answer(0);
@@ -108,14 +99,15 @@ describe('running tests', () => {
     expect(document.activeElement).toBe($('.next-step'));
   });
 
-  it('moves on to the next test, with a fresh bench', async () => {
+  it("moves on to the next test, showing its result and fresh answers", async () => {
     await open('?case=vi');
     answer(1);
     $('.next-step').click();
     expect($('.step-name').textContent).toBe('Microscope');
     expect($('.step-question').textContent).toBe('Are the cells corkscrews, or rods?');
-    expect($('.bench-hint')).not.toBeNull();
-    expect($('.run-test').hidden).toBe(false);
+    expect($('.lab-bench .lab-view').getAttribute('aria-label')).toBe('The cells are rods.');
+    expect($$('.answer-btn').map((b) => [b.textContent, b.disabled])).toEqual([['Corkscrew', false], ['Rods', false]]);
+    expect($('.next-step').hidden).toBe(true);
     expect($('.step-feedback').textContent).toBe('');
     expect(document.activeElement).toBe($('.step-name'));
   });

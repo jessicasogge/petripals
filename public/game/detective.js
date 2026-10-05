@@ -36,34 +36,22 @@ function showSuspects(left) {
 const route = pathTo(mystery.id);
 let at = 0; // which step of the route she's on
 
-const runButton = $('.run-test');
 const answers = $('.answers');
 const feedback = $('.step-feedback');
 const nextButton = $('.next-step');
 
+// Each step shows its test's result straight away, with the two answers
+// under it.
 function showStep() {
-  const { step } = route[at];
+  const { step, answer } = route[at];
   $('.step-name').textContent = step.name;
   $('.step-question').textContent = step.question;
-  const hint = document.createElement('p');
-  hint.className = 'bench-hint';
-  hint.textContent = 'The sample is ready.';
-  $('.lab-bench').replaceChildren(hint);
-  runButton.hidden = false;
-  answers.hidden = true;
+  $('.lab-bench').replaceChildren(labView(step, answer, mystery.id));
+  answers.replaceChildren(...step.answers.map((option, index) => answerButton(option.label, index)));
   nextButton.hidden = true;
   feedback.textContent = '';
   feedback.className = 'step-feedback';
 }
-
-runButton.addEventListener('click', () => {
-  const { step, answer } = route[at];
-  $('.lab-bench').replaceChildren(labView(step, answer, mystery.id));
-  runButton.hidden = true;
-  answers.replaceChildren(...step.answers.map((option, index) => answerButton(option.label, index)));
-  answers.hidden = false;
-  answers.querySelector('button').focus();
-});
 
 function answerButton(label, index) {
   const button = document.createElement('button');

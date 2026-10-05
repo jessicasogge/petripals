@@ -25,7 +25,7 @@ No antibiotics this time. You share the plate with a rival pal, picked at random
 
 ### Detective
 
-Tap **Play Detective** on the home page; there's no pal to pick first. A mystery pal is chosen at random, and you name her by following a **dichotomous key**: a chain of two-way questions where each answer rules out some of the suspects, until only one is left. Each step is a real lab test (a Gram stain, a look under the microscope, a catalase test, blood agar and more). Run the test, look at the result, and pick the answer that matches. After each right answer you learn the science behind the test.
+Tap **Play Detective** on the home page; there's no pal to pick first. A mystery pal is chosen at random, and you name her by following a **dichotomous key**: a chain of two-way questions where each answer rules out some of the suspects, until only one is left. Each step is a real lab test (a Gram stain, a look under the microscope, a catalase test, blood agar and more). Look at the result and pick the answer that matches. After each right answer you learn the science behind the test.
 
 Pick a wrong answer and you're asked to look at the result again; there's no score to lose. At the end you see the whole dichotomous key as a tree, branching downward from the Gram stain to every pal, with your path through it highlighted.
 
