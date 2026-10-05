@@ -611,7 +611,7 @@ export const SPECIES = {
       "Ivy grows in long chains of rods, lined up end to end.",
       "Unlike many of her cousins, Ivy usually has no flagella, so she can't swim.",
       "Ivy makes endospores that help her survive heat, cold, and drought in the soil.",
-      "Ivy is a close cousin of Ceres: both belong to the *Bacillus cereus* group.",
+      "Ivy is a close cousin of our pal Ceres.",
       "Ivy can live inside plants without harming them, as an endophyte.",
       "Some Ivy strains are used to help sugar beets fight off a leaf spot disease.",
       "Ivy was first described by the German scientist Carl Flügge in 1886.",
