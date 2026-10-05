@@ -36,6 +36,9 @@ describe('the start button', () => {
   });
 
   it('shows it heard the click right away, and can\'t be pressed twice', async () => {
+    // Fake timers, so the click's delayed jump to the picker can't fire after
+    // this test file has finished and its simulated page is gone.
+    vi.useFakeTimers();
     const button = await open();
     button.click();
     expect(button.textContent).toBe('Opening picker...');
