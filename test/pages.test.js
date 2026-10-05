@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { LEVELS, MIXED } from '../public/game/config.js';
 
 const file = (name) => new URL(`../public/${name}`, import.meta.url);
-const PAGES = ['index.html', 'pal-picker.html', 'choose-mode.html', 'choose-rivals.html', 'petri-dish.html'];
+const PAGES = ['index.html', 'pal-picker.html', 'choose-mode.html', 'choose-rivals.html', 'petri-dish.html', 'guess-the-pal.html'];
 
 describe('tab icon', () => {
   it.each(PAGES)('%s links the icon, with a PNG for browsers without SVG icons', (page) => {
