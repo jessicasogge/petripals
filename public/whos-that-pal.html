@@ -3,15 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>PetriPals | Guess the Pal</title>
+    <title>PetriPals | Who’s That Pal?</title>
     <meta name="description" content="Read a fun fact about a real bacterium and guess which PetriPal it belongs to. No score, just facts and tries." />
-    <link rel="canonical" href="https://jessicasogge.github.io/petripals/guess-the-pal.html" />
+    <link rel="canonical" href="https://jessicasogge.github.io/petripals/whos-that-pal.html" />
     <!-- How the link looks when it's shared (iMessage, Slack, Discord, social media) -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="PetriPals" />
-    <meta property="og:title" content="PetriPals | Guess the Pal" />
+    <meta property="og:title" content="PetriPals | Who’s That Pal?" />
     <meta property="og:description" content="Read a fun fact about a real bacterium and guess which PetriPal it belongs to. No score, just facts and tries." />
-    <meta property="og:url" content="https://jessicasogge.github.io/petripals/guess-the-pal.html" />
+    <meta property="og:url" content="https://jessicasogge.github.io/petripals/whos-that-pal.html" />
     <meta property="og:image" content="https://jessicasogge.github.io/petripals/social-preview.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body class="picker-page">
-    <!-- "Growing the colony…" covers the page until game/guess-the-pal.js has
+    <!-- "Growing the colony…" covers the page until game/whos-that-pal.js has
          filled it in (see game/loading.js). -->
     <div class="loading-overlay arriving">
       <div class="loading-card" role="status">
@@ -31,11 +31,11 @@
       </div>
     </div>
     <main class="picker-shell guess-shell">
-      <h1>Guess the Pal</h1>
+      <h1>Who’s That Pal?</h1>
       <!-- A fact with "this pal" in place of her name, from game/guess.js. -->
       <p class="guess-fact"></p>
       <p class="guess-status" aria-live="polite">Who is this fact about? Tap her!</p>
-      <!-- A button for every pal, made by game/guess-the-pal.js. They look
+      <!-- A button for every pal, made by game/whos-that-pal.js. They look
            like the tiles on the rival screen. -->
       <div class="rivals-grid guess-grid"></div>
       <div class="rivals-actions">
@@ -44,7 +44,7 @@
       <a class="back-link" href="./index.html">Back to home</a>
     </main>
     <footer class="signature">jsogge 2026</footer>
-    <script type="module" src="./game/guess-the-pal.js"></script>
+    <script type="module" src="./game/whos-that-pal.js"></script>
     <script data-goatcounter="https://petripals.goatcounter.com/count"
             async src="https://gc.zgo.at/count.js"></script>
   </body>

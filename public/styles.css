@@ -184,8 +184,8 @@ body {
   opacity: 0.8;
 }
 
-/* The home page's second button, under Start: Guess the Pal
-   (guess-the-pal.html). Outlined, so Start stays the main thing to press. */
+/* The home page's second button, under Start: Who’s That Pal?
+   (whos-that-pal.html). Outlined, so Start stays the main thing to press. */
 .guess-link {
   display: inline-block;
   margin-top: 1rem;
@@ -726,7 +726,7 @@ body {
   text-decoration: none;
 }
 
-/* Guess the Pal (game/guess-the-pal.js): a fact with "this pal" in place of
+/* Who’s That Pal? (game/whos-that-pal.js): a fact with "this pal" in place of
    her name, over a tile for every pal (the rival screen's tiles). */
 .guess-shell {
   width: min(860px, 100%);

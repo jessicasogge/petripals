@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-// Guess the Pal: a fact with the pal's name blanked out, and a button for
+// Who’s That Pal? shows a fact with "this pal" in place of her name, and a button for
 // every pal. No score, just tries until you find her.
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -8,7 +8,7 @@ import { SPECIES } from '../public/game/config.js';
 import { factDeck } from '../public/game/guess.js';
 import { PALS } from '../public/game/pals.js';
 
-const page = readFileSync(resolve(process.cwd(), 'public/guess-the-pal.html'), 'utf8');
+const page = readFileSync(resolve(process.cwd(), 'public/whos-that-pal.html'), 'utf8');
 
 // The same deck the page shuffles, with Math.random pinned to 0 below. The
 // page deals from the end.
@@ -18,7 +18,7 @@ const dealt = (n) => deck[deck.length - 1 - n];
 async function open() {
   document.body.outerHTML = page.slice(page.indexOf('<body'), page.indexOf('</body>'));
   vi.resetModules();
-  await import('../public/game/guess-the-pal.js');
+  await import('../public/game/whos-that-pal.js');
 }
 
 const button = (id) => document.querySelector(`.guess-btn[data-pal="${id}"]`);
@@ -30,7 +30,7 @@ const wrong = (pal) => PALS.find((other) => other.id !== pal.id);
 beforeEach(() => vi.spyOn(Math, 'random').mockReturnValue(0));
 afterEach(() => vi.restoreAllMocks());
 
-describe('Guess the Pal', () => {
+describe('Who’s That Pal?', () => {
   it('offers every pal, in order', async () => {
     await open();
     const offered = [...document.querySelectorAll('.guess-btn')].map((b) => b.dataset.pal);

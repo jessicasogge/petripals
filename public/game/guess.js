@@ -1,4 +1,4 @@
-// Guess the Pal (guess-the-pal.html): the fun facts from config.js, one at a
+// Who’s That Pal? (whos-that-pal.html): the fun facts from config.js, one at a
 // time, with the pal's name swapped for "this pal". Tap the pal you think it's about.
 // There's no score: a wrong guess just greys out that pal so you can try
 // again, until you find her.

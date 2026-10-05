@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-// Guess the Pal's facts: shuffled into a deck, with "this pal" in place of the pal's name.
+// Who’s That Pal? facts: shuffled into a deck, with "this pal" in place of the pal's name.
 import { describe, expect, it } from 'vitest';
 import { SPECIES } from '../public/game/config.js';
 import { factDeck, fillBlanks, withBlanks } from '../public/game/guess.js';
