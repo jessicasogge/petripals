@@ -493,6 +493,10 @@ body {
   background: rgba(255, 90, 110, 0.22);
 }
 
+.ivy {
+  background: rgba(150, 190, 120, 0.3);
+}
+
 .pick-btn {
   margin-top: 0.75rem;
   padding: 0.7rem 1rem;
