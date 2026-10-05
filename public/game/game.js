@@ -6,6 +6,7 @@ import { GAME, LEVELS } from './config.js';
 import { coccusGroup } from './coccus.js';
 import { showFact } from './facts.js';
 import { arrowKeys } from './keyboard.js';
+import { goTo } from './loading.js';
 import { rodGroup } from './rod.js';
 import { sporeBurst } from './spores.js';
 import { steer, touchSteering } from './touch.js';
@@ -45,7 +46,7 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
   function goToLevel(n) {
     const url = new URL(window.location.href);
     url.searchParams.set('level', n);
-    window.location.href = url.toString();
+    goTo(url.toString());
   }
   document.querySelector('.play-again').addEventListener('click', () => goToLevel(nextLevel));
   document.querySelector('.start-over').addEventListener('click', () => goToLevel(1));

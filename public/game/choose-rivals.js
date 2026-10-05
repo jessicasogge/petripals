@@ -2,8 +2,12 @@
 // tap up to MIXED.MAX_RIVALS of the other pals offered (a random 12 once
 // there are more than that) to race, or Surprise me for one at random. You can't race yourself, and each rival can only be picked once.
 import { MIXED, raceTarget, SPECIES } from './config.js';
+import { goTo, pageReady, watchLoading } from './loading.js';
 import { palById, palTile } from './pals.js';
 import { raceAddress, rivalChoices } from './rivals.js';
+
+// "Growing the colony…" while the next screen loads.
+watchLoading();
 
 const id = new URLSearchParams(window.location.search).get('pal');
 const pal = palById(id);
@@ -56,7 +60,7 @@ if (!pal || !Object.hasOwn(SPECIES, id)) {
   }
 
   start.addEventListener('click', () => {
-    window.location.href = raceAddress(id, picked);
+    goTo(raceAddress(id, picked));
   });
   document.querySelector('.surprise-me').href = raceAddress(id);
   document.querySelector('.back-link').href = `./choose-mode.html?pal=${id}`;
@@ -68,4 +72,5 @@ if (!pal || !Object.hasOwn(SPECIES, id)) {
   nameEl.style.color = SPECIES[id].color;
   document.title = `PetriPals | ${pal.name} | Pick Your Rivals`;
   update();
+  pageReady();
 }

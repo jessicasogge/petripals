@@ -22,6 +22,14 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body class="picker-page">
+    <!-- "Growing the colony…" covers the page until game/pal-picker.js has
+         filled it in (see game/loading.js). -->
+    <div class="loading-overlay arriving">
+      <div class="loading-card" role="status">
+        <span class="loading-cells" aria-hidden="true"><span></span><span></span></span>
+        <span class="loading-text">Growing the colony…</span>
+      </div>
+    </div>
     <main class="picker-shell picker-wide">
       <h1>Pick a Pal</h1>
       <!-- Microscope mode: shows each pal as she'd look after a Gram stain. -->

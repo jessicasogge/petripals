@@ -1,7 +1,11 @@
 // The mode screen after picking a pal (choose-mode.html?pal=mona): shows the
 // pal and links to classic for her, or to picking rivals for mixed culture.
 import { SPECIES } from './config.js';
+import { pageReady, watchLoading } from './loading.js';
 import { palById, palTile } from './pals.js';
+
+// "Growing the colony…" while the next screen loads.
+watchLoading();
 
 const id = new URLSearchParams(window.location.search).get('pal');
 const pal = palById(id);
@@ -18,4 +22,5 @@ if (!pal || !Object.hasOwn(SPECIES, id)) {
   nameEl.textContent = pal.name;
   nameEl.style.color = SPECIES[id].color;
   document.title = `PetriPals | ${pal.name} | Choose a Mode`;
+  pageReady();
 }

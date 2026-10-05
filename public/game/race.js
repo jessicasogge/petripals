@@ -5,6 +5,7 @@ import { makeColony, moveGroups } from './colony.js';
 import { GAME } from './config.js';
 import { coccusGroup } from './coccus.js';
 import { arrowKeys } from './keyboard.js';
+import { goTo } from './loading.js';
 import { rivalBrain } from './rival.js';
 import { listOf } from './rivals.js';
 import { rodGroup } from './rod.js';
@@ -66,10 +67,10 @@ export function playRace({ you, rivals, nutrients, target }) {
 
   // "Race again" goes back to picking rivals; "Play classic" goes to the levels.
   document.querySelector('.play-again').addEventListener('click', () => {
-    window.location.href = `./choose-rivals.html?pal=${you.svg.dataset.pal}`;
+    goTo(`./choose-rivals.html?pal=${you.svg.dataset.pal}`);
   });
   document.querySelector('.start-over').addEventListener('click', () => {
-    window.location.href = `./petri-dish.html?pal=${you.svg.dataset.pal}`;
+    goTo(`./petri-dish.html?pal=${you.svg.dataset.pal}`);
   });
 
   function updateCounter() {
