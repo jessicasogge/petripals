@@ -1,17 +1,9 @@
 // @vitest-environment jsdom
-// Guess the Pal's facts: shuffled into a deck, with the pal's name blanked.
+// Guess the Pal's facts: shuffled into a deck, with "this pal" in place of the pal's name.
 import { describe, expect, it } from 'vitest';
 import { SPECIES } from '../public/game/config.js';
 import { factDeck, fillBlanks, withBlanks } from '../public/game/guess.js';
 import { PALS } from '../public/game/pals.js';
-
-// The fact as it would read on screen, with "___" for each blank.
-function shown(nodes) {
-  const p = document.createElement('p');
-  p.append(...nodes);
-  for (const gap of p.querySelectorAll('.fact-blank')) gap.replaceWith('___');
-  return p;
-}
 
 describe('the deck of facts', () => {
   it('has every fact about every pal, once each', () => {
@@ -26,35 +18,56 @@ describe('the deck of facts', () => {
   });
 });
 
-describe('blanking out her name', () => {
-  it('blanks every mention of her, possessives too', () => {
-    const p = shown(withBlanks("Mona's cells signal to each other, so Mona can talk.", 'Mona'));
-    expect(p.textContent).toBe("___'s cells signal to each other, so ___ can talk.");
+describe('swapping her name for "this pal"', () => {
+  const shown = (fact, name) => {
+    const p = document.createElement('p');
+    p.append(...withBlanks(fact, name));
+    return p;
+  };
+
+  it('swaps every mention of her, possessives too', () => {
+    expect(shown("Mona's cells signal to each other, so Mona can talk.", 'Mona').textContent)
+      .toBe("This pal's cells signal to each other, so this pal can talk.");
   });
 
-  it('only blanks whole words', () => {
-    const p = shown(withBlanks('Vi is a Vibrio, and so are Vi\'s cousins.', 'Vi'));
-    expect(p.textContent).toBe("___ is a Vibrio, and so are ___'s cousins.");
+  it('starts every sentence with a capital', () => {
+    expect(shown('Mona swims. Mona glows! "Mona" is a name.', 'Mona').textContent)
+      .toBe('This pal swims. This pal glows! "This pal" is a name.');
+    expect(shown('Without oxygen, Mona breathes nitrate.', 'Mona').textContent)
+      .toBe('Without oxygen, this pal breathes nitrate.');
+  });
+
+  it('is plain text, with no question mark', () => {
+    const p = shown('Mona swims.', 'Mona');
+    expect(p.querySelector('.fact-blank').textContent).toBe('This pal');
+    expect(p.textContent).not.toContain('?');
+  });
+
+  it('only swaps whole words', () => {
+    expect(shown("Vi is a Vibrio, and so are Vi's cousins.", 'Vi').textContent)
+      .toBe("This pal is a Vibrio, and so are this pal's cousins.");
+  });
+
+  it('says "strains of this pal", not "this pal strains"', () => {
+    expect(shown('Some Ana strains eat mucin, unlike harmless Penny cells.', 'Ana').textContent)
+      .toBe('Some strains of this pal eat mucin, unlike harmless Penny cells.');
+    expect(shown('Vaccines cover the Penny types that matter.', 'Penny').textContent)
+      .toBe('Vaccines cover the types of this pal that matter.');
   });
 
   it('keeps other bacteria in italics', () => {
-    const p = shown(withBlanks("Ceres's cousin *Bacillus thuringiensis* is an insecticide.", 'Ceres'));
-    expect(p.textContent).toBe("___'s cousin Bacillus thuringiensis is an insecticide.");
+    const p = shown("Ceres's cousin *Bacillus thuringiensis* is an insecticide. Ceres isn't.", 'Ceres');
+    expect(p.textContent).toBe("This pal's cousin Bacillus thuringiensis is an insecticide. This pal isn't.");
     expect(p.querySelector('i').textContent).toBe('Bacillus thuringiensis');
-  });
-
-  it("shows a ? and tells a screen reader it's this pal", () => {
-    const [gap] = withBlanks('Mona swims.', 'Mona');
-    expect(gap.className).toBe('fact-blank');
-    expect(gap.querySelector('[aria-hidden="true"]').textContent).toBe('?');
-    expect(gap.querySelector('.visually-hidden').textContent).toBe('this pal');
   });
 
   it.each(PALS.map((pal) => [pal.name, pal.id]))("never gives %s's name away", (name, id) => {
     for (const fact of SPECIES[id].facts) {
-      const p = shown(withBlanks(fact, name));
-      expect(p.textContent, fact).not.toMatch(new RegExp(`\\b${name}\\b`));
-      expect(p.textContent, fact).toContain('___');
+      const text = shown(fact, name).textContent;
+      expect(text, fact).not.toMatch(new RegExp(`\\b${name}\\b`));
+      expect(text, fact).toMatch(/\b[Tt]his pal\b/);
+      expect(text, fact).not.toMatch(/\bthis pal (strains|cells|types)\b/);
+      expect(text, fact).toMatch(/^["A-Z0-9]/);
     }
   });
 });

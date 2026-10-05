@@ -25,7 +25,7 @@ No antibiotics this time. You share the plate with one to three rival pals steer
 
 ### Guess the Pal
 
-Tap **Guess the Pal** on the home page for a quiz on the pals' fun facts. You get one fact with the pal's name blanked out: tap the pal it's about. A wrong guess greys that pal out so you can try again, and the right one fills in her name and species. There's no score, so it's just for learning. You'll see every fact once before any comes up again.
+Tap **Guess the Pal** on the home page for a quiz on the pals' fun facts. You get one fact with "this pal" in place of her name: tap the pal it's about. A wrong guess greys that pal out so you can try again, and the right one puts her name back in and shows her species. There's no score, so it's just for learning. You'll see every fact once before any comes up again.
 
 ## The pals
 
@@ -94,7 +94,7 @@ The tests use [Vitest](https://vitest.dev/). Most of the game logic runs in [jsd
 | `public/choose-rivals.html` | Pick up to three rivals for mixed culture, or Surprise me |
 | `public/petri-dish.html` | The game, in either mode |
 | `public/guess-the-pal.html` | Guess the Pal: which pal is this fact about? |
-| `public/game/` | Game code: classic mode (`game.js`), mixed culture mode (`race.js`, with each rival's steering in `rival.js` and who's racing in `rivals.js`, picked on `choose-rivals.js`), what both share (a colony eating and dividing in `colony.js`, steering in `keyboard.js` and `touch.js`), how the pals grow (`rod.js`, `coccus.js`), antibiotics (`antibiotic.js`), nutrients, physics, settings and fun facts (`config.js`), the fun-fact pop-up (`facts.js`, with italics for scientific names from `italics.js`), the picker's microscope mode (`stain.js`), the win confetti (`spores.js`), Guess the Pal (`guess-the-pal.js`, with the blanked-out facts in `guess.js`), and a little surprise on the home page (`split.js`) |
+| `public/game/` | Game code: classic mode (`game.js`), mixed culture mode (`race.js`, with each rival's steering in `rival.js` and who's racing in `rivals.js`, picked on `choose-rivals.js`), what both share (a colony eating and dividing in `colony.js`, steering in `keyboard.js` and `touch.js`), how the pals grow (`rod.js`, `coccus.js`), antibiotics (`antibiotic.js`), nutrients, physics, settings and fun facts (`config.js`), the fun-fact pop-up (`facts.js`, with italics for scientific names from `italics.js`), the picker's microscope mode (`stain.js`), the win confetti (`spores.js`), Guess the Pal (`guess-the-pal.js`, with the facts' "this pal" swap in `guess.js`), and a little surprise on the home page (`split.js`) |
 | `public/game/pals.js` | Every pal's name and drawing, in one place. All the pages draw the pals from here, in the order listed (except the picker, which shuffles them each visit), eight to a page (`PAGE_SIZE`). To add a pal, see the notes at the top. |
 | `test/` | Tests |
 | `src/index.ts` | Small Express server for local development |

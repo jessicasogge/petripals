@@ -38,10 +38,10 @@ describe('Guess the Pal', () => {
     expect(document.querySelector('.loading-overlay').hidden).toBe(true);
   });
 
-  it('shows a fact with her name blanked out', async () => {
+  it('shows a fact with "this pal" in place of her name', async () => {
     await open();
     const { pal } = dealt(0);
-    expect(fact().querySelectorAll('.fact-blank').length).toBeGreaterThan(0);
+    expect(fact().textContent).toMatch(/\b[Tt]his pal\b/);
     expect(fact().textContent).not.toContain(pal.name);
     expect(status()).toBe('Who is this fact about? Tap her!');
     expect(next().hidden).toBe(true);
@@ -60,7 +60,9 @@ describe('Guess the Pal', () => {
     await open();
     const { pal, fact: text } = dealt(0);
     button(pal.id).click();
-    expect(fact().textContent).toBe(text.replaceAll('*', ''));
+    expect(fact().textContent).toContain(pal.name);
+    expect(fact().textContent).not.toMatch(/\b[Tt]his pal\b/);
+    expect(text).toContain(pal.name);
     expect(button(pal.id).classList).toContain('right');
     expect(status()).toBe(`Yes! It's ${pal.name}, ${SPECIES[pal.id].scientific.replaceAll('*', '')}.`);
     expect(document.querySelector('.guess-status i')).not.toBeNull();
@@ -97,7 +99,9 @@ describe('Guess the Pal', () => {
       next().click();
     }
     // Back to the top of a fresh deck.
-    button(dealt(0).pal.id).click();
-    expect(fact().textContent).toBe(dealt(0).fact.replaceAll('*', ''));
+    const { pal } = dealt(0);
+    expect(fact().textContent).toMatch(/\b[Tt]his pal\b/);
+    button(pal.id).click();
+    expect(next().hidden).toBe(false);
   });
 });

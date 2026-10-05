@@ -1,6 +1,6 @@
 // Guess the Pal (guess-the-pal.html), from the button on the home page: a
-// fun fact with the pal's name blanked out, and a button for every pal.
-// Tap the right one and her name fills the blanks; tap a wrong one and that
+// fun fact with "this pal" in place of her name, and a button for every pal.
+// Tap the right one and her name goes back in; tap a wrong one and that
 // pal greys out so you can try again. No score is kept, on purpose: it's
 // for learning the facts, not for winning.
 import { SPECIES } from './config.js';

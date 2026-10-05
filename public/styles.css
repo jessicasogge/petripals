@@ -726,8 +726,8 @@ body {
   text-decoration: none;
 }
 
-/* Guess the Pal (game/guess-the-pal.js): a fact with the pal's name blanked
-   out, over a tile for every pal (the rival screen's tiles). */
+/* Guess the Pal (game/guess-the-pal.js): a fact with "this pal" in place of
+   her name, over a tile for every pal (the rival screen's tiles). */
 .guess-shell {
   width: min(860px, 100%);
 }
@@ -743,21 +743,10 @@ body {
   line-height: 1.6;
 }
 
-/* Where her name goes: a "?" in a little bubble, then her name once found. */
-.fact-blank {
-  display: inline-block;
-  min-width: 2.6em;
-  padding: 0 0.4em;
-  border-radius: 999px;
-  background: #ccfbf1;
-  color: #0f766e;
-  font-weight: 700;
-  line-height: 1.4;
-}
-
+/* Where her name goes: "this pal" in plain text, then her name, in her
+   color, once she's found. */
 .fact-blank.filled {
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: inset 0 0 0 2px rgba(19, 78, 74, 0.12);
+  font-weight: 700;
 }
 
 .guess-status {
@@ -795,16 +784,6 @@ body {
 
 .next-fact[hidden] {
   display: none;
-}
-
-/* Words only a screen reader says, like "this pal" in a blank. */
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
 }
 
 .pal-mover {
