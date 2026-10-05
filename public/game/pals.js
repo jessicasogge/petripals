@@ -58,7 +58,7 @@ const eliaShine = (x) => {
     `<animate attributeName="cy" dur="${ELIA_SWIM}" repeatCount="indefinite" values="${eliaPhases.map(y).join(';')}" /></circle>`;
 };
 
-// Flagella all over the body (peritrichous), for Sallie, Terra, Lissie and Serra: each one
+// Flagella all over the body (peritrichous), for Sallie, Terra, Lissie and Sara: each one
 // starts at (x, y) on her outline and heads off at `angle` degrees, `length`
 // long, waving 12 units to each side. Wiggled with SVG's own <animate>, like
 // Mona's and Vi's tails, each at its own speed so they don't move in lockstep.
@@ -105,7 +105,7 @@ const LISSIE_FLAGELLA = [
 ]
   .map((f) => flagellum('#2c4f7c', ...f))
   .join('');
-// Serra's: all around her short, plump rod.
+// Sara's: all around her short, plump rod.
 const SERRA_FLAGELLA = [
   [72, 74, -110, 28, '0.7s'],
   [100, 72, -90, 26, '0.66s'],
@@ -477,10 +477,10 @@ export const PALS = [
       </g>
     `,
   },
-  // Serra: Serratia marcescens, a short, plump rod in prodigiosin red, with flagella all over
+  // Sara: Serratia marcescens, a short, plump rod in prodigiosin red, with flagella all over
   {
-    id: 'serra',
-    name: 'Serra',
+    id: 'sara',
+    name: 'Sara',
     looks: 'a short, plump red rod-shaped Serratia marcescens with flagella all around her',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '10 10 180 180', dish: '8 8 184 184' },
