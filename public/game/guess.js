@@ -1,15 +1,16 @@
-// Who’s That Pal? (whos-that-pal.html): the fun facts from config.js, one at a
-// time, with the pal's name swapped for "this pal". Tap the pal you think it's about.
+// Who’s That Pal? (whos-that-pal.html): fun facts from quiz-facts.js, one at
+// a time, with the pal's name swapped for "this pal". Tap the pal you think it's about.
 // There's no score: a wrong guess just greys out that pal so you can try
 // again, until you find her.
 
 import { withItalics } from './italics.js';
 
-// Every fact about every pal, as { pal, fact }, shuffled, so you go through
-// them all before any comes up again. `pals` are the pals from pals.js,
-// `species` is SPECIES from config.js.
-export function factDeck(pals, species, random = Math.random) {
-  const deck = pals.flatMap((pal) => species[pal.id].facts.map((fact) => ({ pal, fact })));
+// Every quiz fact about every pal, as { pal, fact }, shuffled, so you go
+// through them all before any comes up again. `pals` are the pals from
+// pals.js, `facts` is QUIZ_FACTS from quiz-facts.js (each pal's id to her
+// list of facts).
+export function factDeck(pals, facts, random = Math.random) {
+  const deck = pals.flatMap((pal) => facts[pal.id].map((fact) => ({ pal, fact })));
   for (let i = deck.length - 1; i > 0; i--) {
     const j = Math.floor(random() * (i + 1));
     [deck[i], deck[j]] = [deck[j], deck[i]];

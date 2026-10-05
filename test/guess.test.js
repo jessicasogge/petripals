@@ -4,16 +4,34 @@ import { describe, expect, it } from 'vitest';
 import { SPECIES } from '../public/game/config.js';
 import { factDeck, fillBlanks, withBlanks } from '../public/game/guess.js';
 import { PALS } from '../public/game/pals.js';
+import { QUIZ_FACTS } from '../public/game/quiz-facts.js';
+
+describe('the quiz facts', () => {
+  it.each(PALS.map((pal) => pal.id))('%s has quiz facts, each one of her facts in config.js', (id) => {
+    expect(QUIZ_FACTS[id].length).toBeGreaterThanOrEqual(5);
+    expect(new Set(QUIZ_FACTS[id]).size).toBe(QUIZ_FACTS[id].length);
+    for (const fact of QUIZ_FACTS[id]) expect(SPECIES[id].facts, fact).toContain(fact);
+  });
+
+  it('leaves out the facts too broad to point to one pal', () => {
+    expect(QUIZ_FACTS.mona).not.toContain('Mona is naturally resistant to many antibiotics.');
+    expect(QUIZ_FACTS.ceres).not.toContain('Ceres is a large Gram-positive rod, so she stains purple on a Gram stain.');
+  });
+
+  it('covers no pal that is not in the game', () => {
+    expect(Object.keys(QUIZ_FACTS).sort()).toEqual(PALS.map((pal) => pal.id).sort());
+  });
+});
 
 describe('the deck of facts', () => {
-  it('has every fact about every pal, once each', () => {
-    const deck = factDeck(PALS, SPECIES);
-    const all = PALS.flatMap((pal) => SPECIES[pal.id].facts.map((fact) => `${pal.id}: ${fact}`));
+  it('has every quiz fact about every pal, once each', () => {
+    const deck = factDeck(PALS, QUIZ_FACTS);
+    const all = PALS.flatMap((pal) => QUIZ_FACTS[pal.id].map((fact) => `${pal.id}: ${fact}`));
     expect(deck.map(({ pal, fact }) => `${pal.id}: ${fact}`).sort()).toEqual(all.sort());
   });
 
   it('is shuffled', () => {
-    const order = (random) => factDeck(PALS, SPECIES, random).map(({ fact }) => fact);
+    const order = (random) => factDeck(PALS, QUIZ_FACTS, random).map(({ fact }) => fact);
     expect(order(() => 0)).not.toEqual(order(() => 0.999));
   });
 });

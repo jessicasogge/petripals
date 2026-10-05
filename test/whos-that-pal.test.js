@@ -7,12 +7,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { SPECIES } from '../public/game/config.js';
 import { factDeck } from '../public/game/guess.js';
 import { PALS } from '../public/game/pals.js';
+import { QUIZ_FACTS } from '../public/game/quiz-facts.js';
 
 const page = readFileSync(resolve(process.cwd(), 'public/whos-that-pal.html'), 'utf8');
 
 // The same deck the page shuffles, with Math.random pinned to 0 below. The
 // page deals from the end.
-const deck = factDeck(PALS, SPECIES, () => 0);
+const deck = factDeck(PALS, QUIZ_FACTS, () => 0);
 const dealt = (n) => deck[deck.length - 1 - n];
 
 async function open() {

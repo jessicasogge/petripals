@@ -8,6 +8,7 @@ import { factDeck, fillBlanks, withBlanks } from './guess.js';
 import { shortSpeciesName, speciesName } from './italics.js';
 import { pageReady, watchLoading } from './loading.js';
 import { PALS, palTile } from './pals.js';
+import { QUIZ_FACTS } from './quiz-facts.js';
 
 // "Growing the colony…" while the next screen loads.
 watchLoading();
@@ -41,7 +42,7 @@ let current = null;
 
 function showNext() {
   // Through every fact once, then shuffle them all again.
-  if (deck.length === 0) deck = factDeck(PALS, SPECIES);
+  if (deck.length === 0) deck = factDeck(PALS, QUIZ_FACTS);
   current = deck.pop();
   factEl.replaceChildren(...withBlanks(current.fact, current.pal.name));
   status.textContent = ASK;
