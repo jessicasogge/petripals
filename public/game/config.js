@@ -513,11 +513,6 @@ export const SPECIES = {
       { code: 'DO', name: 'doxycycline', zone: 24 },
     ],
   },
-  // Listeria monocytogenes, the cause of listeriosis. A short rod with a few
-  // flagella all around her, so she splits and tumbles apart like Sallie.
-  // Her zones are ballpark sizes for a susceptible strain, and every disk is
-  // a drug that works on her: no cephalosporins, which aren't reliable
-  // against Listeria. Ampicillin, the usual treatment, comes first.
   lissie: {
     facts: [
       "Lissie is a Gram-positive rod, so she typically stains purple on a Gram stain.",
