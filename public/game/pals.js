@@ -553,8 +553,8 @@ export const PALS = [
     art: `
       <g class="stalked">
         <!-- two stalks (prosthecae) from her sides, near her back end -->
-        ${astridStalk(70, 84, 34, 34)}
-        ${astridStalk(70, 116, 34, 166)}
+        ${astridStalk(70, 84, 41, 44)}
+        ${astridStalk(70, 116, 41, 156)}
         <!-- holdfast: a dab of glue right at her back end -->
         <ellipse cx="40" cy="100" rx="9" ry="12" fill="#fde68a" stroke="#d4a017" stroke-width="3" />
       </g>
