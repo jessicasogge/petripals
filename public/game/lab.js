@@ -1,13 +1,13 @@
 // Detective mode's lab bench: draws the result of each test in the key
-// (key.js) for the mystery pal. Under the microscope she's shown herself,
-// Gram stained, as on the picker's microscope mode. The other tests are
-// little drawings: a fizzing drop, a blood agar plate, a tube of broth...
+// (key.js) for the mystery pal. Under the microscope she's a field of plain
+// cells in her Gram stain color, the right shape but not her cartoon, so the
+// picture shows only what a real slide would. The other tests are little
+// drawings: a fizzing drop, a blood agar plate, a tube of broth...
 //
 // Every drawing is built from fixed shapes in this file, never from anything
 // in the page's address, so nothing a visitor types can end up in it.
 import { SPECIES } from './config.js';
-import { palById, palTile } from './pals.js';
-import { stainPal } from './stain.js';
+import { stainOf } from './stain.js';
 
 const SVG = 'http://www.w3.org/2000/svg';
 
@@ -22,6 +22,54 @@ const ROD_SPOTS = [[42, 46, -12], [118, 38, 8], [70, 98, 6], [150, 96, -8]];
 
 const circles = (points, attrs) =>
   points.map(([cx, cy, r]) => `<circle cx="${cx}" cy="${cy}" r="${r}" ${attrs} />`).join('');
+
+// The shape of each pal's cells under the microscope. Ceres grows in chains
+// and Terra's rods carry a spore, but on the slide they're all just rods.
+export const CELL_SHAPES = {
+  goldie: 'cocci',
+  penny: 'cocci',
+  scarlett: 'cocci',
+  ana: 'rods',
+  ceres: 'rods',
+  terra: 'rods',
+  mona: 'rods',
+  sallie: 'rods',
+  coco: 'rods',
+  vi: 'curved',
+  elia: 'spirochetes',
+};
+
+// Where the cells sit on the slide: [x, y, angle in degrees].
+const FIELD = [
+  [86, 50, 20], [124, 38, -30], [158, 58, 60], [98, 84, -10],
+  [140, 90, 35], [76, 112, 70], [118, 122, 0], [160, 118, -45],
+];
+
+// One cell of each shape, centered on (0, 0) and turned by its <g>.
+const CELL = {
+  cocci: (s) => `<circle r="9" fill="${s.body}" stroke="${s.outline}" stroke-width="2.5" />`,
+  rods: (s) => `<rect x="-17" y="-7" width="34" height="14" rx="7" fill="${s.body}" stroke="${s.outline}" stroke-width="2.5" />`,
+  curved: (s) => `
+    <path d="M-15 4 Q0 -12 15 4" stroke="${s.outline}" stroke-width="13" fill="none" stroke-linecap="round" />
+    <path d="M-15 4 Q0 -12 15 4" stroke="${s.body}" stroke-width="8" fill="none" stroke-linecap="round" />`,
+  spirochetes: (s) => {
+    const wave = 'M-18 0 Q-15 -5 -12 0 T-6 0 T0 0 T6 0 T12 0 T18 0';
+    return `
+    <path d="${wave}" stroke="${s.outline}" stroke-width="6" fill="none" stroke-linecap="round" />
+    <path d="${wave}" stroke="${s.body}" stroke-width="3" fill="none" stroke-linecap="round" />`;
+  },
+};
+
+// A round slide with pal `id`'s cells on it, in her Gram stain colors.
+export function slide(id) {
+  const shape = CELL_SHAPES[id];
+  const stain = stainOf(SPECIES[id]);
+  const cells = FIELD.map(([x, y, angle]) =>
+    `<g class="cell" transform="translate(${x} ${y}) rotate(${angle})">${CELL[shape](stain)}</g>`).join('');
+  return `
+    <circle cx="120" cy="80" r="76" fill="#ffffff" stroke="#94a3b8" stroke-width="3" />
+    ${cells}`;
+}
 
 // Each test's drawing, given which of its two results she shows (0 or 1, as
 // in the step's `answers`).
@@ -83,17 +131,10 @@ export function labView(step, result, id) {
   view.setAttribute('role', 'img');
   view.setAttribute('aria-label', step.answers[result].seen);
 
-  if (step.view === 'microscope') {
-    // Her own drawing, Gram stained, on a white slide.
-    const tile = palTile(palById(id));
-    stainPal(tile.querySelector('svg'), SPECIES[id]);
-    view.append(tile);
-  } else {
-    const svg = document.createElementNS(SVG, 'svg');
-    svg.setAttribute('viewBox', '0 0 240 160');
-    svg.setAttribute('aria-hidden', 'true');
-    svg.innerHTML = DRAWINGS[step.view](result);
-    view.append(svg);
-  }
+  const svg = document.createElementNS(SVG, 'svg');
+  svg.setAttribute('viewBox', '0 0 240 160');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.innerHTML = step.view === 'microscope' ? slide(id) : DRAWINGS[step.view](result);
+  view.append(svg);
   return view;
 }
