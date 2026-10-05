@@ -1,14 +1,8 @@
-// Who’s That Pal? (whos-that-pal.html): fun facts from quiz-facts.js, one at
-// a time, with the pal's name swapped for "this pal". Tap the pal you think it's about.
-// There's no score: a wrong guess just greys out that pal so you can try
-// again, until you find her.
+// Who’s That Pal? (whos-that-pal.html): fun facts from quiz-facts.js
 
 import { withItalics } from './italics.js';
 
-// Every quiz fact about every pal, as { pal, fact }, shuffled, so you go
-// through them all before any comes up again. `pals` are the pals from
-// pals.js, `facts` is QUIZ_FACTS from quiz-facts.js (each pal's id to her
-// list of facts).
+// Shuffled { pal, fact } pairs
 export function factDeck(pals, facts, random = Math.random) {
   const deck = pals.flatMap((pal) => facts[pal.id].map((fact) => ({ pal, fact })));
   for (let i = deck.length - 1; i > 0; i--) {
@@ -18,9 +12,7 @@ export function factDeck(pals, facts, random = Math.random) {
   return deck;
 }
 
-// Where the pal's name goes: the words "this pal", in plain text, so the
-// fact reads as a riddle ("This pal can grow at 42°C"). Capitalized when it
-// starts a sentence. fillBlanks() puts her name in once she's been found.
+// Placeholder for the pal's name
 function blank(startsSentence) {
   const gap = document.createElement('span');
   gap.className = 'fact-blank';
@@ -28,14 +20,9 @@ function blank(startsSentence) {
   return gap;
 }
 
-// Text that ends a sentence, so whatever comes next starts a new one.
 const SENTENCE_END = /(^|[.!?]["”]?\s+)["“]?$/;
 
-// `fact` as nodes for the page, with other bacteria's names in italics (as
-// in the end-of-level pop-up) and every mention of `name` swapped for
-// "this pal". Every fact says whose it is (test/facts.test.js checks), so
-// there's always at least one. Only whole words count, so Vi's facts leave
-// "Vibrio" alone.
+// Format fact text with name blanks and italics
 export function withBlanks(fact, name) {
   const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const word = new RegExp(`\\b${escaped}\\b`);
@@ -59,7 +46,6 @@ export function withBlanks(fact, name) {
   });
 }
 
-// Found her: put her name in every blank in `element`, in her `color`.
 export function fillBlanks(element, name, color) {
   for (const gap of element.querySelectorAll('.fact-blank')) {
     gap.classList.add('filled');

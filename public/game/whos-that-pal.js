@@ -1,8 +1,4 @@
-// Who’s That Pal? (whos-that-pal.html), from the button on the home page: a
-// fun fact with "this pal" in place of her name, and a button for every pal.
-// Tap the right one and her name goes back in; tap a wrong one and that
-// pal greys out so you can try again. No score is kept, on purpose: it's
-// for learning the facts, not for winning.
+// Quiz: identify each pal from a fact
 import { SPECIES } from './config.js';
 import { factDeck, fillBlanks, withBlanks } from './guess.js';
 import { shortSpeciesName, speciesName } from './italics.js';
@@ -66,7 +62,7 @@ function guess(pal, button) {
     button.disabled = true;
     return;
   }
-  // Found her: her name in the blanks, and her species, so you learn that too.
+  
   fillBlanks(factEl, pal.name, SPECIES[pal.id].color);
   button.classList.add('right');
   for (const other of buttons) other.disabled = other !== button;
