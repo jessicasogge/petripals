@@ -3,7 +3,7 @@
 // page uses to walk it.
 import { describe, expect, it } from 'vitest';
 import { SPECIES } from '../public/game/config.js';
-import { couplets, isPal, KEY, MAX_STARS, palsUnder, pathTo, starsFor } from '../public/game/key.js';
+import { isPal, KEY, palsUnder, pathTo } from '../public/game/key.js';
 import { DRAWINGS } from '../public/game/lab.js';
 
 // Every step in the key, top first.
@@ -85,24 +85,5 @@ describe('pathTo', () => {
   it('takes Goldie three steps and Coco five', () => {
     expect(pathTo('goldie')).toHaveLength(3);
     expect(pathTo('coco')).toHaveLength(5);
-  });
-});
-
-describe('couplets', () => {
-  it('numbers every step once, top down, following each first answer before the second', () => {
-    const numbered = couplets();
-    expect(numbered.map((c) => c.number)).toEqual(numbered.map((_, i) => i + 1));
-    expect(numbered.map((c) => c.step)).toEqual(steps());
-    expect(numbered.map((c) => c.step.name)).toEqual([
-      'Gram stain', 'Microscope', 'Catalase test', 'Blood agar', 'Spore stain',
-      'Oxygen tube', 'Microscope', 'Oxidase test', 'Microscope', 'Chocolate agar',
-    ]);
-  });
-});
-
-describe('stars', () => {
-  it('gives three for no wrong answers, one fewer for each, but never less than one', () => {
-    expect(MAX_STARS).toBe(3);
-    expect([0, 1, 2, 3, 7].map(starsFor)).toEqual([3, 2, 1, 1, 1]);
   });
 });

@@ -1,14 +1,15 @@
 // Detective mode (detective.html): a mystery pal, picked at random, and the
 // player runs one lab test at a time, answering its question from the result
 // and following the dichotomous key in key.js until only one pal is left.
-// Each wrong answer costs a star. Once she's named, the whole key is shown,
-// numbered the way a textbook prints one, with the path to her highlighted.
+// A wrong answer just asks them to look again. Once she's named, the whole
+// key is shown as a tree, branching downward, with the path to her
+// highlighted.
 //
 // Add ?case=vi to the address to pick the mystery pal (for testing).
 import { SPECIES } from './config.js';
 import { pickFact, writeFact } from './facts.js';
 import { speciesName } from './italics.js';
-import { couplets, isPal, MAX_STARS, palsUnder, pathTo, starsFor } from './key.js';
+import { isPal, KEY, palsUnder, pathTo } from './key.js';
 import { labView } from './lab.js';
 import { PALS, palById, palTile } from './pals.js';
 
@@ -30,11 +31,9 @@ for (const pal of PALS) {
 }
 function showSuspects(left) {
   for (const item of list.children) item.classList.toggle('ruled-out', !left.includes(item.dataset.pal));
-  $('.suspect-count').textContent = `(${left.length} left)`;
 }
 
 const route = pathTo(mystery.id);
-let wrong = 0;
 let at = 0; // which step of the route she's on
 
 const runButton = $('.run-test');
@@ -78,7 +77,6 @@ function answerButton(label, index) {
 function pick(index, button) {
   const { step, answer } = route[at];
   if (index !== answer) {
-    wrong += 1;
     button.disabled = true;
     button.classList.add('wrong');
     feedback.textContent = 'Not quite. Look at the result again!';
@@ -122,80 +120,61 @@ function solve() {
   $('.solved-species').replaceChildren(...speciesName(species.scientific));
   document.title = `PetriPals | Detective | It's ${mystery.name}!`;
 
-  const stars = starsFor(wrong);
-  const starLine = $('.stars');
-  starLine.textContent = '★'.repeat(stars) + '☆'.repeat(MAX_STARS - stars);
-  starLine.setAttribute('aria-label', `${stars} of ${MAX_STARS} stars`);
   writeFact($('.fun-fact-text'), pickFact(species.facts));
 
-  $('.key-chart').replaceChildren(...keyChart());
+  $('.key-tree').replaceChildren(branch(KEY, null, true));
   heading.focus();
 }
 
-// The whole key as numbered couplets: 1a and 1b, then 2a and 2b... Each
-// answer says which couplet to go to next, or names the pal it ends at.
-// The steps and answers on the way to the mystery pal are highlighted.
-function keyChart() {
-  const numbered = couplets();
-  const numberOf = (step) => numbered.find((c) => c.step === step).number;
-  const onPath = new Map(route.map(({ step, answer }) => [step, answer]));
+// One branch of the key as a tree: the test (or pal) at `next`, labeled
+// with the answer that leads to it, and everything below it. `taken` marks
+// the branches on the way to the mystery pal; the line down to her runs past
+// the siblings above her, so they're marked too ('trunk-on') and styles.css
+// colors that stretch of line.
+const takenAt = new Map(route.map(({ step, answer }) => [step, answer]));
 
-  return numbered.map(({ number, step }) => {
-    const couplet = document.createElement('li');
-    couplet.className = 'couplet';
-    couplet.id = `couplet-${number}`;
-    couplet.classList.toggle('on-path', onPath.has(step));
+function branch(next, answer, taken) {
+  const item = document.createElement('li');
+  item.className = 'key-node';
+  item.classList.toggle('on-path', taken);
 
-    const title = document.createElement('p');
-    title.className = 'couplet-step';
-    const name = document.createElement('b');
-    name.textContent = `${number}. ${step.name}`;
-    title.append(name, ` ${step.question}`);
+  const box = document.createElement('div');
+  box.className = isPal(next) ? 'node-box node-pal' : 'node-box';
+  if (answer) {
+    const label = document.createElement('span');
+    label.className = 'node-answer';
+    label.textContent = answer;
+    box.append(label);
+  }
+  const name = document.createElement('span');
+  name.className = 'node-name';
+  if (isPal(next)) {
+    const pal = palById(next);
+    name.textContent = pal.name;
+    box.append(palTile(pal));
+  } else {
+    name.textContent = next.name;
+  }
+  box.append(name);
+  if (taken) {
+    const note = document.createElement('span');
+    note.className = 'visually-hidden';
+    note.textContent = ' (your path)';
+    box.append(note);
+  }
+  item.append(box);
 
-    const leads = document.createElement('ul');
-    leads.className = 'leads';
-    step.answers.forEach((option, index) => {
-      const lead = document.createElement('li');
-      lead.className = 'lead';
-      const taken = onPath.get(step) === index;
-      lead.classList.toggle('on-path', taken);
-
-      const letter = document.createElement('span');
-      letter.className = 'lead-letter';
-      letter.textContent = `${number}${'ab'[index]}`;
-      const label = document.createElement('span');
-      label.className = 'lead-label';
-      label.textContent = option.label;
-      lead.append(letter, label);
-
-      if (isPal(option.next)) {
-        const pal = palById(option.next);
-        const end = document.createElement('span');
-        end.className = 'lead-pal';
-        const name = document.createElement('span');
-        name.className = 'lead-pal-name';
-        name.textContent = pal.name;
-        end.append(palTile(pal), name);
-        lead.append(end);
-      } else {
-        const to = document.createElement('a');
-        to.className = 'lead-to';
-        to.href = `#couplet-${numberOf(option.next)}`;
-        to.textContent = `Go to ${numberOf(option.next)}`;
-        lead.append(to);
-      }
-      if (taken) {
-        const note = document.createElement('span');
-        note.className = 'visually-hidden';
-        note.textContent = ' (your path)';
-        lead.append(note);
-      }
-      leads.append(lead);
+  if (!isPal(next)) {
+    const right = taken ? takenAt.get(next) : -1;
+    const children = document.createElement('ul');
+    next.answers.forEach((option, index) => {
+      const child = branch(option.next, option.label, index === right);
+      child.classList.toggle('trunk-on', index < right);
+      children.append(child);
     });
-
-    couplet.append(title, leads);
-    return couplet;
-  });
+    item.append(children);
+  }
+  return item;
 }
 
 document.title = 'PetriPals | Detective';

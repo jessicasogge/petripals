@@ -1,12 +1,12 @@
 // @vitest-environment jsdom
 // Detective mode (detective.js): loads the real page into jsdom, solves cases
-// by tapping through the key, and checks the stars, the suspects and the key
-// shown at the end.
+// by tapping through the key, and checks the suspects and the key shown at
+// the end.
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SPECIES } from '../public/game/config.js';
-import { couplets, pathTo } from '../public/game/key.js';
+import { KEY, palsUnder, pathTo } from '../public/game/key.js';
 import { PALS } from '../public/game/pals.js';
 
 const page = readFileSync(resolve(process.cwd(), 'public/detective.html'), 'utf8');
@@ -52,7 +52,6 @@ describe('opening a case', () => {
   it('lists every pal as a suspect', async () => {
     await open('?case=vi');
     expect($$('.suspects li').map((li) => li.dataset.pal)).toEqual(PALS.map((p) => p.id));
-    expect($('.suspect-count').textContent).toBe(`(${PALS.length} left)`);
     expect($$('.suspects .ruled-out')).toHaveLength(0);
   });
 
@@ -105,7 +104,6 @@ describe('running tests', () => {
     expect($$('.trail li').map((li) => li.textContent)).toEqual(['Gram stain: Pink']);
     const left = $$('.suspects li:not(.ruled-out)').map((li) => li.dataset.pal);
     expect(left.sort()).toEqual(['coco', 'elia', 'mona', 'sallie', 'vi']);
-    expect($('.suspect-count').textContent).toBe('(5 left)');
     expect($('.next-step').textContent).toBe('Next test');
     expect(document.activeElement).toBe($('.next-step'));
   });
@@ -146,54 +144,75 @@ describe('solving the case', () => {
     expect(document.activeElement).toBe($('.solved-name'));
   });
 
-  it('gives three stars with no wrong answers, fewer for each one, and never none', async () => {
-    const starsAfter = async (wrong) => {
-      await open('?case=vi');
-      solve('vi', wrong);
-      return [$('.stars').textContent, $('.stars').getAttribute('aria-label')];
-    };
-    expect(await starsAfter(0)).toEqual(['★★★', '3 of 3 stars']);
-    expect(await starsAfter(1)).toEqual(['★★☆', '2 of 3 stars']);
-    expect(await starsAfter(3)).toEqual(['★☆☆', '1 of 3 stars']);
+  it("doesn't keep score: no stars, however many answers were wrong", async () => {
+    await open('?case=vi');
+    solve('vi', 3);
+    expect($('.solved-name').textContent).toBe("It's Vi!");
+    expect($('.stars')).toBeNull();
+    expect($('.solved').textContent).not.toMatch(/[★☆]|stars?\b/);
   });
 });
 
 describe('the key at the end', () => {
-  it('shows every couplet, numbered, each with its two answers', async () => {
+  // Each branch of the tree: its answer label and the test or pal it leads to.
+  const box = (node) => {
+    const b = node.querySelector(':scope > .node-box');
+    return [b.querySelector('.node-answer')?.textContent ?? null, b.querySelector('.node-name').textContent];
+  };
+
+  it('starts at the Gram stain and branches into every test and pal, the way the key does', async () => {
     await open('?case=coco');
     solve('coco');
-    const shown = $$('.couplet');
-    expect(shown).toHaveLength(couplets().length);
-    expect(shown[0].id).toBe('couplet-1');
-    expect(shown[0].querySelector('.couplet-step').textContent).toBe('1. Gram stain What color are the cells?');
-    const leads = [...shown[0].querySelectorAll('.lead')];
-    expect(leads.map((l) => l.querySelector('.lead-letter').textContent)).toEqual(['1a', '1b']);
-    expect(leads.map((l) => l.querySelector('.lead-label').textContent)).toEqual(['Purple', 'Pink']);
+    const root = $('.key-tree > .key-node');
+    expect($$('.key-tree > li')).toHaveLength(1);
+    expect(box(root)).toEqual([null, 'Gram stain']);
+    // The tree has one branch for every answer in the key.
+    const answers = (step) => step.answers.flatMap((a) => [a, ...(typeof a.next === 'string' ? [] : answers(a.next))]);
+    expect($$('.key-tree .node-answer')).toHaveLength(answers(KEY).length);
+    // Under the Gram stain: Purple, then Pink, each leading to the microscope.
+    const kids = [...root.querySelectorAll(':scope > ul > .key-node')];
+    expect(kids.map(box)).toEqual([['Purple', 'Microscope'], ['Pink', 'Microscope']]);
+    // Every pal is at the end of exactly one branch, with her picture.
+    const ends = $$('.node-pal .node-name').map((name) => name.textContent);
+    expect(ends.sort()).toEqual(PALS.map((p) => p.name).sort());
+    expect($$('.node-pal .pal-icon')).toHaveLength(PALS.length);
+    expect($$('.node-pal .pal-icon.coco')).toHaveLength(1);
+    // A pal's branch ends there.
+    expect($$('.node-pal + ul')).toHaveLength(0);
   });
 
-  it('says where each answer goes: another couplet, or a pal', async () => {
+  it('puts each pal under the branch the key sends her down', async () => {
     await open('?case=coco');
     solve('coco');
-    const [purple, pink] = $('#couplet-1').querySelectorAll('.lead');
-    expect(purple.querySelector('.lead-to').textContent).toBe('Go to 2');
-    expect(purple.querySelector('.lead-to').getAttribute('href')).toBe('#couplet-2');
-    expect($(pink.querySelector('.lead-to').getAttribute('href')).querySelector('.couplet-step b').textContent).toBe('7. Microscope');
-    // Every pal is at the end of exactly one answer.
-    const ends = $$('.lead-pal-name').map((name) => name.textContent);
-    expect(ends.sort()).toEqual(PALS.map((p) => p.name).sort());
-    expect($$('.lead-pal .pal-icon')).toHaveLength(PALS.length);
+    const pink = $$('.key-tree > .key-node > ul > .key-node')[1];
+    const under = [...pink.querySelectorAll('.node-pal .node-name')].map((n) => n.textContent.toLowerCase());
+    expect(under.sort()).toEqual(palsUnder(KEY.answers[1].next).sort());
   });
 
   it('highlights the path to the mystery pal, and tells screen readers', async () => {
     await open('?case=coco');
     solve('coco');
-    const taken = $$('.lead.on-path');
-    expect(taken.map((l) => l.querySelector('.lead-label').textContent)).toEqual(
-      pathTo('coco').map(({ step, answer: right }) => step.answers[right].label),
-    );
-    expect(taken.at(-1).querySelector('.lead-pal-name').textContent).toBe('Coco');
-    expect(taken.every((l) => l.querySelector('.visually-hidden').textContent === ' (your path)')).toBe(true);
-    expect($$('.couplet.on-path')).toHaveLength(pathTo('coco').length);
-    expect($$('.lead:not(.on-path) .visually-hidden')).toHaveLength(0);
+    const taken = $$('.key-node.on-path');
+    expect(taken.map(box)).toEqual([
+      [null, 'Gram stain'],
+      ['Pink', 'Microscope'],
+      ['Rods', 'Oxidase test'],
+      ['Purple', 'Microscope'],
+      ['Straight', 'Chocolate agar'],
+      ['Only chocolate', 'Coco'],
+    ]);
+    expect(taken.every((n) => n.querySelector(':scope > .node-box .visually-hidden').textContent === ' (your path)')).toBe(true);
+    expect($$('.key-node:not(.on-path) > .node-box .visually-hidden')).toHaveLength(0);
+  });
+
+  it("colors the line running past the branches above hers, and only those", async () => {
+    await open('?case=coco');
+    solve('coco');
+    // Pink is the second branch under the Gram stain, so the line to it runs past Purple.
+    const trunk = $$('.key-node.trunk-on').map(box);
+    expect(trunk).toEqual([['Purple', 'Microscope'], ['Corkscrew', 'Elia'], ['Curved', 'Vi'], ['Plain agar too', 'Mona']]);
+    await open('?case=goldie');
+    solve('goldie');
+    expect($$('.key-node.trunk-on')).toHaveLength(0); // first branch every time
   });
 });

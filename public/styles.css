@@ -995,11 +995,6 @@ body:not(.picker-page) .signature {
   font-size: 1.05rem;
 }
 
-.suspect-count {
-  font-weight: 400;
-  color: #475569;
-}
-
 /* Every suspect, small. The ones the key has ruled out fade to grey. */
 .suspects {
   list-style: none;
@@ -1204,7 +1199,7 @@ body:not(.picker-page) .signature {
   display: none;
 }
 
-/* The case solved: her picture in color, stars, and the whole key. */
+/* The case solved: her picture in color, and the whole key. */
 .solved {
   animation: result-in 0.45s ease-out;
 }
@@ -1229,13 +1224,6 @@ body:not(.picker-page) .signature {
   margin: 0.2rem 0 0.5rem;
 }
 
-.stars {
-  margin: 0;
-  font-size: 2rem;
-  letter-spacing: 0.1em;
-  color: #d97706;
-}
-
 .solved .fun-fact {
   margin: 1rem auto 0;
   max-width: 34rem;
@@ -1249,9 +1237,12 @@ body:not(.picker-page) .signature {
   color: #0f766e;
 }
 
-/* The whole key, printed the way a textbook prints one: numbered couplets,
-   each a test and its two answers. The path to the mystery pal is filled in
-   teal. */
+/* The whole key as a tree branching downward, each branch indented under
+   the test it comes from (game/detective.js). Each box shows the answer that
+   leads to it and the next test, or the pal it ends at. The path to the
+   mystery pal is teal. Lines: every branch draws its own line down from its
+   parent (::before) and on to the next branch below (::after, not on the last
+   one), plus a short stub into its box. */
 .key-title {
   margin: 1.75rem 0 0.25rem;
 }
@@ -1269,99 +1260,108 @@ body:not(.picker-page) .signature {
   font-weight: 700;
 }
 
-.key-chart {
+.key-tree,
+.key-tree ul {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  gap: 0.6rem;
   text-align: left;
 }
 
-.couplet {
-  padding: 0.7rem 0.8rem;
-  border: 2px solid rgba(15, 118, 110, 0.2);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.5);
-  scroll-margin-top: 1rem;
+.key-tree ul {
+  padding-left: 22px;
 }
 
-.couplet.on-path {
+.key-node {
+  position: relative;
+  padding-top: 6px;
+}
+
+/* The line from the parent down to this branch's box, and on past it. */
+.key-tree ul > .key-node::before,
+.key-tree ul > .key-node::after {
+  content: '';
+  position: absolute;
+  left: -11px;
+  border-left: 1.5px solid #94a3b8;
+}
+
+.key-tree ul > .key-node::before {
+  top: 0;
+  height: 25px; /* down to the middle of the box: 6px gap + half of 38px */
+}
+
+.key-tree ul > .key-node:not(:last-child)::after {
+  top: 25px;
+  bottom: 0;
+}
+
+.key-tree ul > .key-node > .node-box::before {
+  content: '';
+  position: absolute;
+  left: -11px;
+  top: 50%;
+  width: 11px;
+  border-top: 1.5px solid #94a3b8;
+}
+
+.key-tree ul > .key-node.on-path::before,
+.key-tree ul > .key-node.trunk-on::before,
+.key-tree ul > .key-node.trunk-on::after,
+.key-tree ul > .key-node.on-path > .node-box::before {
   border-color: #0f766e;
+  border-width: 3px;
 }
 
-.couplet:target {
-  box-shadow: 0 0 0 3px #99f6e4;
-}
-
-.couplet-step {
-  margin: 0 0 0.5rem;
-  line-height: 1.35;
-}
-
-.leads {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 0.35rem;
-}
-
-.lead {
+.node-box {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  min-height: 44px;
-  padding: 0.25rem 0.6rem;
+  gap: 0.5rem;
+  min-height: 38px;
+  padding: 0.2rem 0.75rem;
+  border: 2px solid rgba(15, 118, 110, 0.2);
   border-radius: 10px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* A pal at the end of a branch: rounder, with her picture. */
+.node-pal {
+  border-radius: 999px;
   background: rgba(15, 118, 110, 0.06);
-  font-weight: 700;
 }
 
-.lead.on-path {
-  background: #0f766e;
-  color: white;
-}
-
-.lead-letter {
-  min-width: 2.2em;
+.node-answer {
+  flex: 1;
+  font-size: 0.85rem;
   color: #475569;
 }
 
-.lead.on-path .lead-letter {
-  color: #ccfbf1;
+.node-name {
+  font-weight: 700;
+  white-space: nowrap;
 }
 
-.lead-label {
-  flex: 1;
+.node-pal .pal-icon {
+  width: 30px;
+  height: 30px;
+  margin: 0 0 0 auto;
+  border-radius: 8px;
 }
 
-.lead-to {
+.node-pal .pal-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.on-path > .node-box {
+  border-color: #0f766e;
+  background: #ccfbf1;
+}
+
+.on-path > .node-box .node-answer {
   color: #0f766e;
-  white-space: nowrap;
-}
-
-.lead.on-path .lead-to {
-  color: white;
-}
-
-.lead-pal {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  white-space: nowrap;
-}
-
-.lead-pal .pal-icon {
-  width: 36px;
-  height: 36px;
-  margin: 0;
-  border-radius: 10px;
-}
-
-.lead-pal .pal-icon svg {
-  width: 28px;
-  height: 28px;
+  font-weight: 700;
 }
 
 /* Read out by screen readers, but not shown. */
@@ -1377,6 +1377,24 @@ body:not(.picker-page) .signature {
 @media (max-width: 520px) {
   .lab-step {
     padding: 1rem 0.75rem;
+  }
+
+  .detective-shell {
+    padding: 1.5rem 1rem;
+  }
+
+  .key-tree ul {
+    padding-left: 18px;
+  }
+
+  .key-tree ul > .key-node::before,
+  .key-tree ul > .key-node::after,
+  .key-tree ul > .key-node > .node-box::before {
+    left: -9px;
+  }
+
+  .key-tree ul > .key-node > .node-box::before {
+    width: 9px;
   }
 }
 

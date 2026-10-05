@@ -29,7 +29,7 @@
       <!-- The case: the suspects, the trail through the key so far, and the
            next test. Filled in by game/detective.js from game/key.js. -->
       <section class="case">
-        <h2 class="suspects-title">Suspects <span class="suspect-count"></span></h2>
+        <h2 class="suspects-title">Suspects</h2>
         <ul class="suspects"></ul>
 
         <ol class="trail" aria-label="Tests done so far"></ol>
@@ -53,12 +53,11 @@
         <div class="solved-pal" aria-hidden="true"></div>
         <h2 class="solved-name" tabindex="-1"></h2>
         <p class="species solved-species"></p>
-        <p class="stars"></p>
         <p class="fun-fact"><strong>Did you know?</strong> <span class="fun-fact-text"></span></p>
 
         <h3 class="key-title">The dichotomous key</h3>
-        <p class="key-intro">Start at 1 and follow the answers. <span class="key-legend">Your path</span> is highlighted.</p>
-        <ol class="key-chart"></ol>
+        <p class="key-intro">Start at the top and follow the answers. <span class="key-legend">Your path</span> is highlighted.</p>
+        <ul class="key-tree"></ul>
 
         <div class="banner-buttons">
           <a class="pick-btn next-case" href="./detective.html">Next case</a>

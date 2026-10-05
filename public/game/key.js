@@ -149,17 +149,3 @@ export function pathTo(id, step = KEY) {
   }
   return [];
 }
-
-// The key written out the way a textbook prints one: numbered couplets, each
-// a step and its two answers, numbered top down (a step's first answer is
-// followed all the way before its second). Gives each step with its number.
-export function couplets(step = KEY, list = []) {
-  list.push({ number: list.length + 1, step });
-  for (const answer of step.answers) if (!isPal(answer.next)) couplets(answer.next, list);
-  return list;
-}
-
-// Stars for a solved case: three, minus one for each wrong answer, but never
-// fewer than one. Every case solved earns at least a star.
-export const MAX_STARS = 3;
-export const starsFor = (wrong) => Math.max(1, MAX_STARS - wrong);
