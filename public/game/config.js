@@ -440,7 +440,7 @@ export const SPECIES = {
       "Many typhoid vaccines teach the body to spot Sallie's Vi capsule. No relation to Vi!",
       "Sallie can survive inside macrophages, the immune cells that are supposed to eat her.",
       "On MacConkey agar, Sallie's colonies stay pale because she can't ferment lactose.",
-      "On XLD agar, Sallie's colonies are usually red, often with a small black center.",
+      "On XLD agar, Sallie's colonies are pink or red, with or without a black center.",
       "Sallie's typhoid fever can cause faint pink rose spots on the belly or upper chest.",
       "Sallie's \"typhoid\" means \"like typhus,\" from a Greek word for smoke, haze, or stupor.",
       "In 2016, an extensively drug-resistant strain of Sallie began spreading in Pakistan.",

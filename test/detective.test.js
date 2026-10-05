@@ -131,6 +131,10 @@ describe('solving the case', () => {
     expect($('.solved-name').textContent).toBe(`It's ${pal.name}!`);
     expect($('.solved-pal .pal-icon').classList).toContain(id);
     expect($('.solved-species').textContent).toBe(SPECIES[id].scientific.replaceAll('*', ''));
+    // Only among the PetriPals: the key can't name a species among all bacteria.
+    expect($('.solved-note').textContent).toBe(
+      `Out of the ${PALS.length} PetriPals, only ${pal.name} fits these results. A real lab would run more tests to be sure.`,
+    );
     expect(SPECIES[id].facts.map((f) => f.replaceAll('*', ''))).toContain($('.fun-fact-text').textContent);
     expect(document.title).toBe(`PetriPals | Detective | It's ${pal.name}!`);
     expect(document.activeElement).toBe($('.solved-name'));

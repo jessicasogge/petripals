@@ -1213,6 +1213,14 @@ body:not(.picker-page) .signature {
   margin: 0.2rem 0 0.5rem;
 }
 
+.solved-note {
+  margin: 0 auto;
+  max-width: 30rem;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  color: #475569;
+}
+
 .solved .fun-fact {
   margin: 1rem auto 0;
   max-width: 34rem;

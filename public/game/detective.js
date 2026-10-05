@@ -106,6 +106,10 @@ function solve() {
   heading.textContent = `It's ${mystery.name}!`;
   heading.style.color = species.color;
   $('.solved-species').replaceChildren(...speciesName(species.scientific));
+  // The key only sorts the PetriPals: a handful of tests can't name a species
+  // among all the bacteria a real lab might see, so don't claim it can.
+  $('.solved-note').textContent =
+    `Out of the ${PALS.length} PetriPals, only ${mystery.name} fits these results. A real lab would run more tests to be sure.`;
   document.title = `PetriPals | Detective | It's ${mystery.name}!`;
 
   writeFact($('.fun-fact-text'), pickFact(species.facts));
