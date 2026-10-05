@@ -2,14 +2,15 @@
 // the URL and start the game with them:
 //   petri-dish.html?pal=mona&level=2    classic, level 2
 //   petri-dish.html?pal=mona&mode=mixed mixed culture against a random rival
-//                                       (add &rival=vi to pick the rival)
+//                                       (or &rivals=vi,elia for up to three)
 import { antibioticsFor, placeAntibiotics } from './antibiotic.js';
-import { LEVELS, MIXED, SPECIES } from './config.js';
+import { LEVELS, MIXED, raceTarget, SPECIES } from './config.js';
 import { playGame } from './game.js';
 import { speciesName } from './italics.js';
 import { scatterNutrients } from './nutrients.js';
 import { dishPal, PALS } from './pals.js';
 import { playRace } from './race.js';
+import { listOf, rivalsFor } from './rivals.js';
 import { watchInputMode } from './touch.js';
 
 // Show touch or arrow-key directions, whichever fits the device.
@@ -56,32 +57,48 @@ function startClassic() {
 function startMixed() {
   pal.removeAttribute('hidden');
   const species = SPECIES[pal.dataset.pal];
-  // A random rival, any pal but yours (or the one in the URL, for testing).
-  const others = Object.keys(SPECIES).filter((name) => name !== pal.dataset.pal);
-  const asked = params.get('rival');
-  const rivalName = others.includes(asked) ? asked : others[Math.floor(Math.random() * others.length)];
-  const rival = { svg: drawingOf(rivalName), species: SPECIES[rivalName] };
-  document.title = `PetriPals | ${pal.dataset.name} vs. ${rival.svg.dataset.name}`;
+  // The rivals in the address, or one at random.
+  const rivals = rivalsFor(pal.dataset.pal, params.get('rivals')).map((id) => ({ svg: drawingOf(id), species: SPECIES[id] }));
+  const rivalNames = rivals.map((rival) => rival.svg.dataset.name);
+  const target = raceTarget(rivals.length);
+  document.title = `PetriPals | ${pal.dataset.name} vs. ${listOf(rivalNames)}`;
   document.body.classList.add('mixed-mode');
 
-  // "Mona vs. Vi" above the dish, each name in its pal's color, and both species.
+  // "Mona vs. Vi and Elia" above the dish, each name in its pal's color, and
+  // every species.
   const title = document.querySelector('.pal-name');
-  title.replaceChildren(named(pal.dataset.name, species.color), ' vs. ', named(rival.svg.dataset.name, rival.species.color));
+  title.replaceChildren(
+    named(pal.dataset.name, species.color),
+    ' vs. ',
+    ...joined(rivals.map((rival) => [named(rival.svg.dataset.name, rival.species.color)])),
+  );
   const speciesLine = document.querySelector('.species');
-  speciesLine.replaceChildren(...speciesName(species.scientific), ' vs. ', ...speciesName(rival.species.scientific));
+  speciesLine.replaceChildren(
+    ...speciesName(species.scientific),
+    ' vs. ',
+    ...joined(rivals.map((rival) => speciesName(rival.species.scientific))),
+  );
 
   const howTo = document.querySelector('.how-to-play');
   howTo.replaceChildren(
-    `Race ${rival.svg.dataset.name} to ${MIXED.TARGET} cells! `,
+    `Race ${listOf(rivalNames)} to ${target} cells! `,
     // Arrow-key or touch wording, whichever fits the device (see styles.css).
     wording('for-keys', 'Use the arrow keys to eat nutrients.'),
     wording('for-touch', 'Touch and hold where you want to swim to eat nutrients.'),
     document.createElement('br'),
-    'Any cell that eats a nutrient divides, so grab them before the rival does!',
+    `Any cell that eats a nutrient divides, so grab them before ${rivals.length > 1 ? 'your rivals do' : 'the rival does'}!`,
   );
 
-  const nutrients = scatterNutrients({ count: MIXED.NUTRIENTS });
-  playRace({ you: { svg: pal, species }, rival, nutrients });
+  const nutrients = scatterNutrients({ count: MIXED.NUTRIENTS_PER_PAL * (rivals.length + 1) });
+  playRace({ you: { svg: pal, species }, rivals, nutrients, target });
+}
+
+// Lists of nodes joined like listOf: "A", "A and B", "A, B and C".
+function joined(parts) {
+  return parts.flatMap((part, i) => {
+    if (i === 0) return part;
+    return [i === parts.length - 1 ? ' and ' : ', ', ...part];
+  });
 }
 
 function named(text, color) {
