@@ -90,5 +90,6 @@ describe('the detective button', () => {
   it('opens detective mode, with no pal to pick first', async () => {
     await open();
     expect(document.querySelector('.detective-btn').getAttribute('href')).toBe('./detective.html');
+    expect(document.querySelector('.detective-btn').textContent).toBe('Play Dichotomous Detective');
   });
 });
