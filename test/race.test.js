@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-// race.js runs mixed culture mode: you and a computer-steered rival race to
-// grow MIXED.TARGET cells first. Like game.test.js, these tests load the real
+// race.js runs mixed culture mode: you and one to three computer-steered
+// rivals race to grow the target number of cells first. Like game.test.js, these tests load the real
 // petri dish page into jsdom and stand in for the colonies, steering and
 // effects, so each test can say exactly what happens ("the rival reached 64
 // cells") and check what the player sees.
@@ -9,7 +9,7 @@ import { resolve } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { GAME, MIXED, SPECIES } from '../public/game/config.js';
 
-// Stand-in colonies, yours first and then the rival's, in the order race.js
+// Stand-in colonies, yours first and then each rival's, in the order race.js
 // makes them.
 const fake = vi.hoisted(() => ({ colonies: [] }));
 
@@ -47,7 +47,8 @@ let now;
 let nutrients;
 let location;
 let yours;
-let theirs;
+let theirs; // the first rival's colony
+let others; // the other rivals' colonies, if any
 
 function makeFakeColony() {
   let cells = 1;
@@ -72,12 +73,17 @@ function drawing(pal) {
   return svg;
 }
 
-// Race Mona (or `me`) against Vi (or `them`) and return the pop-up.
-function race({ me = 'mona', them = 'vi' } = {}) {
+// Race Mona (or `me`) against Vi (or `them`: one pal, or a list of up to
+// three) to `target` cells, and return the pop-up.
+function race({ me = 'mona', them = 'vi', target = TARGET } = {}) {
+  const rivals = [].concat(them);
+  others = rivals.slice(1).map(() => makeFakeColony());
+  fake.colonies = [yours, theirs, ...others];
   playRace({
     you: { svg: drawing(me), species: SPECIES[me] },
-    rival: { svg: drawing(them), species: SPECIES[them] },
+    rivals: rivals.map((pal) => ({ svg: drawing(pal), species: SPECIES[pal] })),
     nutrients,
+    target,
   });
   return document.querySelector('.win-banner');
 }
@@ -99,10 +105,9 @@ beforeEach(() => {
   now = 0;
   yours = makeFakeColony();
   theirs = makeFakeColony();
-  fake.colonies = [yours, theirs];
   nutrients = { stop: vi.fn() };
   sessionStorage.clear();
-  location = { href: 'http://localhost/petri-dish.html?pal=mona&mode=mixed&rival=vi' };
+  location = { href: 'http://localhost/petri-dish.html?pal=mona&mode=mixed&rivals=vi' };
   vi.stubGlobal('location', location);
   vi.stubGlobal('requestAnimationFrame', (run) => frames.push(run));
   vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
@@ -255,15 +260,12 @@ describe('the pop-up buttons', () => {
     return banner;
   }
 
-  it('"Race again" drops the rival from the address, so you get a new one', () => {
+  it('"Race again" goes back to picking rivals for the same pal', () => {
     const banner = finished();
     const again = banner.querySelector('.play-again');
     expect(again.textContent).toBe('Race again');
     again.click();
-    const url = new URL(location.href);
-    expect(url.searchParams.has('rival')).toBe(false);
-    expect(url.searchParams.get('pal')).toBe('mona');
-    expect(url.searchParams.get('mode')).toBe('mixed');
+    expect(location.href).toBe('./choose-rivals.html?pal=mona');
   });
 
   it('"Play classic" goes to level 1 with the same pal', () => {
@@ -305,5 +307,71 @@ describe('the fun fact', () => {
     frame();
     vi.runAllTimers();
     expect(SPECIES.penny.facts).toContain(factShown());
+  });
+});
+
+describe('more than one rival', () => {
+  const RIVALS = ['vi', 'elia', 'goldie'];
+  const CROWDED = MIXED.CROWDED_TARGET;
+
+  it('draws every rival, each labeled "your rival"', () => {
+    race({ them: RIVALS, target: CROWDED });
+    const labels = [...document.querySelectorAll('.pal-mover.rival svg')].map((svg) => svg.getAttribute('aria-label'));
+    expect(labels).toEqual(['Vi, your rival', 'Elia, your rival', 'Goldie, your rival']);
+  });
+
+  it('spaces everyone evenly around the dish, with the rivals facing the middle', () => {
+    Object.defineProperty(document.querySelector('.agar'), 'clientWidth', { value: 400 });
+    race({ them: RIVALS, target: CROWDED });
+    const leaders = [...rodGroup.mock.results, ...coccusGroup.mock.results].map((r) => r.value);
+    const distances = leaders.map(({ x, y }) => Math.hypot(x, y));
+    for (const d of distances) expect(d).toBeCloseTo(60, 1); // 0.3 of the 200px radius
+    const spots = new Set(leaders.map(({ x, y }) => `${Math.round(x)},${Math.round(y)}`));
+    expect(spots.size).toBe(4);
+    for (const rival of leaders.slice(1)) {
+      if (rival.x > 0) expect(rival.facing).toBe(-1);
+      if (rival.x < 0) expect(rival.facing).toBe(1);
+    }
+  });
+
+  it('counts every colony toward the target', async () => {
+    const { makeColony } = await import('../public/game/colony.js');
+    race({ them: RIVALS, target: CROWDED });
+    others[1].setCells(7);
+    makeColony.mock.calls[3][0].onDivide();
+    expect(counter()).toBe(`Mona 1 · Vi 1 · Elia 1 · Goldie 7 / ${CROWDED} cells`);
+  });
+
+  it('steers every rival', async () => {
+    const { rivalBrain } = await import('../public/game/rival.js');
+    race({ them: RIVALS, target: CROWDED });
+    frame();
+    expect(rivalBrain).toHaveBeenCalledTimes(3);
+    for (const { value } of rivalBrain.mock.results) expect(value.step).toHaveBeenCalled();
+  });
+
+  it('you lose to whichever rival gets there first', () => {
+    const banner = race({ them: RIVALS, target: CROWDED });
+    others[0].setCells(CROWDED); // Elia
+    frame();
+    vi.runAllTimers();
+    expect(banner.querySelector('h2').textContent).toBe('You lost!');
+    expect(banner.querySelector('.win-message').textContent)
+      .toBe(`Elia took over the plate, reaching ${CROWDED} cells first.`);
+    const elia = document.querySelectorAll('.pal-mover.rival')[1];
+    expect(sporeBurst).toHaveBeenCalledWith(elia);
+  });
+
+  it('you win if you beat them all, and win a tie', async () => {
+    const { track } = await import('../public/game/track.js');
+    const banner = race({ them: RIVALS, target: CROWDED });
+    yours.setCells(CROWDED);
+    others[1].setCells(CROWDED);
+    frame();
+    vi.runAllTimers();
+    expect(banner.querySelector('h2').textContent).toBe('You won the race!');
+    expect(banner.querySelector('.win-message').textContent)
+      .toBe(`Your colony reached ${CROWDED} cells before any of your rivals did.`);
+    expect(track).toHaveBeenCalledWith('mixed/won/mona/vs-vi+elia+goldie', 'Mona beat Vi, Elia and Goldie in mixed culture');
   });
 });

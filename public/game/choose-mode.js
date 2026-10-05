@@ -1,5 +1,5 @@
 // The mode screen after picking a pal (choose-mode.html?pal=mona): shows the
-// pal and links to classic or mixed culture for her.
+// pal and links to classic for her, or to picking rivals for mixed culture.
 import { SPECIES } from './config.js';
 import { palById, palTile } from './pals.js';
 
@@ -10,7 +10,7 @@ if (!pal || !Object.hasOwn(SPECIES, id)) {
   window.location.replace('./pal-picker.html');
 } else {
   document.querySelector('.mode-classic').href = `./petri-dish.html?pal=${id}`;
-  document.querySelector('.mode-mixed').href = `./petri-dish.html?pal=${id}&mode=mixed`;
+  document.querySelector('.mode-mixed').href = `./choose-rivals.html?pal=${id}`;
 
   // Her picture on its tile, as on the picker, and her name in her color.
   document.querySelector('.mode-pal').append(palTile(pal));

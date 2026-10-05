@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PetriPals | Pick Your Rivals</title>
+    <meta name="description" content="Pick up to three rival pals to race in a PetriPals mixed culture." />
+    <link rel="canonical" href="https://jessicasogge.github.io/petripals/choose-rivals.html" />
+    <!-- How the link looks when it's shared (iMessage, Slack, Discord, social media) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PetriPals" />
+    <meta property="og:title" content="PetriPals | Pick Your Rivals" />
+    <meta property="og:description" content="Pick up to three rival pals to race in a PetriPals mixed culture." />
+    <meta property="og:url" content="https://jessicasogge.github.io/petripals/choose-rivals.html" />
+    <meta property="og:image" content="https://jessicasogge.github.io/petripals/social-preview.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="The eight PetriPals, cartoon bacteria, above the words PetriPals: Grow your colony. Dodge antibiotics." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="./favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="picker-page">
+    <main class="picker-shell mode-shell rivals-shell">
+      <div class="mode-pal" aria-hidden="true"></div>
+      <h1>Who's in the dish with <span class="mode-pal-name">your pal</span>?</h1>
+      <p class="rivals-status" aria-live="polite">Pick up to 3 rivals.</p>
+      <div class="rivals-grid"></div>
+      <div class="rivals-actions">
+        <button class="pick-btn start-race" type="button" disabled>Start race</button>
+        <a class="pager-btn surprise-me" href="./petri-dish.html">Surprise me</a>
+      </div>
+      <a class="back-link" href="./pal-picker.html">Back to modes</a>
+    </main>
+    <footer class="signature">jsogge 2026</footer>
+    <script type="module" src="./game/choose-rivals.js"></script>
+    <script data-goatcounter="https://petripals.goatcounter.com/count"
+            async src="https://gc.zgo.at/count.js"></script>
+  </body>
+</html>

@@ -565,6 +565,141 @@ body {
   line-height: 1.45;
 }
 
+/* Picking rivals before a mixed culture race (game/choose-rivals.js): a
+   tile for every other pal, tapped on and off, up to three. */
+.rivals-status {
+  margin: 0.5rem 0 0;
+  font-weight: 700;
+  color: #0f766e;
+  min-height: 1.5em;
+}
+
+/* Six across (three on a phone), each the same width, with a short last row
+   kept in the middle. */
+.rivals-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.rivals-grid > .rival-btn {
+  flex: 0 0 calc((100% - 3.75rem) / 6);
+  min-width: 0;
+}
+
+@media (max-width: 760px) {
+  .rivals-grid {
+    gap: 0.6rem;
+  }
+
+  .rivals-grid > .rival-btn {
+    flex-basis: calc((100% - 1.2rem) / 3);
+  }
+
+  .rival-btn .pal-icon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .rival-btn .pal-icon svg {
+    width: 52px;
+    height: 52px;
+  }
+}
+
+.rival-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.6rem 0.4rem 0.7rem;
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px solid rgba(15, 118, 110, 0.2);
+  border-radius: 18px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rival-btn .pal-icon {
+  width: 76px;
+  height: 76px;
+  margin: 0;
+  border-radius: 16px;
+}
+
+.rival-btn .pal-icon svg {
+  width: 62px;
+  height: 62px;
+}
+
+.rival-btn:hover:not(:disabled):not([aria-pressed='true']) {
+  border-color: #14b8a6;
+}
+
+.rival-btn:focus-visible {
+  outline: 3px solid #0f766e;
+  outline-offset: 2px;
+}
+
+/* Picked: a thick teal border and a check in the corner. */
+.rival-btn[aria-pressed='true'] {
+  background: #f0fdfa;
+  border: 3px solid #0f766e;
+  padding: calc(0.6rem - 1px) calc(0.4rem - 1px) calc(0.7rem - 1px);
+}
+
+.rival-btn[aria-pressed='true']::after {
+  content: '\2713';
+  position: absolute;
+  top: -0.55rem;
+  right: -0.55rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: #0f766e;
+  color: white;
+  font-size: 0.9rem;
+  line-height: 1.6rem;
+}
+
+.rival-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.rivals-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.rivals-actions .pick-btn {
+  margin-top: 0;
+  min-height: 44px;
+  padding: 0.6rem 1.4rem;
+  font: inherit;
+  font-weight: 700;
+}
+
+.rivals-actions .pick-btn:disabled {
+  background: #94a3b8;
+  cursor: default;
+}
+
+.rivals-actions .pager-btn {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
 .pal-mover {
   grid-area: 1 / 1; /* stack in the dish center, even after dividing into two */
   width: 18%;

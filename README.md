@@ -1,6 +1,6 @@
 # PetriPals 🧫
 
-A cute microbiology game for the browser. Pick a bacterial pal and eat nutrients to grow your colony. In **classic** mode, steer clear of the antibiotic disks and their zones of inhibition. In **mixed culture** mode, race a rival pal to take over the plate.
+A cute microbiology game for the browser. Pick a bacterial pal and eat nutrients to grow your colony. In **classic** mode, steer clear of the antibiotic disks and their zones of inhibition. In **mixed culture** mode, race up to three rival pals to take over the plate.
 
 **[▶ Play PetriPals](https://jessicasogge.github.io/petripals/)**: works on computers, phones and tablets.
 
@@ -9,7 +9,7 @@ A cute microbiology game for the browser. Pick a bacterial pal and eat nutrients
 ## How to play
 
 1. **Pick a pal.** Each one is a real bacterium, drawn as a cartoon.
-2. **Choose a mode:** classic or mixed culture.
+2. **Choose a mode:** classic or mixed culture. For mixed culture, pick up to three rivals, or tap **Surprise me** for one at random.
 3. **Swim around the dish.** Use the arrow keys, or on a touch screen, touch and hold where you want to swim.
 4. **Eat nutrients to divide.** Every cell that eats a nutrient divides in two, just like binary fission.
 
@@ -21,7 +21,7 @@ There are seven levels. Each one adds another antibiotic disk and doubles the co
 
 ### Mixed culture
 
-No antibiotics this time. You share the plate with a rival pal, picked at random and steered by the computer, and the **first colony to reach 64 cells wins.** You get a one-second head start, and the rival swims a little slower than you, but it's quick to spot the nearest nutrient, so grab them before it does!
+No antibiotics this time. You share the plate with one to three rival pals steered by the computer. Pick them yourself (any pals but yours, each once; once there are more than 12 to choose from, the rival screen offers a random 12), or tap **Surprise me** for one at random. Against one rival, the **first colony to reach 64 cells wins**; against two or three, the dish fills up fast, so it's the **first to 32**. Each pal in the dish adds more nutrients, and **Race again** takes you back to pick your rivals. You get a one-second head start, and the rivals swim a little slower than you, but they're quick to spot the nearest nutrient, so grab them first!
 
 ## The pals
 
@@ -85,8 +85,9 @@ The tests use [Vitest](https://vitest.dev/). Most of the game logic runs in [jsd
 | `public/index.html` | Home page |
 | `public/pal-picker.html` | Pick a pal |
 | `public/choose-mode.html` | Choose classic or mixed culture |
+| `public/choose-rivals.html` | Pick up to three rivals for mixed culture, or Surprise me |
 | `public/petri-dish.html` | The game, in either mode |
-| `public/game/` | Game code: classic mode (`game.js`), mixed culture mode (`race.js`, with the rival in `rival.js`), what both share (a colony eating and dividing in `colony.js`, steering in `keyboard.js` and `touch.js`), how the pals grow (`rod.js`, `coccus.js`), antibiotics (`antibiotic.js`), nutrients, physics, settings and fun facts (`config.js`), the fun-fact pop-up (`facts.js`, with italics for scientific names from `italics.js`), the picker's microscope mode (`stain.js`), the win confetti (`spores.js`), and a little surprise on the home page (`split.js`) |
+| `public/game/` | Game code: classic mode (`game.js`), mixed culture mode (`race.js`, with each rival's steering in `rival.js` and who's racing in `rivals.js`, picked on `choose-rivals.js`), what both share (a colony eating and dividing in `colony.js`, steering in `keyboard.js` and `touch.js`), how the pals grow (`rod.js`, `coccus.js`), antibiotics (`antibiotic.js`), nutrients, physics, settings and fun facts (`config.js`), the fun-fact pop-up (`facts.js`, with italics for scientific names from `italics.js`), the picker's microscope mode (`stain.js`), the win confetti (`spores.js`), and a little surprise on the home page (`split.js`) |
 | `public/game/pals.js` | Every pal's name and drawing, in one place. All the pages draw the pals from here, in the order listed (except the picker, which shuffles them each visit), eight to a page (`PAGE_SIZE`). To add a pal, see the notes at the top. |
 | `test/` | Tests |
 | `src/index.ts` | Small Express server for local development |
