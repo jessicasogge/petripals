@@ -566,6 +566,7 @@ export const MIXED = {
   TARGET: 64,
   CROWDED_TARGET: 32,
   MAX_RIVALS: 3,
+  CHOICES: 12, // pals offered on the rival screen; with more, a random 12
   NUTRIENTS_PER_PAL: 7, // flecks on the agar at a time, for each pal in the dish
   RIVAL_SPEED: 0.55, // fraction of the dish radius per second (you swim at GAME.SPEED)
   RIVAL_REACT_MS: 500, // how often the rival looks around for a new nutrient

@@ -3,6 +3,7 @@
 //   petri-dish.html?pal=mona&mode=mixed&rivals=vi,elia   Mona vs. Vi and Elia
 //   petri-dish.html?pal=mona&mode=mixed                  Mona vs. one random pal
 import { MIXED, SPECIES } from './config.js';
+import { inRandomOrder, PALS } from './pals.js';
 
 // The rivals named in `text` ("vi,elia"): real pals only, never `you`, each
 // once, and no more than MIXED.MAX_RIVALS. If that leaves nobody, one random
@@ -24,4 +25,12 @@ export function raceAddress(you, rivals = []) {
 // "Vi", "Vi and Elia", "Vi, Elia and Ceres".
 export function listOf(names) {
   return names.length < 2 ? names.join('') : `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`;
+}
+
+// The pals offered on the rival screen: every pal but `you`, in the home
+// page's order, or once there are more than MIXED.CHOICES of them, a random
+// MIXED.CHOICES, new each visit.
+export function rivalChoices(you, pals = PALS, random = Math.random) {
+  const others = pals.filter((pal) => pal.id !== you);
+  return others.length > MIXED.CHOICES ? inRandomOrder(others, random).slice(0, MIXED.CHOICES) : others;
 }
