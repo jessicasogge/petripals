@@ -24,7 +24,7 @@ vi.mock('../public/game/keyboard.js', () => ({
 }));
 vi.mock('../public/game/touch.js', () => ({
   steer: vi.fn(),
-  touchSteering: vi.fn(() => ({ target: () => null, stop: vi.fn() })),
+  touchSteering: vi.fn(() => ({ target: () => null, onLoop: () => false, stop: vi.fn() })),
 }));
 vi.mock('../public/game/spores.js', () => ({ sporeBurst: vi.fn() }));
 vi.mock('../public/game/track.js', () => ({ track: vi.fn() }));

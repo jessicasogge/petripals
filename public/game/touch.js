@@ -74,7 +74,8 @@ export function loopChosen(root = document.documentElement) {
 
 // Listen for a finger (or mouse button) held down on `agar`. Returns
 // { target() } giving where it is now, in px from the dish center, or null
-// when nothing is held down; and stop(), to ignore it from now on (after the
+// when nothing is held down; onLoop(), whether that's the inoculating loop's
+// tip (so the pal can stick to it, see steer above); and stop(), to ignore it from now on (after the
 // game ends).
 //
 // With the loop on (`useLoop()`), a finger or pen steers to LOOP_REACH px
@@ -131,6 +132,7 @@ export function touchSteering(agar, {
 
   return {
     target: () => (stopped ? null : target),
+    onLoop: () => !stopped && target !== null && lifted,
     stop() {
       stopped = true;
       pointer = null;
@@ -216,16 +218,26 @@ export function watchInputMode(root = document.documentElement, win = window) {
 // finger, if one is down ([x, y] or null, from touchSteering). The same top
 // speed, `maxStep`, either way; `arrive` is how close to the finger counts as
 // there. Both game modes use this.
-export function steer(group, [dx, dy], finger, maxStep, arrive = 0) {
+//
+// `loop` is { step, slip } while a finger steers with the inoculating loop
+// (null otherwise). Once she reaches the loop's tip she sticks to it, keeping
+// up at the faster `step`, so she moves with the loop instead of trailing
+// behind. If the loop gets more than `slip` ahead (a really fast swipe), she
+// falls off and swims after it at her normal speed until she catches it.
+export function steer(group, [dx, dy], finger, maxStep, arrive = 0, loop = null) {
   if (dx !== 0 || dy !== 0) {
+    group.onLoop = false;
     const length = Math.hypot(dx, dy); // same speed on diagonals
     group.x += (dx / length) * maxStep;
     group.y += (dy / length) * maxStep;
     if (dx !== 0) group.facing = Math.sign(dx);
   } else if (finger) {
-    const [mx, my] = stepToward(group.x, group.y, finger[0], finger[1], maxStep, arrive);
+    const stuck = Boolean(loop && group.onLoop);
+    const [mx, my] = stepToward(group.x, group.y, finger[0], finger[1], stuck ? loop.step : maxStep, arrive);
     group.x += mx;
     group.y += my;
+    const behind = Math.hypot(finger[0] - group.x, finger[1] - group.y);
+    group.onLoop = Boolean(loop) && behind <= (stuck ? loop.slip : arrive);
     // Only turn around when mostly heading sideways, so she doesn't flip
     // back and forth while swimming nearly straight up or down.
     if (Math.abs(mx) > Math.abs(my) * 0.5) group.facing = Math.sign(mx);

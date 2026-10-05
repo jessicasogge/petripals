@@ -89,7 +89,8 @@ export function playRace({ you, rivals, nutrients, target }) {
 
     if (!finished) {
       // Steer your pal; the computer steers the rivals.
-      steer(yourLeader, keys.direction(), touch.target(), GAME.SPEED * radius * seconds, GAME.ARRIVE * radius);
+      steer(yourLeader, keys.direction(), touch.target(), GAME.SPEED * radius * seconds, GAME.ARRIVE * radius,
+        touch.onLoop() ? { step: GAME.LOOP_SPEED * radius * seconds, slip: GAME.LOOP_SLIP * radius } : null);
       for (const rival of others) rival.brain.step(seconds, radius);
     }
 

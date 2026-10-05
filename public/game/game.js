@@ -69,7 +69,8 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
 
     // Steer the player's pal.
     if (!finished) {
-      steer(player, keys.direction(), touch.target(), GAME.SPEED * radius * seconds, GAME.ARRIVE * radius);
+      steer(player, keys.direction(), touch.target(), GAME.SPEED * radius * seconds, GAME.ARRIVE * radius,
+        touch.onLoop() ? { step: GAME.LOOP_SPEED * radius * seconds, slip: GAME.LOOP_SLIP * radius } : null);
     }
 
     colony.tick(seconds);

@@ -73,6 +73,58 @@ describe('steer', () => {
     steer(p, [0, 0], null, 5);
     expect([p.x, p.y]).toEqual([7, 8]);
   });
+
+  describe('with the inoculating loop', () => {
+    const loop = { step: 20, slip: 10 };
+
+    it('swims to the tip at her normal speed until she reaches it', () => {
+      const p = pal();
+      steer(p, [0, 0], [100, 0], 5, 1, loop);
+      expect(p.x).toBe(5);
+      expect(p.onLoop).toBe(false);
+    });
+
+    it('sticks to the tip once she reaches it, keeping up with the loop', () => {
+      const p = pal();
+      steer(p, [0, 0], [3, 0], 5, 1, loop); // reaches the tip
+      expect(p.onLoop).toBe(true);
+      steer(p, [0, 0], [18, 0], 5, 1, loop); // the loop moves 15: faster than her normal 5
+      expect([p.x, p.onLoop]).toEqual([18, true]);
+    });
+
+    it('stays stuck when the loop gets a little ahead, and catches up', () => {
+      const p = pal();
+      steer(p, [0, 0], [0, 0], 5, 1, loop);
+      steer(p, [0, 0], [28, 0], 5, 1, loop); // 8 behind after moving 20: within the slip
+      expect([p.x, p.onLoop]).toEqual([20, true]);
+      steer(p, [0, 0], [28, 0], 5, 1, loop);
+      expect(p.x).toBe(28);
+    });
+
+    it('falls off on a really fast swipe, and swims after it at her normal speed', () => {
+      const p = pal();
+      steer(p, [0, 0], [0, 0], 5, 1, loop);
+      steer(p, [0, 0], [100, 0], 5, 1, loop); // still 80 behind after moving 20
+      expect([p.x, p.onLoop]).toEqual([20, false]);
+      steer(p, [0, 0], [100, 0], 5, 1, loop);
+      expect(p.x).toBe(25);
+    });
+
+    it('lets go when the finger lifts or an arrow key takes over', () => {
+      const p = pal();
+      steer(p, [0, 0], [0, 0], 5, 1, loop);
+      steer(p, [1, 0], null, 5, 1, null);
+      expect(p.onLoop).toBe(false);
+    });
+
+    it("never sticks while steering right under the finger", () => {
+      const p = pal();
+      steer(p, [0, 0], [0, 0], 5, 1, null);
+      expect(p.onLoop).toBe(false);
+      steer(p, [0, 0], [18, 0], 5, 1, null);
+      expect(p.x).toBe(5);
+    });
+  });
 });
 
 describe('fromCenter', () => {
@@ -199,6 +251,23 @@ describe('touchSteering with the inoculating loop', () => {
     loopOn = false;
     agar.dispatchEvent(pointer('pointermove', { x: 260, y: 250 }));
     expect(steering.target()).toEqual([60, 50 - LOOP_REACH]);
+  });
+
+  it('says when it is steering with the loop, so the pal can stick to its tip', () => {
+    expect(steering.onLoop()).toBe(false);
+    agar.dispatchEvent(pointer('pointerdown', { x: 260, y: 250 }));
+    expect(steering.onLoop()).toBe(true);
+    agar.dispatchEvent(pointer('pointerup'));
+    expect(steering.onLoop()).toBe(false);
+    loopOn = false;
+    agar.dispatchEvent(pointer('pointerdown', { x: 260, y: 250 }));
+    expect(steering.onLoop()).toBe(false);
+  });
+
+  it('stops sticking when the game ends', () => {
+    agar.dispatchEvent(pointer('pointerdown', { x: 260, y: 250 }));
+    steering.stop();
+    expect(steering.onLoop()).toBe(false);
   });
 
   it('hides the loop when the game ends', () => {
