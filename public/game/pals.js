@@ -119,6 +119,13 @@ const SERRA_FLAGELLA = [
   .map((f) => flagellum('#b0002f', ...f))
   .join('');
 
+// One of Ivy's rods, centered at (x, y), turned `angle` degrees, with a shine
+// near one corner.
+const ivyRod = (x, y, angle, w, h) =>
+  `<g transform="rotate(${angle} ${x} ${y})">` +
+  `<rect x="${x - w / 2}" y="${y - h / 2}" width="${w}" height="${h}" rx="${(h * 0.36).toFixed(1)}" fill="#b8d8a0" stroke="#4d6b3c" stroke-width="4" />` +
+  `<circle cx="${x - w / 2 + 9}" cy="${y - h / 2 + 8}" r="3.2" fill="#f0f7e8" /></g>`;
+
 export const PALS = [
   // Terra: Clostridium tetani, an olive rod with a round spore at one end (a "drumstick")
   {
@@ -498,6 +505,31 @@ export const PALS = [
         <ellipse cx="74" cy="108" rx="6.5" ry="3.8" fill="#ffc2cc" opacity="0.95" />
         <ellipse cx="126" cy="108" rx="6.5" ry="3.8" fill="#ffc2cc" opacity="0.95" />
         <path d="M94 108 Q100 114 106 108" stroke="#6b0016" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
+  // Ivy: Bacillus mycoides, a sage-green chain of rods curling up like a vine
+  {
+    id: 'ivy',
+    name: 'Ivy',
+    looks: 'a sage-green chain of Bacillus mycoides rods curling up at the end like a vine',
+    motion: 'wobble',
+    frames: { home: '0 12 204 204', picker: '2 22 194 194', dish: '2 22 194 194' },
+    art: `
+      <!-- five rods end to end, curling up at the front like a tendril (her colonies swirl as they spread) -->
+      ${ivyRod(28, 156, 16, 44, 30)}
+      ${ivyRod(70, 144, 6, 46, 32)}
+      ${ivyRod(124, 132, -8, 62, 46)}
+      ${ivyRod(170, 96, -62, 46, 32)}
+      ${ivyRod(168, 50, -118, 38, 26)}
+      <g class="face">
+        <circle cx="113" cy="128" r="6" fill="#2f4224" />
+        <circle cx="135" cy="125" r="6" fill="#2f4224" />
+        <circle cx="115" cy="126" r="2" fill="white" />
+        <circle cx="137" cy="123" r="2" fill="white" />
+        <ellipse cx="102" cy="140" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="146" cy="136" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <path d="M118 139 Q124 145 131 138" stroke="#2f4224" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
   },

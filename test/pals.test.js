@@ -339,6 +339,17 @@ describe('the pages', () => {
 // The pals drawn with a flagellum (or several) that wiggles.
 const SWIMMERS = PALS.filter((pal) => pal.art.includes('class="flagellum"')).map((pal) => pal.id);
 
+describe("Ivy, who can't swim", () => {
+  it('has no flagella, and her chain curls up at the end like a vine', () => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.innerHTML = palById('ivy').art;
+    expect(svg.querySelector('.flagellum')).toBeNull();
+    const angles = [...svg.querySelectorAll(':scope > g[transform^="rotate"]')].map((g) => Number(g.getAttribute('transform').match(/rotate\((-?[\d.]+)/)[1]));
+    expect(angles).toHaveLength(5); // five rods end to end
+    expect(Math.min(...angles.slice(-2))).toBeLessThan(-45); // the last ones turn up
+  });
+});
+
 describe('wiggly flagella', () => {
 
   it('gives Mona, Vi, Sallie, Terra, Lissie and Sara, who swim with flagella, wiggling tails', () => {

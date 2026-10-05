@@ -57,7 +57,6 @@ describe('rivalChoices', () => {
   const roster = (n) => Array.from({ length: n }, (_, i) => ({ id: `pal${i}` }));
 
   it('offers every other pal, in order, while there are 12 or fewer', () => {
-    expect(rivalChoices('mona').map((pal) => pal.id)).toEqual(PALS.map((pal) => pal.id).filter((id) => id !== 'mona'));
     const thirteen = roster(13);
     expect(rivalChoices('pal0', thirteen)).toEqual(thirteen.slice(1));
   });
@@ -75,5 +74,13 @@ describe('rivalChoices', () => {
       offered.forEach((id) => seen.add(id));
     }
     expect(seen.size).toBe(19); // over a few visits, everyone gets a turn
+  });
+
+  it('offers real pals from the game: as many as fit, never you, each once', () => {
+    const offered = rivalChoices('mona').map((pal) => pal.id);
+    expect(offered).toHaveLength(Math.min(MIXED.CHOICES, PALS.length - 1));
+    expect(new Set(offered).size).toBe(offered.length);
+    expect(offered).not.toContain('mona');
+    for (const id of offered) expect(PALS.map((pal) => pal.id)).toContain(id);
   });
 });
