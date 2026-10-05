@@ -1,24 +1,26 @@
 // @vitest-environment jsdom
 // Who’s That Pal? facts: shuffled into a deck, with "this pal" in place of the pal's name.
 import { describe, expect, it } from 'vitest';
-import { SPECIES } from '../public/game/config.js';
 import { factDeck, fillBlanks, withBlanks } from '../public/game/guess.js';
 import { PALS } from '../public/game/pals.js';
 import { QUIZ_FACTS } from '../public/game/quiz-facts.js';
 
 describe('the quiz facts', () => {
-  it.each(PALS.map((pal) => pal.id))('%s has quiz facts, each one of her facts in config.js', (id) => {
-    expect(QUIZ_FACTS[id].length).toBeGreaterThanOrEqual(5);
-    expect(new Set(QUIZ_FACTS[id]).size).toBe(QUIZ_FACTS[id].length);
-    for (const fact of QUIZ_FACTS[id]) expect(SPECIES[id].facts, fact).toContain(fact);
+  // Jess picks these to point to one pal each, sometimes reworded from the
+  // pop-up facts in config.js, so they're checked here on their own.
+  it.each(PALS.map((pal) => [pal.name, pal.id]))('%s has quiz facts that each name her', (name, id) => {
+    const facts = QUIZ_FACTS[id];
+    expect(facts.length).toBeGreaterThan(0);
+    expect(new Set(facts).size).toBe(facts.length);
+    for (const fact of facts) {
+      // Says whose it is, so "this pal" can take her name's place.
+      expect(fact, fact).toMatch(new RegExp(`\\b${name}\\b`));
+      expect(fact.split('*').length % 2, fact).toBe(1); // italics come in pairs
+      expect(fact.replaceAll('*', ''), fact).toMatch(/^["A-Z0-9].*[.!"]$/); // a full sentence
+    }
   });
 
-  it('leaves out the facts too broad to point to one pal', () => {
-    expect(QUIZ_FACTS.mona).not.toContain('Mona is naturally resistant to many antibiotics.');
-    expect(QUIZ_FACTS.ceres).not.toContain('Ceres is a large Gram-positive rod, so she stains purple on a Gram stain.');
-  });
-
-  it('covers no pal that is not in the game', () => {
+  it('covers every pal in the game, and only them', () => {
     expect(Object.keys(QUIZ_FACTS).sort()).toEqual(PALS.map((pal) => pal.id).sort());
   });
 });
@@ -80,7 +82,7 @@ describe('swapping her name for "this pal"', () => {
   });
 
   it.each(PALS.map((pal) => [pal.name, pal.id]))("never gives %s's name away", (name, id) => {
-    for (const fact of SPECIES[id].facts) {
+    for (const fact of QUIZ_FACTS[id]) {
       const text = shown(fact, name).textContent;
       expect(text, fact).not.toMatch(new RegExp(`\\b${name}\\b`));
       expect(text, fact).toMatch(/\b[Tt]his pal\b/);

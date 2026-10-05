@@ -56,6 +56,16 @@ describe('Who’s That Pal?', () => {
     expect(next().hidden).toBe(true);
   });
 
+  it("counts how many facts you've seen, out of all of them", async () => {
+    await open();
+    const counter = () => document.querySelector('.guess-counter').textContent;
+    expect(counter()).toBe(`1 / ${deck.length}`);
+    button(dealt(0).pal.id).click();
+    expect(counter()).toBe(`1 / ${deck.length}`); // no change for finding her
+    next().click();
+    expect(counter()).toBe(`2 / ${deck.length}`);
+  });
+
   it('greys out a wrong guess so you can try again', async () => {
     await open();
     const other = wrong(dealt(0).pal);
@@ -82,7 +92,7 @@ describe('Who’s That Pal?', () => {
 
   it("doesn't keep score", async () => {
     await open();
-    expect(document.body.textContent).not.toMatch(/score|points|\d+ \/ \d+/i);
+    expect(document.body.textContent).not.toMatch(/score|points|correct/i);
   });
 
   it('moves on to the next fact, with every pal back', async () => {
@@ -107,7 +117,8 @@ describe('Who’s That Pal?', () => {
       button(dealt(i).pal.id).click();
       next().click();
     }
-    // Back to the top of a fresh deck.
+    // Back to the top of a fresh deck, counting from 1 again.
+    expect(document.querySelector('.guess-counter').textContent).toBe(`1 / ${deck.length}`);
     const { pal } = dealt(0);
     expect(fact().textContent).toMatch(/\b[Tt]his pal\b/);
     button(pal.id).click();

@@ -37,13 +37,20 @@ const buttons = PALS.map((pal) => {
 });
 document.querySelector('.guess-grid').append(...buttons);
 
+const counter = document.querySelector('.guess-counter');
 let deck = [];
+let total = 0;
 let current = null;
 
 function showNext() {
-  // Through every fact once, then shuffle them all again.
-  if (deck.length === 0) deck = factDeck(PALS, QUIZ_FACTS);
+  // Through every fact once, then shuffle them all again and count from 1.
+  if (deck.length === 0) {
+    deck = factDeck(PALS, QUIZ_FACTS);
+    total = deck.length;
+  }
   current = deck.pop();
+  // How far through the facts you are (2 / 88), not a score.
+  counter.textContent = `${total - deck.length} / ${total}`;
   factEl.replaceChildren(...withBlanks(current.fact, current.pal.name));
   status.textContent = ASK;
   next.hidden = true;

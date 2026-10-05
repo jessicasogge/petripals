@@ -25,7 +25,7 @@ No antibiotics this time. You share the plate with one to three rival pals steer
 
 ### Who’s That Pal?
 
-Tap **Who’s That Pal?** on the home page for a quiz on the pals' fun facts. You get one fact with "this pal" in place of her name: tap the pal it's about. A wrong guess greys that pal out so you can try again, and the right one puts her name back in and shows her species. There's no score, so it's just for learning. You'll see every quiz fact once before any comes up again. The quiz skips facts too broad to point to one pal (like "is Gram-positive"); the ones it uses are listed in `public/game/quiz-facts.js`.
+Tap **Who’s That Pal?** on the home page for a quiz on the pals' fun facts. You get one fact with "this pal" in place of her name: tap the pal it's about. A wrong guess greys that pal out so you can try again, and the right one puts her name back in and shows her species. There's no score, so it's just for learning. A counter (like 2 / 88) shows how many facts you've seen so far, and you'll see every quiz fact once before any comes up again. The quiz skips facts too broad to point to one pal (like "is Gram-positive"); the ones it uses are listed in `public/game/quiz-facts.js`.
 
 ## The pals
 

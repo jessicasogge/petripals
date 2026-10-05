@@ -732,9 +732,17 @@ body {
   width: min(860px, 100%);
 }
 
+.guess-counter {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0f766e;
+  opacity: 0.75;
+}
+
 .guess-fact {
   max-width: 38rem;
-  margin: 1.25rem auto 0;
+  margin: 0.75rem auto 0;
   padding: 1rem 1.25rem;
   background: rgba(255, 255, 255, 0.7);
   border: 2px solid rgba(15, 118, 110, 0.2);
