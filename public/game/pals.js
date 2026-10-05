@@ -58,7 +58,7 @@ const eliaShine = (x) => {
     `<animate attributeName="cy" dur="${ELIA_SWIM}" repeatCount="indefinite" values="${eliaPhases.map(y).join(';')}" /></circle>`;
 };
 
-// Flagella all over the body (peritrichous), for Sallie, Terra and Lissie: each one
+// Flagella all over the body (peritrichous), for Sallie, Terra, Lissie and Serra: each one
 // starts at (x, y) on her outline and heads off at `angle` degrees, `length`
 // long, waving 12 units to each side. Wiggled with SVG's own <animate>, like
 // Mona's and Vi's tails, each at its own speed so they don't move in lockstep.
@@ -104,6 +104,19 @@ const LISSIE_FLAGELLA = [
   [50, 100, 180, 26, '0.7s'],
 ]
   .map((f) => flagellum('#2c4f7c', ...f))
+  .join('');
+// Serra's: all around her short, plump rod.
+const SERRA_FLAGELLA = [
+  [72, 74, -110, 28, '0.7s'],
+  [100, 72, -90, 26, '0.66s'],
+  [128, 74, -70, 28, '0.74s'],
+  [72, 126, 110, 28, '0.72s'],
+  [100, 128, 90, 26, '0.68s'],
+  [128, 126, 70, 28, '0.7s'],
+  [52, 100, 180, 26, '0.6s'],
+  [148, 100, 0, 24, '0.64s'],
+]
+  .map((f) => flagellum('#b0002f', ...f))
   .join('');
 
 export const PALS = [
@@ -461,6 +474,30 @@ export const PALS = [
         <ellipse cx="72" cy="110" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
         <ellipse cx="128" cy="110" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
         <path d="M94 110 Q100 116 106 110" stroke="#27272a" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
+  // Serra: Serratia marcescens, a short, plump rod in prodigiosin red, with flagella all over
+  {
+    id: 'serra',
+    name: 'Serra',
+    looks: 'a short, plump red rod-shaped Serratia marcescens with flagella all around her',
+    motion: 'bob',
+    frames: { home: '0 0 200 200', picker: '10 10 180 180', dish: '8 8 184 184' },
+    art: `
+      <!-- flagella all over her body -->
+      ${SERRA_FLAGELLA}
+      <rect x="52" y="72" width="96" height="56" rx="28" fill="#ff5a6e" stroke="#b0002f" stroke-width="4" />
+      <ellipse cx="124" cy="83" rx="9" ry="4.5" fill="#ffd1d8" opacity="0.9" transform="rotate(-12 124 83)" />
+      <circle cx="66" cy="117" r="3" fill="#ffd1d8" />
+      <g class="face">
+        <circle cx="88" cy="96" r="6" fill="#6b0016" />
+        <circle cx="112" cy="96" r="6" fill="#6b0016" />
+        <circle cx="90" cy="94" r="2" fill="white" />
+        <circle cx="114" cy="94" r="2" fill="white" />
+        <ellipse cx="74" cy="108" rx="6.5" ry="3.8" fill="#ffc2cc" opacity="0.95" />
+        <ellipse cx="126" cy="108" rx="6.5" ry="3.8" fill="#ffc2cc" opacity="0.95" />
+        <path d="M94 108 Q100 114 106 108" stroke="#6b0016" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
   },

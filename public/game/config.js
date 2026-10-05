@@ -556,6 +556,51 @@ export const SPECIES = {
       { code: 'MEM', name: 'meropenem', zone: 32 },
     ],
   },
+  serra: {
+    facts: [
+      "Serra is a Gram-negative rod, so she stains pink on a Gram stain, despite her red color.",
+      "Many strains of Serra make prodigiosin, a bright red pigment.",
+      "Serra often makes more red pigment at room temperature than at body temperature.",
+      "\"Marcescens\" is Latin for fading or decaying, since Serra's red pigment fades over time.",
+      "In 1819, Bartolomeo Bizio named Serra after red spots grew on polenta near Padua, Italy.",
+      "Serra's genus is named for Serafino Serrati, an Italian physicist and steamboat pioneer.",
+      "Red spots on bread were sometimes seen as miracles; some may have been Serra growing.",
+      "Serra can make a pink, orange, or red film in damp spots like showers and toilet bowls.",
+      "Some Serra strains swarm on soft agar, spreading quickly across the surface as a group.",
+      "Serra usually swims with flagella spread all over her body.",
+      "Serra makes DNase, an enzyme that breaks down DNA, which labs use to help identify her.",
+      "Serra makes chitinase, an enzyme that breaks down chitin in insect shells.",
+      "Serra's cousin *Serratia entomophila* is used in New Zealand to fight grass grubs.",
+      "Serra can cause infections in hospital patients, often in the lungs or urinary tract.",
+      "Serra can cause eye infections, especially in people who wear contact lenses.",
+      "Serra is usually resistant to ampicillin and colistin.",
+    ],
+    scientific: 'Serratia marcescens',
+    color: '#c2003a', // for her name above the dish
+    kind: 'rod',
+    gram: 'negative',
+    size: 10.5,
+    body: [
+      // tail (the flagellum behind her)
+      [-0.39, 0.0, 0.04],
+      [-0.33, 0.0, 0.04],
+      // her short, plump rod
+      [-0.108, 0.0, 0.152],
+      [-0.054, 0.0, 0.152],
+      [0.0, 0.0, 0.152],
+      [0.054, 0.0, 0.152],
+      [0.108, 0.0, 0.152],
+    ],
+    // She's naturally resistant to ampicillin, colistin and older
+    // cephalosporins, so her disks are drugs that work on her.
+    antibiotics: [
+      { code: 'CIP', name: 'ciprofloxacin', zone: 31 },
+      { code: 'GM', name: 'gentamicin', zone: 18 },
+      { code: 'CRO', name: 'ceftriaxone', zone: 29 },
+      { code: 'MEM', name: 'meropenem', zone: 28 },
+      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 24 },
+    ],
+  },
 };
 
 // Mixed culture mode: no disks, just you and a rival pal (picked at random,
