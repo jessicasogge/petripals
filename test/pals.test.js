@@ -7,7 +7,7 @@ import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SPECIES } from '../public/game/config.js';
 import { plainText } from '../public/game/italics.js';
-import { dishPal, homePal, inRandomOrder, PAGE_SIZE, palById, PALS, palTile, pickerPages } from '../public/game/pals.js';
+import { dishPal, HOME_PALS, homePal, inRandomOrder, PAGE_SIZE, palById, PALS, palTile, pickerPages } from '../public/game/pals.js';
 
 // (jsdom changes import.meta.url to a web address, so find files from the project folder.)
 const file = (name) => readFileSync(resolve(process.cwd(), 'public', name), 'utf8');
@@ -160,10 +160,12 @@ describe('inRandomOrder', () => {
 });
 
 describe('the pages', () => {
-  it('home shows every pal, in order', async () => {
+  it('home shows its full row of twelve pals, in order', async () => {
     await open('index.html', 'script.js');
     const labels = [...document.querySelectorAll('.friends svg')].map((s) => s.getAttribute('aria-label'));
-    expect(labels).toEqual(PALS.map((pal) => `${pal.name}, ${pal.looks}`));
+    expect(labels).toEqual(HOME_PALS.map((pal) => `${pal.name}, ${pal.looks}`));
+    expect(HOME_PALS.map((pal) => pal.id)).toEqual(
+      ['terra', 'penny', 'vi', 'goldie', 'ana', 'lissie', 'scarlett', 'coco', 'mona', 'elia', 'ceres', 'sallie']);
   });
 
   it('the picker has a card for every pal, each once, linking to her', async () => {

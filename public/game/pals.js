@@ -2,7 +2,8 @@
 // page and the petri dish all draw the pals from here, so a change to how a
 // pal looks only has to be made once.
 //
-// The list is in the order the pals appear on the home page and the picker.
+// The list is in the order the pals appear on the home page (the picker
+// shuffles them).
 // Each pal has:
 //   id      her key, matching SPECIES in config.js and ?pal= in addresses
 //   name    what she's called
@@ -14,8 +15,10 @@
 //   art     the drawing itself, in a 200 x 200 space. Wrap the face in
 //           <g class="face">: offspring in the dish hide it.
 //
-// To add a pal: add her here and to SPECIES in config.js, and give her tile a
-// color in styles.css (.<id> next to .penny and the others).
+// To add a pal: add her to the end of this list and to SPECIES in config.js,
+// and give her tile a color in styles.css (.<id> next to .penny and the
+// others). The home page row is full, so new pals go in the picker only:
+// don't add them to HOME below.
 
 const SVG = 'http://www.w3.org/2000/svg';
 
@@ -462,6 +465,11 @@ export const PALS = [
     `,
   },
 ];
+
+// The pals in the home page's row, in PALS order. The row is full: pals
+// added after Lissie appear only in the picker and the game.
+const HOME = ['terra', 'penny', 'vi', 'goldie', 'ana', 'lissie', 'scarlett', 'coco', 'mona', 'elia', 'ceres', 'sallie'];
+export const HOME_PALS = PALS.filter((pal) => HOME.includes(pal.id));
 
 // How many pals fit on one page of the picker: four across, two down.
 export const PAGE_SIZE = 8;
