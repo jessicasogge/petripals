@@ -46,7 +46,7 @@ function showNext() {
   }
   current = deck.pop();
   // How far through the facts you are (2 / 88), not a score.
-  counter.textContent = `${total - deck.length} / ${total}`;
+  counter.textContent = `Fact ${total - deck.length} of ${total}`;
   factEl.replaceChildren(...withBlanks(current.fact, current.pal.name));
   status.textContent = ASK;
   next.hidden = true;
