@@ -15,22 +15,25 @@
 // one they're using.
 
 // How far above the finger the loop's tip sits, in screen px: enough to
-// clear a grown-up's fingertip, not so far it feels disconnected. It's a
+// clear a grown-up's whole fingertip and see around the pal, not so far it
+// feels disconnected. It's a
 // fixed size rather than a share of the dish because fingers don't shrink on
 // small screens.
-export const LOOP_REACH = 64;
+export const LOOP_REACH = 96;
 
 // The loop's drawing. Its box is placed (in styles.css, .inoc-loop svg) so
 // the finger is at (20, LOOP_FINGER_Y): the handle runs down under the
 // finger, and the ring, where the pal aims, is LOOP_REACH px straight up.
 // Straight up, not leaning to one side, so it suits left and right hands.
-export const LOOP_FINGER_Y = 70;
+// The ring is small with a dot in the middle, marking exactly where she aims.
+export const LOOP_FINGER_Y = 104;
 const RING_Y = LOOP_FINGER_Y - LOOP_REACH;
 export const LOOP_ART = `
-  <svg viewBox="0 0 40 120" width="40" height="120">
+  <svg viewBox="0 0 40 154" width="40" height="154">
     <rect x="14" y="${LOOP_FINGER_Y - 2}" width="12" height="50" rx="6" fill="#0f766e" />
-    <path d="M20 ${RING_Y + 7.5} L20 ${LOOP_FINGER_Y}" stroke="#64748b" stroke-width="2.5" stroke-linecap="round" />
-    <circle class="inoc-loop-ring" cx="20" cy="${RING_Y}" r="6.5" fill="rgba(255, 255, 255, 0.35)" stroke="#475569" stroke-width="2.5" />
+    <path d="M20 ${RING_Y + 5} L20 ${LOOP_FINGER_Y}" stroke="#64748b" stroke-width="2" stroke-linecap="round" />
+    <circle class="inoc-loop-ring" cx="20" cy="${RING_Y}" r="4.5" fill="rgba(255, 255, 255, 0.35)" stroke="#475569" stroke-width="1.75" />
+    <circle cx="20" cy="${RING_Y}" r="1.25" fill="#475569" />
   </svg>`;
 
 // A little loop for the Loop button.
