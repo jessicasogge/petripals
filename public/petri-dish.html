@@ -53,6 +53,20 @@
 
       <p class="cell-count" aria-live="polite">Level 1 · 1 / 4 cells</p>
 
+      <!-- On a touch screen, steer with the inoculating loop (the pal swims to
+           its tip, above your finger, so your finger doesn't hide her) or
+           right under your finger. See game/touch.js. -->
+      <div class="steer-choice" role="group" aria-label="Steer with">
+        <button class="steer-btn" type="button" data-steer="loop" aria-pressed="true">
+          <span class="steer-icon" aria-hidden="true"></span>
+          Loop
+        </button>
+        <button class="steer-btn" type="button" data-steer="finger" aria-pressed="false">
+          <span class="steer-icon" aria-hidden="true"></span>
+          Finger
+        </button>
+      </div>
+
       <p class="how-to-play">
         <span class="for-keys">Use the arrow keys to swim.</span>
         <span class="for-touch">Touch and hold where you want to swim.</span>
@@ -63,6 +77,9 @@
       <a class="back-link" href="./pal-picker.html">Pick a different pal</a>
     </main>
     <footer class="signature">jsogge 2026</footer>
+    <!-- The inoculating loop, drawn over your finger while you steer with it
+         (game/touch.js draws, moves and shows it). -->
+    <div class="inoc-loop" aria-hidden="true" hidden></div>
     <script type="module" src="./game/main.js"></script>
     <script data-goatcounter="https://petripals.goatcounter.com/count"
             async src="https://gc.zgo.at/count.js"></script>

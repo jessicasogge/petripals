@@ -12,10 +12,13 @@ import { scatterNutrients } from './nutrients.js';
 import { dishPal, PALS } from './pals.js';
 import { playRace } from './race.js';
 import { listOf, rivalsFor } from './rivals.js';
-import { watchInputMode } from './touch.js';
+import { steeringChoice, watchInputMode } from './touch.js';
 
 // Show touch or arrow-key directions, whichever fits the device.
 watchInputMode();
+// Steer a finger with the inoculating loop, or right under the finger,
+// whichever the player picked (the buttons under the dish).
+steeringChoice();
 // "Growing the colony…" while the next screen loads.
 watchLoading();
 
