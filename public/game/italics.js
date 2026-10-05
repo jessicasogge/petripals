@@ -24,3 +24,11 @@ export function withItalics(text) {
 export function speciesName(scientific) {
   return withItalics(scientific.includes('*') ? scientific : `*${scientific}*`);
 }
+
+// A pal's `scientific` name shortened the way it's written after the first
+// mention, with the genus cut to its first letter: P. aeruginosa, or
+// S. Typhi for a name that marks its own italics.
+export function shortSpeciesName(scientific) {
+  const marked = scientific.includes('*') ? scientific : `*${scientific}*`;
+  return withItalics(marked.replace(/^\*([A-Z])[a-z]+(\*?) /, '*$1.$2 '));
+}

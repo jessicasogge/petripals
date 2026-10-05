@@ -5,7 +5,7 @@
 // for learning the facts, not for winning.
 import { SPECIES } from './config.js';
 import { factDeck, fillBlanks, withBlanks } from './guess.js';
-import { speciesName } from './italics.js';
+import { shortSpeciesName, speciesName } from './italics.js';
 import { pageReady, watchLoading } from './loading.js';
 import { PALS, palTile } from './pals.js';
 
@@ -26,7 +26,11 @@ const buttons = PALS.map((pal) => {
   const name = document.createElement('span');
   name.textContent = pal.name;
   name.style.color = SPECIES[pal.id].color;
-  button.append(palTile(pal), name);
+  // Her species, shortened (P. aeruginosa), so facts about it can help too.
+  const species = document.createElement('span');
+  species.className = 'guess-species';
+  species.append(...shortSpeciesName(SPECIES[pal.id].scientific));
+  button.append(palTile(pal), name, species);
   button.addEventListener('click', () => guess(pal, button));
   return button;
 });

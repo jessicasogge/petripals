@@ -756,6 +756,21 @@ body {
   color: #0f766e;
 }
 
+/* Her species under her name on each tile, shortened: P. aeruginosa. It
+   shrinks a little with the tile on a phone, and a long one
+   (L. monocytogenes) wraps onto two lines if it still won't fit. */
+.guess-btn {
+  container-type: inline-size;
+}
+
+.guess-species {
+  margin-top: -0.25rem;
+  font-size: clamp(0.68rem, 11.5cqi, 0.8rem);
+  font-weight: 400;
+  color: #134e4a;
+  line-height: 1.2;
+}
+
 /* The right pal: a thick teal border and a check, like a picked rival. */
 .guess-btn.right {
   background: #f0fdfa;

@@ -38,6 +38,14 @@ describe('Guess the Pal', () => {
     expect(document.querySelector('.loading-overlay').hidden).toBe(true);
   });
 
+  it("shows each pal's species, shortened, under her name", async () => {
+    await open();
+    expect(button('mona').querySelector('.guess-species').textContent).toBe('P. aeruginosa');
+    expect(button('mona').querySelector('.guess-species i').textContent).toBe('P. aeruginosa');
+    expect(button('sallie').querySelector('.guess-species').textContent).toBe('S. Typhi');
+    for (const pal of PALS) expect(button(pal.id).querySelector('.guess-species').textContent).toMatch(/^[A-Z]\.\s\S+$/);
+  });
+
   it('shows a fact with "this pal" in place of her name', async () => {
     await open();
     const { pal } = dealt(0);

@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 // Italics in scientific names, marked between asterisks in config.js.
 import { describe, expect, it } from 'vitest';
-import { plainText, speciesName, withItalics } from '../public/game/italics.js';
+import { plainText, shortSpeciesName, speciesName, withItalics } from '../public/game/italics.js';
 
 // Nodes as "text" and "<i>italic</i>", to compare easily.
 const shown = (nodes) => nodes.map((n) => (n.nodeName === 'I' ? `<i>${n.textContent}</i>` : n.textContent)).join('');
@@ -27,5 +27,10 @@ describe('italics', () => {
     expect(shown(speciesName('Bacillus cereus'))).toBe('<i>Bacillus cereus</i>');
     // A serovar is capitalized and upright.
     expect(shown(speciesName('*Salmonella* Typhi'))).toBe('<i>Salmonella</i> Typhi');
+  });
+
+  it('shortens a species to the first letter of its genus', () => {
+    expect(shown(shortSpeciesName('Pseudomonas aeruginosa'))).toBe('<i>P. aeruginosa</i>');
+    expect(shown(shortSpeciesName('*Salmonella* Typhi'))).toBe('<i>S.</i> Typhi');
   });
 });
