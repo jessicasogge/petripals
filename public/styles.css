@@ -467,6 +467,10 @@ body {
   background: rgba(122, 156, 199, 0.42);
 }
 
+.sara {
+  background: rgba(255, 90, 110, 0.22);
+}
+
 .pick-btn {
   margin-top: 0.75rem;
   padding: 0.7rem 1rem;
