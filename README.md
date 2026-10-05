@@ -21,7 +21,7 @@ There are seven levels. Each one adds another antibiotic disk and doubles the co
 
 ### Mixed culture
 
-No antibiotics this time. You share the plate with one to three rival pals steered by the computer. Pick them yourself (any pals but yours, each once), or tap **Surprise me** for one at random. Against one rival, the **first colony to reach 64 cells wins**; against two or three, the dish fills up fast, so it's the **first to 32**. Each pal in the dish adds more nutrients. You get a one-second head start, and the rivals swim a little slower than you, but they're quick to spot the nearest nutrient, so grab them first!
+No antibiotics this time. You share the plate with one to three rival pals steered by the computer. Pick them yourself (any pals but yours, each once), or tap **Surprise me** for one at random. Against one rival, the **first colony to reach 64 cells wins**; against two or three, the dish fills up fast, so it's the **first to 32**. Each pal in the dish adds more nutrients, and **Race again** takes you back to pick your rivals. You get a one-second head start, and the rivals swim a little slower than you, but they're quick to spot the nearest nutrient, so grab them first!
 
 ## The pals
 

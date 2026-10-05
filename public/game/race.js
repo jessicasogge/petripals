@@ -64,10 +64,9 @@ export function playRace({ you, rivals, nutrients, target }) {
   let finished = false;
   let lastTime = null;
 
-  // "Race again" plays the same rivals again (or, after Surprise me, a new
-  // random one); "Play classic" goes to the levels.
+  // "Race again" goes back to picking rivals; "Play classic" goes to the levels.
   document.querySelector('.play-again').addEventListener('click', () => {
-    window.location.href = window.location.href;
+    window.location.href = `./choose-rivals.html?pal=${you.svg.dataset.pal}`;
   });
   document.querySelector('.start-over').addEventListener('click', () => {
     window.location.href = `./petri-dish.html?pal=${you.svg.dataset.pal}`;

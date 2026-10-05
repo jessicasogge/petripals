@@ -260,14 +260,12 @@ describe('the pop-up buttons', () => {
     return banner;
   }
 
-  it('"Race again" plays the same race again, rivals and all', () => {
+  it('"Race again" goes back to picking rivals for the same pal', () => {
     const banner = finished();
     const again = banner.querySelector('.play-again');
     expect(again.textContent).toBe('Race again');
     again.click();
-    // The same address: the same rivals, or after Surprise me (no rivals in
-    // the address), a new random one.
-    expect(location.href).toBe('http://localhost/petri-dish.html?pal=mona&mode=mixed&rivals=vi');
+    expect(location.href).toBe('./choose-rivals.html?pal=mona');
   });
 
   it('"Play classic" goes to level 1 with the same pal', () => {
