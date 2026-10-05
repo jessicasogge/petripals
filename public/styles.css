@@ -956,3 +956,368 @@ body:not(.picker-page) .signature {
     animation-duration: 0.01s;
   }
 }
+
+/* Detective mode (detective.html, game/detective.js): your pal, the
+   suspects, the trail through the key, and the lab bench for each test. */
+.detective-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-align: left;
+}
+
+.detective-head h1 {
+  margin: 0;
+}
+
+.case-line {
+  margin: 0.2rem 0 0;
+  font-weight: 700;
+}
+
+.detective-pal .pal-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0;
+  border-radius: 16px;
+}
+
+.detective-pal .pal-icon svg {
+  width: 58px;
+  height: 58px;
+}
+
+.suspects-title {
+  margin: 1.5rem 0 0.5rem;
+  font-size: 1.05rem;
+}
+
+.suspect-count {
+  font-weight: 400;
+  color: #475569;
+}
+
+/* Every suspect, small. The ones the key has ruled out fade to grey. */
+.suspects,
+.pal-book {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 0.5rem;
+}
+
+.suspects li,
+.pal-book li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+.suspects .pal-icon,
+.pal-book .pal-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 0 0.2rem;
+  border-radius: 14px;
+}
+
+.suspects .pal-icon svg,
+.pal-book .pal-icon svg {
+  width: 44px;
+  height: 44px;
+}
+
+.suspects .ruled-out {
+  opacity: 0.3;
+  filter: grayscale(1);
+}
+
+.suspects .ruled-out .suspect-name {
+  text-decoration: line-through;
+}
+
+/* The tests done so far, as a row of steps. */
+.trail {
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.trail li,
+.recap li {
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: #0f766e;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.lab-step {
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 3px solid #0f766e;
+  border-radius: 18px;
+}
+
+.step-name {
+  margin: 0;
+}
+
+.step-name:focus,
+.solved-name:focus {
+  outline: none;
+}
+
+.step-question {
+  margin: 0.35rem 0 1rem;
+  line-height: 1.4;
+}
+
+/* The bench: the sample waiting, then the test's result. */
+.lab-bench {
+  min-height: 180px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: #e0f2fe;
+  box-shadow: inset 0 0 0 2px #bae6fd;
+}
+
+.bench-hint {
+  margin: 0;
+  color: #475569;
+  font-weight: 700;
+}
+
+.lab-view {
+  animation: result-in 0.45s ease-out;
+}
+
+.lab-view svg {
+  display: block;
+  width: min(280px, 80vw);
+  height: auto;
+}
+
+/* Under the microscope she sits on a white slide, whatever her usual tile
+   color, so the tile doesn't give her away. */
+.lab-view .pal-icon {
+  width: 150px;
+  height: 150px;
+  margin: 15px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0 58%, #f1f5f9 72%, #e2e8f0 100%);
+  box-shadow: inset 0 0 0 3px #94a3b8;
+}
+
+.lab-view .pal-icon svg {
+  width: 120px;
+  height: 120px;
+}
+
+.lab-catalase .bubble {
+  animation: fizz 1.2s ease-out infinite alternate;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes fizz {
+  from {
+    transform: scale(0.6);
+  }
+
+  to {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes result-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.answers {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.answers[hidden] {
+  display: none;
+}
+
+.answer-btn {
+  min-height: 52px;
+  padding: 0.6rem;
+  border: 2px solid rgba(15, 118, 110, 0.35);
+  border-radius: 14px;
+  background: white;
+  color: #134e4a;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.answer-btn:hover:not(:disabled) {
+  background: #ccfbf1;
+}
+
+.answer-btn:disabled {
+  cursor: default;
+}
+
+.answer-btn.right {
+  background: #0f766e;
+  border-color: #0f766e;
+  color: white;
+}
+
+.answer-btn.wrong {
+  border-style: dashed;
+  color: #64748b;
+  text-decoration: line-through;
+}
+
+.step-feedback {
+  margin: 1rem 0 0;
+  line-height: 1.4;
+}
+
+.step-feedback:empty {
+  display: none;
+}
+
+.step-feedback.correct {
+  padding: 0.55rem 0.75rem;
+  border-radius: 12px;
+  background: rgba(15, 118, 110, 0.1);
+}
+
+.step-feedback.try-again {
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+.run-test[hidden],
+.next-step[hidden] {
+  display: none;
+}
+
+/* The case solved: her picture in color, stars, and the Pal Book. */
+.solved {
+  animation: result-in 0.45s ease-out;
+}
+
+.solved[hidden],
+.case[hidden] {
+  display: none;
+}
+
+.solved-pal {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.solved-name {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.solved-species {
+  margin: 0.2rem 0 0.5rem;
+}
+
+.stars {
+  margin: 0;
+  font-size: 2rem;
+  letter-spacing: 0.1em;
+  color: #d97706;
+}
+
+.recap {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.solved .fun-fact {
+  margin: 1rem auto 0;
+  max-width: 34rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 12px;
+  background: rgba(15, 118, 110, 0.08);
+  line-height: 1.4;
+}
+
+.solved .fun-fact strong {
+  color: #0f766e;
+}
+
+.book-title {
+  margin: 1.5rem 0 0.5rem;
+}
+
+.book-count {
+  font-weight: 400;
+  color: #475569;
+}
+
+.pal-book .unfound {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto;
+  display: grid;
+  place-items: center;
+  border: 2px dashed rgba(15, 118, 110, 0.35);
+  border-radius: 14px;
+  color: #475569;
+  font-size: 1.3rem;
+}
+
+@media (max-width: 520px) {
+  .detective-head {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .lab-step {
+    padding: 1rem 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-view,
+  .solved,
+  .lab-catalase .bubble {
+    animation: none;
+  }
+
+  .suspects li {
+    transition: none;
+  }
+}

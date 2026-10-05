@@ -319,6 +319,7 @@ describe('the pages', () => {
     expect(name.style.color).toBe(expected.style.color);
     expect(document.title).toBe('PetriPals | Coco | Choose a Mode');
     expect(document.querySelector('.mode-mixed').getAttribute('href')).toBe('./petri-dish.html?pal=coco&mode=mixed');
+    expect(document.querySelector('.mode-detective').getAttribute('href')).toBe('./detective.html?pal=coco');
   });
 
   it('the mode page sends an unknown pal back to the picker', async () => {
@@ -328,7 +329,7 @@ describe('the pages', () => {
   });
 
   it("the pages don't draw any pals by hand", () => {
-    for (const page of ['index.html', 'pal-picker.html', 'choose-mode.html', 'petri-dish.html']) {
+    for (const page of ['index.html', 'pal-picker.html', 'choose-mode.html', 'petri-dish.html', 'detective.html']) {
       expect(file(page), page).not.toContain('<svg');
     }
   });

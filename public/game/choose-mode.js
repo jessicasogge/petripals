@@ -11,6 +11,7 @@ if (!pal || !Object.hasOwn(SPECIES, id)) {
 } else {
   document.querySelector('.mode-classic').href = `./petri-dish.html?pal=${id}`;
   document.querySelector('.mode-mixed').href = `./petri-dish.html?pal=${id}&mode=mixed`;
+  document.querySelector('.mode-detective').href = `./detective.html?pal=${id}`;
 
   // Her picture on its tile, as on the picker, and her name in her color.
   document.querySelector('.mode-pal').append(palTile(pal));
