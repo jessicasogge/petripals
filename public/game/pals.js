@@ -2,7 +2,8 @@
 // page and the petri dish all draw the pals from here, so a change to how a
 // pal looks only has to be made once.
 //
-// The list is in the order the pals appear on the home page and the picker.
+// The list is in the order the pals appear on the home page (the picker
+// shuffles them).
 // Each pal has:
 //   id      her key, matching SPECIES in config.js and ?pal= in addresses
 //   name    what she's called
@@ -14,8 +15,10 @@
 //   art     the drawing itself, in a 200 x 200 space. Wrap the face in
 //           <g class="face">: offspring in the dish hide it.
 //
-// To add a pal: add her here and to SPECIES in config.js, and give her tile a
-// color in styles.css (.<id> next to .penny and the others).
+// To add a pal: add her to the end of this list and to SPECIES in config.js,
+// and give her tile a color in styles.css (.<id> next to .penny and the
+// others). The home page row is full, so new pals go in the picker only:
+// don't add them to HOME below.
 
 const SVG = 'http://www.w3.org/2000/svg';
 
@@ -55,7 +58,7 @@ const eliaShine = (x) => {
     `<animate attributeName="cy" dur="${ELIA_SWIM}" repeatCount="indefinite" values="${eliaPhases.map(y).join(';')}" /></circle>`;
 };
 
-// Flagella all over the body (peritrichous), for Sallie and Terra: each one
+// Flagella all over the body (peritrichous), for Sallie, Terra and Lissie: each one
 // starts at (x, y) on her outline and heads off at `angle` degrees, `length`
 // long, waving 12 units to each side. Wiggled with SVG's own <animate>, like
 // Mona's and Vi's tails, each at its own speed so they don't move in lockstep.
@@ -90,6 +93,17 @@ const TERRA_FLAGELLA = [
   [30, 100, 180, 28, '0.6s'],
 ]
   .map((f) => flagellum('#65751c', ...f))
+  .join('');
+// Lissie's: just a few around her short rod, since she tumbles rather than
+// swims fast.
+const LISSIE_FLAGELLA = [
+  [72, 78, -110, 28, '0.8s'],
+  [128, 78, -70, 28, '0.75s'],
+  [72, 122, 110, 28, '0.78s'],
+  [128, 122, 70, 28, '0.82s'],
+  [50, 100, 180, 26, '0.7s'],
+]
+  .map((f) => flagellum('#2c4f7c', ...f))
   .join('');
 
 export const PALS = [
@@ -263,6 +277,30 @@ export const PALS = [
       </g>
     `,
   },
+  // Lissie: Listeria monocytogenes, a short denim-blue rod with a few flagella
+  {
+    id: 'lissie',
+    name: 'Lissie',
+    looks: 'a short denim-blue rod-shaped Listeria monocytogenes with a few flagella around her',
+    motion: 'bob',
+    frames: { home: '0 0 200 200', picker: '10 10 180 180', dish: '8 8 184 184' },
+    art: `
+      <!-- a few flagella around her short rod -->
+      ${LISSIE_FLAGELLA}
+      <rect x="52" y="76" width="96" height="48" rx="24" fill="#9fbbdc" stroke="#2c4f7c" stroke-width="4" />
+      <circle cx="131" cy="88" r="3.8" fill="#e6eef8" />
+      <circle cx="66" cy="114" r="2.8" fill="#e6eef8" />
+      <g class="face">
+        <circle cx="89" cy="98" r="5.5" fill="#1b3150" />
+        <circle cx="111" cy="98" r="5.5" fill="#1b3150" />
+        <circle cx="90.8" cy="96.2" r="1.9" fill="white" />
+        <circle cx="112.8" cy="96.2" r="1.9" fill="white" />
+        <ellipse cx="76" cy="109" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="124" cy="109" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <path d="M95 109 Q100 114 105 109" stroke="#1b3150" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
   // Scarlett: Streptococcus pyogenes, a red chain of cocci
   {
     id: 'scarlett',
@@ -427,6 +465,11 @@ export const PALS = [
     `,
   },
 ];
+
+// The pals in the home page's row, in PALS order. The row is full: pals
+// added after Lissie appear only in the picker and the game.
+const HOME = ['terra', 'penny', 'vi', 'goldie', 'ana', 'lissie', 'scarlett', 'coco', 'mona', 'elia', 'ceres', 'sallie'];
+export const HOME_PALS = PALS.filter((pal) => HOME.includes(pal.id));
 
 // How many pals fit on one page of the picker: four across, two down.
 export const PAGE_SIZE = 8;

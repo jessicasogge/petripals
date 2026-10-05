@@ -1,9 +1,9 @@
 // The home page: the row of pals, and the "Press Start to Play" button.
-import { homePal, PALS } from './game/pals.js';
+import { HOME_PALS, homePal } from './game/pals.js';
 import { splitOnTap } from './game/split.js';
 
 const friends = document.querySelector('.friends');
-friends?.append(...PALS.map(homePal));
+friends?.append(...HOME_PALS.map(homePal));
 // An easter egg: tap a pal and she divides in two.
 splitOnTap(friends);
 

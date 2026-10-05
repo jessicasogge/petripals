@@ -65,6 +65,12 @@ describe('pals', () => {
     expect(body.at(-1)[0]).toBe(Math.max(...body.map(([x]) => x)));
   });
 
+  it('makes Lissie a Gram-positive rod that tumbles apart after dividing, like Sallie', () => {
+    expect(SPECIES.lissie.kind).toBe('rod');
+    expect(SPECIES.lissie.layout).toBeUndefined();
+    expect(SPECIES.lissie.gram).toBe('positive');
+  });
+
   it('makes Ceres a Bacillus: rod-shaped cells in short chains of up to three', () => {
     expect(SPECIES.ceres.kind).toBe('coccus'); // grows with the chain code
     expect(SPECIES.ceres.layout).toBe('chain');
@@ -145,9 +151,9 @@ describe('Gram stains', () => {
     }
   });
 
-  it('matches the real bacteria: the cocci, Ana, Ceres and Terra are Gram-positive, the other rods negative', () => {
+  it('matches the real bacteria: the cocci, Ana, Ceres, Terra and Lissie are Gram-positive, the other rods negative', () => {
     const positive = Object.keys(SPECIES).filter((name) => SPECIES[name].gram === 'positive').sort();
-    expect(positive).toEqual(['ana', 'ceres', 'goldie', 'penny', 'scarlett', 'terra']);
+    expect(positive).toEqual(['ana', 'ceres', 'goldie', 'lissie', 'penny', 'scarlett', 'terra']);
   });
 
   it('marks only Elia as barely taking the stain', () => {
