@@ -58,6 +58,44 @@ describe('the loading card', () => {
   });
 });
 
+describe('a page that starts covered', () => {
+  // The picker, mode, rival and dish pages start with the card in their HTML.
+  const pageHtml = (name) => {
+    const page = readFileSync(resolve(process.cwd(), 'public', name), 'utf8');
+    return page.slice(page.indexOf('<body'), page.indexOf('</body>'));
+  };
+
+  it('is taken away by pageReady, and stays see-through after', () => {
+    document.body.outerHTML = pageHtml('pal-picker.html');
+    expect(card().hidden).toBe(false);
+    expect(card().classList.contains('arriving')).toBe(true);
+    loading.pageReady();
+    expect(card().hidden).toBe(true);
+    expect(card().classList.contains('arriving')).toBe(false);
+    // Leaving later shows that same card, not a second one.
+    loading.showLoading();
+    expect(document.querySelectorAll('.loading-overlay')).toHaveLength(1);
+    expect(card().hidden).toBe(false);
+  });
+
+  it.each(['pal-picker.html', 'choose-mode.html', 'choose-rivals.html', 'petri-dish.html'])(
+    '%s starts with the same card the script makes',
+    (page) => {
+      document.body.outerHTML = pageHtml(page);
+      const started = card();
+      expect(started.classList.contains('arriving')).toBe(true);
+      started.remove();
+      loading.showLoading();
+      const made = card();
+      made.classList.add('arriving');
+      made.hidden = false;
+      started.hidden = false;
+      const normalize = (el) => el.outerHTML.replace(/>\s+</g, '><').replace(/ hidden=""/, '');
+      expect(normalize(started)).toBe(normalize(made));
+    },
+  );
+});
+
 describe('goTo', () => {
   it('shows the card, then goes to the address', () => {
     const location = { href: 'http://localhost/petri-dish.html?pal=mona' };
@@ -165,6 +203,20 @@ describe('every page', () => {
 
   it("hides the card when it's hidden (a class with display set would otherwise win)", () => {
     expect(css).toContain('.loading-overlay[hidden] {\n  display: none;');
+  });
+
+  it.each([
+    ['game/pal-picker.js'],
+    ['game/choose-mode.js'],
+    ['game/choose-rivals.js'],
+    ['game/main.js'],
+  ])('%s takes the starting card away once the page is filled in', (file) => {
+    const code = readFileSync(resolve(process.cwd(), 'public', file), 'utf8');
+    expect(code).toContain('pageReady();');
+  });
+
+  it("gives up covering a page whose script never finishes, so it's never stuck", () => {
+    expect(css).toMatch(/\.loading-overlay\.arriving \{[^}]*animation: loading-give-up 0s linear \d+s forwards;/);
   });
 
   it("waits a moment before fading in, so a quick page change doesn't flash it", () => {

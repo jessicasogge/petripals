@@ -22,6 +22,14 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body class="picker-page">
+    <!-- "Growing the colony…" covers the page until game/main.js has
+         filled it in (see game/loading.js). -->
+    <div class="loading-overlay arriving">
+      <div class="loading-card" role="status">
+        <span class="loading-cells" aria-hidden="true"><span></span><span></span></span>
+        <span class="loading-text">Growing the colony…</span>
+      </div>
+    </div>
     <main class="picker-shell dish-shell">
       <header class="dish-title">
         <h1 class="pal-name"></h1>

@@ -7,7 +7,7 @@ import { antibioticsFor, placeAntibiotics } from './antibiotic.js';
 import { LEVELS, MIXED, raceTarget, SPECIES } from './config.js';
 import { playGame } from './game.js';
 import { speciesName } from './italics.js';
-import { watchLoading } from './loading.js';
+import { pageReady, watchLoading } from './loading.js';
 import { scatterNutrients } from './nutrients.js';
 import { dishPal, PALS } from './pals.js';
 import { playRace } from './race.js';
@@ -37,10 +37,11 @@ const drawingOf = (name) => [...document.querySelectorAll('.dish-pal')].find((el
 if (!pal) {
   // No pal (or an unknown one) in the URL: send them back to choose.
   window.location.replace('./pal-picker.html');
-} else if (params.get('mode') === 'mixed') {
-  startMixed();
 } else {
-  startClassic();
+  if (params.get('mode') === 'mixed') startMixed();
+  else startClassic();
+  // The dish is set up: take the loading card away.
+  pageReady();
 }
 
 function startClassic() {

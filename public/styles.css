@@ -1116,6 +1116,19 @@ body:not(.picker-page) .signature {
   display: none;
 }
 
+/* On a page that's still being filled in, the cover is solid, so the half
+   built page doesn't show through. If its script never gets to say it's
+   done (an error, say), give up after a while rather than block the page
+   forever. */
+.loading-overlay.arriving {
+  background: #ccfbf1;
+  animation: loading-give-up 0s linear 8s forwards;
+}
+
+.loading-overlay.arriving .loading-card {
+  animation: loading-in 0.2s ease-out 0.15s both;
+}
+
 .loading-card {
   display: inline-flex;
   align-items: center;
@@ -1162,6 +1175,12 @@ body:not(.picker-page) .signature {
 
   to {
     opacity: 1;
+  }
+}
+
+@keyframes loading-give-up {
+  to {
+    visibility: hidden;
   }
 }
 

@@ -6,6 +6,12 @@
 // Every page calls watchLoading() once: it shows the card when you follow a
 // link to another PetriPals page. Buttons that change pages in code use
 // goTo(address) instead of setting window.location.href themselves.
+//
+// The pages a script fills in (the picker, the mode and rival screens, the
+// dish) also start with the card already in their HTML, covering the page
+// (class "arriving"), so you never see them half built: no pal cards yet,
+// both pager buttons showing. Their script calls pageReady() once the page
+// is filled in.
 
 export const LOADING_TEXT = 'Growing the colony…';
 
@@ -36,8 +42,15 @@ function makeOverlay() {
   return el;
 }
 
+// The card on this page, if there is one yet: the one made earlier, or the
+// one the page started with.
+function current() {
+  if (!overlay || !overlay.isConnected) overlay = document.querySelector('.loading-overlay');
+  return overlay;
+}
+
 export function showLoading() {
-  if (!overlay || !overlay.isConnected) {
+  if (!current()) {
     overlay = makeOverlay();
     document.body.append(overlay);
   }
@@ -46,8 +59,14 @@ export function showLoading() {
 }
 
 export function hideLoading() {
-  if (overlay) overlay.hidden = true;
+  if (!current()) return;
+  overlay.hidden = true;
+  // From here on it's only shown on the way out, see-through.
+  overlay.classList.remove('arriving');
 }
+
+// The page is filled in: take away the card it started with.
+export const pageReady = hideLoading;
 
 // Show the card, then go.
 export function goTo(address) {

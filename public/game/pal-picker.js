@@ -6,7 +6,7 @@
 // Gram stain.
 import { SPECIES } from './config.js';
 import { speciesName } from './italics.js';
-import { watchLoading } from './loading.js';
+import { pageReady, watchLoading } from './loading.js';
 import { inRandomOrder, PALS, palTile, pickerPages } from './pals.js';
 import { stainPal, unstainPal } from './stain.js';
 
@@ -101,3 +101,6 @@ function showStain(stained) {
 }
 
 scope?.addEventListener('click', () => showStain(!shell.classList.contains('stained')));
+
+// All filled in: take the loading card away.
+pageReady();
