@@ -1095,3 +1095,97 @@ body:not(.picker-page) .signature {
     animation-duration: 0.01s;
   }
 }
+
+/* "Growing the colony…": the small card that shows while the next screen
+   loads (game/loading.js). It waits a moment before fading in, so a quick
+   page change never flashes it. The see-through cover behind it keeps a
+   second tap from starting a second trip. */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(204, 251, 241, 0.55);
+  animation: loading-in 0.2s ease-out 0.15s both;
+}
+
+.loading-overlay[hidden] {
+  display: none;
+}
+
+.loading-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.7rem 1.25rem;
+  background: white;
+  border: 2px solid rgba(15, 118, 110, 0.25);
+  border-radius: 999px;
+  box-shadow: 0 12px 28px rgba(19, 78, 74, 0.18);
+  color: #134e4a;
+  font-family: Fredoka, system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+/* A little cell pinching into two daughter cells, over and over. */
+.loading-cells {
+  position: relative;
+  flex: none;
+  width: 30px;
+  height: 18px;
+}
+
+.loading-cells span {
+  position: absolute;
+  top: 2px;
+  left: 8px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #14b8a6;
+  animation: loading-split-left 0.9s ease-in-out infinite alternate;
+}
+
+.loading-cells span:last-child {
+  background: #0f766e;
+  animation-name: loading-split-right;
+}
+
+@keyframes loading-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes loading-split-left {
+  to {
+    transform: translateX(-6px);
+  }
+}
+
+@keyframes loading-split-right {
+  to {
+    transform: translateX(6px);
+  }
+}
+
+/* No moving cells for anyone who'd rather not have motion: just the two
+   daughters, side by side. */
+@media (prefers-reduced-motion: reduce) {
+  .loading-cells span {
+    animation: none;
+    transform: translateX(-6px);
+  }
+
+  .loading-cells span:last-child {
+    transform: translateX(6px);
+  }
+}

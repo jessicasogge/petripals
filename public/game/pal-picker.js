@@ -6,8 +6,12 @@
 // Gram stain.
 import { SPECIES } from './config.js';
 import { speciesName } from './italics.js';
+import { watchLoading } from './loading.js';
 import { inRandomOrder, PALS, palTile, pickerPages } from './pals.js';
 import { stainPal, unstainPal } from './stain.js';
+
+// "Growing the colony…" while the next screen loads.
+watchLoading();
 
 // Every page is made up front and the ones not showing are hidden, so the
 // microscope button can stain every pal, and a page you come back to looks

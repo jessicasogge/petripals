@@ -1,6 +1,10 @@
 // The home page: the row of pals, and the "Press Start to Play" button.
 import { HOME_PALS, homePal } from './game/pals.js';
+import { goTo, watchLoading } from './game/loading.js';
 import { splitOnTap } from './game/split.js';
+
+// "Growing the colony…" while the next screen loads.
+watchLoading();
 
 const friends = document.querySelector('.friends');
 friends?.append(...HOME_PALS.map(homePal));
@@ -17,7 +21,7 @@ if (startButton) {
     startButton.disabled = true;
 
     setTimeout(() => {
-      window.location.href = './pal-picker.html';
+      goTo('./pal-picker.html');
     }, 250);
   });
 
