@@ -613,7 +613,6 @@ export const SPECIES = {
       "Ivy makes endospores that help her survive heat, cold, and drought in the soil.",
       "Ivy is a close cousin of our pal Ceres.",
       "Ivy can live inside plants without harming them, as an endophyte.",
-      "Some Ivy strains are used to help sugar beets fight off a leaf spot disease.",
       "Ivy was first described by the German scientist Carl Flügge in 1886.",
       "Ivy rarely, if ever, causes disease in people.",
       "Some Ivy strains can keep growing in the cold, even at fridge temperatures.",
