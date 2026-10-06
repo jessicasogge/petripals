@@ -3,7 +3,7 @@
 // or Surprise me for one at random.
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MIXED, SPECIES } from '../public/game/config.js';
 import { PALS } from '../public/game/pals.js';
 
@@ -22,13 +22,21 @@ const button = (pal) => document.querySelector(`.rival-btn[data-pal="${pal}"]`);
 const start = () => document.querySelector('.start-race');
 const status = () => document.querySelector('.rivals-status').textContent;
 
-afterEach(() => vi.unstubAllGlobals());
+// With more pals than the screen offers, it shows a random few. Pin the
+// shuffle so it keeps the pals in order, and the ones these tests tap (Vi,
+// Elia, Ceres) are always on it.
+beforeEach(() => vi.spyOn(Math, 'random').mockReturnValue(0.999));
+afterEach(() => {
+  vi.unstubAllGlobals();
+  vi.restoreAllMocks();
+});
 
 describe('picking rivals', () => {
-  it('offers every pal but yours, each once', async () => {
+  it('offers the other pals, as many as fit, each once and never yours', async () => {
     await open('?pal=mona');
     const offered = [...document.querySelectorAll('.rival-btn')].map((b) => b.dataset.pal);
-    expect(offered).toEqual(PALS.map((pal) => pal.id).filter((id) => id !== 'mona'));
+    const others = PALS.map((pal) => pal.id).filter((id) => id !== 'mona');
+    expect(offered).toEqual(others.slice(0, MIXED.CHOICES)); // in order, with the shuffle pinned
   });
 
   it('shows you and your name in your color', async () => {

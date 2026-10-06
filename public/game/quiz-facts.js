@@ -115,4 +115,10 @@ export const QUIZ_FACTS = {
     "Red spots on bread were sometimes seen as miracles; some may have been Sara growing.",
     "Sara can make a pink, orange, or red film in damp spots like showers and toilet bowls.",
   ],
+  ivy: [
+    "\"Mycoides\" means fungus-like, because Ivy's colonies spread out like mold.",
+    "On agar, Ivy grows rhizoid colonies: hairy, root-like strands that branch outward.",
+    "Ivy's colonies spiral as they spread, some strains clockwise and others counterclockwise.",
+    "Ivy was first described by the German scientist Carl Flügge in 1886.",
+  ],
 };

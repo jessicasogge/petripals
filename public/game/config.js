@@ -601,6 +601,43 @@ export const SPECIES = {
       { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 24 },
     ],
   },
+  ivy: {
+    facts: [
+      "Ivy is a Gram-positive rod, so she stains purple on a Gram stain.",
+      "Ivy lives in soil all over the world.",
+      "\"Mycoides\" means fungus-like, because Ivy's colonies spread out like mold.",
+      "On agar, Ivy grows rhizoid colonies: hairy, root-like strands that branch outward.",
+      "Ivy's colonies spiral as they spread, some strains clockwise and others counterclockwise.",
+      "Ivy grows in long chains of rods, lined up end to end.",
+      "Unlike many of her cousins, Ivy usually has no flagella, so she can't swim.",
+      "Ivy makes endospores that help her survive heat, cold, and drought in the soil.",
+      "Ivy is a close cousin of our pal Ceres.",
+      "Ivy can live inside plants without harming them, as an endophyte.",
+      "Ivy was first described by the German scientist Carl Flügge in 1886.",
+      "Ivy rarely, if ever, causes disease in people.",
+      "Some Ivy strains can keep growing in the cold, even at fridge temperatures.",
+      "Ivy's colonies can spread across a whole agar plate in just a few days.",
+      "Scientists study Ivy's spiral colonies to learn how left- and right-handed shapes form.",
+    ],
+    scientific: 'Bacillus mycoides',
+    color: '#4d6b3c', // for her name above the dish
+    kind: 'coccus', // grows in chains with the chain code, like Ceres, though her cells are rods
+    gram: 'positive',
+    layout: 'chain',
+    maxCells: 4, // longer chains than Ceres's
+    shape: 'rod',
+    colors: { fill: '#b8d8a0', stroke: '#4d6b3c', highlight: '#f0f7e8', dark: '#2f4224' },
+    // Like Ceres, she's in the B. cereus group, which tends to make
+    // beta-lactamases, so no penicillin. No standard disk sizes exist for
+    // her, so these zones are estimates.
+    antibiotics: [
+      { code: 'VA', name: 'vancomycin', zone: 18 },
+      { code: 'CIP', name: 'ciprofloxacin', zone: 30 },
+      { code: 'TE', name: 'tetracycline', zone: 23 },
+      { code: 'GM', name: 'gentamicin', zone: 20 },
+      { code: 'E', name: 'erythromycin', zone: 26 },
+    ],
+  },
 };
 
 // Mixed culture mode: no disks, just you and one to three rival pals (picked
