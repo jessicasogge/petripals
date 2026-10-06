@@ -1030,12 +1030,6 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* Each fleck's sugar soaks into the agar around it, so the food has a faint
-   cloud around it. */
-.tumble-mode .nutrient {
-  box-shadow: 0 0 0 1px rgba(19, 78, 74, 0.25), 0 0 1.6rem 1.1rem hsl(var(--hue, 20) 85% 60% / 0.22);
-}
-
 .cell-count {
   margin: 1rem 0 0;
   font-weight: 700;
