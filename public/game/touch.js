@@ -1,29 +1,16 @@
-// Touch steering, for phones and tablets. It works with a mouse too (press
-// and hold).
+// Touch steering, for phones and tablets: a finger drags her like a laptop
+// trackpad. Touch anywhere on the dish and she stays put, then slide your
+// finger and she moves the same way, as far as your finger moves (up to a top
+// speed). Nothing jumps when you touch down, and your finger can stay well
+// away from her and the antibiotic disks. Lift and touch again to keep going.
 //
-// A finger covers up the very spot it's pointing at, so by default a finger
-// drags her like a laptop trackpad: touch anywhere on the dish and she stays
-// put, then slide your finger and she moves the same way, as far as your
-// finger moves (up to a top speed). Nothing jumps when you touch down, and
-// your finger can stay well away from her and the antibiotic disks. Lift and
-// touch again to keep going.
-//
-// Players can switch to steering right under the finger instead (the Drag /
-// Finger buttons under the dish), and the game remembers which: touch and
-// hold where you want her to go, and she swims there at her normal speed,
-// stopping when she gets there. A mouse always steers right where it points.
+// A mouse steers right where it points instead: press and hold, and she
+// swims there at her normal speed, stopping when she gets there.
 //
 // Also keeps the how-to-play directions right for the device: touch wording
 // on a touch screen, arrow-key wording on a computer, switching if someone
 // with both (a touchscreen laptop, an iPad with a keyboard) changes which
 // one they're using.
-
-// Icons for the Drag / Finger buttons.
-const DRAG_ICON = '✋';
-const FINGER_ICON = '👆';
-
-// Where the Drag / Finger choice is saved in the browser.
-export const STEERING_KEY = 'petripals.steering';
 
 // How far to move this frame to head toward (tx, ty) from (x, y), as [dx, dy],
 // at most `maxStep`. Stops exactly on the spot instead of overshooting and
@@ -44,21 +31,13 @@ export function fromCenter(el, clientX, clientY) {
   return [clientX - (box.left + box.width / 2), clientY - (box.top + box.height / 2)];
 }
 
-// Whether the player picked dragging (see steeringChoice below).
-export function dragChosen(root = document.documentElement) {
-  return root.classList.contains('steer-drag');
-}
-
 // Listen for a finger (or mouse button) held down on `agar`. Returns
-// { target() } giving where it is now, in px from the dish center, or null
-// when nothing is held down (or it's dragging instead); drag(), how far a
-// dragging finger has moved since the last call, as [dx, dy] px (and starts
-// counting again from there); and stop(), to ignore it from now on (after the
-// game ends).
-//
-// With dragging on (`useDrag()`), a finger or pen only drags: target() stays
-// null, so she never heads for the spot it touched.
-export function touchSteering(agar, { useDrag = () => dragChosen() } = {}) {
+// { target() } giving where a held-down mouse is, in px from the dish center,
+// or null when none is; drag(), how far a finger (or pen) has moved since the
+// last call, as [dx, dy] px (and starts counting again from there); and
+// stop(), to ignore them from now on (after the game ends). A finger never
+// gives a target(), so she never heads for the spot it touched.
+export function touchSteering(agar) {
   let pointer = null; // the id of the finger we're following
   let dragging = false;
   let last = null; // where a dragging finger was, on the screen
@@ -78,8 +57,7 @@ export function touchSteering(agar, { useDrag = () => dragChosen() } = {}) {
   agar.addEventListener('pointerdown', (event) => {
     if (stopped || !event.isPrimary || pointer !== null) return;
     pointer = event.pointerId;
-    // Decided once per touch, so it can't switch mid-swim.
-    dragging = event.pointerType !== 'mouse' && useDrag();
+    dragging = event.pointerType !== 'mouse';
     last = [event.clientX, event.clientY];
     moved = [0, 0];
     follow(event);
@@ -115,57 +93,6 @@ export function touchSteering(agar, { useDrag = () => dragChosen() } = {}) {
       moved = [0, 0];
     },
   };
-}
-
-// The browser's saved settings, or null if it won't share them (some private
-// windows, or site data turned off), in which case the choice just isn't
-// remembered.
-function savedSettings(win) {
-  try {
-    return win.localStorage ?? null;
-  } catch {
-    return null;
-  }
-}
-
-// The Drag / Finger buttons under the dish: `buttons` each have
-// data-steer="drag" or "finger". Starts from what was picked last time
-// (dragging if nothing was), marks the picked button pressed, and sets the
-// steer-drag class on `root` while dragging is on, which touchSteering reads
-// at the start of each touch. Also draws the buttons' icons.
-export function steeringChoice({
-  root = document.documentElement,
-  buttons = document.querySelectorAll('.steer-btn'),
-  win = window,
-} = {}) {
-  for (const button of buttons) {
-    const icon = button.querySelector('.steer-icon');
-    if (icon) icon.innerHTML = button.dataset.steer === 'drag' ? DRAG_ICON : FINGER_ICON;
-  }
-  const storage = savedSettings(win);
-  const pick = (choice, save) => {
-    root.classList.toggle('steer-drag', choice === 'drag');
-    for (const button of buttons) {
-      button.setAttribute('aria-pressed', String(button.dataset.steer === choice));
-    }
-    if (!save) return;
-    try {
-      storage?.setItem(STEERING_KEY, choice);
-    } catch {
-      // Full or blocked: it still works, it just won't be remembered.
-    }
-  };
-
-  let saved = null;
-  try {
-    saved = storage?.getItem(STEERING_KEY);
-  } catch {
-    saved = null;
-  }
-  pick(saved === 'finger' ? 'finger' : 'drag', false);
-  for (const button of buttons) {
-    button.addEventListener('click', () => pick(button.dataset.steer, true));
-  }
 }
 
 // Which directions to show: 'touch' or 'keys'. Starts from what the device

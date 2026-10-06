@@ -1043,65 +1043,6 @@ html.input-keys .for-keys {
   display: inline;
 }
 
-/* For touch, the directions for whichever way of steering the player picked
-   (Drag or Finger, below). */
-html.steer-drag .for-finger,
-html:not(.steer-drag) .for-drag {
-  display: none;
-}
-
-/* Drag / Finger: how a finger steers (game/touch.js). Only on touch screens,
-   shown and hidden the same way as the touch directions above. */
-.steer-choice {
-  display: none;
-  justify-content: center;
-  gap: 0.5rem;
-  margin: 0.75rem 0 0;
-}
-
-@media (pointer: coarse) {
-  .steer-choice {
-    display: flex;
-  }
-}
-
-html.input-touch .steer-choice {
-  display: flex;
-}
-
-html.input-keys .steer-choice {
-  display: none;
-}
-
-.steer-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  min-height: 44px; /* big enough for a small finger */
-  padding: 0.45rem 1rem;
-  border: 2px solid #0f766e;
-  border-radius: 999px;
-  background: white;
-  color: #0f766e;
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
-
-.steer-btn[aria-pressed='true'] {
-  background: #0f766e;
-  color: white;
-}
-
-.steer-icon {
-  width: 1.3em;
-  height: 1.3em;
-  font-size: 1.1em;
-  line-height: 1.3em;
-}
-
 /* The antibiotic disk: a small white paper disk with the drug's code on it,
    like the disks used in the lab. Placed by game/antibiotic.js. */
 .antibiotic {

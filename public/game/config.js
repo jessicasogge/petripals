@@ -642,7 +642,7 @@ export const GAME = {
   SNAP_REACH: 0.3,
   NUTRIENTS_PER_DIVISION: 1, // nutrients the player eats before dividing
   SPEED: 0.8, // player speed, as a fraction of the dish radius per second
-  // With touch steering, how close to the finger counts as there (so she
+  // Steering with a mouse, how close to the pointer counts as there (so she
   // settles instead of jittering on the spot), as a fraction of the dish radius.
   ARRIVE: 0.01,
   // Dragging her with a finger, she moves as far as the finger does, up to
