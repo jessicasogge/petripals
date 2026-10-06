@@ -66,7 +66,7 @@ export function playRace({ you, rivals, nutrients, target }) {
   let finished = false;
   let lastTime = null;
 
-  // "Race again" goes back to picking rivals; "Play classic" goes to the levels.
+  // "Race again" goes back to picking rivals; "Play Classic" goes to the levels.
   document.querySelector('.play-again').addEventListener('click', () => {
     goTo(`./choose-rivals.html?pal=${you.svg.dataset.pal}`);
   });
@@ -122,7 +122,7 @@ export function playRace({ you, rivals, nutrients, target }) {
     sporeBurst(won ? playerMover : beaten.mover);
     const pals = `${you.svg.dataset.pal}/vs-${rivals.map((rival) => rival.svg.dataset.pal).join('+')}`;
     const versus = listOf(rivalNames);
-    track(`mixed/${won ? 'won' : 'lost'}/${pals}`, `${yourName} ${won ? 'beat' : 'lost to'} ${versus} in mixed culture`);
+    track(`mixed/${won ? 'won' : 'lost'}/${pals}`, `${yourName} ${won ? 'beat' : 'lost to'} ${versus} in Mixed Culture`);
     setTimeout(() => {
       // A fun fact about your pal, win or lose.
       showFact(you.svg.dataset.pal, you.species);
@@ -141,7 +141,7 @@ export function playRace({ you, rivals, nutrients, target }) {
     banner.querySelector('.win-message').textContent = message;
     banner.querySelector('.play-again').textContent = 'Race again';
     const classic = banner.querySelector('.start-over');
-    classic.textContent = 'Play classic';
+    classic.textContent = 'Play Classic';
     classic.hidden = false;
     banner.removeAttribute('hidden');
     banner.querySelector('.play-again').focus();

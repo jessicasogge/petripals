@@ -268,10 +268,10 @@ describe('the pop-up buttons', () => {
     expect(location.href).toBe('./choose-rivals.html?pal=mona');
   });
 
-  it('"Play classic" goes to level 1 with the same pal', () => {
+  it('"Play Classic" goes to level 1 with the same pal', () => {
     const classic = finished().querySelector('.start-over');
     expect(classic.hidden).toBe(false);
-    expect(classic.textContent).toBe('Play classic');
+    expect(classic.textContent).toBe('Play Classic');
     classic.click();
     const url = new URL(location.href, 'http://localhost/');
     expect(url.pathname).toMatch(/petri-dish\.html$/);
@@ -372,6 +372,6 @@ describe('more than one rival', () => {
     expect(banner.querySelector('h2').textContent).toBe('You won the race!');
     expect(banner.querySelector('.win-message').textContent)
       .toBe(`Your colony reached ${CROWDED} cells before any of your rivals did.`);
-    expect(track).toHaveBeenCalledWith('mixed/won/mona/vs-vi+elia+goldie', 'Mona beat Vi, Elia and Goldie in mixed culture');
+    expect(track).toHaveBeenCalledWith('mixed/won/mona/vs-vi+elia+goldie', 'Mona beat Vi, Elia and Goldie in Mixed Culture');
   });
 });
