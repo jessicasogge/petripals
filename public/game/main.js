@@ -16,8 +16,8 @@ import { steeringChoice, watchInputMode } from './touch.js';
 
 // Show touch or arrow-key directions, whichever fits the device.
 watchInputMode();
-// Steer a finger with the inoculating loop, or right under the finger,
-// whichever the player picked (the buttons under the dish).
+// A finger drags the pal, or steers right under the finger, whichever the
+// player picked (the buttons under the dish).
 steeringChoice();
 // "Growing the colony…" while the next screen loads.
 watchLoading();
@@ -89,9 +89,11 @@ function startMixed() {
   const howTo = document.querySelector('.how-to-play');
   howTo.replaceChildren(
     `Race ${listOf(rivalNames)} to ${target} cells! `,
-    // Arrow-key or touch wording, whichever fits the device (see styles.css).
+    // Arrow-key or touch wording, whichever fits the device, and for touch,
+    // whichever way of steering the player picked (see styles.css).
     wording('for-keys', 'Use the arrow keys to eat nutrients.'),
-    wording('for-touch', 'Touch and hold where you want to swim to eat nutrients.'),
+    wording('for-touch for-drag', 'Touch the dish and slide your finger to eat nutrients.'),
+    wording('for-touch for-finger', 'Touch and hold where you want to swim to eat nutrients.'),
     document.createElement('br'),
     `Any cell that eats a nutrient divides, so grab them before ${rivals.length > 1 ? 'your rivals do' : 'the rival does'}!`,
   );

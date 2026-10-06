@@ -1,12 +1,13 @@
 // @vitest-environment jsdom
-// touch.js: steering toward a finger held on the dish, and showing touch or
+// touch.js: steering with a finger on the dish (dragging her, or toward the
+// finger), and showing touch or
 // arrow-key directions to match the device. These run in jsdom, a simulated
 // browser page.
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
-  fromCenter, LOOP_ART, LOOP_FINGER_Y, LOOP_REACH, loopChosen, steer, steeringChoice, STEERING_KEY, stepToward, touchSteering, watchInputMode,
+  dragChosen, fromCenter, steer, steeringChoice, STEERING_KEY, stepToward, touchSteering, watchInputMode,
 } from '../public/game/touch.js';
 
 describe('stepToward', () => {
@@ -74,55 +75,41 @@ describe('steer', () => {
     expect([p.x, p.y]).toEqual([7, 8]);
   });
 
-  describe('with the inoculating loop', () => {
-    const loop = { step: 20, slip: 10 };
-
-    it('swims to the tip at her normal speed until she reaches it', () => {
-      const p = pal();
-      steer(p, [0, 0], [100, 0], 5, 1, loop);
-      expect(p.x).toBe(5);
-      expect(p.onLoop).toBe(false);
+  describe('dragging', () => {
+    it('moves her the same way the finger moved', () => {
+      const p = pal(10, 10);
+      steer(p, [0, 0], null, 5, 1, [6, -8], 20);
+      expect([p.x, p.y]).toEqual([16, 2]);
     });
 
-    it('sticks to the tip once she reaches it, keeping up with the loop', () => {
+    it('keeps up with a finger faster than her normal speed', () => {
       const p = pal();
-      steer(p, [0, 0], [3, 0], 5, 1, loop); // reaches the tip
-      expect(p.onLoop).toBe(true);
-      steer(p, [0, 0], [18, 0], 5, 1, loop); // the loop moves 15: faster than her normal 5
-      expect([p.x, p.onLoop]).toEqual([18, true]);
+      steer(p, [0, 0], null, 5, 1, [15, 0], 20);
+      expect(p.x).toBe(15);
     });
 
-    it('stays stuck when the loop gets a little ahead, and catches up', () => {
+    it('moves her less than a really fast swipe, at her top drag speed', () => {
       const p = pal();
-      steer(p, [0, 0], [0, 0], 5, 1, loop);
-      steer(p, [0, 0], [28, 0], 5, 1, loop); // 8 behind after moving 20: within the slip
-      expect([p.x, p.onLoop]).toEqual([20, true]);
-      steer(p, [0, 0], [28, 0], 5, 1, loop);
-      expect(p.x).toBe(28);
+      steer(p, [0, 0], null, 5, 1, [0, 100], 20);
+      expect([p.x, p.y]).toEqual([0, 20]);
     });
 
-    it('falls off on a really fast swipe, and swims after it at her normal speed', () => {
-      const p = pal();
-      steer(p, [0, 0], [0, 0], 5, 1, loop);
-      steer(p, [0, 0], [100, 0], 5, 1, loop); // still 80 behind after moving 20
-      expect([p.x, p.onLoop]).toEqual([20, false]);
-      steer(p, [0, 0], [100, 0], 5, 1, loop);
-      expect(p.x).toBe(25);
+    it('turns her to face the way she is dragged', () => {
+      const p = pal(0, 0, 1);
+      steer(p, [0, 0], null, 5, 1, [-10, 2], 20);
+      expect(p.facing).toBe(-1);
     });
 
-    it('lets go when the finger lifts or an arrow key takes over', () => {
-      const p = pal();
-      steer(p, [0, 0], [0, 0], 5, 1, loop);
-      steer(p, [1, 0], null, 5, 1, null);
-      expect(p.onLoop).toBe(false);
+    it('stays put while a dragging finger is held still', () => {
+      const p = pal(7, 8);
+      steer(p, [0, 0], null, 5, 1, [0, 0], 20);
+      expect([p.x, p.y]).toEqual([7, 8]);
     });
 
-    it("never sticks while steering right under the finger", () => {
+    it('lets the arrow keys win over dragging', () => {
       const p = pal();
-      steer(p, [0, 0], [0, 0], 5, 1, null);
-      expect(p.onLoop).toBe(false);
-      steer(p, [0, 0], [18, 0], 5, 1, null);
-      expect(p.x).toBe(5);
+      steer(p, [0, 1], null, 5, 1, [15, 0], 20);
+      expect([p.x, p.y]).toEqual([0, 5]);
     });
   });
 });
@@ -150,7 +137,7 @@ describe('touchSteering', () => {
     agar = document.querySelector('.agar');
     // A 200px dish with its middle at (200, 200) on the screen.
     agar.getBoundingClientRect = () => ({ left: 100, top: 100, width: 200, height: 200 });
-    steering = touchSteering(agar, { useLoop: () => false });
+    steering = touchSteering(agar, { useDrag: () => false });
   });
 
   it('has no target until a finger is down', () => {
@@ -197,101 +184,88 @@ describe('touchSteering', () => {
   });
 });
 
-describe('touchSteering with the inoculating loop', () => {
+describe('touchSteering when dragging', () => {
   let agar;
-  let loop;
-  let loopOn;
   let steering;
+  let dragOn;
   beforeEach(() => {
-    document.body.innerHTML = '<div class="agar"></div><div class="inoc-loop" hidden></div>';
+    document.body.innerHTML = '<div class="agar"></div>';
     agar = document.querySelector('.agar');
-    loop = document.querySelector('.inoc-loop');
     agar.getBoundingClientRect = () => ({ left: 100, top: 100, width: 200, height: 200 });
-    loopOn = true;
-    steering = touchSteering(agar, { useLoop: () => loopOn });
+    dragOn = true;
+    steering = touchSteering(agar, { useDrag: () => dragOn });
   });
 
-  it("aims at the loop's tip, above the finger, so the finger doesn't hide the pal", () => {
+  it("doesn't send her anywhere when a finger touches down", () => {
     agar.dispatchEvent(pointer('pointerdown', { x: 260, y: 250 }));
-    expect(steering.target()).toEqual([60, 50 - LOOP_REACH]);
-    agar.dispatchEvent(pointer('pointermove', { x: 180, y: 290 }));
-    expect(steering.target()).toEqual([-20, 90 - LOOP_REACH]);
+    expect(steering.target()).toBeNull();
+    expect(steering.drag()).toEqual([0, 0]);
   });
 
-  it('shows the loop on the finger while it is down, and hides it after', () => {
+  it('says how far the finger moved since it last asked', () => {
     agar.dispatchEvent(pointer('pointerdown', { x: 260, y: 250 }));
-    expect(loop.hidden).toBe(false);
-    expect(loop.style.transform).toBe('translate(260px, 250px)');
-    agar.dispatchEvent(pointer('pointermove', { x: 180, y: 290 }));
-    expect(loop.style.transform).toBe('translate(180px, 290px)');
+    agar.dispatchEvent(pointer('pointermove', { x: 270, y: 245 }));
+    agar.dispatchEvent(pointer('pointermove', { x: 275, y: 240 }));
+    expect(steering.drag()).toEqual([15, -10]);
+    expect(steering.drag()).toEqual([0, 0]); // already counted
+    agar.dispatchEvent(pointer('pointermove', { x: 270, y: 240 }));
+    expect(steering.drag()).toEqual([-5, 0]);
+  });
+
+  it('starts fresh at each touch, wherever it lands', () => {
+    agar.dispatchEvent(pointer('pointerdown', { x: 260, y: 250 }));
+    agar.dispatchEvent(pointer('pointermove', { x: 270, y: 250 }));
     agar.dispatchEvent(pointer('pointerup'));
-    expect(loop.hidden).toBe(true);
+    expect(steering.drag()).toEqual([0, 0]); // lifting drops what wasn't used
+    agar.dispatchEvent(pointer('pointerdown', { x: 120, y: 120 }));
+    agar.dispatchEvent(pointer('pointermove', { x: 125, y: 120 }));
+    expect(steering.drag()).toEqual([5, 0]);
   });
 
-  it('works with a pen too, since a hand covers the screen the same way', () => {
+  it('works with a pen too', () => {
     agar.dispatchEvent(pointer('pointerdown', { x: 260, y: 250, kind: 'pen' }));
-    expect(steering.target()).toEqual([60, 50 - LOOP_REACH]);
+    agar.dispatchEvent(pointer('pointermove', { x: 262, y: 250, kind: 'pen' }));
+    expect(steering.target()).toBeNull();
+    expect(steering.drag()).toEqual([2, 0]);
   });
 
-  it('lets a mouse steer right where it points, with no loop', () => {
+  it('lets a mouse steer right where it points, without dragging', () => {
     agar.dispatchEvent(pointer('pointerdown', { x: 260, y: 250, kind: 'mouse' }));
-    expect(steering.target()).toEqual([60, 50]);
-    expect(loop.hidden).toBe(true);
+    agar.dispatchEvent(pointer('pointermove', { x: 270, y: 250, kind: 'mouse' }));
+    expect(steering.target()).toEqual([70, 50]);
+    expect(steering.drag()).toEqual([0, 0]);
   });
 
-  it('steers right under the finger when the loop is turned off', () => {
-    loopOn = false;
+  it('steers right under the finger when dragging is turned off', () => {
+    dragOn = false;
     agar.dispatchEvent(pointer('pointerdown', { x: 260, y: 250 }));
     expect(steering.target()).toEqual([60, 50]);
-    expect(loop.hidden).toBe(true);
   });
 
   it("doesn't switch mid-swim, only at the next touch", () => {
     agar.dispatchEvent(pointer('pointerdown', { x: 260, y: 250 }));
-    loopOn = false;
-    agar.dispatchEvent(pointer('pointermove', { x: 260, y: 250 }));
-    expect(steering.target()).toEqual([60, 50 - LOOP_REACH]);
+    dragOn = false;
+    agar.dispatchEvent(pointer('pointermove', { x: 270, y: 250 }));
+    expect(steering.target()).toBeNull();
+    expect(steering.drag()).toEqual([10, 0]);
   });
 
-  it('says when it is steering with the loop, so the pal can stick to its tip', () => {
-    expect(steering.onLoop()).toBe(false);
+  it('stops dragging when the game ends', () => {
     agar.dispatchEvent(pointer('pointerdown', { x: 260, y: 250 }));
-    expect(steering.onLoop()).toBe(true);
-    agar.dispatchEvent(pointer('pointerup'));
-    expect(steering.onLoop()).toBe(false);
-    loopOn = false;
-    agar.dispatchEvent(pointer('pointerdown', { x: 260, y: 250 }));
-    expect(steering.onLoop()).toBe(false);
-  });
-
-  it('stops sticking when the game ends', () => {
-    agar.dispatchEvent(pointer('pointerdown', { x: 260, y: 250 }));
+    agar.dispatchEvent(pointer('pointermove', { x: 270, y: 250 }));
     steering.stop();
-    expect(steering.onLoop()).toBe(false);
-  });
-
-  it('hides the loop when the game ends', () => {
-    agar.dispatchEvent(pointer('pointerdown', { x: 260, y: 250 }));
-    steering.stop();
-    expect(loop.hidden).toBe(true);
-  });
-
-  it('still steers on a page without the loop drawing', () => {
-    loop.remove();
-    const plain = touchSteering(agar, { useLoop: () => true, loop: null });
-    agar.dispatchEvent(pointer('pointerdown', { id: 5, x: 260, y: 250 }));
-    expect(plain.target()).toEqual([60, 50 - LOOP_REACH]);
-    agar.dispatchEvent(pointer('pointerup', { id: 5 }));
-    plain.stop();
-    expect(plain.target()).toBeNull();
+    expect(steering.drag()).toEqual([0, 0]);
+    agar.dispatchEvent(pointer('pointerdown', { id: 2, x: 260, y: 250 }));
+    agar.dispatchEvent(pointer('pointermove', { id: 2, x: 290, y: 250 }));
+    expect(steering.drag()).toEqual([0, 0]);
   });
 
   it("uses the player's choice on the page when not told otherwise", () => {
-    document.documentElement.classList.add('steer-loop');
+    document.documentElement.classList.add('steer-drag');
     const fresh = touchSteering(agar);
     agar.dispatchEvent(pointer('pointerdown', { id: 9, x: 260, y: 250 }));
-    expect(fresh.target()).toEqual([60, 50 - LOOP_REACH]);
-    document.documentElement.classList.remove('steer-loop');
+    expect(fresh.target()).toBeNull();
+    document.documentElement.classList.remove('steer-drag');
   });
 });
 
@@ -306,30 +280,28 @@ describe('steeringChoice', () => {
   const pressed = () => buttons.map((b) => b.getAttribute('aria-pressed'));
   beforeEach(() => {
     document.body.innerHTML = `
-      <button class="steer-btn" data-steer="loop"><span class="steer-icon"></span> Loop</button>
-      <button class="steer-btn" data-steer="finger"><span class="steer-icon"></span> Finger</button>
-      <div class="inoc-loop" hidden></div>`;
+      <button class="steer-btn" data-steer="drag"><span class="steer-icon"></span> Drag</button>
+      <button class="steer-btn" data-steer="finger"><span class="steer-icon"></span> Finger</button>`;
     buttons = [...document.querySelectorAll('.steer-btn')];
   });
 
-  it('draws the button icons and the loop', () => {
+  it('draws the button icons', () => {
     steeringChoice({ root, buttons, win: {} });
-    expect(buttons[0].querySelector('.steer-icon svg')).not.toBeNull();
+    expect(buttons[0].querySelector('.steer-icon').textContent).toBe('✋');
     expect(buttons[1].querySelector('.steer-icon').textContent).toBe('👆');
-    expect(document.querySelector('.inoc-loop .inoc-loop-ring')).not.toBeNull();
   });
 
-  it("doesn't mind buttons without an icon, or no loop on the page", () => {
+  it("doesn't mind buttons without an icon", () => {
     const bare = document.createElement('button');
     bare.dataset.steer = 'finger';
-    steeringChoice({ root, buttons: [bare], loop: null, win: {} });
+    steeringChoice({ root, buttons: [bare], win: {} });
     expect(bare.getAttribute('aria-pressed')).toBe('false');
   });
-  afterEach(() => root.classList.remove('steer-loop'));
+  afterEach(() => root.classList.remove('steer-drag'));
 
-  it('starts with the loop when nothing was picked before', () => {
+  it('starts with dragging when nothing was picked before', () => {
     steeringChoice({ root, buttons, win: { localStorage: memory() } });
-    expect(loopChosen(root)).toBe(true);
+    expect(dragChosen(root)).toBe(true);
     expect(pressed()).toEqual(['true', 'false']);
   });
 
@@ -337,45 +309,45 @@ describe('steeringChoice', () => {
     const storage = memory();
     steeringChoice({ root, buttons, win: { localStorage: storage } });
     buttons[1].click();
-    expect(loopChosen(root)).toBe(false);
+    expect(dragChosen(root)).toBe(false);
     expect(pressed()).toEqual(['false', 'true']);
     expect(storage.saved[STEERING_KEY]).toBe('finger');
   });
 
   it('starts with the finger if that was picked last time', () => {
     steeringChoice({ root, buttons, win: { localStorage: memory({ [STEERING_KEY]: 'finger' }) } });
-    expect(loopChosen(root)).toBe(false);
+    expect(dragChosen(root)).toBe(false);
     expect(pressed()).toEqual(['false', 'true']);
   });
 
-  it('can switch back to the loop', () => {
+  it('can switch back to dragging', () => {
     const storage = memory({ [STEERING_KEY]: 'finger' });
     steeringChoice({ root, buttons, win: { localStorage: storage } });
     buttons[0].click();
-    expect(loopChosen(root)).toBe(true);
-    expect(storage.saved[STEERING_KEY]).toBe('loop');
+    expect(dragChosen(root)).toBe(true);
+    expect(storage.saved[STEERING_KEY]).toBe('drag');
   });
 
   it("still works when the browser won't save settings at all", () => {
     const win = {};
     Object.defineProperty(win, 'localStorage', { get() { throw new Error('blocked'); } });
     steeringChoice({ root, buttons, win });
-    expect(loopChosen(root)).toBe(true);
+    expect(dragChosen(root)).toBe(true);
     buttons[1].click();
-    expect(loopChosen(root)).toBe(false);
+    expect(dragChosen(root)).toBe(false);
   });
 
   it('still works when reading or saving the setting fails', () => {
     const broken = { getItem() { throw new Error('blocked'); }, setItem() { throw new Error('full'); } };
     steeringChoice({ root, buttons, win: { localStorage: broken } });
-    expect(loopChosen(root)).toBe(true);
+    expect(dragChosen(root)).toBe(true);
     buttons[1].click();
-    expect(loopChosen(root)).toBe(false);
+    expect(dragChosen(root)).toBe(false);
   });
 
   it("works in a browser with no saved settings, and finds the page's buttons itself", () => {
     steeringChoice({ win: {} });
-    expect(loopChosen(root)).toBe(true);
+    expect(dragChosen(root)).toBe(true);
     expect(pressed()).toEqual(['true', 'false']);
   });
 
@@ -445,27 +417,24 @@ describe('the directions on the dish page', () => {
 
   it('has both touch and arrow-key wording', () => {
     expect(page).toContain('<span class="for-keys">Use the arrow keys to swim.</span>');
-    expect(page).toContain('<span class="for-touch">Touch and hold where you want to swim.</span>');
+    expect(page).toContain('<span class="for-touch for-drag">Touch the dish and slide your finger to swim.</span>');
+    expect(page).toContain('<span class="for-touch for-finger">Touch and hold where you want to swim.</span>');
+  });
+
+  it('shows the touch wording for whichever way of steering was picked', () => {
+    expect(css).toMatch(/html\.steer-drag \.for-finger,\s*html:not\(\.steer-drag\) \.for-drag \{\s*display: none;/);
   });
 
   it('picks touch wording on a touch screen even before any script runs', () => {
     expect(css).toMatch(/@media \(pointer: coarse\)\s*\{[^@]*\.for-keys\s*\{\s*display: none;/);
   });
 
-  it('has the Loop and Finger buttons, and the loop drawing', () => {
-    expect(page).toContain('data-steer="loop" aria-pressed="true"');
+  it('has the Drag and Finger buttons, with Drag picked to start', () => {
+    expect(page).toContain('data-steer="drag" aria-pressed="true"');
     expect(page).toContain('data-steer="finger" aria-pressed="false"');
-    expect(page).toContain('<div class="inoc-loop" aria-hidden="true" hidden></div>');
   });
 
-  it('draws the ring LOOP_REACH px above the finger, where the pal aims', () => {
-    // styles.css hangs the drawing so its (20, LOOP_FINGER_Y) is on the finger.
-    expect(css).toMatch(new RegExp(`\\.inoc-loop svg \\{[^}]*left: -20px;[^}]*top: -${LOOP_FINGER_Y}px;`));
-    const ring = Number(LOOP_ART.match(/class="inoc-loop-ring" cx="20" cy="([\d.]+)"/)[1]);
-    expect(LOOP_FINGER_Y - ring).toBe(LOOP_REACH);
-  });
-
-  it('shows the Loop / Finger buttons only on touch screens', () => {
+  it('shows the Drag / Finger buttons only on touch screens', () => {
     expect(css).toMatch(/\.steer-choice \{\s*display: none;/);
     expect(css).toMatch(/html\.input-touch \.steer-choice \{\s*display: flex;/);
     expect(css).toMatch(/html\.input-keys \.steer-choice \{\s*display: none;/);

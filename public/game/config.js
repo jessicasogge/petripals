@@ -645,14 +645,11 @@ export const GAME = {
   // With touch steering, how close to the finger counts as there (so she
   // settles instead of jittering on the spot), as a fraction of the dish radius.
   ARRIVE: 0.01,
-  // Steering with the inoculating loop, she sticks to its tip once she
-  // reaches it, keeping up at LOOP_SPEED (a fraction of the dish radius per
-  // second) so she moves with the loop. A swipe that gets the tip more than
-  // LOOP_SLIP of the dish radius ahead shakes her off, and she swims after it
-  // at SPEED again. Even at LOOP_SPEED she moves less per frame than an
+  // Dragging her with a finger, she moves as far as the finger does, up to
+  // DRAG_SPEED (a fraction of the dish radius per second) so she keeps up
+  // with ordinary dragging. Even that fast she moves less per frame than an
   // antibiotic disk is wide, so a swipe can't skip over a zone.
-  LOOP_SPEED: 2,
-  LOOP_SLIP: 0.1,
+  DRAG_SPEED: 2,
   // How hard a new group pushes away when it splits off. It slides about
   // BURST_SPEED / SETTLE_RATE of the dish radius (half that for cocci) before
   // it stops: far enough to see, short enough not to slide into a zone easily.

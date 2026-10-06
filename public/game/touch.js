@@ -1,51 +1,28 @@
-// Touch steering, for phones and tablets: touch and hold anywhere on the dish
-// and the pal swims toward your finger at her normal speed, stopping when she
-// gets there. Let go and she stops. It works with a mouse too (press and hold).
+// Touch steering, for phones and tablets. It works with a mouse too (press
+// and hold).
 //
 // A finger covers up the very spot it's pointing at, so by default a finger
-// steers with an inoculating loop, the wire loop used to streak plates in a
-// real lab: its tip sits a little above the finger, and the pal swims to the
-// tip instead. Players can switch back to steering right under the finger
-// (the Loop / Finger buttons under the dish), and the game remembers which.
-// A mouse pointer is small, so it always steers right where it points.
+// drags her like a laptop trackpad: touch anywhere on the dish and she stays
+// put, then slide your finger and she moves the same way, as far as your
+// finger moves (up to a top speed). Nothing jumps when you touch down, and
+// your finger can stay well away from her and the antibiotic disks. Lift and
+// touch again to keep going.
+//
+// Players can switch to steering right under the finger instead (the Drag /
+// Finger buttons under the dish), and the game remembers which: touch and
+// hold where you want her to go, and she swims there at her normal speed,
+// stopping when she gets there. A mouse always steers right where it points.
 //
 // Also keeps the how-to-play directions right for the device: touch wording
 // on a touch screen, arrow-key wording on a computer, switching if someone
 // with both (a touchscreen laptop, an iPad with a keyboard) changes which
 // one they're using.
 
-// How far above the finger the loop's tip sits, in screen px: enough to
-// clear a grown-up's whole fingertip and see around the pal, not so far it
-// feels disconnected. It's a
-// fixed size rather than a share of the dish because fingers don't shrink on
-// small screens.
-export const LOOP_REACH = 96;
-
-// The loop's drawing. Its box is placed (in styles.css, .inoc-loop svg) so
-// the finger is at (20, LOOP_FINGER_Y): the handle runs down under the
-// finger, and the ring, where the pal aims, is LOOP_REACH px straight up.
-// Straight up, not leaning to one side, so it suits left and right hands.
-// The ring is small with a dot in the middle, marking exactly where she aims.
-export const LOOP_FINGER_Y = 104;
-const RING_Y = LOOP_FINGER_Y - LOOP_REACH;
-export const LOOP_ART = `
-  <svg viewBox="0 0 40 154" width="40" height="154">
-    <rect x="14" y="${LOOP_FINGER_Y - 2}" width="12" height="50" rx="6" fill="#0f766e" />
-    <path d="M20 ${RING_Y + 5} L20 ${LOOP_FINGER_Y}" stroke="#64748b" stroke-width="2" stroke-linecap="round" />
-    <circle class="inoc-loop-ring" cx="20" cy="${RING_Y}" r="4.5" fill="rgba(255, 255, 255, 0.35)" stroke="#475569" stroke-width="1.75" />
-    <circle cx="20" cy="${RING_Y}" r="1.25" fill="#475569" />
-  </svg>`;
-
-// A little loop for the Loop button.
-const LOOP_ICON = `
-  <svg viewBox="0 0 24 24" width="100%" height="100%">
-    <circle cx="5" cy="5" r="2.6" fill="none" stroke="currentColor" stroke-width="1.6" />
-    <path d="M6.9 6.9 L13 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
-    <path d="M13.5 13.5 L20.5 20.5" stroke="currentColor" stroke-width="4" stroke-linecap="round" />
-  </svg>`;
+// Icons for the Drag / Finger buttons.
+const DRAG_ICON = '✋';
 const FINGER_ICON = '👆';
 
-// Where the Loop / Finger choice is saved in the browser.
+// Where the Drag / Finger choice is saved in the browser.
 export const STEERING_KEY = 'petripals.steering';
 
 // How far to move this frame to head toward (tx, ty) from (x, y), as [dx, dy],
@@ -67,50 +44,44 @@ export function fromCenter(el, clientX, clientY) {
   return [clientX - (box.left + box.width / 2), clientY - (box.top + box.height / 2)];
 }
 
-// Whether the player picked the loop (see steeringChoice below).
-export function loopChosen(root = document.documentElement) {
-  return root.classList.contains('steer-loop');
+// Whether the player picked dragging (see steeringChoice below).
+export function dragChosen(root = document.documentElement) {
+  return root.classList.contains('steer-drag');
 }
 
 // Listen for a finger (or mouse button) held down on `agar`. Returns
 // { target() } giving where it is now, in px from the dish center, or null
-// when nothing is held down; onLoop(), whether that's the inoculating loop's
-// tip (so the pal can stick to it, see steer above); and stop(), to ignore it from now on (after the
+// when nothing is held down (or it's dragging instead); drag(), how far a
+// dragging finger has moved since the last call, as [dx, dy] px (and starts
+// counting again from there); and stop(), to ignore it from now on (after the
 // game ends).
 //
-// With the loop on (`useLoop()`), a finger or pen steers to LOOP_REACH px
-// above where it touches, and `loop` (the loop drawing) follows it so the
-// player can see where that is. Pulling the finger down past the dish's edge
-// still steers (it's followed off the dish), which is how the tip reaches the
-// bottom of the agar.
-export function touchSteering(agar, {
-  useLoop = () => loopChosen(),
-  loop = document.querySelector('.inoc-loop'),
-} = {}) {
+// With dragging on (`useDrag()`), a finger or pen only drags: target() stays
+// null, so she never heads for the spot it touched.
+export function touchSteering(agar, { useDrag = () => dragChosen() } = {}) {
   let pointer = null; // the id of the finger we're following
-  let lifted = false; // steering with the loop's tip, above the finger
+  let dragging = false;
+  let last = null; // where a dragging finger was, on the screen
+  let moved = [0, 0]; // how far it's moved since drag() was last called
   let target = null;
   let stopped = false;
 
-  const showLoop = (x, y) => {
-    if (!loop) return;
-    loop.hidden = false;
-    loop.style.transform = `translate(${x}px, ${y}px)`;
-  };
-  const hideLoop = () => {
-    if (loop) loop.hidden = true;
-  };
   const follow = (event) => {
-    const reach = lifted ? LOOP_REACH : 0;
-    target = fromCenter(agar, event.clientX, event.clientY - reach);
-    if (lifted) showLoop(event.clientX, event.clientY);
+    if (!dragging) {
+      target = fromCenter(agar, event.clientX, event.clientY);
+      return;
+    }
+    moved = [moved[0] + event.clientX - last[0], moved[1] + event.clientY - last[1]];
+    last = [event.clientX, event.clientY];
   };
 
   agar.addEventListener('pointerdown', (event) => {
     if (stopped || !event.isPrimary || pointer !== null) return;
     pointer = event.pointerId;
-    // Decided once per touch, so the aim can't jump mid-swim.
-    lifted = event.pointerType !== 'mouse' && useLoop();
+    // Decided once per touch, so it can't switch mid-swim.
+    dragging = event.pointerType !== 'mouse' && useDrag();
+    last = [event.clientX, event.clientY];
+    moved = [0, 0];
     follow(event);
     // Keep following the finger even if it slides off the dish.
     agar.setPointerCapture?.(event.pointerId);
@@ -124,7 +95,7 @@ export function touchSteering(agar, {
     if (event.pointerId !== pointer) return;
     pointer = null;
     target = null;
-    hideLoop();
+    moved = [0, 0];
   };
   agar.addEventListener('pointerup', release);
   agar.addEventListener('pointercancel', release);
@@ -132,12 +103,16 @@ export function touchSteering(agar, {
 
   return {
     target: () => (stopped ? null : target),
-    onLoop: () => !stopped && target !== null && lifted,
+    drag() {
+      const sofar = moved;
+      moved = [0, 0];
+      return stopped ? [0, 0] : sofar;
+    },
     stop() {
       stopped = true;
       pointer = null;
       target = null;
-      hideLoop();
+      moved = [0, 0];
     },
   };
 }
@@ -153,26 +128,23 @@ function savedSettings(win) {
   }
 }
 
-// The Loop / Finger buttons under the dish: `buttons` each have
-// data-steer="loop" or "finger". Starts from what was picked last time (the
-// loop if nothing was), marks the picked button pressed, and sets the
-// steer-loop class on `root` while the loop is on, which touchSteering reads
-// at the start of each touch. Also draws the buttons' icons and `loop`, the
-// loop that follows the finger.
+// The Drag / Finger buttons under the dish: `buttons` each have
+// data-steer="drag" or "finger". Starts from what was picked last time
+// (dragging if nothing was), marks the picked button pressed, and sets the
+// steer-drag class on `root` while dragging is on, which touchSteering reads
+// at the start of each touch. Also draws the buttons' icons.
 export function steeringChoice({
   root = document.documentElement,
   buttons = document.querySelectorAll('.steer-btn'),
-  loop = document.querySelector('.inoc-loop'),
   win = window,
 } = {}) {
-  if (loop) loop.innerHTML = LOOP_ART;
   for (const button of buttons) {
     const icon = button.querySelector('.steer-icon');
-    if (icon) icon.innerHTML = button.dataset.steer === 'loop' ? LOOP_ICON : FINGER_ICON;
+    if (icon) icon.innerHTML = button.dataset.steer === 'drag' ? DRAG_ICON : FINGER_ICON;
   }
   const storage = savedSettings(win);
   const pick = (choice, save) => {
-    root.classList.toggle('steer-loop', choice === 'loop');
+    root.classList.toggle('steer-drag', choice === 'drag');
     for (const button of buttons) {
       button.setAttribute('aria-pressed', String(button.dataset.steer === choice));
     }
@@ -190,7 +162,7 @@ export function steeringChoice({
   } catch {
     saved = null;
   }
-  pick(saved === 'finger' ? 'finger' : 'loop', false);
+  pick(saved === 'finger' ? 'finger' : 'drag', false);
   for (const button of buttons) {
     button.addEventListener('click', () => pick(button.dataset.steer, true));
   }
@@ -214,32 +186,31 @@ export function watchInputMode(root = document.documentElement, win = window) {
 }
 
 // Move `group` (the player's pal) for one frame: the arrow keys win if any
-// are held ([dx, dy] from keyboard.js); otherwise she swims toward the
-// finger, if one is down ([x, y] or null, from touchSteering). The same top
-// speed, `maxStep`, either way; `arrive` is how close to the finger counts as
-// there. Both game modes use this.
-//
-// `loop` is { step, slip } while a finger steers with the inoculating loop
-// (null otherwise). Once she reaches the loop's tip she sticks to it, keeping
-// up at the faster `step`, so she moves with the loop instead of trailing
-// behind. If the loop gets more than `slip` ahead (a really fast swipe), she
-// falls off and swims after it at her normal speed until she catches it.
-export function steer(group, [dx, dy], finger, maxStep, arrive = 0, loop = null) {
+// are held ([dx, dy] from keyboard.js); otherwise a dragging finger moves her
+// the same way it moved (`dragged`, [dx, dy] px from touchSteering's drag(),
+// at most `dragStep`: a really fast swipe moves her less than the finger);
+// otherwise she swims toward the finger, if one is down ([x, y] or null, from
+// touchSteering's target()). The arrow keys and the finger share a top speed,
+// `maxStep`; `arrive` is how close to the finger counts as there. Both game
+// modes use this.
+export function steer(group, [dx, dy], finger, maxStep, arrive = 0, dragged = [0, 0], dragStep = maxStep) {
   if (dx !== 0 || dy !== 0) {
-    group.onLoop = false;
     const length = Math.hypot(dx, dy); // same speed on diagonals
     group.x += (dx / length) * maxStep;
     group.y += (dy / length) * maxStep;
     if (dx !== 0) group.facing = Math.sign(dx);
-  } else if (finger) {
-    const stuck = Boolean(loop && group.onLoop);
-    const [mx, my] = stepToward(group.x, group.y, finger[0], finger[1], stuck ? loop.step : maxStep, arrive);
-    group.x += mx;
-    group.y += my;
-    const behind = Math.hypot(finger[0] - group.x, finger[1] - group.y);
-    group.onLoop = Boolean(loop) && behind <= (stuck ? loop.slip : arrive);
-    // Only turn around when mostly heading sideways, so she doesn't flip
-    // back and forth while swimming nearly straight up or down.
-    if (Math.abs(mx) > Math.abs(my) * 0.5) group.facing = Math.sign(mx);
+    return;
   }
+  let [mx, my] = [0, 0];
+  if (dragged[0] !== 0 || dragged[1] !== 0) {
+    const scale = Math.min(1, dragStep / Math.hypot(dragged[0], dragged[1]));
+    [mx, my] = [dragged[0] * scale, dragged[1] * scale];
+  } else if (finger) {
+    [mx, my] = stepToward(group.x, group.y, finger[0], finger[1], maxStep, arrive);
+  }
+  group.x += mx;
+  group.y += my;
+  // Only turn around when mostly heading sideways, so she doesn't flip
+  // back and forth while swimming nearly straight up or down.
+  if (Math.abs(mx) > Math.abs(my) * 0.5) group.facing = Math.sign(mx);
 }

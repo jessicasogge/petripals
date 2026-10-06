@@ -1043,7 +1043,14 @@ html.input-keys .for-keys {
   display: inline;
 }
 
-/* Loop / Finger: how a finger steers (game/touch.js). Only on touch screens,
+/* For touch, the directions for whichever way of steering the player picked
+   (Drag or Finger, below). */
+html.steer-drag .for-finger,
+html:not(.steer-drag) .for-drag {
+  display: none;
+}
+
+/* Drag / Finger: how a finger steers (game/touch.js). Only on touch screens,
    shown and hidden the same way as the touch directions above. */
 .steer-choice {
   display: none;
@@ -1093,36 +1100,6 @@ html.input-keys .steer-choice {
   height: 1.3em;
   font-size: 1.1em;
   line-height: 1.3em;
-}
-
-/* The loop itself: its corner sits on the finger (moved there by
-   touch.js), and the drawing hangs so the ring is LOOP_REACH px above it.
-   It never catches touches itself. */
-.inoc-loop {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 0;
-  height: 0;
-  z-index: 50;
-  pointer-events: none;
-}
-
-.inoc-loop[hidden] {
-  display: none;
-}
-
-.inoc-loop svg {
-  position: absolute;
-  left: -20px;
-  top: -104px;
-  overflow: visible;
-  filter: drop-shadow(0 2px 3px rgba(19, 78, 74, 0.3));
-}
-
-/* A soft glow on the ring, so it's easy to spot over the agar. */
-.inoc-loop-ring {
-  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.95));
 }
 
 /* The antibiotic disk: a small white paper disk with the drug's code on it,

@@ -53,13 +53,13 @@
 
       <p class="cell-count" aria-live="polite">Level 1 · 1 / 4 cells</p>
 
-      <!-- On a touch screen, steer with the inoculating loop (the pal swims to
-           its tip, above your finger, so your finger doesn't hide her) or
-           right under your finger. See game/touch.js. -->
+      <!-- On a touch screen, drag the pal like a trackpad (touch anywhere and
+           slide, so your finger doesn't hide her) or steer right under your
+           finger. See game/touch.js. -->
       <div class="steer-choice" role="group" aria-label="Steer with">
-        <button class="steer-btn" type="button" data-steer="loop" aria-pressed="true">
+        <button class="steer-btn" type="button" data-steer="drag" aria-pressed="true">
           <span class="steer-icon" aria-hidden="true"></span>
-          Loop
+          Drag
         </button>
         <button class="steer-btn" type="button" data-steer="finger" aria-pressed="false">
           <span class="steer-icon" aria-hidden="true"></span>
@@ -69,7 +69,8 @@
 
       <p class="how-to-play">
         <span class="for-keys">Use the arrow keys to swim.</span>
-        <span class="for-touch">Touch and hold where you want to swim.</span>
+        <span class="for-touch for-drag">Touch the dish and slide your finger to swim.</span>
+        <span class="for-touch for-finger">Touch and hold where you want to swim.</span>
         Eat nutrients and grow to <span class="target-cells">4</span> cells.<br />
         Any cell that eats a nutrient divides. Don't touch the antibiotic disks or the clear zones around them, and watch out: the zones spread as the drug soaks into the agar!
       </p>
@@ -77,9 +78,6 @@
       <a class="back-link" href="./pal-picker.html">Pick a different pal</a>
     </main>
     <footer class="signature">jsogge 2026</footer>
-    <!-- The inoculating loop, drawn over your finger while you steer with it
-         (game/touch.js draws, moves and shows it). -->
-    <div class="inoc-loop" aria-hidden="true" hidden></div>
     <script type="module" src="./game/main.js"></script>
     <script data-goatcounter="https://petripals.goatcounter.com/count"
             async src="https://gc.zgo.at/count.js"></script>

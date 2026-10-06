@@ -10,7 +10,7 @@ A cute microbiology game for the browser. Pick a bacterial pal and eat nutrients
 
 1. **Pick a pal.** Each one is a real bacterium, drawn as a cartoon.
 2. **Choose a mode:** classic or mixed culture. For mixed culture, pick up to three rivals, or tap **Surprise me** for one at random.
-3. **Swim around the dish.** Use the arrow keys, or on a touch screen, touch and hold where you want to swim. On a touch screen your finger steers with an inoculating loop by default, so it doesn't cover your pal: she swims to the loop's tip, just above your finger, and once she gets there she sticks to it and moves with the loop (a really fast swipe shakes her off). Tap **Finger** under the dish to steer right under your finger instead; the game remembers which you picked.
+3. **Swim around the dish.** Use the arrow keys, or on a touch screen, touch and hold where you want to swim. On a touch screen you drag your pal like a trackpad by default: touch anywhere on the dish and slide your finger, and she moves the same way, so your finger never hides her and nothing jumps when you touch down. Lift and touch again to keep going. Tap **Finger** under the dish to steer right under your finger instead; the game remembers which you picked.
 4. **Eat nutrients to divide.** Every cell that eats a nutrient divides in two, just like binary fission.
 
 ### Classic
