@@ -25,9 +25,7 @@ No antibiotics this time. You share the plate with one to three rival pals steer
 
 ### Run & tumble
 
-No steering this time. Your pal swims in a straight line on her own, and all you can do is make her **tumble**: tap the dish (or press the space bar or an arrow key) and she spins on the spot, then sets off a random new way. She bounces off the rim. Each nutrient's sugar soaks into the agar around it, and a line under the dish tells you whether it **smells sweeter** (keep swimming!) or **less sweet** (tumble!). Grow to 16 cells in as few tumbles as you can.
-
-Only pals who can swim play run & tumble: Mona, Vi, Elia, Ceres, Sallie, Terra, Lissie and Sara. The mode screen tells the others why they can't.
+No steering this time. Your pal swims in a straight line on her own, and all you can do is make her **tumble**: tap the dish (or press the space bar or an arrow key) and she spins on the spot, then sets off a random new way. She bounces off the rim. Each nutrient's sugar soaks into the agar, so it has a faint cloud around it. Tumble when she's heading the wrong way, and grow to 16 cells in as few tumbles as you can.
 
 ### Who’s That Pal?
 
@@ -68,7 +66,7 @@ The game is loosely based on real lab microbiology:
 - **Ana's Y shape** is in her name: *bifidus* means "split in two," and bifidobacteria are rods that branch into a Y. She's one of the "good" gut bacteria (a probiotic), and her name is a nod to "anaerobe," since oxygen is bad for her.
 - **Penny's glasses** are a nod to history: pneumococcus is the bacterium that helped show DNA carries genes, in experiments by Frederick Griffith (1928) and by Oswald Avery, Colin MacLeod and Maclyn McCarty (1944).
 - **The antibiotic disks** are modeled on the Kirby-Bauer disk test. Each disk is a drug commonly used against that pal's species, labeled with its standard disk code (CIP for ciprofloxacin, P for penicillin, and so on).
-- **Run and tumble** is how swimming bacteria find food (chemotaxis). They're too small to tell which side of them the sugar is stronger on, so instead they compare how sweet it smells now with a moment ago, and keep running while it's getting sweeter and tumble sooner when it isn't. Tumbling at random sounds aimless, but runs that are going the right way last longer, so the cell drifts toward the food. Pals with flagella all over (Sallie, Sara, Terra, Lissie, Ceres) really do tumble, like *E. coli*: their flagella fly apart and the cell spins. Mona and Vi, with one flagellum, mostly back up and flick to a new direction instead, and Elia flexes her corkscrew, but in the game they all tumble.
+- **Run and tumble** is how swimming bacteria find food (chemotaxis). They're too small to tell which side of them the sugar is stronger on, so instead they compare how sweet it smells now with a moment ago, and keep running while it's getting sweeter and tumble sooner when it isn't. Tumbling at random sounds aimless, but runs that are going the right way last longer, so the cell drifts toward the food. Pals with flagella all over (Sallie, Sara, Terra, Lissie, Ceres) really do tumble, like *E. coli*: their flagella fly apart and the cell spins. Mona and Vi, with one flagellum, mostly back up and flick to a new direction instead, and Elia flexes her corkscrew. Pals without flagella (Goldie, Scarlett, Penny, Coco, Ana, Ivy) can't swim at all in real life, but in the game every pal swims and tumbles, as they all swim in the other modes.
 - **A mixed culture** is a plate growing more than one species at once, all competing for the same nutrients. That's the idea behind the mixed culture race.
 - **The zones spread** because the drug diffuses outward from the disk into the agar. Diffusion is quick at first and then slows down, so each zone widens fast and then creeps out to its full size. On a real plate this happens over hours of incubation; the game speeds it up to a few seconds.
 - **The zones of inhibition** are sized from ballpark zone diameters a lab would measure for a susceptible strain of that species, scaled down to fit the dish. A bigger zone means the drug works better. *Borrelia* can't be grown for disk tests, so Elia's zones are made up from how well each drug works on her, and the same goes for Ana's and Ceres's (there are no standard disk sizes for bifidobacteria or *Bacillus*). Bifidobacteria are naturally resistant to gentamicin, so Ana's gentamicin disk has **no zone at all**: you can swim right up to it, but don't touch the disk itself. Ceres never gets a penicillin disk, because *B. cereus* makes beta-lactamases, enzymes that break penicillin and its relatives down.
@@ -99,7 +97,7 @@ The tests use [Vitest](https://vitest.dev/). Most of the game logic runs in [jsd
 |---|---|
 | `public/index.html` | Home page |
 | `public/pal-picker.html` | Pick a pal |
-| `public/choose-mode.html` | Choose classic, mixed culture or run & tumble (only for pals who swim) |
+| `public/choose-mode.html` | Choose classic, mixed culture or run & tumble |
 | `public/choose-rivals.html` | Pick up to three rivals for mixed culture, or Surprise me |
 | `public/petri-dish.html` | The game, in any mode |
 | `public/whos-that-pal.html` | Who’s That Pal?, a quiz: which pal is this fact about? |

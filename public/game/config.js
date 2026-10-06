@@ -664,15 +664,6 @@ export const TUMBLE = {
   NUTRIENTS: 12, // flecks on the agar at a time
   SPEED: 0.45, // how fast she swims, as a fraction of the dish radius per second
   TUMBLE_MS: 350, // how long a tumble takes, spinning on the spot
-  // How far each fleck's smell spreads through the agar, as a fraction of the
-  // dish radius: the sugar is strongest right at a fleck and fades from there.
-  SCENT: 0.4,
-  // She compares how sweet it smells now with this long ago, to tell
-  // whether she's getting closer. (Real bacteria compare over about a second.)
-  SENSE_MS: 400,
-  // The pals that swim, so the ones who can play. The rest have no
-  // flagella. Elia's are inside her body, but she swims too.
-  SWIMMERS: ['mona', 'vi', 'elia', 'ceres', 'sallie', 'terra', 'lissie', 'sara'],
 };
 
 // How many cells win a race against `rivals` rival pals.

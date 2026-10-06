@@ -21,7 +21,7 @@ vi.mock('../public/game/coccus.js', () => ({ coccusGroup: vi.fn(() => group()) }
 vi.mock('../public/game/spores.js', () => ({ sporeBurst: vi.fn() }));
 vi.mock('../public/game/track.js', () => ({ track: vi.fn() }));
 
-const { playTumble, sweetness, swimmer } = await import('../public/game/tumble.js');
+const { playTumble, swimmer } = await import('../public/game/tumble.js');
 const { rodGroup } = await import('../public/game/rod.js');
 const { coccusGroup } = await import('../public/game/coccus.js');
 const { sporeBurst } = await import('../public/game/spores.js');
@@ -34,7 +34,6 @@ const TARGET = TUMBLE.TARGET;
 let frames;
 let now;
 let nutrients;
-let flecks; // where the nutrients are, as nutrients.positions() gives them
 let location;
 let colony;
 
@@ -73,7 +72,6 @@ function frame(ms = 16) {
 }
 
 const counter = () => document.querySelector('.cell-count').textContent;
-const sense = () => document.querySelector('.sense');
 const leader = () => rodGroup.mock.results[0].value;
 const press = (key, options = {}) => {
   const event = new KeyboardEvent('keydown', { key, cancelable: true, ...options });
@@ -97,8 +95,7 @@ beforeEach(() => {
   now = 0;
   colony = makeFakeColony();
   fake.colony = colony;
-  flecks = [];
-  nutrients = { stop: vi.fn(), positions: () => flecks };
+  nutrients = { stop: vi.fn() };
   location = { href: 'http://localhost/petri-dish.html?pal=mona&mode=tumble' };
   vi.stubGlobal('location', location);
   vi.stubGlobal('requestAnimationFrame', (run) => frames.push(run));
@@ -108,20 +105,6 @@ afterEach(() => {
   vi.useRealTimers();
   vi.unstubAllGlobals();
   vi.clearAllMocks();
-});
-
-describe('sweetness', () => {
-  it('is strongest right on a fleck and fades with distance', () => {
-    const fleck = [{ fx: 0.5, fy: 0 }];
-    expect(sweetness(0.5, 0, fleck)).toBeCloseTo(1);
-    expect(sweetness(0.3, 0, fleck)).toBeLessThan(1);
-    expect(sweetness(0, 0, fleck)).toBeLessThan(sweetness(0.3, 0, fleck));
-  });
-
-  it('adds up every fleck', () => {
-    expect(sweetness(0, 0, [{ fx: 0, fy: 0 }, { fx: 0, fy: 0 }])).toBeCloseTo(2);
-    expect(sweetness(0, 0, [])).toBe(0);
-  });
 });
 
 describe('swimmer', () => {
@@ -173,11 +156,12 @@ describe('swimmer', () => {
 });
 
 describe('playing', () => {
-  it('is a rod or a chain like the pal', () => {
+  it('is a rod, chain or cluster like the pal', () => {
     play('mona');
     play('ceres');
+    play('goldie');
     expect(rodGroup).toHaveBeenCalledTimes(1);
-    expect(coccusGroup).toHaveBeenCalledTimes(1);
+    expect(coccusGroup).toHaveBeenCalledTimes(2);
   });
 
   it('counts cells and tumbles', () => {
@@ -208,8 +192,6 @@ describe('playing', () => {
     const event = pointerdown();
     expect(event.defaultPrevented).toBe(true);
     expect(mover.classList).toContain('tumbling');
-    frame();
-    expect(sense().textContent).toBe('Tumbling…');
     for (let i = 0; i < 10; i++) frame(50);
     expect(mover.classList).not.toContain('tumbling');
   });
@@ -236,19 +218,6 @@ describe('playing', () => {
     expect(press('a').defaultPrevented).toBe(false);
     press(' ', { repeat: true });
     expect(counter()).toContain('0 tumbles');
-  });
-
-  it('says when the sugar smells sweeter, and when it fades', () => {
-    flecks = [{ fx: 0.5, fy: 0 }]; // straight ahead of her
-    play();
-    frame();
-    for (let i = 0; i < 10; i++) frame(50);
-    expect(sense().textContent).toBe('Smells sweeter! Keep swimming.');
-    expect(sense().dataset.feeling).toBe('sweeter');
-    flecks = [];
-    frame(50);
-    expect(sense().textContent).toBe('Less sweet… tumble!');
-    expect(sense().getAttribute('aria-hidden')).toBe('true');
   });
 
   it('keeps eating and dividing until the colony is big enough', () => {

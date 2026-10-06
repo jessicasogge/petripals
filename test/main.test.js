@@ -211,7 +211,7 @@ describe('run & tumble mode', () => {
     return playTumble;
   }
 
-  it.each(TUMBLE.SWIMMERS)('starts run & tumble for %s, who swims', async (pal) => {
+  it.each(Object.keys(SPECIES))('starts run & tumble for %s', async (pal) => {
     const playTumble = await openTumble(`?pal=${pal}&mode=tumble`);
     expect(playTumble).toHaveBeenCalledTimes(1);
     const [{ you, nutrients, target }] = playTumble.mock.calls[0];
@@ -229,12 +229,7 @@ describe('run & tumble mode', () => {
     const howTo = document.querySelector('.how-to-play');
     expect(howTo.querySelector('.for-keys').textContent).toBe('Press the space bar');
     expect(howTo.querySelector('.for-touch').textContent).toBe('Tap the dish');
-    expect(howTo.textContent).toContain(`Grow to ${TUMBLE.TARGET} cells`);
+    expect(howTo.textContent).toContain(`grow to ${TUMBLE.TARGET} cells`);
   });
 
-  it("sends a pal who can't swim back to choosing a mode", async () => {
-    const playTumble = await openTumble('?pal=goldie&mode=tumble');
-    expect(location.replace).toHaveBeenCalledWith('./choose-mode.html?pal=goldie');
-    expect(playTumble).not.toHaveBeenCalled();
-  });
 });

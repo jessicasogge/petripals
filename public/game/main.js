@@ -3,7 +3,7 @@
 //   petri-dish.html?pal=mona&level=2    classic, level 2
 //   petri-dish.html?pal=mona&mode=mixed mixed culture against a random rival
 //                                       (or &rivals=vi,elia for up to three)
-//   petri-dish.html?pal=mona&mode=tumble run & tumble (only pals who swim)
+//   petri-dish.html?pal=mona&mode=tumble run & tumble
 import { antibioticsFor, placeAntibiotics } from './antibiotic.js';
 import { LEVELS, MIXED, raceTarget, SPECIES, TUMBLE } from './config.js';
 import { playGame } from './game.js';
@@ -39,9 +39,6 @@ const drawingOf = (name) => [...document.querySelectorAll('.dish-pal')].find((el
 if (!pal) {
   // No pal (or an unknown one) in the URL: send them back to choose.
   window.location.replace('./pal-picker.html');
-} else if (params.get('mode') === 'tumble' && !TUMBLE.SWIMMERS.includes(choice)) {
-  // She can't swim, so she can't run and tumble: back to choosing a mode.
-  window.location.replace(`./choose-mode.html?pal=${choice}`);
 } else {
   if (params.get('mode') === 'mixed') startMixed();
   else if (params.get('mode') === 'tumble') startTumble();
@@ -120,7 +117,7 @@ function startTumble() {
     wording('for-touch', 'Tap the dish'),
     ' to make her tumble and swim off a random new way.',
     document.createElement('br'),
-    `Follow your nose: when the sugar smells sweeter, keep going; when it fades, tumble! Grow to ${TUMBLE.TARGET} cells in as few tumbles as you can.`,
+    `Tumble when she's heading the wrong way, and grow to ${TUMBLE.TARGET} cells in as few tumbles as you can.`,
   );
 
   const nutrients = scatterNutrients({ count: TUMBLE.NUTRIENTS });

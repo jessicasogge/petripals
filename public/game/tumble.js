@@ -1,9 +1,8 @@
 // Run & tumble mode: no steering. Your pal swims in a straight line on her
 // own (a "run"), and a tap, or the space bar or an arrow key, makes her
 // tumble: she spins on the spot and sets off a random new way. That's how
-// real swimming bacteria find food (chemotaxis). They can't see it, but they
-// can smell whether the sugar around them is getting stronger, and they keep
-// running while it is and tumble sooner when it isn't.
+// real swimming bacteria find food (chemotaxis): they keep running while the
+// sugar around them is getting stronger, and tumble sooner when it isn't.
 import { makeColony, moveGroups } from './colony.js';
 import { GAME, TUMBLE } from './config.js';
 import { coccusGroup } from './coccus.js';
@@ -15,18 +14,6 @@ import { track } from './track.js';
 
 // The keys that tumble her.
 const TUMBLE_KEYS = new Set([' ', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']);
-
-// How sweet the agar smells at (fx, fy), from every fleck in `flecks`
-// ({ fx, fy }, all in fractions of the dish radius): each fleck's sugar is
-// strongest right on it and fades with distance, over about `scent`.
-export function sweetness(fx, fy, flecks, scent = TUMBLE.SCENT) {
-  let total = 0;
-  for (const fleck of flecks) {
-    const d = Math.hypot(fleck.fx - fx, fleck.fy - fy) / scent;
-    total += Math.exp(-d * d);
-  }
-  return total;
-}
 
 // Swims `group` (the player's pal) straight ahead, and tumbles her on
 // tumble(). `random` picks her new heading, for the tests.
@@ -98,15 +85,6 @@ export function playTumble({ you, nutrients, target = TUMBLE.TARGET }) {
   });
   const swim = swimmer(leader);
 
-  // Her sense of smell, under the counter: is it getting sweeter?
-  const sense = document.createElement('p');
-  sense.className = 'sense';
-  sense.setAttribute('aria-hidden', 'true'); // changes too often to read out
-  counter.after(sense);
-  const smells = []; // [ms, sweetness] over the last SENSE_MS
-  let clock = 0;
-  let feeling = null;
-
   let tumbles = 0;
   let finished = false;
   let lastTime = null;
@@ -137,27 +115,6 @@ export function playTumble({ you, nutrients, target = TUMBLE.TARGET }) {
     counter.textContent = `${shown} / ${target} cells · ${tumbles} ${tumbles === 1 ? 'tumble' : 'tumbles'}`;
   }
 
-  // Compare how sweet it smells here with a moment ago.
-  function smell(seconds, radius) {
-    clock += seconds * 1000;
-    const now = sweetness(leader.x / radius, leader.y / radius, nutrients.positions());
-    smells.push([clock, now]);
-    while (smells.length > 1 && smells[1][0] <= clock - TUMBLE.SENSE_MS) smells.shift();
-    const change = now - smells[0][1];
-    let next = feeling;
-    if (swim.tumbling()) next = 'tumbling';
-    else if (change > 0.01) next = 'sweeter';
-    else if (change < -0.01) next = 'fainter';
-    if (next === feeling) return;
-    feeling = next;
-    sense.dataset.feeling = feeling;
-    sense.textContent = {
-      tumbling: 'Tumbling…',
-      sweeter: 'Smells sweeter! Keep swimming.',
-      fainter: 'Less sweet… tumble!',
-    }[feeling];
-  }
-
   function step(time) {
     const seconds = lastTime === null ? 0 : Math.min(0.05, (time - lastTime) / 1000);
     lastTime = time;
@@ -166,7 +123,6 @@ export function playTumble({ you, nutrients, target = TUMBLE.TARGET }) {
     if (!finished) {
       swim.step(seconds, TUMBLE.SPEED * radius * seconds, radius);
       if (!swim.tumbling()) playerMover.classList.remove('tumbling');
-      smell(seconds, radius);
     }
 
     colony.tick(seconds);
@@ -185,7 +141,6 @@ export function playTumble({ you, nutrients, target = TUMBLE.TARGET }) {
     finished = true;
     nutrients.stop();
     playerMover.classList.remove('tumbling');
-    sense.textContent = '';
     updateCounter();
     sporeBurst(playerMover);
     track(`tumble/won/${pal}`, `${name} grew ${target} cells in ${tumbles} tumbles`);
