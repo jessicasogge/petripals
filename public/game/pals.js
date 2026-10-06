@@ -131,22 +131,22 @@ const ivyRod = (x, y, angle, w, h) =>
 // out at `angle` degrees (on her underside, which curves in, they fan out a
 // little so they don't cross).
 const REBECCA_WIRES = [
-  [51, 78, -113],
-  [73, 71, -103],
-  [96, 68, -92],
-  [119, 70, -81],
-  [141, 75, -70],
-  [161, 85, -59],
-  [174, 104, -29],
-  [168, 125, 0],
-  [149, 136, 30],
-  [126, 130, 57],
-  [104, 124, 84],
-  [81, 127, 115],
-  [60, 135, 139],
-  [39, 132, 167],
-  [26, 113, -163],
-  [32, 91, -133],
+  [57, 78, -102],
+  [80, 75, -96],
+  [103, 74, -89],
+  [125, 76, -83],
+  [147, 79, -77],
+  [167, 89, -53],
+  [174, 111, -21],
+  [164, 130, 9],
+  [143, 136, 40],
+  [120, 131, 64],
+  [97, 130, 94],
+  [75, 132, 122],
+  [54, 136, 144],
+  [33, 127, 177],
+  [26, 106, -153],
+  [37, 86, -121],
 ];
 const WIRE_LENGTH = 26;
 // The points along one wire, from her outline to its tip: a gentle wave that
@@ -601,18 +601,18 @@ export const PALS = [
       <!-- nanowires all around her, with yellow bursts running out along them (no flagella: the usual lab strain doesn't make any) -->
       ${REBECCA_NANOWIRES}
       <!-- a slightly curved rod: outline, then fill -->
-      <path d="M54 108 Q100 84 146 108" stroke="#4c1d95" stroke-width="56" fill="none" stroke-linecap="round" />
-      <path d="M54 108 Q100 84 146 108" stroke="#b27ee0" stroke-width="48" fill="none" stroke-linecap="round" />
-      <ellipse cx="132" cy="90" rx="8" ry="4" fill="#f5ecff" transform="rotate(20 132 90)" />
-      <circle cx="58" cy="118" r="3" fill="#f5ecff" />
+      <path d="M54 108 Q100 96 146 108" stroke="#4c1d95" stroke-width="56" fill="none" stroke-linecap="round" />
+      <path d="M54 108 Q100 96 146 108" stroke="#b27ee0" stroke-width="48" fill="none" stroke-linecap="round" />
+      <ellipse cx="132" cy="95" rx="8" ry="4" fill="#f5ecff" transform="rotate(10 132 95)" />
+      <circle cx="58" cy="121" r="3" fill="#f5ecff" />
       <g class="face">
-        <circle cx="88" cy="96" r="6" fill="#2e1065" />
-        <circle cx="112" cy="96" r="6" fill="#2e1065" />
-        <circle cx="90" cy="94" r="2" fill="white" />
-        <circle cx="114" cy="94" r="2" fill="white" />
-        <ellipse cx="73" cy="108" rx="6.5" ry="3.8" fill="#f9a8d4" opacity="0.95" />
-        <ellipse cx="127" cy="108" rx="6.5" ry="3.8" fill="#f9a8d4" opacity="0.95" />
-        <path d="M94 107 Q100 113 106 107" stroke="#2e1065" stroke-width="3" fill="none" stroke-linecap="round" />
+        <circle cx="88" cy="101" r="6" fill="#2e1065" />
+        <circle cx="112" cy="101" r="6" fill="#2e1065" />
+        <circle cx="90" cy="99" r="2" fill="white" />
+        <circle cx="114" cy="99" r="2" fill="white" />
+        <ellipse cx="73" cy="113" rx="6.5" ry="3.8" fill="#f9a8d4" opacity="0.95" />
+        <ellipse cx="127" cy="113" rx="6.5" ry="3.8" fill="#f9a8d4" opacity="0.95" />
+        <path d="M94 112 Q100 118 106 112" stroke="#2e1065" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
   },

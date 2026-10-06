@@ -661,9 +661,9 @@ export const SPECIES = {
         body: [
       // her slightly curved rod, from end to end (her thin nanowires don't count)
       [-0.219, 0.029, 0.143],
-      [-0.11, -0.014, 0.143],
-      [0.0, -0.029, 0.143],
-      [0.11, -0.014, 0.143],
+      [-0.11, 0.007, 0.143],
+      [0.0, 0.0, 0.143],
+      [0.11, 0.007, 0.143],
       [0.219, 0.029, 0.143],
     ],
     // She's an anaerobe from mud, and there are no standard disk sizes for
