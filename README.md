@@ -45,7 +45,7 @@ Tap **Who’s That Pal?** on the home page for a quiz on the pals' fun facts. Yo
 | **Lissie** | *Listeria monocytogenes* | Short denim-blue rod with a few flagella |
 | **Sara** | *Serratia marcescens* | Short, plump red rod with flagella all around |
 | **Ivy** | *Bacillus mycoides* | Sage-green chain of rods curling up like a vine |
-| **Rebecca** | *Geobacter sulfurreducens* | Grape-purple curved rod covered in sparking nanowires |
+| **Rebecca** | *Geobacter sulfurreducens* | Grape-purple rod covered in sparking nanowires |
 
 The picker shuffles all the pals each visit and shows them eight to a page, with **More pals** for the rest, so any pal can turn up on any page.
 

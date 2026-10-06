@@ -659,12 +659,12 @@ export const SPECIES = {
     kind: 'rod',
     gram: 'negative',
         body: [
-      // her slightly curved rod, from end to end (her thin nanowires don't count)
-      [-0.219, 0.029, 0.143],
-      [-0.11, 0.007, 0.143],
+      // her rod, from end to end (her thin nanowires don't count)
+      [-0.21, 0.0, 0.143],
+      [-0.105, 0.0, 0.143],
       [0.0, 0.0, 0.143],
-      [0.11, 0.007, 0.143],
-      [0.219, 0.029, 0.143],
+      [0.105, 0.0, 0.143],
+      [0.21, 0.0, 0.143],
     ],
     // She's an anaerobe from mud, and there are no standard disk sizes for
     // her, so these drugs and zones are estimates.

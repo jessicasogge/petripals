@@ -65,14 +65,12 @@ describe('pals', () => {
     expect(body.at(-1)[0]).toBe(Math.max(...body.map(([x]) => x)));
   });
 
-  it('makes Rebecca a Gram-negative rod that splits and slides apart, traced along her curve', () => {
+  it('makes Rebecca a Gram-negative rod that splits and slides apart, traced along her straight rod', () => {
     const { kind, layout, gram, body } = SPECIES.rebecca;
     expect(kind).toBe('rod');
     expect(layout).toBeUndefined();
     expect(gram).toBe('negative');
-    // Her rod bends up in the middle, so its middle circle sits highest.
-    const middle = body[Math.floor(body.length / 2)];
-    expect(middle[1]).toBe(Math.min(...body.map(([, y]) => y)));
+    for (const [, y] of body) expect(y).toBe(0); // straight, like the other rods
   });
 
   it('makes Lissie a Gram-positive rod that tumbles apart after dividing, like Sallie', () => {
