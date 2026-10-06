@@ -658,7 +658,8 @@ export const SPECIES = {
     color: '#4c1d95', // for her name above the dish: grape, darker than Elia's purple
     kind: 'rod',
     gram: 'negative',
-        body: [
+    size: 11, // a touch smaller than most, since her nanowires take up room around her
+    body: [
       // her rod, from end to end (her thin nanowires don't count)
       [-0.21, 0.0, 0.143],
       [-0.105, 0.0, 0.143],
