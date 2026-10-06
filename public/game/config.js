@@ -702,6 +702,15 @@ export const MIXED = {
   RIVAL_START_MS: 1000, // the rival waits this long before it starts, so you get a head start
 };
 
+// Petri Picnic (game/tumble.js): your pal swims straight on her own,
+// and all you can do is make her tumble to face a random new way
+export const TUMBLE = {
+  TARGET: 256,
+  NUTRIENTS: 30, // flecks on the agar at a time
+  SPEED: 0.60, // how fast she swims, as a fraction of the dish radius per second
+  TUMBLE_MS: 300, // how long a tumble takes, spinning on the spot
+};
+
 // How many cells win a race against `rivals` rival pals.
 export function raceTarget(rivals) {
   return rivals > 1 ? MIXED.CROWDED_TARGET : MIXED.TARGET;
