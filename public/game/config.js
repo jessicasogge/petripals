@@ -657,13 +657,12 @@ export const MIXED = {
 };
 
 // Petri Picnic (game/tumble.js): your pal swims straight on her own,
-// and all you can do is make her tumble to face a random new way, the way
-// real swimming bacteria hunt for food.
+// and all you can do is make her tumble to face a random new way
 export const TUMBLE = {
-  TARGET: 128,
+  TARGET: 256,
   NUTRIENTS: 30, // flecks on the agar at a time
-  SPEED: 0.55, // how fast she swims, as a fraction of the dish radius per second
-  TUMBLE_MS: 350, // how long a tumble takes, spinning on the spot
+  SPEED: 0.60, // how fast she swims, as a fraction of the dish radius per second
+  TUMBLE_MS: 300, // how long a tumble takes, spinning on the spot
 };
 
 // How many cells win a race against `rivals` rival pals.
