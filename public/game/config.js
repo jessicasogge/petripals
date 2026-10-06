@@ -661,8 +661,8 @@ export const MIXED = {
 // real swimming bacteria hunt for food.
 export const TUMBLE = {
   TARGET: 128,
-  NUTRIENTS: 24, // flecks on the agar at a time
-  SPEED: 0.45, // how fast she swims, as a fraction of the dish radius per second
+  NUTRIENTS: 30, // flecks on the agar at a time
+  SPEED: 0.55, // how fast she swims, as a fraction of the dish radius per second
   TUMBLE_MS: 350, // how long a tumble takes, spinning on the spot
 };
 
