@@ -639,6 +639,43 @@ export const SPECIES = {
       { code: 'E', name: 'erythromycin', zone: 26 },
     ],
   },
+  rebecca: {
+    facts: [
+      "Rebecca is a Gram-negative rod, so she stains pink on a Gram stain.",
+      "Rebecca lives in mud, river sediment, and soil where there's no oxygen.",
+      "Rebecca \"breathes\" rust instead of oxygen, handing her spare electrons to iron oxide.",
+      "Rebecca grows tiny hair-like wires, called nanowires, that carry electricity.",
+      "Rebecca's nanowires can stretch many times longer than she is.",
+      "Rebecca can power a microbial fuel cell, making electricity from mud.",
+      "Rebecca is packed with cytochromes, iron-holding proteins that pass electrons along.",
+      "Rebecca helps clean uranium out of groundwater by turning it into a form that stays put.",
+      "Rebecca eats acetate, a simple molecule other microbes leave behind.",
+      "Rebecca was first found in a ditch in Norman, Oklahoma, in the early 1990s.",
+      "Lots of Rebeccas can join up into a living, electricity-carrying film on an electrode.",
+      "Rebecca can even share electrons directly with other microbes, like passing a battery.",
+    ],
+    scientific: 'Geobacter sulfurreducens',
+    color: '#4c1d95', // for her name above the dish: grape, darker than Elia's purple
+    kind: 'rod',
+    gram: 'negative',
+        body: [
+      // her slightly curved rod, from end to end (her thin nanowires don't count)
+      [-0.219, 0.029, 0.143],
+      [-0.11, -0.014, 0.143],
+      [0.0, -0.029, 0.143],
+      [0.11, -0.014, 0.143],
+      [0.219, 0.029, 0.143],
+    ],
+    // She's an anaerobe from mud, and there are no standard disk sizes for
+    // her, so these drugs and zones are estimates.
+    antibiotics: [
+      { code: 'GM', name: 'gentamicin', zone: 18 },
+      { code: 'CIP', name: 'ciprofloxacin', zone: 30 },
+      { code: 'TE', name: 'tetracycline', zone: 22 },
+      { code: 'DO', name: 'doxycycline', zone: 24 },
+      { code: 'MEM', name: 'meropenem', zone: 26 },
+    ],
+  },
 };
 
 // Mixed culture mode: no disks, just you and one to three rival pals (picked

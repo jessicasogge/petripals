@@ -121,4 +121,12 @@ export const QUIZ_FACTS = {
     "Ivy's colonies spiral as they spread, some strains clockwise and others counterclockwise.",
     "Ivy was first described by the German scientist Carl Flügge in 1886.",
   ],
+  rebecca: [
+    "Rebecca \"breathes\" rust instead of oxygen, handing her spare electrons to iron oxide.",
+    "Rebecca grows tiny hair-like wires, called nanowires, that carry electricity.",
+    "Rebecca can power a microbial fuel cell, making electricity from mud.",
+    "Rebecca helps clean uranium out of groundwater by turning it into a form that stays put.",
+    "Rebecca was first found in a ditch in Norman, Oklahoma, in the early 1990s.",
+    "Rebecca can even share electrons directly with other microbes, like passing a battery.",
+  ],
 };

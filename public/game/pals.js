@@ -126,6 +126,63 @@ const ivyRod = (x, y, angle, w, h) =>
   `<rect x="${x - w / 2}" y="${y - h / 2}" width="${w}" height="${h}" rx="${(h * 0.36).toFixed(1)}" fill="#b8d8a0" stroke="#4d6b3c" stroke-width="4" />` +
   `<circle cx="${x - w / 2 + 9}" cy="${y - h / 2 + 8}" r="3.2" fill="#f0f7e8" /></g>`;
 
+// Rebecca's nanowires: 16 conductive filaments, evenly spaced all around her
+// and all the same length. Each starts on her outline at [x, y] and heads
+// out at `angle` degrees (on her underside, which curves in, they fan out a
+// little so they don't cross).
+const REBECCA_WIRES = [
+  [51, 78, -113],
+  [73, 71, -103],
+  [96, 68, -92],
+  [119, 70, -81],
+  [141, 75, -70],
+  [161, 85, -59],
+  [174, 104, -29],
+  [168, 125, 0],
+  [149, 136, 30],
+  [126, 130, 57],
+  [104, 124, 84],
+  [81, 127, 115],
+  [60, 135, 139],
+  [39, 132, 167],
+  [26, 113, -163],
+  [32, 91, -133],
+];
+const WIRE_LENGTH = 26;
+// The points along one wire, from her outline to its tip: a gentle wave that
+// starts straight where it leaves her, every other one waving the other way.
+function wirePoints([x, y, angle], i) {
+  const a = (angle * Math.PI) / 180;
+  const [dx, dy] = [Math.cos(a), Math.sin(a)];
+  const points = [];
+  for (let step = 0; step <= 10; step++) {
+    const s = step / 10;
+    const wave = 3.2 * Math.sin(2 * Math.PI * 1.25 * s + (i % 2) * Math.PI) * Math.min(1, s * 4);
+    points.push([x + dx * WIRE_LENGTH * s - dy * wave, y + dy * WIRE_LENGTH * s + dx * wave]);
+  }
+  return points;
+}
+// A four-pointed yellow spark of radius r at (x, y). It flashes on a loop,
+// `delay` seconds in, so the bursts run out along each wire like current.
+function spark(x, y, r, delay, className) {
+  const points = [[0, -r], [0.3 * r, -0.3 * r], [r, 0], [0.3 * r, 0.3 * r], [0, r], [-0.3 * r, 0.3 * r], [-r, 0], [-0.3 * r, -0.3 * r]]
+    .map(([px, py]) => `${(x + px).toFixed(1)} ${(y + py).toFixed(1)}`)
+    .join(' L');
+  return (
+    `<path class="${className}" d="M${points} Z" fill="#fde047" stroke="#ca8a04" stroke-width="1" stroke-linejoin="round">` +
+    `<animate attributeName="opacity" values="0.35;1;0.35;0.35" keyTimes="0;0.2;0.6;1" dur="1.2s" begin="${delay}s" repeatCount="indefinite" /></path>`
+  );
+}
+const REBECCA_NANOWIRES = REBECCA_WIRES.map((wire, i) => {
+  const points = wirePoints(wire, i);
+  const d = points.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join(' L');
+  return (
+    `<path d="M${d}" stroke="#4c1d95" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round" />` +
+    spark(...points[5], 3.6, 0, 'burst') +
+    spark(...points[10], 5, 0.3, 'spark')
+  );
+}).join('');
+
 export const PALS = [
   // Terra: Clostridium tetani, an olive rod with a round spore at one end (a "drumstick")
   {
@@ -533,6 +590,32 @@ export const PALS = [
       </g>
     `,
   },
+  // Rebecca: Geobacter sulfurreducens, a grape-purple rod covered in electric nanowires
+  {
+    id: 'rebecca',
+    name: 'Rebecca',
+    looks: 'a grape-purple, slightly curved Geobacter sulfurreducens rod covered in sparking nanowires',
+    motion: 'bob',
+    frames: { home: '-11 -9 222 222', picker: '-5 -3 210 210', dish: '-5 -3 210 210' },
+    art: `
+      <!-- nanowires all around her, with yellow bursts running out along them (no flagella: the usual lab strain doesn't make any) -->
+      ${REBECCA_NANOWIRES}
+      <!-- a slightly curved rod: outline, then fill -->
+      <path d="M54 108 Q100 84 146 108" stroke="#4c1d95" stroke-width="56" fill="none" stroke-linecap="round" />
+      <path d="M54 108 Q100 84 146 108" stroke="#b27ee0" stroke-width="48" fill="none" stroke-linecap="round" />
+      <ellipse cx="132" cy="90" rx="8" ry="4" fill="#f5ecff" transform="rotate(20 132 90)" />
+      <circle cx="58" cy="118" r="3" fill="#f5ecff" />
+      <g class="face">
+        <circle cx="88" cy="96" r="6" fill="#2e1065" />
+        <circle cx="112" cy="96" r="6" fill="#2e1065" />
+        <circle cx="90" cy="94" r="2" fill="white" />
+        <circle cx="114" cy="94" r="2" fill="white" />
+        <ellipse cx="73" cy="108" rx="6.5" ry="3.8" fill="#f9a8d4" opacity="0.95" />
+        <ellipse cx="127" cy="108" rx="6.5" ry="3.8" fill="#f9a8d4" opacity="0.95" />
+        <path d="M94 107 Q100 113 106 107" stroke="#2e1065" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
 ];
 
 // The pals in the home page's row, in PALS order. The row is full: pals
@@ -573,9 +656,9 @@ function drawing(pal, page) {
   const svg = document.createElementNS(SVG, 'svg');
   svg.setAttribute('viewBox', pal.frames[page]);
   svg.innerHTML = pal.art;
-  // A flagellum (Mona's, Vi's) and Elia's body wiggle with SVG's own
-  // <animate> on the home page, and in the dish while she swims (see rod.js).
-  // They stay still on the picker, and for anyone who has asked for less
+  // A flagellum (Mona's, Vi's), Elia's body and Rebecca's sparks move with
+  // SVG's own <animate> on the home page, and in the dish while she swims
+  // (see rod.js). They stay still on the picker, and for anyone who has asked for less
   // motion (CSS can't pause <animate>).
   const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
   if (page === 'picker' || reduced) {

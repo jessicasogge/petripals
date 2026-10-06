@@ -497,6 +497,16 @@ body {
   background: rgba(150, 190, 120, 0.3);
 }
 
+.rebecca {
+  background: rgba(178, 126, 224, 0.35);
+}
+
+/* On a tile she's small, so only the sparks at the tips of her nanowires
+   show: the bursts along them would crowd the wires. */
+.pal-icon .burst {
+  display: none;
+}
+
 .pick-btn {
   margin-top: 0.75rem;
   padding: 0.7rem 1rem;
