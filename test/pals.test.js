@@ -5,7 +5,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { SPECIES } from '../public/game/config.js';
+import { SPECIES, TUMBLE } from '../public/game/config.js';
 import { plainText } from '../public/game/italics.js';
 import { dishPal, HOME_PALS, homePal, inRandomOrder, PAGE_SIZE, palById, PALS, palTile, pickerPages } from '../public/game/pals.js';
 
@@ -321,6 +321,24 @@ describe('the pages', () => {
     expect(name.style.color).toBe(expected.style.color);
     expect(document.title).toBe('PetriPals | Coco | Choose a Mode');
     expect(document.querySelector('.mode-mixed').getAttribute('href')).toBe('./choose-rivals.html?pal=coco');
+  });
+
+  it('the mode page links a pal who swims to run & tumble', async () => {
+    await open('choose-mode.html', 'game/choose-mode.js', '?pal=sallie');
+    expect(document.querySelector('.mode-tumble').getAttribute('href')).toBe('./petri-dish.html?pal=sallie&mode=tumble');
+    expect(document.querySelector('.mode-note').hidden).toBe(true);
+  });
+
+  it("the mode page says why a pal who can't swim can't run & tumble", async () => {
+    await open('choose-mode.html', 'game/choose-mode.js', '?pal=goldie');
+    expect(document.querySelector('.mode-tumble')).toBeNull();
+    const note = document.querySelector('.mode-note');
+    expect(note.hidden).toBe(false);
+    expect(note.textContent).toBe("Goldie has no flagella, so she can't swim. Pick a pal who swims to play!");
+  });
+
+  it('the pals who run & tumble are the ones that swim: every pal drawn with a flagellum, plus Ceres and Elia', () => {
+    expect([...TUMBLE.SWIMMERS].sort()).toEqual([...SWIMMERS, 'ceres', 'elia'].sort());
   });
 
   it('the mode page sends an unknown pal back to the picker', async () => {

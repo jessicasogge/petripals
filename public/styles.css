@@ -608,6 +608,13 @@ body {
   line-height: 1.45;
 }
 
+/* Run & tumble, for a pal who can't swim: why there's no button. */
+.mode-note {
+  margin-top: auto;
+  font-weight: 700;
+  color: #64748b;
+}
+
 /* Picking rivals before a mixed culture race (game/choose-rivals.js): a
    tile for every other pal, tapped on and off, up to three. */
 .rivals-status {
@@ -1018,6 +1025,38 @@ body {
    a dish full of 64 cells smooth. */
 .pal-mover.offspring .dish-pal {
   animation: none;
+}
+
+/* Run & tumble (game/tumble.js): a tumble spins her on the spot. */
+.pal-mover.tumbling .dish-pal {
+  animation: tumble 0.35s linear;
+}
+
+@keyframes tumble {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Each fleck's sugar soaks into the agar around it, so the food you're
+   sniffing for has a faint cloud of smell. */
+.tumble-mode .nutrient {
+  box-shadow: 0 0 0 1px rgba(19, 78, 74, 0.25), 0 0 1.6rem 1.1rem hsl(var(--hue, 20) 85% 60% / 0.22);
+}
+
+/* Her sense of smell, under the counter. */
+.sense {
+  margin: 0.35rem 0 0;
+  min-height: 1.5em;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.sense[data-feeling='sweeter'] {
+  color: #15803d;
+}
+
+.sense[data-feeling='fainter'] {
+  color: #b45309;
 }
 
 .cell-count {

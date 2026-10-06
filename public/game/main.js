@@ -3,8 +3,9 @@
 //   petri-dish.html?pal=mona&level=2    classic, level 2
 //   petri-dish.html?pal=mona&mode=mixed mixed culture against a random rival
 //                                       (or &rivals=vi,elia for up to three)
+//   petri-dish.html?pal=mona&mode=tumble run & tumble (only pals who swim)
 import { antibioticsFor, placeAntibiotics } from './antibiotic.js';
-import { LEVELS, MIXED, raceTarget, SPECIES } from './config.js';
+import { LEVELS, MIXED, raceTarget, SPECIES, TUMBLE } from './config.js';
 import { playGame } from './game.js';
 import { speciesName } from './italics.js';
 import { pageReady, watchLoading } from './loading.js';
@@ -13,6 +14,7 @@ import { dishPal, PALS } from './pals.js';
 import { playRace } from './race.js';
 import { listOf, rivalsFor } from './rivals.js';
 import { watchInputMode } from './touch.js';
+import { playTumble } from './tumble.js';
 
 // Show touch or arrow-key directions, whichever fits the device.
 watchInputMode();
@@ -37,8 +39,12 @@ const drawingOf = (name) => [...document.querySelectorAll('.dish-pal')].find((el
 if (!pal) {
   // No pal (or an unknown one) in the URL: send them back to choose.
   window.location.replace('./pal-picker.html');
+} else if (params.get('mode') === 'tumble' && !TUMBLE.SWIMMERS.includes(choice)) {
+  // She can't swim, so she can't run and tumble: back to choosing a mode.
+  window.location.replace(`./choose-mode.html?pal=${choice}`);
 } else {
   if (params.get('mode') === 'mixed') startMixed();
+  else if (params.get('mode') === 'tumble') startTumble();
   else startClassic();
   // The dish is set up: take the loading card away.
   pageReady();
@@ -95,6 +101,30 @@ function startMixed() {
 
   const nutrients = scatterNutrients({ count: MIXED.NUTRIENTS_PER_PAL * (rivals.length + 1) });
   playRace({ you: { svg: pal, species }, rivals, nutrients, target });
+}
+
+function startTumble() {
+  pal.removeAttribute('hidden');
+  const species = SPECIES[pal.dataset.pal];
+  document.title = `PetriPals | ${pal.dataset.name} | Run & Tumble`;
+  document.body.classList.add('tumble-mode');
+  const title = document.querySelector('.pal-name');
+  title.textContent = pal.dataset.name;
+  title.style.color = species.color;
+  document.querySelector('.species-name').replaceChildren(...speciesName(species.scientific));
+
+  document.querySelector('.how-to-play').replaceChildren(
+    `No steering! ${pal.dataset.name} swims straight ahead on her own. `,
+    // Tap or key wording, whichever fits the device (see styles.css).
+    wording('for-keys', 'Press the space bar'),
+    wording('for-touch', 'Tap the dish'),
+    ' to make her tumble and swim off a random new way.',
+    document.createElement('br'),
+    `Follow your nose: when the sugar smells sweeter, keep going; when it fades, tumble! Grow to ${TUMBLE.TARGET} cells in as few tumbles as you can.`,
+  );
+
+  const nutrients = scatterNutrients({ count: TUMBLE.NUTRIENTS });
+  playTumble({ you: { svg: pal, species }, nutrients, target: TUMBLE.TARGET });
 }
 
 // Lists of nodes joined like listOf: "A", "A and B", "A, B and C".

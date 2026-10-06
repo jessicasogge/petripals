@@ -6,11 +6,12 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { LEVELS, MIXED, SPECIES } from '../public/game/config.js';
+import { LEVELS, MIXED, SPECIES, TUMBLE } from '../public/game/config.js';
 
 // Don't run the real game loop; just record how the game was started.
 vi.mock('../public/game/game.js', () => ({ playGame: vi.fn() }));
 vi.mock('../public/game/race.js', () => ({ playRace: vi.fn() }));
+vi.mock('../public/game/tumble.js', () => ({ playTumble: vi.fn() }));
 // The real nutrients, watched so a test can see how many were asked for.
 vi.mock('../public/game/nutrients.js', async (original) => {
   const real = await original();
@@ -200,5 +201,40 @@ describe('mixed culture mode', () => {
     expect(document.querySelector('.species').textContent).toBe('Pseudomonas aeruginosa vs. Vibrio cholerae');
     expect(document.title).toBe('PetriPals | Mona vs. Vi');
     expect(document.querySelector('.how-to-play').textContent).toMatch(/Race Vi to 64 cells/);
+  });
+});
+
+describe('run & tumble mode', () => {
+  async function openTumble(search) {
+    await open(search);
+    const { playTumble } = await import('../public/game/tumble.js');
+    return playTumble;
+  }
+
+  it.each(TUMBLE.SWIMMERS)('starts run & tumble for %s, who swims', async (pal) => {
+    const playTumble = await openTumble(`?pal=${pal}&mode=tumble`);
+    expect(playTumble).toHaveBeenCalledTimes(1);
+    const [{ you, nutrients, target }] = playTumble.mock.calls[0];
+    expect(you.svg.dataset.pal).toBe(pal);
+    expect(you.species).toEqual(SPECIES[pal]);
+    expect(nutrients.positions()).toHaveLength(TUMBLE.NUTRIENTS);
+    expect(target).toBe(TUMBLE.TARGET);
+    expect(document.body.classList).toContain('tumble-mode');
+  });
+
+  it('names the mode in the tab and explains how to play', async () => {
+    await openTumble('?pal=sara&mode=tumble');
+    expect(document.title).toBe('PetriPals | Sara | Run & Tumble');
+    expect(document.querySelector('.pal-name').textContent).toBe('Sara');
+    const howTo = document.querySelector('.how-to-play');
+    expect(howTo.querySelector('.for-keys').textContent).toBe('Press the space bar');
+    expect(howTo.querySelector('.for-touch').textContent).toBe('Tap the dish');
+    expect(howTo.textContent).toContain(`Grow to ${TUMBLE.TARGET} cells`);
+  });
+
+  it("sends a pal who can't swim back to choosing a mode", async () => {
+    const playTumble = await openTumble('?pal=goldie&mode=tumble');
+    expect(location.replace).toHaveBeenCalledWith('./choose-mode.html?pal=goldie');
+    expect(playTumble).not.toHaveBeenCalled();
   });
 });
