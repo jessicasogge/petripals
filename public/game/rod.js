@@ -69,7 +69,7 @@ export function rodGroup({ mover, svg, species, isPlayer }) {
   };
   group.coast = coaster(group);
 
-  // A flagellum (Mona's, Vi's), Elia's wavy body or Rebecca's sparks move
+  // A flagellum (Mona's, Vi's), Elia's wavy body or Electra's sparks move
   // only while the rod is swimming. They keep going for a few frames after a
   // stop, so they don't flicker on and off between key presses, and ignore the
   // tiny nudges of settled cells.

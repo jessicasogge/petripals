@@ -350,11 +350,11 @@ describe("Ivy, who can't swim", () => {
   });
 });
 
-describe('Rebecca, covered in nanowires', () => {
+describe('Electra, covered in nanowires', () => {
   afterEach(() => vi.unstubAllGlobals());
   const art = () => {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.innerHTML = palById('rebecca').art;
+    svg.innerHTML = palById('electra').art;
     return svg;
   };
   const points = (path) => path.getAttribute('d').match(/-?[\d.]+/g).map(Number);
@@ -391,10 +391,10 @@ describe('Rebecca, covered in nanowires', () => {
 
   it('flashes on the home page and in the dish, but holds still on the picker', () => {
     vi.stubGlobal('matchMedia', () => ({ matches: false }));
-    const rebecca = palById('rebecca');
-    expect(homePal(rebecca).querySelector('.spark animate')).not.toBeNull();
-    expect(dishPal(rebecca).querySelector('.spark animate')).not.toBeNull();
-    expect(palTile(rebecca).querySelector('.spark animate')).toBeNull();
+    const electra = palById('electra');
+    expect(homePal(electra).querySelector('.spark animate')).not.toBeNull();
+    expect(dishPal(electra).querySelector('.spark animate')).not.toBeNull();
+    expect(palTile(electra).querySelector('.spark animate')).toBeNull();
   });
 
   it('shows only the tip sparks on a small tile, so the wires stay clear', () => {

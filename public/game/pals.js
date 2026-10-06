@@ -126,10 +126,10 @@ const ivyRod = (x, y, angle, w, h) =>
   `<rect x="${x - w / 2}" y="${y - h / 2}" width="${w}" height="${h}" rx="${(h * 0.36).toFixed(1)}" fill="#b8d8a0" stroke="#4d6b3c" stroke-width="4" />` +
   `<circle cx="${x - w / 2 + 9}" cy="${y - h / 2 + 8}" r="3.2" fill="#f0f7e8" /></g>`;
 
-// Rebecca's nanowires: 16 conductive filaments, evenly spaced all around her
+// Electra's nanowires: 16 conductive filaments, evenly spaced all around her
 // and all the same length. Each starts on her outline at [x, y] and heads
 // straight out from it at `angle` degrees.
-const REBECCA_WIRES = [
+const ELECTRA_WIRES = [
   [66, 72, -90],
   [89, 72, -90],
   [111, 72, -90],
@@ -172,7 +172,7 @@ function spark(x, y, r, delay, className) {
     `<animate attributeName="opacity" values="0.35;1;0.35;0.35" keyTimes="0;0.2;0.6;1" dur="1.2s" begin="${delay}s" repeatCount="indefinite" /></path>`
   );
 }
-const REBECCA_NANOWIRES = REBECCA_WIRES.map((wire, i) => {
+const ELECTRA_NANOWIRES = ELECTRA_WIRES.map((wire, i) => {
   const points = wirePoints(wire, i);
   const d = points.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join(' L');
   return (
@@ -589,16 +589,16 @@ export const PALS = [
       </g>
     `,
   },
-  // Rebecca: Geobacter sulfurreducens, a grape-purple rod covered in electric nanowires
+  // Electra: Geobacter sulfurreducens, a grape-purple rod covered in electric nanowires
   {
-    id: 'rebecca',
-    name: 'Rebecca',
+    id: 'electra',
+    name: 'Electra',
     looks: 'a grape-purple Geobacter sulfurreducens rod covered in sparking nanowires',
     motion: 'bob',
     frames: { home: '-11 -9 222 222', picker: '-5 -3 210 210', dish: '-5 -3 210 210' },
     art: `
       <!-- nanowires all around her, with yellow bursts running out along them (no flagella: the usual lab strain doesn't make any) -->
-      ${REBECCA_NANOWIRES}
+      ${ELECTRA_NANOWIRES}
       <rect x="28" y="74" width="144" height="56" rx="28" fill="#b27ee0" stroke="#4c1d95" stroke-width="4" />
       <circle cx="148" cy="87" r="4" fill="#f5ecff" />
       <circle cx="52" cy="119" r="3" fill="#f5ecff" />
@@ -653,7 +653,7 @@ function drawing(pal, page) {
   const svg = document.createElementNS(SVG, 'svg');
   svg.setAttribute('viewBox', pal.frames[page]);
   svg.innerHTML = pal.art;
-  // A flagellum (Mona's, Vi's), Elia's body and Rebecca's sparks move with
+  // A flagellum (Mona's, Vi's), Elia's body and Electra's sparks move with
   // SVG's own <animate> on the home page, and in the dish while she swims
   // (see rod.js). They stay still on the picker, and for anyone who has asked for less
   // motion (CSS can't pause <animate>).
