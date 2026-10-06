@@ -25,7 +25,7 @@ No antibiotics this time. You share the plate with one to three rival pals steer
 
 ### Run & tumble
 
-No steering this time. Your pal swims in a straight line on her own, and all you can do is make her **tumble**: tap the dish (or press the space bar or an arrow key) and she spins on the spot, then sets off a random new way. She bounces off the rim. Tumble when she's heading the wrong way, and grow to 16 cells in as few tumbles as you can.
+No steering this time. Your pal swims in a straight line on her own, and all you can do is make her **tumble**: tap the dish (or press the space bar or an arrow key) and she spins on the spot, then sets off a random new way. She bounces off the rim. Tumble when she's heading the wrong way, and grow to 64 cells in as few tumbles as you can.
 
 ### Who’s That Pal?
 
