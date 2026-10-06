@@ -288,3 +288,12 @@ describe('winning', () => {
     expect(location.href).toBe('./choose-mode.html?pal=mona');
   });
 });
+
+describe('the tumble spin', () => {
+  it("spins her around her middle, even Goldie, whose squish pivots from her bottom", () => {
+    const css = readFileSync(resolve(process.cwd(), 'public/styles.css'), 'utf8');
+    const rule = css.match(/\.pal-mover\.tumbling \.dish-pal \{([^}]*)\}/)[1];
+    expect(rule).toMatch(/animation: tumble /);
+    expect(rule).toMatch(/transform-origin: center;/);
+  });
+});

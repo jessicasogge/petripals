@@ -1020,9 +1020,12 @@ body {
   animation: none;
 }
 
-/* Petri Picnic (game/tumble.js): a tumble spins her on the spot. */
+/* Petri Picnic (game/tumble.js): a tumble spins her on the spot, around her
+   middle (Goldie's squish pivots from her bottom, which would swing her
+   around in a loop instead). */
 .pal-mover.tumbling .dish-pal {
   animation: tumble 0.35s linear;
+  transform-origin: center;
 }
 
 @keyframes tumble {
