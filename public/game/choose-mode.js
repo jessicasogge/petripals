@@ -1,6 +1,6 @@
 // The mode screen after picking a pal (choose-mode.html?pal=mona): shows the
 // pal and links to classic for her, to picking rivals for mixed culture, or
-// to Petri Patrol.
+// to Petri Picnic.
 import { SPECIES } from './config.js';
 import { pageReady, watchLoading } from './loading.js';
 import { palById, palTile } from './pals.js';

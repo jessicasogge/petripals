@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-// tumble.js runs Petri Patrol: your pal swims straight on her own and a
+// tumble.js runs Petri Picnic: your pal swims straight on her own and a
 // tap or key makes her tumble a random new way. Like race.test.js, these
 // tests load the real petri dish page into jsdom and stand in for the colony
 // and effects, so each test can say exactly what happens and check what the
@@ -58,7 +58,7 @@ function drawing(pal) {
   return svg;
 }
 
-// Start Petri Patrol with Mona (or `me`) and return the pop-up.
+// Start Petri Picnic with Mona (or `me`) and return the pop-up.
 function play(me = 'mona') {
   playTumble({ you: { svg: drawing(me), species: SPECIES[me] }, nutrients, target: TARGET });
   return document.querySelector('.win-banner');
@@ -252,7 +252,7 @@ describe('winning', () => {
     expect(banner.hidden).toBe(false);
     expect(banner.querySelector('h2').textContent).toBe('You found the food!');
     expect(banner.querySelector('.win-message').textContent)
-      .toBe(`Your colony reached ${TARGET} cells with 3 tumbles. Can you do it in fewer?`);
+      .toBe(`Your colony reached ${TARGET} cells with 3 tumbles.`);
     expect(SPECIES.mona.facts).toContain(document.querySelector('.fun-fact-text').textContent);
     expect(track).toHaveBeenCalledWith('tumble/won/mona', `Mona grew ${TARGET} cells in 3 tumbles`);
   });

@@ -323,7 +323,7 @@ describe('the pages', () => {
     expect(document.querySelector('.mode-mixed').getAttribute('href')).toBe('./choose-rivals.html?pal=coco');
   });
 
-  it.each(Object.keys(SPECIES))('the mode page links %s to Petri Patrol', async (id) => {
+  it.each(Object.keys(SPECIES))('the mode page links %s to Petri Picnic', async (id) => {
     await open('choose-mode.html', 'game/choose-mode.js', `?pal=${id}`);
     expect(document.querySelector('.mode-tumble').getAttribute('href')).toBe(`./petri-dish.html?pal=${id}&mode=tumble`);
   });

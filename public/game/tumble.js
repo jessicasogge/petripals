@@ -1,4 +1,4 @@
-// Petri Patrol: no steering. Your pal swims in a straight line on her
+// Petri Picnic: no steering. Your pal swims in a straight line on her
 // own (a "run"), and a tap, or the space bar or an arrow key, makes her
 // tumble: she spins on the spot and sets off a random new way. That's how
 // real swimming bacteria find food (chemotaxis): they keep running while the
@@ -149,7 +149,7 @@ export function playTumble({ you, nutrients, target = TUMBLE.TARGET }) {
       const banner = document.querySelector('.win-banner');
       banner.querySelector('h2').textContent = 'You found the food!';
       banner.querySelector('.win-message').textContent =
-        `Your colony reached ${target} cells with ${tumbles} ${tumbles === 1 ? 'tumble' : 'tumbles'}. Can you do it in fewer?`;
+        `Your colony reached ${target} cells with ${tumbles} ${tumbles === 1 ? 'tumble' : 'tumbles'}.`;
       banner.querySelector('.play-again').textContent = 'Play again';
       const modes = banner.querySelector('.start-over');
       modes.textContent = 'Choose a mode';

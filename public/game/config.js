@@ -656,7 +656,7 @@ export const MIXED = {
   RIVAL_START_MS: 1000, // the rival waits this long before it starts, so you get a head start
 };
 
-// Petri Patrol (game/tumble.js): your pal swims straight on her own,
+// Petri Picnic (game/tumble.js): your pal swims straight on her own,
 // and all you can do is make her tumble to face a random new way, the way
 // real swimming bacteria hunt for food.
 export const TUMBLE = {

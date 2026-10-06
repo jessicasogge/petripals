@@ -1,6 +1,6 @@
 # PetriPals 🧫
 
-A cute microbiology game for the browser. Pick a bacterial pal and eat nutrients to grow your colony. In **classic** mode, steer clear of the antibiotic disks and their zones of inhibition. In **mixed culture** mode, race up to three rival pals to take over the plate. In **Petri Patrol**, there's no steering: sniff out food the way real swimming bacteria do.
+A cute microbiology game for the browser. Pick a bacterial pal and eat nutrients to grow your colony. In **classic** mode, steer clear of the antibiotic disks and their zones of inhibition. In **mixed culture** mode, race up to three rival pals to take over the plate. In **Petri Picnic**, there's no steering: sniff out food the way real swimming bacteria do.
 
 **[▶ Play PetriPals](https://jessicasogge.github.io/petripals/)**: works on computers, phones and tablets.
 
@@ -9,7 +9,7 @@ A cute microbiology game for the browser. Pick a bacterial pal and eat nutrients
 ## How to play
 
 1. **Pick a pal.** Each one is a real bacterium, drawn as a cartoon.
-2. **Choose a mode:** classic, mixed culture, or Petri Patrol. For mixed culture, pick up to three rivals, or tap **Surprise me** for one at random.
+2. **Choose a mode:** classic, mixed culture, or Petri Picnic. For mixed culture, pick up to three rivals, or tap **Surprise me** for one at random.
 3. **Swim around the dish.** Use the arrow keys, or on a touch screen, drag your pal like a trackpad: touch anywhere on the dish and slide your finger, and she moves the same way. Your finger never hides her, and nothing moves when you touch down. Lift and touch again to keep going.
 4. **Eat nutrients to divide.** Every cell that eats a nutrient divides in two, just like binary fission.
 
@@ -23,9 +23,9 @@ There are seven levels. Each one adds another antibiotic disk and doubles the co
 
 No antibiotics this time. You share the plate with one to three rival pals steered by the computer. Pick them yourself (any pals but yours, each once; once there are more than 12 to choose from, the rival screen offers a random 12), or tap **Surprise me** for one at random. Against one rival, the **first colony to reach 64 cells wins**; against two or three, the dish fills up fast, so it's the **first to 32**. Each pal in the dish adds more nutrients, and **Race again** takes you back to pick your rivals. You get a one-second head start, and the rivals swim a little slower than you, but they're quick to spot the nearest nutrient, so grab them first!
 
-### Petri Patrol
+### Petri Picnic
 
-No steering this time. Your pal swims in a straight line on her own, and all you can do is make her **tumble**: tap the dish (or press the space bar or an arrow key) and she spins on the spot, then sets off a random new way. She bounces off the rim. Tumble when she's heading the wrong way, and grow to 128 cells in as few tumbles as you can.
+No steering this time. Your pal swims in a straight line on her own, and all you can do is make her **tumble**: tap the dish (or press the space bar or an arrow key) and she spins on the spot, then sets off a random new way. She bounces off the rim. Tumble when she's heading the wrong way, and grow to 128 cells. No rush, and no way to lose.
 
 ### Who’s That Pal?
 
@@ -66,7 +66,7 @@ The game is loosely based on real lab microbiology:
 - **Ana's Y shape** is in her name: *bifidus* means "split in two," and bifidobacteria are rods that branch into a Y. She's one of the "good" gut bacteria (a probiotic), and her name is a nod to "anaerobe," since oxygen is bad for her.
 - **Penny's glasses** are a nod to history: pneumococcus is the bacterium that helped show DNA carries genes, in experiments by Frederick Griffith (1928) and by Oswald Avery, Colin MacLeod and Maclyn McCarty (1944).
 - **The antibiotic disks** are modeled on the Kirby-Bauer disk test. Each disk is a drug commonly used against that pal's species, labeled with its standard disk code (CIP for ciprofloxacin, P for penicillin, and so on).
-- **Run and tumble** is how swimming bacteria find food (chemotaxis). They're too small to tell which side of them the sugar is stronger on, so instead they compare how sweet it smells now with a moment ago, and keep running while it's getting sweeter and tumble sooner when it isn't. Tumbling at random sounds aimless, but runs that are going the right way last longer, so the cell drifts toward the food. Pals with flagella all over (Sallie, Sara, Terra, Lissie, Ceres) really do tumble, like *E. coli*: their flagella fly apart and the cell spins. Mona and Vi, with one flagellum, mostly back up and flick to a new direction instead, and Elia flexes her corkscrew. Pals without flagella (Goldie, Scarlett, Penny, Coco, Ana, Ivy) can't swim at all in real life, but in Petri Patrol every pal swims and tumbles, as they all swim in the other modes.
+- **Run and tumble** is how swimming bacteria find food (chemotaxis). They're too small to tell which side of them the sugar is stronger on, so instead they compare how sweet it smells now with a moment ago, and keep running while it's getting sweeter and tumble sooner when it isn't. Tumbling at random sounds aimless, but runs that are going the right way last longer, so the cell drifts toward the food. Pals with flagella all over (Sallie, Sara, Terra, Lissie, Ceres) really do tumble, like *E. coli*: their flagella fly apart and the cell spins. Mona and Vi, with one flagellum, mostly back up and flick to a new direction instead, and Elia flexes her corkscrew. Pals without flagella (Goldie, Scarlett, Penny, Coco, Ana, Ivy) can't swim at all in real life, but in Petri Picnic every pal swims and tumbles, as they all swim in the other modes.
 - **A mixed culture** is a plate growing more than one species at once, all competing for the same nutrients. That's the idea behind the mixed culture race.
 - **The zones spread** because the drug diffuses outward from the disk into the agar. Diffusion is quick at first and then slows down, so each zone widens fast and then creeps out to its full size. On a real plate this happens over hours of incubation; the game speeds it up to a few seconds.
 - **The zones of inhibition** are sized from ballpark zone diameters a lab would measure for a susceptible strain of that species, scaled down to fit the dish. A bigger zone means the drug works better. *Borrelia* can't be grown for disk tests, so Elia's zones are made up from how well each drug works on her, and the same goes for Ana's and Ceres's (there are no standard disk sizes for bifidobacteria or *Bacillus*). Bifidobacteria are naturally resistant to gentamicin, so Ana's gentamicin disk has **no zone at all**: you can swim right up to it, but don't touch the disk itself. Ceres never gets a penicillin disk, because *B. cereus* makes beta-lactamases, enzymes that break penicillin and its relatives down.
@@ -97,11 +97,11 @@ The tests use [Vitest](https://vitest.dev/). Most of the game logic runs in [jsd
 |---|---|
 | `public/index.html` | Home page |
 | `public/pal-picker.html` | Pick a pal |
-| `public/choose-mode.html` | Choose classic, mixed culture or Petri Patrol |
+| `public/choose-mode.html` | Choose classic, mixed culture or Petri Picnic |
 | `public/choose-rivals.html` | Pick up to three rivals for mixed culture, or Surprise me |
 | `public/petri-dish.html` | The game, in any mode |
 | `public/whos-that-pal.html` | Who’s That Pal?, a quiz: which pal is this fact about? |
-| `public/game/` | Game code: classic mode (`game.js`), Petri Patrol (`tumble.js`), mixed culture mode (`race.js`, with each rival's steering in `rival.js` and who's racing in `rivals.js`, picked on `choose-rivals.js`), what both share (a colony eating and dividing in `colony.js`, steering in `keyboard.js` and `touch.js`), how the pals grow (`rod.js`, `coccus.js`), antibiotics (`antibiotic.js`), nutrients, physics, settings and fun facts (`config.js`), the fun-fact pop-up (`facts.js`, with italics for scientific names from `italics.js`), the picker's microscope mode (`stain.js`), the win confetti (`spores.js`), Who’s That Pal? (`whos-that-pal.js`, with the facts' "this pal" swap in `guess.js` and the facts it asks about in `quiz-facts.js`), and a little surprise on the home page (`split.js`) |
+| `public/game/` | Game code: classic mode (`game.js`), Petri Picnic (`tumble.js`), mixed culture mode (`race.js`, with each rival's steering in `rival.js` and who's racing in `rivals.js`, picked on `choose-rivals.js`), what both share (a colony eating and dividing in `colony.js`, steering in `keyboard.js` and `touch.js`), how the pals grow (`rod.js`, `coccus.js`), antibiotics (`antibiotic.js`), nutrients, physics, settings and fun facts (`config.js`), the fun-fact pop-up (`facts.js`, with italics for scientific names from `italics.js`), the picker's microscope mode (`stain.js`), the win confetti (`spores.js`), Who’s That Pal? (`whos-that-pal.js`, with the facts' "this pal" swap in `guess.js` and the facts it asks about in `quiz-facts.js`), and a little surprise on the home page (`split.js`) |
 | `public/game/pals.js` | Every pal's name and drawing, in one place. All the pages draw the pals from here, in the order listed (except the picker, which shuffles them each visit), eight to a page (`PAGE_SIZE`). To add a pal, see the notes at the top. |
 | `test/` | Tests |
 | `src/index.ts` | Small Express server for local development |

@@ -3,7 +3,7 @@
 //   petri-dish.html?pal=mona&level=2    classic, level 2
 //   petri-dish.html?pal=mona&mode=mixed mixed culture against a random rival
 //                                       (or &rivals=vi,elia for up to three)
-//   petri-dish.html?pal=mona&mode=tumble Petri Patrol
+//   petri-dish.html?pal=mona&mode=tumble Petri Picnic
 import { antibioticsFor, placeAntibiotics } from './antibiotic.js';
 import { LEVELS, MIXED, raceTarget, SPECIES, TUMBLE } from './config.js';
 import { playGame } from './game.js';
@@ -103,7 +103,7 @@ function startMixed() {
 function startTumble() {
   pal.removeAttribute('hidden');
   const species = SPECIES[pal.dataset.pal];
-  document.title = `PetriPals | ${pal.dataset.name} | Petri Patrol`;
+  document.title = `PetriPals | ${pal.dataset.name} | Petri Picnic`;
   document.body.classList.add('tumble-mode');
   const title = document.querySelector('.pal-name');
   title.textContent = pal.dataset.name;
@@ -117,7 +117,7 @@ function startTumble() {
     wording('for-touch', 'Tap the dish'),
     ' to make her tumble and swim off a random new way.',
     document.createElement('br'),
-    `Tumble when she's heading the wrong way, and grow to ${TUMBLE.TARGET} cells in as few tumbles as you can.`,
+    `Tumble when she's heading the wrong way, and grow to ${TUMBLE.TARGET} cells.`,
   );
 
   const nutrients = scatterNutrients({ count: TUMBLE.NUTRIENTS });
