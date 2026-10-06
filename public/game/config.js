@@ -679,9 +679,14 @@ export const GAME = {
   SNAP_REACH: 0.3,
   NUTRIENTS_PER_DIVISION: 1, // nutrients the player eats before dividing
   SPEED: 0.8, // player speed, as a fraction of the dish radius per second
-  // With touch steering, how close to the finger counts as there (so she
+  // Steering with a mouse, how close to the pointer counts as there (so she
   // settles instead of jittering on the spot), as a fraction of the dish radius.
   ARRIVE: 0.01,
+  // Dragging her with a finger, she moves as far as the finger does, up to
+  // DRAG_SPEED (a fraction of the dish radius per second) so she keeps up
+  // with ordinary dragging. Even that fast she moves less per frame than an
+  // antibiotic disk is wide, so a swipe can't skip over a zone.
+  DRAG_SPEED: 2,
   // How hard a new group pushes away when it splits off. It slides about
   // BURST_SPEED / SETTLE_RATE of the dish radius (half that for cocci) before
   // it stops: far enough to see, short enough not to slide into a zone easily.
