@@ -532,6 +532,12 @@ body {
 
 .dish-shell {
   width: min(760px, 100%);
+  /* Nothing on the game page needs selecting, and on an iPhone a finger
+     that slips off the dish onto the words around it would otherwise bring
+     up the text magnifier mid-game. */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
 /* The agar keeps itself square (below) and the glass rim wraps around it.
@@ -544,6 +550,13 @@ body {
   margin: 0 auto;
   padding: 18px;
   border-radius: 50%;
+  /* A finger drags the pal from anywhere on the dish, rim included
+     (game/touch.js): don't scroll or zoom the page, select text, or pop up
+     the magnifier or long-press menu instead. */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
   /* glass rim */
   background: rgba(255, 255, 255, 0.55);
   border: 3px solid rgba(15, 118, 110, 0.35);

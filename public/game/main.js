@@ -88,7 +88,7 @@ function startMixed() {
     `Race ${listOf(rivalNames)} to ${target} cells! `,
     // Arrow-key or touch wording, whichever fits the device (see styles.css).
     wording('for-keys', 'Use the arrow keys to eat nutrients.'),
-    wording('for-touch', 'Touch and hold where you want to swim to eat nutrients.'),
+    wording('for-touch', 'Touch the dish and slide your finger to eat nutrients.'),
     document.createElement('br'),
     `Any cell that eats a nutrient divides, so grab them before ${rivals.length > 1 ? 'your rivals do' : 'the rival does'}!`,
   );
