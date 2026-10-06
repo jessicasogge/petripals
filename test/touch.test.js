@@ -241,6 +241,21 @@ describe('touchSteering with a finger', () => {
     expect(steering.drag()).toEqual([0, 0]);
   });
 
+  it('drags from the rim too, measuring from the agar', () => {
+    document.body.innerHTML = '<div class="petri-dish"><div class="agar"></div></div>';
+    const dish = document.querySelector('.petri-dish');
+    const inner = document.querySelector('.agar');
+    inner.getBoundingClientRect = () => ({ left: 100, top: 100, width: 200, height: 200 });
+    const whole = touchSteering(inner, dish);
+    dish.dispatchEvent(pointer('pointerdown', { x: 95, y: 200 })); // on the rim, just left of the agar
+    dish.dispatchEvent(pointer('pointermove', { x: 105, y: 190 }));
+    expect(whole.drag()).toEqual([10, -10]);
+    dish.dispatchEvent(pointer('pointerdown', { id: 3, x: 95, y: 200, kind: 'mouse' }));
+    dish.dispatchEvent(pointer('pointerup'));
+    dish.dispatchEvent(pointer('pointerdown', { id: 4, x: 95, y: 200, kind: 'mouse' }));
+    expect(whole.target()).toEqual([-105, 0]);
+  });
+
   it('stops dragging when the game ends', () => {
     agar.dispatchEvent(pointer('pointerdown', { x: 260, y: 250 }));
     agar.dispatchEvent(pointer('pointermove', { x: 270, y: 250 }));
@@ -314,6 +329,16 @@ describe('the directions on the dish page', () => {
 
   it('picks touch wording on a touch screen even before any script runs', () => {
     expect(css).toMatch(/@media \(pointer: coarse\)\s*\{[^@]*\.for-keys\s*\{\s*display: none;/);
+  });
+
+  it("doesn't let a finger near the dish's edge select text or bring up the magnifier", () => {
+    const dish = css.match(/\n\.petri-dish \{([^}]*)\}/)[1];
+    expect(dish).toMatch(/touch-action: none/);
+    expect(dish).toMatch(/-webkit-user-select: none/);
+    expect(dish).toMatch(/-webkit-touch-callout: none/);
+    const shell = css.match(/\n\.dish-shell \{([^}]*)\}/)[1];
+    expect(shell).toMatch(/-webkit-user-select: none/);
+    expect(shell).toMatch(/-webkit-touch-callout: none/);
   });
 
   it("doesn't let touching the dish scroll or zoom the page", () => {

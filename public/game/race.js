@@ -60,8 +60,9 @@ export function playRace({ you, rivals, nutrients, target }) {
   });
 
   const keys = arrowKeys();
-  // On a touch screen (or with a mouse), touch and hold where to swim.
-  const touch = touchSteering(agar);
+  // Drag with a finger anywhere on the dish, rim included (or hold a mouse
+  // button where to swim).
+  const touch = touchSteering(agar, agar.closest('.petri-dish') ?? agar);
   let finished = false;
   let lastTime = null;
 

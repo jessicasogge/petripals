@@ -37,7 +37,11 @@ export function fromCenter(el, clientX, clientY) {
 // last call, as [dx, dy] px (and starts counting again from there); and
 // stop(), to ignore them from now on (after the game ends). A finger never
 // gives a target(), so she never heads for the spot it touched.
-export function touchSteering(agar) {
+//
+// It listens on `area`, the whole dish (the glass rim too, see main.js), so a
+// finger that lands near the edge still drags her instead of starting a
+// long-press on the page. Positions are still measured from the agar.
+export function touchSteering(agar, area = agar) {
   let pointer = null; // the id of the finger we're following
   let dragging = false;
   let last = null; // where a dragging finger was, on the screen
@@ -54,7 +58,7 @@ export function touchSteering(agar) {
     last = [event.clientX, event.clientY];
   };
 
-  agar.addEventListener('pointerdown', (event) => {
+  area.addEventListener('pointerdown', (event) => {
     if (stopped || !event.isPrimary || pointer !== null) return;
     pointer = event.pointerId;
     dragging = event.pointerType !== 'mouse';
@@ -62,10 +66,10 @@ export function touchSteering(agar) {
     moved = [0, 0];
     follow(event);
     // Keep following the finger even if it slides off the dish.
-    agar.setPointerCapture?.(event.pointerId);
+    area.setPointerCapture?.(event.pointerId);
     event.preventDefault(); // no text selection or long-press menu
   });
-  agar.addEventListener('pointermove', (event) => {
+  area.addEventListener('pointermove', (event) => {
     if (event.pointerId !== pointer) return;
     follow(event);
   });
@@ -75,9 +79,9 @@ export function touchSteering(agar) {
     target = null;
     moved = [0, 0];
   };
-  agar.addEventListener('pointerup', release);
-  agar.addEventListener('pointercancel', release);
-  agar.addEventListener('lostpointercapture', release);
+  area.addEventListener('pointerup', release);
+  area.addEventListener('pointercancel', release);
+  area.addEventListener('lostpointercapture', release);
 
   return {
     target: () => (stopped ? null : target),

@@ -36,8 +36,9 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
   // don't jump ahead after the tab was hidden for a while.
   let elapsed = 0;
   const keys = arrowKeys();
-  // On a touch screen (or with a mouse), touch and hold where to swim.
-  const touch = touchSteering(agar);
+  // Drag with a finger anywhere on the dish, rim included (or hold a mouse
+  // button where to swim).
+  const touch = touchSteering(agar, agar.closest('.petri-dish') ?? agar);
 
   // The pop-up's buttons: the main one goes to the next level, back to
   // level 1, or tries this level again; after a game over, "Start over" goes
