@@ -1,31 +1,24 @@
-// Every pal's drawing, in one place. The home page, the pal picker, the mode
-// page and the petri dish all draw the pals from here, so a change to how a
-// pal looks only has to be made once.
+// Shared pal drawings for the home page, picker, mode page and petri dish.
+// Listed in home-page order; the picker shuffles them.
 //
-// The list is in the order the pals appear on the home page (the picker
-// shuffles them).
 // Each pal has:
-//   id      her key, matching SPECIES in config.js and ?pal= in addresses
-//   name    what she's called
-//   looks   what a screen reader says after her name
-//   motion  her idle animation in styles.css (bob, squish, wobble or slither)
-//   frames  the part of the drawing each page shows (an SVG viewBox), so each
-//           page can frame her its own way: a little room around her on the
-//           home page, filling her tile on the picker, snug in the dish
-//   art     the drawing itself, in a 200 x 200 space. Wrap the face in
-//           <g class="face">: offspring in the dish hide it.
+//   id      key matching SPECIES in config.js and ?pal=
+//   name    display name
+//   looks   screen-reader description after her name
+//   motion  idle animation in styles.css: bob, squish, wobble or slither
+//   frames  per-page SVG viewBoxes: roomy on home, tile-filling in picker,
+//           snug in dish
+//   art     200 x 200 drawing; wrap the face in <g class="face"> so dish
+//           offspring can hide it
 //
-// To add a pal: add her to the end of this list and to SPECIES in config.js,
-// and give her tile a color in styles.css (.<id> next to .penny and the
-// others). The home page row is full, so new pals go in the picker only:
-// don't add them to HOME below.
+// To add a pal: append here and to SPECIES, then add a .<id> tile color
+// beside .penny in styles.css. New pals are picker-only; don't add to HOME.
 
 const SVG = 'http://www.w3.org/2000/svg';
 
-// Elia's corkscrew body is a wave along her length: 3½ waves from her tail
-// (x 33) to where it meets her head (x 166), 14 units high, a little smaller
-// over the last half-wave so her neck doesn't wobble. `phase` slides the wave
-// along her (2π is one whole wave).
+// Elia's body: 3.5 waves from tail (x 33) to head (x 166), 14 units high,
+// tapering over the last half-wave to steady her neck.
+// `phase` slides the wave along her; 2π is one full wave.
 const ELIA_TAIL = 33;
 const ELIA_NECK = 166;
 const ELIA_WAVE = 38; // one wave's length
@@ -41,11 +34,10 @@ function eliaBody(phase = 0) {
   }
   return `M${points.join(' L')}`;
 }
-// Her swimming: the wave travels from her head to her tail, the way a
-// spirochete's inner flagella push her forward. Played with SVG's own
-// <animate>, like Mona's and Vi's flagella, so in the dish it only runs
-// while she swims (rod.js), and not at all on the picker or for anyone who
-// has asked for less motion (drawing() below).
+
+// Head-to-tail swimming wave, like a spirochete's inner flagella.
+// Uses SVG <animate>, like Mona and Vi: runs only while swimming in the
+// dish (rod.js), never in the picker or with reduced motion (drawing() below).
 const ELIA_SWIM = '0.9s';
 const ELIA_STEPS = 8;
 const eliaPhases = Array.from({ length: ELIA_STEPS + 1 }, (_, i) => (2 * Math.PI * i) / ELIA_STEPS);
@@ -58,10 +50,10 @@ const eliaShine = (x) => {
     `<animate attributeName="cy" dur="${ELIA_SWIM}" repeatCount="indefinite" values="${eliaPhases.map(y).join(';')}" /></circle>`;
 };
 
-// Flagella all over the body (peritrichous), for Sallie, Terra, Lissie and Sara: each one
-// starts at (x, y) on her outline and heads off at `angle` degrees, `length`
-// long, waving 12 units to each side. Wiggled with SVG's own <animate>, like
-// Mona's and Vi's tails, each at its own speed so they don't move in lockstep.
+// Body-wide (peritrichous) flagella for Sallie, Terra, Lissie and Sara,
+// plus Astrid's swimmers' single tail. Each starts at (x, y), extends
+// `length` at `angle` degrees, and waves 12 units either side.
+// SVG <animate>, like Mona's and Vi's tails, gives each its own speed.
 const SPLINES = 'calcMode="spline" keyTimes="0;0.25;0.5;0.75;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"';
 function flagellum(stroke, x, y, angle, length, duration) {
   const a = (angle * Math.PI) / 180;
@@ -125,6 +117,12 @@ const ivyRod = (x, y, angle, w, h) =>
   `<g transform="rotate(${angle} ${x} ${y})">` +
   `<rect x="${x - w / 2}" y="${y - h / 2}" width="${w}" height="${h}" rx="${(h * 0.36).toFixed(1)}" fill="#b8d8a0" stroke="#4d6b3c" stroke-width="4" />` +
   `<circle cx="${x - w / 2 + 9}" cy="${y - h / 2 + 8}" r="3.2" fill="#f0f7e8" /></g>`;
+
+// Astrid's two stalks (prosthecae), from her sides near her back end out to
+// (x2, y2): an outline with a lighter middle, like the rest of her.
+const astridStalk = (x1, y1, x2, y2) =>
+  `<path d="M${x1} ${y1} L${x2} ${y2}" stroke="#1a4f9c" stroke-width="13" stroke-linecap="round" />` +
+  `<path d="M${x1} ${y1} L${x2} ${y2}" stroke="#5aa9f5" stroke-width="6" stroke-linecap="round" />`;
 
 export const PALS = [
   // Terra: Clostridium tetani, an olive rod with a round spore at one end (a "drumstick")
@@ -530,6 +528,41 @@ export const PALS = [
         <ellipse cx="102" cy="140" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
         <ellipse cx="146" cy="136" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
         <path d="M118 139 Q124 145 131 138" stroke="#2f4224" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
+  // Astrid: Asticcacaulis biprosthecum, an azure rod with two stalks near one end
+  {
+    id: 'astrid',
+    name: 'Astrid',
+    looks: 'an azure rod-shaped Asticcacaulis biprosthecum with two stalks near one end',
+    motion: 'bob',
+    frames: { home: '0 0 200 200', picker: '18 18 164 164', dish: '20 20 160 160' },
+    // She comes in two forms (see rod.js): this one, with stalks and a
+    // holdfast, and the swimmer her divisions make, with a flagellum instead.
+    // The swimmer's parts are hidden until then.
+    art: `
+      <g class="stalked">
+        <!-- two stalks (prosthecae) from her sides, near her back end -->
+        ${astridStalk(70, 84, 41, 44)}
+        ${astridStalk(70, 116, 41, 156)}
+        <!-- holdfast: a dab of glue right at her back end -->
+        <ellipse cx="40" cy="100" rx="9" ry="12" fill="#fde68a" stroke="#d4a017" stroke-width="3" />
+      </g>
+      <g class="swarmer" display="none">
+        ${flagellum('#1a4f9c', 44, 100, 180, 24, '0.6s')}
+      </g>
+      <rect x="44" y="74" width="122" height="52" rx="26" fill="#5aa9f5" stroke="#1a4f9c" stroke-width="4" />
+      <circle cx="146" cy="87" r="4" fill="#e3effd" />
+      <circle cx="62" cy="115" r="3" fill="#e3effd" />
+      <g class="face">
+        <circle cx="103" cy="98" r="6" fill="#0f2f5e" />
+        <circle cx="129" cy="98" r="6" fill="#0f2f5e" />
+        <circle cx="105" cy="96" r="2" fill="white" />
+        <circle cx="131" cy="96" r="2" fill="white" />
+        <ellipse cx="89" cy="110" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="143" cy="110" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
+        <path d="M110 110 Q116 116 122 110" stroke="#0f2f5e" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
   },
