@@ -642,19 +642,19 @@ export const SPECIES = {
     facts: [
       "Astrid is a Gram-negative rod, so she stains pink on a Gram stain.",
       "\"Biprosthecum\" means two prosthecae: Astrid grows two stalks.",
-      "Astrid's two stalks grow out of her sides near one end, not from the very tip.",
+      "Astrid's two stalks grow from opposite sides of her cell, around the middle.",
       "Astrid's stalks are part of her cell, wrapped in the same membranes as the rest of her.",
       "Astrid sticks to surfaces with a holdfast, a dab of sugary glue at one end of her cell.",
       "Astrid's glue is on her cell body, not on a stalk tip like her cousin *Caulobacter*'s.",
       "When Astrid divides, she makes two kinds of cell: one with stalks and one that swims.",
-      "Astrid's swimming daughter has to settle down and grow stalks before she can divide.",
-      "Astrid lives in fresh water, like ponds and streams.",
+      "Usually, Astrid's swimming daughter changes into a stalked cell before she divides.",
+      "Astrid lives in fresh water.",
       "Astrid's stalks may help her soak up scarce nutrients from the water.",
       "Bacteria with stalks like Astrid's are called prosthecate bacteria.",
       "Astrid's cousin *Caulobacter crescentus* is a famous model for how cells divide unevenly.",
       "Scientists study Astrid to learn how stalks evolved to grow in new places on the cell.",
       "Astrid was first described as a new species in 1973.",
-      "Astrid is an alphaproteobacterium, from the group of bacteria mitochondria came from.",
+      "Astrid is an alphaproteobacterium, part of a group related to mitochondria ancestors.",
       "Astrid isn't known to cause disease in people.",
     ],
     scientific: 'Asticcacaulis biprosthecum',
@@ -675,10 +675,7 @@ export const SPECIES = {
       [0.113, 0.0, 0.175],
       [0.25, 0.0, 0.175],
     ],
-    // She lives in ponds, so there are no standard disk sizes for her, and
-    // these zones are estimates. They're drugs labs use to pick out
-    // engineered cells of her and her cousin Caulobacter, so ordinary cells
-    // are killed by them.
+    // No standard disk sizes for her so these zones are estimates.
     antibiotics: [
       { code: 'TE', name: 'tetracycline', zone: 28 },
       { code: 'K', name: 'kanamycin', zone: 18 },
