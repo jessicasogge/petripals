@@ -21,7 +21,7 @@ vi.mock('../public/game/coccus.js', () => ({ coccusGroup: vi.fn(() => group()) }
 vi.mock('../public/game/spores.js', () => ({ sporeBurst: vi.fn() }));
 vi.mock('../public/game/track.js', () => ({ track: vi.fn() }));
 
-const { playTumble, swimmer } = await import('../public/game/tumble.js');
+const { playTumble, QUIET_MS, swimmer } = await import('../public/game/tumble.js');
 const { rodGroup } = await import('../public/game/rod.js');
 const { coccusGroup } = await import('../public/game/coccus.js');
 const { sporeBurst } = await import('../public/game/spores.js');
@@ -36,6 +36,7 @@ let now;
 let nutrients;
 let location;
 let colony;
+let listening; // the window listeners this test's game added, removed after it
 
 function makeFakeColony() {
   let cells = 1;
@@ -89,6 +90,15 @@ function pointerdown(isPrimary = true) {
 }
 
 beforeEach(() => {
+  // Each game listens for keys on the window, which outlives the test, so
+  // take this test's listeners off afterward; otherwise an earlier test's
+  // game would still be answering key presses.
+  listening = [];
+  const add = window.addEventListener;
+  vi.spyOn(window, 'addEventListener').mockImplementation((...args) => {
+    listening.push(args);
+    return add.apply(window, args);
+  });
   document.body.outerHTML = body;
   Object.defineProperty(document.querySelector('.agar'), 'clientWidth', { value: 400, configurable: true });
   frames = [];
@@ -102,6 +112,8 @@ beforeEach(() => {
   vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
 });
 afterEach(() => {
+  window.addEventListener.mockRestore();
+  for (const args of listening) window.removeEventListener(...args);
   vi.useRealTimers();
   vi.unstubAllGlobals();
   vi.clearAllMocks();
@@ -274,6 +286,29 @@ describe('winning', () => {
     const eaten = colony.eat.mock.calls.length;
     frame();
     expect(colony.eat).toHaveBeenCalledTimes(eaten);
+  });
+
+  it("ignores the space bar just after winning, so it can't press Play again and skip the pop-up", () => {
+    const banner = won();
+    expect(press(' ').defaultPrevented).toBe(true); // before the pop-up
+    vi.advanceTimersByTime(GAME.DIVIDE_MS);
+    expect(banner.hidden).toBe(false);
+    expect(document.activeElement).toBe(banner.querySelector('.play-again'));
+    expect(press(' ').defaultPrevented).toBe(true);
+    const up = new KeyboardEvent('keyup', { key: ' ', cancelable: true });
+    window.dispatchEvent(up);
+    expect(up.defaultPrevented).toBe(true);
+    expect(press('ArrowLeft').defaultPrevented).toBe(true);
+    expect(counter()).toContain('3 tumbles'); // and none of them tumble her
+  });
+
+  it('lets the space bar press the buttons again once the pop-up has been up a moment', () => {
+    won();
+    vi.advanceTimersByTime(GAME.DIVIDE_MS + QUIET_MS);
+    expect(press(' ').defaultPrevented).toBe(false);
+    const up = new KeyboardEvent('keyup', { key: ' ', cancelable: true });
+    window.dispatchEvent(up);
+    expect(up.defaultPrevented).toBe(false);
   });
 
   it('"Play again" starts a new dish, and "Choose a mode" goes back to the modes', () => {

@@ -14,6 +14,10 @@ import { track } from './track.js';
 
 // The keys that tumble her.
 const TUMBLE_KEYS = new Set([' ', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']);
+// After winning, those keys do nothing until the pop-up has been up this
+// long, so a tumble pressed just as she wins doesn't press "Play again" and
+// skip the pop-up.
+export const QUIET_MS = 1000;
 
 // Swims `group` (the player's pal) straight ahead, and tumbles her on
 // tumble(). `random` picks her new heading, for the tests.
@@ -87,6 +91,7 @@ export function playTumble({ you, nutrients, target = TUMBLE.TARGET }) {
 
   let tumbles = 0;
   let finished = false;
+  let quiet = false; // ignoring the tumble keys, just after winning
   let lastTime = null;
 
   function tumble() {
@@ -101,9 +106,13 @@ export function playTumble({ you, nutrients, target = TUMBLE.TARGET }) {
     tumble();
   });
   window.addEventListener('keydown', (event) => {
-    if (!TUMBLE_KEYS.has(event.key) || finished) return;
+    if (!TUMBLE_KEYS.has(event.key) || (finished && !quiet)) return;
     event.preventDefault(); // the space bar and arrows would scroll the page
     if (!event.repeat) tumble();
+  });
+  // The space bar presses a button when it's let go, so ignore that too.
+  window.addEventListener('keyup', (event) => {
+    if (quiet && TUMBLE_KEYS.has(event.key)) event.preventDefault();
   });
 
   // "Play again" starts a new dish; "Choose a mode" goes back to the modes.
@@ -139,6 +148,7 @@ export function playTumble({ you, nutrients, target = TUMBLE.TARGET }) {
 
   function finish() {
     finished = true;
+    quiet = true;
     nutrients.stop();
     playerMover.classList.remove('tumbling');
     updateCounter();
@@ -156,6 +166,7 @@ export function playTumble({ you, nutrients, target = TUMBLE.TARGET }) {
       modes.hidden = false;
       banner.removeAttribute('hidden');
       banner.querySelector('.play-again').focus();
+      setTimeout(() => { quiet = false; }, QUIET_MS);
     }, Math.max(0, GAME.DIVIDE_MS - colony.sinceAnyDivision));
   }
 
