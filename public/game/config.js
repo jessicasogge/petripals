@@ -656,11 +656,11 @@ export const MIXED = {
   RIVAL_START_MS: 1000, // the rival waits this long before it starts, so you get a head start
 };
 
-// Run & tumble mode (game/tumble.js): your pal swims straight on her own,
+// Petri Patrol (game/tumble.js): your pal swims straight on her own,
 // and all you can do is make her tumble to face a random new way, the way
 // real swimming bacteria hunt for food.
 export const TUMBLE = {
-  TARGET: 64,
+  TARGET: 128,
   NUTRIENTS: 24, // flecks on the agar at a time
   SPEED: 0.45, // how fast she swims, as a fraction of the dish radius per second
   TUMBLE_MS: 350, // how long a tumble takes, spinning on the spot

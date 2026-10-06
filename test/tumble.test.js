@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-// tumble.js runs run & tumble mode: your pal swims straight on her own and a
+// tumble.js runs Petri Patrol: your pal swims straight on her own and a
 // tap or key makes her tumble a random new way. Like race.test.js, these
 // tests load the real petri dish page into jsdom and stand in for the colony
 // and effects, so each test can say exactly what happens and check what the
@@ -58,7 +58,7 @@ function drawing(pal) {
   return svg;
 }
 
-// Start run & tumble with Mona (or `me`) and return the pop-up.
+// Start Petri Patrol with Mona (or `me`) and return the pop-up.
 function play(me = 'mona') {
   playTumble({ you: { svg: drawing(me), species: SPECIES[me] }, nutrients, target: TARGET });
   return document.querySelector('.win-banner');

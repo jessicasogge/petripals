@@ -1,4 +1,4 @@
-// Run & tumble mode: no steering. Your pal swims in a straight line on her
+// Petri Patrol: no steering. Your pal swims in a straight line on her
 // own (a "run"), and a tap, or the space bar or an arrow key, makes her
 // tumble: she spins on the spot and sets off a random new way. That's how
 // real swimming bacteria find food (chemotaxis): they keep running while the

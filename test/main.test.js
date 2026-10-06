@@ -204,14 +204,14 @@ describe('mixed culture mode', () => {
   });
 });
 
-describe('run & tumble mode', () => {
+describe('Petri Patrol', () => {
   async function openTumble(search) {
     await open(search);
     const { playTumble } = await import('../public/game/tumble.js');
     return playTumble;
   }
 
-  it.each(Object.keys(SPECIES))('starts run & tumble for %s', async (pal) => {
+  it.each(Object.keys(SPECIES))('starts Petri Patrol for %s', async (pal) => {
     const playTumble = await openTumble(`?pal=${pal}&mode=tumble`);
     expect(playTumble).toHaveBeenCalledTimes(1);
     const [{ you, nutrients, target }] = playTumble.mock.calls[0];
@@ -224,7 +224,7 @@ describe('run & tumble mode', () => {
 
   it('names the mode in the tab and explains how to play', async () => {
     await openTumble('?pal=sara&mode=tumble');
-    expect(document.title).toBe('PetriPals | Sara | Run & Tumble');
+    expect(document.title).toBe('PetriPals | Sara | Petri Patrol');
     expect(document.querySelector('.pal-name').textContent).toBe('Sara');
     const howTo = document.querySelector('.how-to-play');
     expect(howTo.querySelector('.for-keys').textContent).toBe('Press the space bar');

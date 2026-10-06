@@ -3,7 +3,7 @@
 //   petri-dish.html?pal=mona&level=2    classic, level 2
 //   petri-dish.html?pal=mona&mode=mixed mixed culture against a random rival
 //                                       (or &rivals=vi,elia for up to three)
-//   petri-dish.html?pal=mona&mode=tumble run & tumble
+//   petri-dish.html?pal=mona&mode=tumble Petri Patrol
 import { antibioticsFor, placeAntibiotics } from './antibiotic.js';
 import { LEVELS, MIXED, raceTarget, SPECIES, TUMBLE } from './config.js';
 import { playGame } from './game.js';
@@ -103,7 +103,7 @@ function startMixed() {
 function startTumble() {
   pal.removeAttribute('hidden');
   const species = SPECIES[pal.dataset.pal];
-  document.title = `PetriPals | ${pal.dataset.name} | Run & Tumble`;
+  document.title = `PetriPals | ${pal.dataset.name} | Petri Patrol`;
   document.body.classList.add('tumble-mode');
   const title = document.querySelector('.pal-name');
   title.textContent = pal.dataset.name;

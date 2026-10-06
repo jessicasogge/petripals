@@ -1020,7 +1020,7 @@ body {
   animation: none;
 }
 
-/* Run & tumble (game/tumble.js): a tumble spins her on the spot. */
+/* Petri Patrol (game/tumble.js): a tumble spins her on the spot. */
 .pal-mover.tumbling .dish-pal {
   animation: tumble 0.35s linear;
 }
