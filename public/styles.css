@@ -154,6 +154,18 @@ body {
   opacity: 0.85;
 }
 
+/* The link to FunGals, the sister game, under the description. */
+.sister-game {
+  margin: 0.75rem auto 0;
+  padding: 0 1.25rem;
+  opacity: 0.85;
+}
+
+.sister-game a {
+  color: #0f766e;
+  font-weight: 700;
+}
+
 .start-btn {
   margin-top: 1rem;
   padding: 0.8rem 2rem;
