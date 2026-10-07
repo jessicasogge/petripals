@@ -501,6 +501,10 @@ body {
   background: rgba(90, 169, 245, 0.3);
 }
 
+.kiki {
+  background: rgba(255, 240, 60, 0.35);
+}
+
 .pick-btn {
   margin-top: 0.75rem;
   padding: 0.7rem 1rem;

@@ -370,8 +370,8 @@ describe('Astrid, with two stalks', () => {
 
 describe('wiggly flagella', () => {
 
-  it("gives Mona, Vi, Sallie, Terra, Lissie, Sara and Astrid's swarmers, who swim with flagella, wiggling tails", () => {
-    expect([...SWIMMERS].sort()).toEqual(['astrid', 'lissie', 'mona', 'sallie', 'sara', 'terra', 'vi']);
+  it("gives Mona, Vi, Sallie, Terra, Lissie, Sara, Kiki and Astrid's swarmers, who swim with flagella, wiggling tails", () => {
+    expect([...SWIMMERS].sort()).toEqual(['astrid', 'kiki', 'lissie', 'mona', 'sallie', 'sara', 'terra', 'vi']);
   });
 
   it('gives Sallie flagella all over her body (peritrichous), each wiggling at its own speed', () => {
@@ -387,6 +387,15 @@ describe('wiggly flagella', () => {
     expect(starts.some(([x]) => x >= 160)).toBe(true);
     const speeds = flagella.map((f) => f.querySelector('animate').getAttribute('dur'));
     expect(new Set(speeds).size).toBeGreaterThan(1);
+  });
+
+  it('gives Kiki flagella all over her body too, like her cousins Sallie and Sara', () => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.innerHTML = palById('kiki').art;
+    const starts = [...svg.querySelectorAll('.flagellum')].map((f) => f.getAttribute('d').match(/^M([\d.]+) ([\d.]+)/).slice(1).map(Number));
+    expect(starts.length).toBeGreaterThanOrEqual(6);
+    expect(starts.some(([, y]) => y < 80)).toBe(true);
+    expect(starts.some(([, y]) => y > 120)).toBe(true);
   });
 
   it.each(SWIMMERS)("starts %s's wiggle from the tail as drawn and loops smoothly", (id) => {

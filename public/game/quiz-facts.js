@@ -128,4 +128,11 @@ export const QUIZ_FACTS = {
     "Scientists study Astrid to learn how stalks evolved to grow in new places on the cell.",
     "Astrid was first described as a new species in 1973.",
   ],
+  kiki: [
+    "Many strains of Kiki turn yellow, more at room temperature than at body temperature.",
+    "Kiki used to be called *Enterobacter sakazakii*, until she got her own genus in 2008.",
+    "Kiki's species name honors Riichi Sakazaki, a Japanese microbiologist.",
+    "Kiki's genus is named for Cronus, the Greek Titan who swallowed his children.",
+    "Kiki can cause rare but serious infections in newborns, often from powdered formula.",
+  ],
 };
