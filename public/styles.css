@@ -1208,12 +1208,9 @@ body:not(.picker-page) .signature {
   }
 }
 
-/* A phone turned sideways: the screen is too short for the dish under the
-   pal's name, so most of it would be off the bottom, and you can't scroll
-   down to it, because dragging on the dish steers. Put the dish on the left,
-   as tall as the screen, with her name, the cell count and how to play
-   beside it. The cards on the other pages get a little less padding, so
-   there's more room for what's on them. */
+/* Short landscape screens: move the dish left at full screen height,
+   with the name, cell count and instructions beside it, since dragging
+   steers instead of scrolling. Reduce padding on other pages' cards. */
 @media (orientation: landscape) and (max-height: 540px) {
   .picker-page {
     padding: 0.75rem 1rem;
