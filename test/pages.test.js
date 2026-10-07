@@ -49,6 +49,10 @@ describe('the home page title', () => {
     expect(html).toContain('<p class="tagline">Grow your colony. Dodge antibiotics.</p>');
   });
 
+  it('links to FunGals, the sister game', () => {
+    expect(html).toMatch(/The sister game to\s*<a href="https:\/\/jessicasogge\.github\.io\/fungals\/">FunGals<\/a>\./);
+  });
+
   it("has every font file the stylesheet uses, each with its license", () => {
     const fonts = [...css.matchAll(/url\(\.\/(fonts\/[^)]+\.woff2)\)/g)].map((m) => m[1]);
     expect(fonts.length).toBeGreaterThan(0);
