@@ -50,7 +50,7 @@ const eliaShine = (x) => {
     `<animate attributeName="cy" dur="${ELIA_SWIM}" repeatCount="indefinite" values="${eliaPhases.map(y).join(';')}" /></circle>`;
 };
 
-// Body-wide (peritrichous) flagella for Sallie, Terra, Lissie and Sara,
+// Body-wide (peritrichous) flagella for Sallie, Terra, Lissie, Sara and Kiki,
 // plus Astrid's swimmers' single tail. Each starts at (x, y), extends
 // `length` at `angle` degrees, and waves 12 units either side.
 // SVG <animate>, like Mona's and Vi's tails, gives each its own speed.
@@ -109,6 +109,19 @@ const SERRA_FLAGELLA = [
   [148, 100, 0, 24, '0.64s'],
 ]
   .map((f) => flagellum('#b0002f', ...f))
+  .join('');
+// Kiki's: all around her short, plump rod, like Sara's.
+const KIKI_FLAGELLA = [
+  [70, 76, -112, 28, '0.72s'],
+  [100, 74, -90, 26, '0.66s'],
+  [130, 76, -68, 28, '0.7s'],
+  [70, 124, 112, 28, '0.74s'],
+  [100, 126, 90, 26, '0.68s'],
+  [130, 124, 68, 28, '0.7s'],
+  [50, 100, 180, 26, '0.62s'],
+  [150, 100, 0, 24, '0.65s'],
+]
+  .map((f) => flagellum('#7d7200', ...f))
   .join('');
 
 // One of Ivy's rods, centered at (x, y), turned `angle` degrees, with a shine
@@ -563,6 +576,33 @@ export const PALS = [
         <ellipse cx="89" cy="110" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
         <ellipse cx="143" cy="110" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
         <path d="M110 110 Q116 116 122 110" stroke="#0f2f5e" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
+  // Kiki: Cronobacter sakazakii, a short, plump lemon-yellow rod with flagella all over
+  {
+    id: 'kiki',
+    name: 'Kiki',
+    looks: 'a short, plump yellow rod-shaped Cronobacter sakazakii with flagella all around her',
+    motion: 'bob',
+    frames: { home: '0 0 200 200', picker: '10 10 180 180', dish: '8 8 184 184' },
+    // A cooler, brighter lemon than Goldie's buttery gold, with an olive
+    // outline rather than an orange one, so the two don't look alike.
+    art: `
+      <!-- flagella all over her body -->
+      ${KIKI_FLAGELLA}
+      <!-- yellow from the pigment many strains make at room temperature -->
+      <rect x="50" y="74" width="100" height="52" rx="26" fill="#fff35c" stroke="#7d7200" stroke-width="4" />
+      <ellipse cx="127" cy="85" rx="8" ry="4" fill="#fffde0" transform="rotate(-12 127 85)" />
+      <circle cx="64" cy="115" r="3" fill="#fffde0" />
+      <g class="face">
+        <circle cx="88" cy="97" r="6" fill="#3b3600" />
+        <circle cx="112" cy="97" r="6" fill="#3b3600" />
+        <circle cx="90" cy="95" r="2" fill="white" />
+        <circle cx="114" cy="95" r="2" fill="white" />
+        <ellipse cx="74" cy="109" rx="6.5" ry="3.8" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="126" cy="109" rx="6.5" ry="3.8" fill="#f9a8d4" opacity="0.9" />
+        <path d="M94 109 Q100 115 106 109" stroke="#3b3600" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
   },

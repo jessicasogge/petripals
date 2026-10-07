@@ -684,6 +684,49 @@ export const SPECIES = {
       { code: 'RA', name: 'rifampin', zone: 21 },
     ],
   },
+  kiki: {
+    facts: [
+      "Kiki is a Gram-negative rod, so she stains pink on a Gram stain, despite her yellow color.",
+      "Many strains of Kiki turn yellow, more at room temperature than at body temperature.",
+      "Kiki swims with flagella spread all over her body.",
+      "Kiki used to be called *Enterobacter sakazakii*, until she got her own genus in 2008.",
+      "Kiki's species name honors Riichi Sakazaki, a Japanese microbiologist.",
+      "Kiki's genus is named for Cronus, the Greek Titan who swallowed his children.",
+      "Kiki can survive for a long time in very dry places, which is unusual for her family.",
+      "Kiki can cause rare but serious infections in newborns, often from powdered formula.",
+      "Making powdered formula with water at least 70°C helps kill Kiki.",
+      "Kiki builds biofilms, sticky layers that help her cling to things like factory equipment.",
+      "Kiki has been found in soil, on plants, in dried foods, and in food factories.",
+      "Kiki is catalase-positive and oxidase-negative, two tests labs use to help identify her.",
+      "Kiki is a cousin of our pals Sallie and Sara, in the same big order of gut-type bacteria.",
+    ],
+    scientific: 'Cronobacter sakazakii',
+    color: '#7d7200', // for her name above the dish
+    kind: 'rod',
+    gram: 'negative',
+    size: 10.5,
+    body: [
+      // tail (the flagellum behind her)
+      [-0.39, 0.0, 0.04],
+      [-0.33, 0.0, 0.04],
+      // her short, plump rod
+      [-0.13, 0.0, 0.141],
+      [-0.065, 0.0, 0.141],
+      [0.0, 0.0, 0.141],
+      [0.065, 0.0, 0.141],
+      [0.13, 0.0, 0.141],
+    ],
+    // Drugs used against her in newborns. There are no disk sizes just for
+    // Cronobacter (labs use the ones for her whole order, Enterobacterales),
+    // so these zones are ballpark figures for a susceptible strain.
+    antibiotics: [
+      { code: 'CRO', name: 'ceftriaxone', zone: 30 },
+      { code: 'GM', name: 'gentamicin', zone: 20 },
+      { code: 'MEM', name: 'meropenem', zone: 30 },
+      { code: 'CIP', name: 'ciprofloxacin', zone: 32 },
+      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 26 },
+    ],
+  },
 };
 
 // Mixed culture mode: no disks, just you and one to three rival pals (picked
