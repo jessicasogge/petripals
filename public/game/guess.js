@@ -1,6 +1,17 @@
 // Who’s That Pal? (whos-that-pal.html): fun facts from quiz-facts.js
 
 import { withItalics } from './italics.js';
+import { inRandomOrder } from './pals.js';
+
+// How many pals each round of the quiz uses.
+export const ROUND_SIZE = 9;
+
+// A random `count` of `pals` for one round, kept in their usual order so
+// each is easy to find.
+export function quizPals(pals, count = ROUND_SIZE, random = Math.random) {
+  const picked = new Set(inRandomOrder(pals, random).slice(0, count));
+  return pals.filter((pal) => picked.has(pal));
+}
 
 // Shuffled { pal, fact } pairs
 export function factDeck(pals, facts, random = Math.random) {

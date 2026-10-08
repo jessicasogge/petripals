@@ -29,7 +29,7 @@ No steering this time. Your pal swims in a straight line on her own, and all you
 
 ### Who’s That Pal?
 
-Tap **Who’s That Pal?** on the home page for a quiz on the pals' fun facts. You get one fact with "this pal" in place of her name: tap the pal it's about. A wrong guess greys that pal out so you can try again, and the right one puts her name back in and shows her species. There's no score, so it's just for learning. A counter (like 2 / 88) shows how many facts you've seen so far, and you'll see every quiz fact once before any comes up again. The quiz skips facts too broad to point to one pal (like "is Gram-positive"); the ones it uses are listed in `public/game/quiz-facts.js`.
+Tap **Who’s That Pal?** on the home page for a quiz on the pals' fun facts. Each round picks 9 pals at random and asks only about them. You get one fact with "this pal" in place of her name: tap the pal it's about. A wrong guess greys that pal out so you can try again, and the right one puts her name back in and shows her species. There's no score, so it's just for learning. A counter (like 2 / 50) shows how many of this round's facts you've seen, and you'll see each of them once before a new round picks 9 more. The quiz skips facts too broad to point to one pal (like "is Gram-positive"); the ones it uses are listed in `public/game/quiz-facts.js`.
 
 ## The pals
 

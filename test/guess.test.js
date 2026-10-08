@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 // Who’s That Pal? facts: shuffled into a deck, with "this pal" in place of the pal's name.
 import { describe, expect, it } from 'vitest';
-import { factDeck, fillBlanks, withBlanks } from '../public/game/guess.js';
+import { factDeck, fillBlanks, quizPals, withBlanks } from '../public/game/guess.js';
 import { PALS } from '../public/game/pals.js';
 import { QUIZ_FACTS } from '../public/game/quiz-facts.js';
 
@@ -35,6 +35,21 @@ describe('the deck of facts', () => {
   it('is shuffled', () => {
     const order = (random) => factDeck(PALS, QUIZ_FACTS, random).map(({ fact }) => fact);
     expect(order(() => 0)).not.toEqual(order(() => 0.999));
+  });
+});
+
+describe("a round's pals", () => {
+  it('picks 9 different pals, in their usual order', () => {
+    const picked = quizPals(PALS);
+    expect(picked).toHaveLength(9);
+    expect(new Set(picked).size).toBe(9);
+    expect(picked).toEqual(PALS.filter((pal) => picked.includes(pal)));
+  });
+
+  it('picks different pals from round to round', () => {
+    const seen = new Set();
+    for (let i = 0; i < 20; i++) for (const pal of quizPals(PALS)) seen.add(pal.id);
+    expect(seen.size).toBeGreaterThan(9);
   });
 });
 
