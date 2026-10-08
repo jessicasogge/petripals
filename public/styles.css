@@ -801,6 +801,22 @@ body {
   color: #0f766e;
 }
 
+/* The pals, then Next fact under them. On a phone the pals fill the screen,
+   so Next fact goes above them instead, right under the answer, with its
+   space kept while it's hidden so the pals don't jump down when it shows. */
+.guess-board {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 760px) {
+  .guess-actions {
+    order: -1;
+    min-height: 44px;
+    margin-top: 0.75rem;
+  }
+}
+
 /* Her species under her name on each tile, shortened: P. aeruginosa. It
    shrinks a little with the tile on a phone, and a long one
    (L. monocytogenes) wraps onto two lines if it still won't fit. */

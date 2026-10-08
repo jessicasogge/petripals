@@ -38,10 +38,13 @@
       <p class="guess-fact"></p>
       <p class="guess-status" aria-live="polite">Who is this fact about? Tap her!</p>
       <!-- A button for every pal, made by game/whos-that-pal.js. They look
-           like the tiles on the rival screen. -->
-      <div class="rivals-grid guess-grid"></div>
-      <div class="rivals-actions">
-        <button class="pick-btn next-fact" type="button" hidden>Next fact</button>
+           like the tiles on the rival screen. On a phone, Next fact moves
+           above them (styles.css), so you don't scroll down for it. -->
+      <div class="guess-board">
+        <div class="rivals-grid guess-grid"></div>
+        <div class="rivals-actions guess-actions">
+          <button class="pick-btn next-fact" type="button" hidden>Next fact</button>
+        </div>
       </div>
       <a class="back-link" href="./index.html">Back to home</a>
     </main>

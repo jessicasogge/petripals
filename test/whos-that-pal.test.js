@@ -32,6 +32,16 @@ beforeEach(() => vi.spyOn(Math, 'random').mockReturnValue(0));
 afterEach(() => vi.restoreAllMocks());
 
 describe('Who’s That Pal?', () => {
+  it('puts Next fact above the pals on a phone, keeping its space so the pals stay put', () => {
+    const css = readFileSync(resolve(process.cwd(), 'public/styles.css'), 'utf8');
+    const phone = css.match(/@media \(max-width: 760px\) \{\s*\.guess-actions \{([^}]*)\}/)[1];
+    expect(phone).toMatch(/order: -1/);
+    expect(phone).toMatch(/min-height: 44px/);
+    expect(css).toMatch(/\.guess-board \{\s*display: flex;\s*flex-direction: column;/);
+    // The button and the pals share the board, so the order applies.
+    expect(page).toMatch(/<div class="guess-board">\s*<div class="rivals-grid guess-grid"><\/div>\s*<div class="rivals-actions guess-actions">/);
+  });
+
   it('offers every pal, in order', async () => {
     await open();
     const offered = [...document.querySelectorAll('.guess-btn')].map((b) => b.dataset.pal);
