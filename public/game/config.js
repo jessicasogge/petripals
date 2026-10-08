@@ -322,7 +322,7 @@ export const SPECIES = {
       "Scarlett is catalase-negative: no bubbles in hydrogen peroxide, unlike Goldie.",
       "A bacitracin disk often stops Scarlett growing, a classic older clue for Group A strep.",
       "A rapid strep test can find Scarlett on a throat swab in minutes.",
-      "In the 1930s, Electra Lancefield sorted strep like Scarlett into lettered groups.",
+      "In the 1930s, Rebecca Lancefield sorted strep like Scarlett into lettered groups.",
       "Scarlett's M protein helps her dodge the immune system.",
       "There are 200+ M protein types of Scarlett, one reason people can get strep throat again.",
     ],
