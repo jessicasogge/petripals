@@ -762,15 +762,15 @@ export const SPECIES = {
       // the bulge over her spore, near her front end but inside its tip
       [0.146, 0.0, 0.156],
     ],
-    // Vancomycin and metronidazole are drugs used against her. She shrugs off
-    // ciprofloxacin and clindamycin, and those are among the antibiotics that
-    // let her take over the gut, so they get no zone. There are no standard
-    // disk sizes for anaerobes, so her zones are estimates, like Terra's.
+    // Vancomycin and metronidazole are drugs used against her, and rifampin's
+    // family (the rifamycins) works on her too. Many of the usual drugs, like
+    // ciprofloxacin and clindamycin, barely touch her (they're what let her
+    // take over the gut), so she has just these three, and levels with more
+    // disks start the list over. There are no standard disk sizes for
+    // anaerobes, so her zones are estimates, like Terra's.
     antibiotics: [
       { code: 'VA', name: 'vancomycin', zone: 17 },
       { code: 'MTZ', name: 'metronidazole', zone: 28 },
-      { code: 'CIP', name: 'ciprofloxacin', zone: null }, // resistant: no zone
-      { code: 'CC', name: 'clindamycin', zone: null }, // resistant: no zone
       { code: 'RA', name: 'rifampin', zone: 32 },
     ],
   },

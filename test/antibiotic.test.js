@@ -204,15 +204,18 @@ describe('touch shapes', () => {
 });
 
 describe('antibiotic choices', () => {
-  it('gives every pal five different antibiotics, each with a code and a name', () => {
+  it('gives every pal five different antibiotics (Diffany three), each with a code and a name', () => {
+    // Few drugs work on Diffany (Clostridioides difficile), so her levels
+    // reuse her three instead.
     for (const [pal, species] of Object.entries(SPECIES)) {
-      expect(species.antibiotics, pal).toHaveLength(5);
+      const count = pal === 'diffany' ? 3 : 5;
+      expect(species.antibiotics, pal).toHaveLength(count);
       for (const antibiotic of species.antibiotics) {
         expect(antibiotic.code, pal).toMatch(/^[A-Z]{1,3}$/);
         expect(antibiotic.name, pal).toBeTruthy();
       }
       const codes = new Set(species.antibiotics.map((a) => a.code));
-      expect(codes.size, pal).toBe(5);
+      expect(codes.size, pal).toBe(count);
     }
   });
 
@@ -256,13 +259,10 @@ describe('levels', () => {
 describe("a drug she's resistant to (no zone)", () => {
   const gentamicin = { code: 'GM', name: 'gentamicin', zone: null };
 
-  it('only Ana and Diffany have them: gentamicin for Ana, and ciprofloxacin and clindamycin for Diffany', () => {
-    // Bifidobacteria are naturally resistant to gentamicin. Clostridioides
-    // difficile shrugs off ciprofloxacin and clindamycin, which is how those
-    // drugs let her take over the gut.
+  it('only Ana has one, and it\'s gentamicin: bifidobacteria are naturally resistant to it', () => {
     const resistant = Object.entries(SPECIES).flatMap(([pal, s]) =>
       s.antibiotics.filter((a) => a.zone === null).map((a) => `${pal} ${a.code}`));
-    expect(resistant).toEqual(['ana GM', 'diffany CIP', 'diffany CC']);
+    expect(resistant).toEqual(['ana GM']);
   });
 
   it("gives Ceres only drugs that work on her: no penicillin or its relatives, which her beta-lactamases break down", () => {
