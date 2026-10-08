@@ -256,10 +256,13 @@ describe('levels', () => {
 describe("a drug she's resistant to (no zone)", () => {
   const gentamicin = { code: 'GM', name: 'gentamicin', zone: null };
 
-  it('only Ana has one, and it\'s gentamicin: bifidobacteria are naturally resistant to it', () => {
+  it('only Ana and Diffany have them: gentamicin for Ana, and ciprofloxacin and clindamycin for Diffany', () => {
+    // Bifidobacteria are naturally resistant to gentamicin. Clostridioides
+    // difficile shrugs off ciprofloxacin and clindamycin, which is how those
+    // drugs let her take over the gut.
     const resistant = Object.entries(SPECIES).flatMap(([pal, s]) =>
       s.antibiotics.filter((a) => a.zone === null).map((a) => `${pal} ${a.code}`));
-    expect(resistant).toEqual(['ana GM']);
+    expect(resistant).toEqual(['ana GM', 'diffany CIP', 'diffany CC']);
   });
 
   it("gives Ceres only drugs that work on her: no penicillin or its relatives, which her beta-lactamases break down", () => {

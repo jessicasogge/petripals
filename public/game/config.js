@@ -726,6 +726,53 @@ export const SPECIES = {
       { code: 'CIP', name: 'ciprofloxacin', zone: 32 },
       { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 26 },
     ],
+  },  diffany: {
+    facts: [
+      "Diffany is a Gram-positive rod, so she stains purple, but her spore stays clear.",
+      "Diffany's name comes from *difficile*, Latin for \"difficult\": she was so hard to grow.",
+      "Diffany makes her oval spore near one end of her rod, not right at the tip.",
+      "Oxygen is toxic to Diffany's growing cells, but her spores can last months on surfaces.",
+      "Diffany's spores survive alcohol hand gel, so soap and water work better against her.",
+      "Bleach kills Diffany's spores, so hospitals use it to clean where she's been.",
+      "Diffany often moves in after antibiotics wipe out the gut bacteria that kept her in check.",
+      "Diffany makes two toxins, called toxin A and toxin B, that inflame the colon.",
+      "Diffany's colonies glow yellow-green under UV light and smell a bit like a horse stable.",
+      "A transplant of healthy gut bacteria (a \"poop transplant\") can help clear Diffany out.",
+      "Diffany was renamed in 2016, from *Clostridium* to *Clostridioides*.",
+      "Diffany was first described in 1935, from the poop of healthy newborn babies.",
+      "Many healthy babies carry Diffany without ever getting sick.",
+      "Diffany swims with flagella spread all over her body.",
+    ],
+    scientific: 'Clostridioides difficile',
+    color: '#7a2e1a', // for her name above the dish
+    kind: 'rod',
+    gram: 'positive',
+    // Big and plump, the biggest of the rods.
+    size: 11.5,
+    body: [
+      // tail (the flagellum behind her)
+      [-0.44, 0.0, 0.04],
+      [-0.38, 0.0, 0.04],
+      // her big, plump rod
+      [-0.156, 0.0, 0.146],
+      [-0.078, 0.0, 0.146],
+      [0.0, 0.0, 0.146],
+      [0.078, 0.0, 0.146],
+      [0.156, 0.0, 0.146],
+      // the bulge over her spore, near her front end but inside its tip
+      [0.146, 0.0, 0.156],
+    ],
+    // Vancomycin and metronidazole are drugs used against her. She shrugs off
+    // ciprofloxacin and clindamycin, and those are among the antibiotics that
+    // let her take over the gut, so they get no zone. There are no standard
+    // disk sizes for anaerobes, so her zones are estimates, like Terra's.
+    antibiotics: [
+      { code: 'VA', name: 'vancomycin', zone: 17 },
+      { code: 'MTZ', name: 'metronidazole', zone: 28 },
+      { code: 'CIP', name: 'ciprofloxacin', zone: null }, // resistant: no zone
+      { code: 'CC', name: 'clindamycin', zone: null }, // resistant: no zone
+      { code: 'RA', name: 'rifampin', zone: 32 },
+    ],
   },
 };
 

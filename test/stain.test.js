@@ -71,6 +71,16 @@ describe('the stain shades', () => {
     expect(svg.querySelector('path[d^="M50 80"]').style.fill).toBe(rgb(STAINS.positive.body));
   });
 
+  it("leaves Diffany's spore clear too, while her rod and its outline take the stain", () => {
+    const svg = dishPal(palById('diffany'));
+    stainPal(svg, SPECIES.diffany);
+    const spore = svg.querySelector('ellipse[fill="#ffffff"]');
+    expect(spore.style.fill).toBe('');
+    const outline = svg.querySelector('g[stroke-width="8"]');
+    expect(outline.style.fill).toBe(rgb(STAINS.positive.body));
+    expect(outline.style.stroke).toBe(rgb(STAINS.positive.outline));
+  });
+
   it('puts her own colors back', () => {
     const svg = dishPal(palById('mona'));
     const before = shown(svg);
