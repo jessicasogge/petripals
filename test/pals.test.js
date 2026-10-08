@@ -323,6 +323,11 @@ describe('the pages', () => {
     expect(document.querySelector('.mode-mixed').getAttribute('href')).toBe('./choose-rivals.html?pal=coco');
   });
 
+  it.each(Object.keys(SPECIES))('the mode page links %s to Petri Picnic', async (id) => {
+    await open('choose-mode.html', 'game/choose-mode.js', `?pal=${id}`);
+    expect(document.querySelector('.mode-tumble').getAttribute('href')).toBe(`./petri-dish.html?pal=${id}&mode=tumble`);
+  });
+
   it('the mode page sends an unknown pal back to the picker', async () => {
     await open('choose-mode.html', 'game/choose-mode.js', '?pal=nobody');
     expect(location.replace).toHaveBeenCalledWith('./pal-picker.html');
@@ -347,6 +352,19 @@ describe("Ivy, who can't swim", () => {
     const angles = [...svg.querySelectorAll(':scope > g[transform^="rotate"]')].map((g) => Number(g.getAttribute('transform').match(/rotate\((-?[\d.]+)/)[1]));
     expect(angles).toHaveLength(5); // five rods end to end
     expect(Math.min(...angles.slice(-2))).toBeLessThan(-45); // the last ones turn up
+  });
+});
+
+describe('Astrid, with two stalks', () => {
+  it('has two stalks from her sides near her back end, a holdfast, and her swarmer tail hidden', () => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.innerHTML = palById('astrid').art;
+    const stalked = svg.querySelector('.stalked');
+    const ends = [...stalked.querySelectorAll('path')].map((p) => p.getAttribute('d').match(/L([\d.]+) ([\d.]+)/).slice(1).map(Number));
+    expect(ends.some(([, y]) => y < 60)).toBe(true); // one up
+    expect(ends.some(([, y]) => y > 140)).toBe(true); // one down
+    expect(stalked.querySelector('ellipse')).not.toBeNull(); // the holdfast
+    expect(svg.querySelector('.swarmer').getAttribute('display')).toBe('none');
   });
 });
 
@@ -404,8 +422,8 @@ describe('Electra, covered in nanowires', () => {
 
 describe('wiggly flagella', () => {
 
-  it('gives Mona, Vi, Sallie, Terra, Lissie and Sara, who swim with flagella, wiggling tails', () => {
-    expect([...SWIMMERS].sort()).toEqual(['lissie', 'mona', 'sallie', 'sara', 'terra', 'vi']);
+  it("gives Mona, Vi, Sallie, Terra, Lissie, Sara, Kiki and Astrid's swarmers, who swim with flagella, wiggling tails", () => {
+    expect([...SWIMMERS].sort()).toEqual(['astrid', 'kiki', 'lissie', 'mona', 'sallie', 'sara', 'terra', 'vi']);
   });
 
   it('gives Sallie flagella all over her body (peritrichous), each wiggling at its own speed', () => {
@@ -421,6 +439,15 @@ describe('wiggly flagella', () => {
     expect(starts.some(([x]) => x >= 160)).toBe(true);
     const speeds = flagella.map((f) => f.querySelector('animate').getAttribute('dur'));
     expect(new Set(speeds).size).toBeGreaterThan(1);
+  });
+
+  it('gives Kiki flagella all over her body too, like her cousins Sallie and Sara', () => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.innerHTML = palById('kiki').art;
+    const starts = [...svg.querySelectorAll('.flagellum')].map((f) => f.getAttribute('d').match(/^M([\d.]+) ([\d.]+)/).slice(1).map(Number));
+    expect(starts.length).toBeGreaterThanOrEqual(6);
+    expect(starts.some(([, y]) => y < 80)).toBe(true);
+    expect(starts.some(([, y]) => y > 120)).toBe(true);
   });
 
   it.each(SWIMMERS)("starts %s's wiggle from the tail as drawn and loops smoothly", (id) => {

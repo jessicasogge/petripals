@@ -613,7 +613,6 @@ export const SPECIES = {
       "Ivy makes endospores that help her survive heat, cold, and drought in the soil.",
       "Ivy is a close cousin of our pal Ceres.",
       "Ivy can live inside plants without harming them, as an endophyte.",
-      "Some Ivy strains are used to help sugar beets fight off a leaf spot disease.",
       "Ivy was first described by the German scientist Carl Flügge in 1886.",
       "Ivy rarely, if ever, causes disease in people.",
       "Some Ivy strains can keep growing in the cold, even at fridge temperatures.",
@@ -637,6 +636,95 @@ export const SPECIES = {
       { code: 'TE', name: 'tetracycline', zone: 23 },
       { code: 'GM', name: 'gentamicin', zone: 20 },
       { code: 'E', name: 'erythromycin', zone: 26 },
+    ],
+  },
+  astrid: {
+    facts: [
+      "Astrid is a Gram-negative rod, so she stains pink on a Gram stain.",
+      "\"Biprosthecum\" means two prosthecae: Astrid grows two stalks.",
+      "Astrid's two stalks grow from opposite sides of her cell, around the middle.",
+      "Astrid's stalks are part of her cell, wrapped in the same membranes as the rest of her.",
+      "Astrid sticks to surfaces with a holdfast, a dab of sugary glue at one end of her cell.",
+      "Astrid's glue is on her cell body, not on a stalk tip like her cousin *Caulobacter*'s.",
+      "When Astrid divides, she makes two kinds of cell: one with stalks and one that swims.",
+      "Usually, Astrid's swimming daughter changes into a stalked cell before she divides.",
+      "Astrid lives in fresh water.",
+      "Astrid's stalks may help her soak up scarce nutrients from the water.",
+      "Bacteria with stalks like Astrid's are called prosthecate bacteria.",
+      "Astrid's cousin *Caulobacter crescentus* is a famous model for how cells divide unevenly.",
+      "Scientists study Astrid to learn how stalks evolved to grow in new places on the cell.",
+      "Astrid was first described as a new species in 1973.",
+      "Astrid is an alphaproteobacterium, part of a group related to mitochondria ancestors.",
+      "Astrid isn't known to cause disease in people.",
+    ],
+    scientific: 'Asticcacaulis biprosthecum',
+    color: '#1a4f9c', // for her name above the dish
+    kind: 'rod',
+    gram: 'negative',
+    size: 10,
+    // Two forms: each division leaves her with stalks and makes a new cell
+    // that swims (see rod.js).
+    swarmers: true,
+    body: [
+      // tail (her swimmers' flagellum) and holdfast, behind her
+      [-0.44, 0.0, 0.04],
+      [-0.36, 0.0, 0.07],
+      // her rod (her thin stalks don't count, like a flagellum off to the side)
+      [-0.175, 0.0, 0.175],
+      [-0.031, 0.0, 0.175],
+      [0.113, 0.0, 0.175],
+      [0.25, 0.0, 0.175],
+    ],
+    // No standard disk sizes for her so these zones are estimates.
+    antibiotics: [
+      { code: 'TE', name: 'tetracycline', zone: 28 },
+      { code: 'K', name: 'kanamycin', zone: 18 },
+      { code: 'C', name: 'chloramphenicol', zone: 22 },
+      { code: 'GM', name: 'gentamicin', zone: 19 },
+      { code: 'RA', name: 'rifampin', zone: 21 },
+    ],
+  },
+  kiki: {
+    facts: [
+      "Kiki is a Gram-negative rod, so she stains pink on a Gram stain, despite her yellow color.",
+      "Many strains of Kiki turn yellow, more at room temperature than at body temperature.",
+      "Kiki swims with flagella spread all over her body.",
+      "Kiki used to be called *Enterobacter sakazakii*, until she got her own genus in 2008.",
+      "Kiki's species name honors Riichi Sakazaki, a Japanese microbiologist.",
+      "Kiki's genus is named for Cronus, the Greek Titan who swallowed his children.",
+      "Kiki can survive for a long time in very dry places, which is unusual for her family.",
+      "Kiki can cause rare but serious infections in newborns, often from powdered formula.",
+      "Making powdered formula with water at least 70°C helps kill Kiki.",
+      "Kiki builds biofilms, sticky layers that help her cling to things like factory equipment.",
+      "Kiki has been found in soil, on plants, in dried foods, and in food factories.",
+      "Kiki is catalase-positive and oxidase-negative, two tests labs use to help identify her.",
+      "Kiki is a cousin of our pals Sallie and Sara, in the same big order of gut-type bacteria.",
+    ],
+    scientific: 'Cronobacter sakazakii',
+    color: '#7d7200', // for her name above the dish
+    kind: 'rod',
+    gram: 'negative',
+    size: 10.5,
+    body: [
+      // tail (the flagellum behind her)
+      [-0.39, 0.0, 0.04],
+      [-0.33, 0.0, 0.04],
+      // her short, plump rod
+      [-0.13, 0.0, 0.141],
+      [-0.065, 0.0, 0.141],
+      [0.0, 0.0, 0.141],
+      [0.065, 0.0, 0.141],
+      [0.13, 0.0, 0.141],
+    ],
+    // Drugs used against her in newborns. There are no disk sizes just for
+    // Cronobacter (labs use the ones for her whole order, Enterobacterales),
+    // so these zones are ballpark figures for a susceptible strain.
+    antibiotics: [
+      { code: 'CRO', name: 'ceftriaxone', zone: 30 },
+      { code: 'GM', name: 'gentamicin', zone: 20 },
+      { code: 'MEM', name: 'meropenem', zone: 30 },
+      { code: 'CIP', name: 'ciprofloxacin', zone: 32 },
+      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 26 },
     ],
   },
   electra: {
@@ -695,6 +783,15 @@ export const MIXED = {
   RIVAL_START_MS: 1000, // the rival waits this long before it starts, so you get a head start
 };
 
+// Petri Picnic (game/tumble.js): your pal swims straight on her own,
+// and all you can do is make her tumble to face a random new way
+export const TUMBLE = {
+  TARGET: 256,
+  NUTRIENTS: 30, // flecks on the agar at a time
+  SPEED: 0.60, // how fast she swims, as a fraction of the dish radius per second
+  TUMBLE_MS: 300, // how long a tumble takes, spinning on the spot
+};
+
 // How many cells win a race against `rivals` rival pals.
 export function raceTarget(rivals) {
   return rivals > 1 ? MIXED.CROWDED_TARGET : MIXED.TARGET;
@@ -718,9 +815,14 @@ export const GAME = {
   SNAP_REACH: 0.3,
   NUTRIENTS_PER_DIVISION: 1, // nutrients the player eats before dividing
   SPEED: 0.8, // player speed, as a fraction of the dish radius per second
-  // With touch steering, how close to the finger counts as there (so she
+  // Steering with a mouse, how close to the pointer counts as there (so she
   // settles instead of jittering on the spot), as a fraction of the dish radius.
   ARRIVE: 0.01,
+  // Dragging her with a finger, she moves as far as the finger does, up to
+  // DRAG_SPEED (a fraction of the dish radius per second) so she keeps up
+  // with ordinary dragging. Even that fast she moves less per frame than an
+  // antibiotic disk is wide, so a swipe can't skip over a zone.
+  DRAG_SPEED: 2,
   // How hard a new group pushes away when it splits off. It slides about
   // BURST_SPEED / SETTLE_RATE of the dish radius (half that for cocci) before
   // it stops: far enough to see, short enough not to slide into a zone easily.

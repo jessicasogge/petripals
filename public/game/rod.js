@@ -4,6 +4,12 @@ import { coaster } from './physics.js';
 
 // A rod-shaped cell (Mona, Vi, Elia, Coco). Each division it splits across the
 // middle and the two cells go their separate ways.
+//
+// Astrid (`swarmers` in config.js) splits into two different cells: one keeps
+// her stalks and holdfast, and the new one is a swarmer, a swimmer with a
+// flagellum and no stalks. A swarmer can't divide as she is: before she does,
+// she settles down, drops her flagellum and grows stalks of her own, and her
+// new cell is a swarmer in turn.
 export function rodGroup({ mover, svg, species, isPlayer }) {
   // How wide the drawing is, as a percent of the dish (see `size` in config.js).
   const ROD_WIDTH = species.size ?? 12;
@@ -50,7 +56,15 @@ export function rodGroup({ mover, svg, species, isPlayer }) {
     divide(others, dishRadius, disks = []) {
       const radius = dishRadius ?? document.querySelector('.agar').clientWidth / 2;
       const copy = svg.cloneNode(true);
+      if (species.swarmers) {
+        if (group.swarmer) {
+          group.swarmer = false;
+          setSwarmer(svg, false);
+        }
+        setSwarmer(copy, true);
+      }
       const child = rodGroup({ mover: newMover(copy), svg: copy, species, isPlayer: false });
+      child.swarmer = Boolean(species.swarmers);
       child.x = group.x;
       child.y = group.y;
       child.facing = group.facing;
@@ -91,6 +105,14 @@ export function rodGroup({ mover, svg, species, isPlayer }) {
   }
 
   return group;
+}
+
+// Show Astrid's drawing as a swarmer (her flagellum, no stalks or holdfast),
+// or with her stalks again.
+export function setSwarmer(svg, swarmer) {
+  const [show, hide] = swarmer ? ['.swarmer', '.stalked'] : ['.stalked', '.swarmer'];
+  for (const part of svg.querySelectorAll(show)) part.removeAttribute('display');
+  for (const part of svg.querySelectorAll(hide)) part.setAttribute('display', 'none');
 }
 
 // How far, in pixels, a rod must move in one frame to count as swimming, and

@@ -60,12 +60,13 @@ export function playRace({ you, rivals, nutrients, target }) {
   });
 
   const keys = arrowKeys();
-  // On a touch screen (or with a mouse), touch and hold where to swim.
-  const touch = touchSteering(agar);
+  // Drag with a finger anywhere on the dish, rim included (or hold a mouse
+  // button where to swim).
+  const touch = touchSteering(agar, agar.closest('.petri-dish') ?? agar);
   let finished = false;
   let lastTime = null;
 
-  // "Race again" goes back to picking rivals; "Play classic" goes to the levels.
+  // "Race again" goes back to picking rivals; "Play Classic" goes to the levels.
   document.querySelector('.play-again').addEventListener('click', () => {
     goTo(`./choose-rivals.html?pal=${you.svg.dataset.pal}`);
   });
@@ -89,7 +90,8 @@ export function playRace({ you, rivals, nutrients, target }) {
 
     if (!finished) {
       // Steer your pal; the computer steers the rivals.
-      steer(yourLeader, keys.direction(), touch.target(), GAME.SPEED * radius * seconds, GAME.ARRIVE * radius);
+      steer(yourLeader, keys.direction(), touch.target(), GAME.SPEED * radius * seconds, GAME.ARRIVE * radius,
+        touch.drag(), GAME.DRAG_SPEED * radius * seconds);
       for (const rival of others) rival.brain.step(seconds, radius);
     }
 
@@ -120,7 +122,7 @@ export function playRace({ you, rivals, nutrients, target }) {
     sporeBurst(won ? playerMover : beaten.mover);
     const pals = `${you.svg.dataset.pal}/vs-${rivals.map((rival) => rival.svg.dataset.pal).join('+')}`;
     const versus = listOf(rivalNames);
-    track(`mixed/${won ? 'won' : 'lost'}/${pals}`, `${yourName} ${won ? 'beat' : 'lost to'} ${versus} in mixed culture`);
+    track(`mixed/${won ? 'won' : 'lost'}/${pals}`, `${yourName} ${won ? 'beat' : 'lost to'} ${versus} in Mixed Culture`);
     setTimeout(() => {
       // A fun fact about your pal, win or lose.
       showFact(you.svg.dataset.pal, you.species);
@@ -139,7 +141,7 @@ export function playRace({ you, rivals, nutrients, target }) {
     banner.querySelector('.win-message').textContent = message;
     banner.querySelector('.play-again').textContent = 'Race again';
     const classic = banner.querySelector('.start-over');
-    classic.textContent = 'Play classic';
+    classic.textContent = 'Play Classic';
     classic.hidden = false;
     banner.removeAttribute('hidden');
     banner.querySelector('.play-again').focus();

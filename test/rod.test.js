@@ -4,6 +4,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { GAME, SPECIES } from '../public/game/config.js';
 import { touchesDisk } from '../public/game/antibiotic.js';
+import { palById } from '../public/game/pals.js';
 import { MIN_STEP, rodGroup, STILL_FRAMES } from '../public/game/rod.js';
 
 // jsdom doesn't lay anything out, so every width reads as 0. Give the dish a
@@ -227,6 +228,43 @@ describe('dividing', () => {
     const grandchild = child.divide();
     expect(grandchild.isPlayer).toBe(false);
     expect(document.querySelectorAll('.agar .pal-mover')).toHaveLength(3);
+  });
+});
+
+describe("Astrid's two kinds of cell", () => {
+  // Astrid in the dish, drawn as the game draws her.
+  function astrid(options) {
+    const rod = makeRod('astrid', options);
+    rod.svg.innerHTML = palById('astrid').art;
+    return rod;
+  }
+  const shown = (svg, part) => svg.querySelector(part).getAttribute('display') !== 'none';
+  const isSwarmer = (svg) => shown(svg, '.swarmer') && !shown(svg, '.stalked');
+  const isStalked = (svg) => shown(svg, '.stalked') && !shown(svg, '.swarmer');
+
+  it('starts out with her stalks, and her flagellum hidden', () => {
+    expect(isStalked(astrid().svg)).toBe(true);
+  });
+
+  it('keeps her stalks when she divides, and her new cell is a swarmer that swims', () => {
+    const player = astrid({ isPlayer: true });
+    const child = player.divide([], DISH_RADIUS);
+    expect(isStalked(player.svg)).toBe(true);
+    expect(child.swarmer).toBe(true);
+    expect(isSwarmer(child.svg)).toBe(true);
+    expect(child.svg.querySelector('.swarmer .flagellum')).not.toBeNull();
+  });
+
+  it('grows stalks on a swarmer before she divides, and makes a swarmer in turn', () => {
+    const swarmer = astrid({ isPlayer: true }).divide([], DISH_RADIUS);
+    const next = swarmer.divide([], DISH_RADIUS);
+    expect(swarmer.swarmer).toBe(false);
+    expect(isStalked(swarmer.svg)).toBe(true);
+    expect(isSwarmer(next.svg)).toBe(true);
+  });
+
+  it("leaves other rods' offspring just like their parents", () => {
+    expect(makeRod('mona', { isPlayer: true }).divide([], DISH_RADIUS).swarmer).toBe(false);
   });
 });
 

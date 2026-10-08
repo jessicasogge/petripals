@@ -121,6 +121,20 @@ export const QUIZ_FACTS = {
     "Ivy's colonies spiral as they spread, some strains clockwise and others counterclockwise.",
     "Ivy was first described by the German scientist Carl Flügge in 1886.",
   ],
+  astrid: [
+    "\"Biprosthecum\" means two prosthecae: Astrid grows two stalks.",
+    "Astrid's two stalks grow out of her sides near one end, not from the very tip.",
+    "Astrid's glue is on her cell body, not on a stalk tip like her cousin *Caulobacter*'s.",
+    "Scientists study Astrid to learn how stalks evolved to grow in new places on the cell.",
+    "Astrid was first described as a new species in 1973.",
+  ],
+  kiki: [
+    "Many strains of Kiki turn yellow, more at room temperature than at body temperature.",
+    "Kiki used to be called *Enterobacter sakazakii*, until she got her own genus in 2008.",
+    "Kiki's species name honors Riichi Sakazaki, a Japanese microbiologist.",
+    "Kiki's genus is named for Cronus, the Greek Titan who swallowed his children.",
+    "Kiki can cause rare but serious infections in newborns, often from powdered formula.",
+  ],
   electra: [
     "Electra \"breathes\" rust instead of oxygen, handing her spare electrons to iron oxide.",
     "Electra grows tiny hair-like wires, called nanowires, that carry electricity.",
