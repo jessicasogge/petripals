@@ -748,7 +748,7 @@ export const SPECIES = {
     kind: 'rod',
     gram: 'positive',
     // Big and plump, the biggest of the rods.
-    size: 11.5,
+    size: 11,
     body: [
       // tail (the flagellum behind her)
       [-0.44, 0.0, 0.04],
