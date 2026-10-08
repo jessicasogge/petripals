@@ -40,7 +40,7 @@ let deck = [];
 let total = 0;
 let current = null;
 
-// A round: 9 random pals (in their usual order, so each is easy to find)
+// A round: 12 random pals (in their usual order, so each is easy to find)
 // and every quiz fact about them, shuffled.
 function startRound() {
   const pals = quizPals(PALS);
@@ -51,7 +51,7 @@ function startRound() {
 }
 
 function showNext() {
-  // Through every fact about this round's pals once, then a new round of 9
+  // Through every fact about this round's pals once, then a new round of 12
   // picked at random again, counting from 1.
   if (deck.length === 0) startRound();
   current = deck.pop();

@@ -11,7 +11,7 @@ import { QUIZ_FACTS } from '../public/game/quiz-facts.js';
 
 const page = readFileSync(resolve(process.cwd(), 'public/whos-that-pal.html'), 'utf8');
 
-// The same 9 pals and deck the page picks, with Math.random pinned to 0
+// The same 12 pals and deck the page picks, with Math.random pinned to 0
 // below. The page deals from the end.
 const round = quizPals(PALS, ROUND_SIZE, () => 0);
 const deck = factDeck(round, QUIZ_FACTS, () => 0);
@@ -33,16 +33,16 @@ beforeEach(() => vi.spyOn(Math, 'random').mockReturnValue(0));
 afterEach(() => vi.restoreAllMocks());
 
 describe('Who’s That Pal?', () => {
-  it('offers 9 random pals, in their usual order', async () => {
+  it('offers 12 random pals, in their usual order', async () => {
     await open();
     const offered = [...document.querySelectorAll('.guess-btn')].map((b) => b.dataset.pal);
-    expect(offered).toHaveLength(9);
+    expect(offered).toHaveLength(12);
     expect(offered).toEqual(round.map((pal) => pal.id));
     expect(offered).toEqual(PALS.map((pal) => pal.id).filter((id) => offered.includes(id)));
     expect(document.querySelector('.loading-overlay').hidden).toBe(true);
   });
 
-  it("only asks about those 9 pals' facts", async () => {
+  it("only asks about those 12 pals' facts", async () => {
     await open();
     expect(new Set(deck.map(({ pal }) => pal))).toEqual(new Set(round));
     expect(deck).toHaveLength(round.reduce((sum, pal) => sum + QUIZ_FACTS[pal.id].length, 0));
@@ -119,7 +119,7 @@ describe('Who’s That Pal?', () => {
     }
   });
 
-  it('starts a new round of 9 once every fact about these has been shown', async () => {
+  it('starts a new round of 12 once every fact about these has been shown', async () => {
     await open();
     for (let i = 0; i < deck.length; i++) {
       button(dealt(i).pal.id).click();

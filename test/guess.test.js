@@ -39,17 +39,17 @@ describe('the deck of facts', () => {
 });
 
 describe("a round's pals", () => {
-  it('picks 9 different pals, in their usual order', () => {
+  it('picks 12 different pals, in their usual order', () => {
     const picked = quizPals(PALS);
-    expect(picked).toHaveLength(9);
-    expect(new Set(picked).size).toBe(9);
+    expect(picked).toHaveLength(12);
+    expect(new Set(picked).size).toBe(12);
     expect(picked).toEqual(PALS.filter((pal) => picked.includes(pal)));
   });
 
   it('picks different pals from round to round', () => {
     const seen = new Set();
     for (let i = 0; i < 20; i++) for (const pal of quizPals(PALS)) seen.add(pal.id);
-    expect(seen.size).toBeGreaterThan(9);
+    expect(seen.size).toBeGreaterThan(12);
   });
 });
 
