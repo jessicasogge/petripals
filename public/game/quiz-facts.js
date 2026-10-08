@@ -135,4 +135,10 @@ export const QUIZ_FACTS = {
     "Kiki's genus is named for Cronus, the Greek Titan who swallowed his children.",
     "Kiki can cause rare but serious infections in newborns, often from powdered formula.",
   ],
+  electra: [
+    "Electra grows tiny hair-like wires, called nanowires, that carry electricity.",
+    "Electra helps clean uranium out of groundwater by turning it into a form that stays put.",
+    "Electra was first found in a ditch in Norman, Oklahoma, in the early 1990s.",
+    "Electra can receive electrons directly from her relative *Geobacter metallireducens*.",
+  ],
 };

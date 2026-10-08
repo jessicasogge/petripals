@@ -727,6 +727,44 @@ export const SPECIES = {
       { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 26 },
     ],
   },
+  electra: {
+    facts: [
+      "Electra is a Gram-negative rod, so she stains pink on a Gram stain.",
+      "Electra lives in oxygen-poor mud, sediment, and soil.",
+      "Electra can \"breathe\" rust, passing electrons to iron oxide instead of oxygen.",
+      "Electra grows tiny hair-like wires, called nanowires, that carry electricity.",
+      "Electra's nanowires can extend many times longer than her own cell.",
+      "Electra can help power a microbial fuel cell by turning energy into electricity.",
+      "Electra is packed with cytochromes, iron-holding proteins that pass electrons along.",
+      "Electra can help remove uranium from groundwater by turning it into a less-soluble form.",
+      "Electra eats acetate, a simple molecule other microbes leave behind.",
+      "Electra was first found in a ditch in Norman, Oklahoma, in the early 1990s.",
+      "Lots of Electras can join up into a living, electricity-carrying film on an electrode.",
+      "Electra can receive electrons directly from another microbe.",
+    ],
+    scientific: 'Geobacter sulfurreducens',
+    color: '#4c1d95', // for her name above the dish: grape, darker than Elia's purple
+    kind: 'rod',
+    gram: 'negative',
+    size: 11, // a touch smaller than most, since her nanowires take up room around her
+    body: [
+      // her rod, from end to end (her thin nanowires don't count)
+      [-0.21, 0.0, 0.143],
+      [-0.105, 0.0, 0.143],
+      [0.0, 0.0, 0.143],
+      [0.105, 0.0, 0.143],
+      [0.21, 0.0, 0.143],
+    ],
+    // She's an anaerobe from mud, and there are no standard disk sizes for
+    // her, so these drugs and zones are estimates.
+    antibiotics: [
+      { code: 'GM', name: 'gentamicin', zone: 18 },
+      { code: 'CIP', name: 'ciprofloxacin', zone: 30 },
+      { code: 'TE', name: 'tetracycline', zone: 22 },
+      { code: 'DO', name: 'doxycycline', zone: 24 },
+      { code: 'MEM', name: 'meropenem', zone: 26 },
+    ],
+  },
 };
 
 // Mixed culture mode: no disks, just you and one to three rival pals (picked
