@@ -49,6 +49,19 @@ body {
   width: 120px;
 }
 
+/* On a phone, just the first six pals, so the title and Start button aren't
+   pushed down past the first screen, a little smaller so they sit in two
+   even rows of three. */
+@media (max-width: 600px) {
+  .friends > .pal {
+    max-width: calc((100vw - 3.5rem) / 3);
+  }
+
+  .friends > .pal:nth-child(n + 7) {
+    display: none;
+  }
+}
+
 /* Tap a pal on the home page and she divides in two (game/split.js). The
    daughters can drift past the edge of her drawing while she's split. */
 .splittable .pal {
@@ -515,6 +528,16 @@ body {
 
 .kiki {
   background: rgba(255, 240, 60, 0.35);
+}
+
+.electra {
+  background: rgba(178, 126, 224, 0.35);
+}
+
+/* On a tile she's small, so only the sparks at the tips of her nanowires
+   show: the bursts along them would crowd the wires. */
+.pal-icon .burst {
+  display: none;
 }
 
 .diffany {

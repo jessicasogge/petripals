@@ -1,6 +1,6 @@
 // Quiz: identify each pal from a fact
 import { SPECIES } from './config.js';
-import { factDeck, fillBlanks, withBlanks } from './guess.js';
+import { factDeck, fillBlanks, quizPals, withBlanks } from './guess.js';
 import { shortSpeciesName, speciesName } from './italics.js';
 import { pageReady, watchLoading } from './loading.js';
 import { PALS, palTile } from './pals.js';
@@ -14,8 +14,8 @@ const status = document.querySelector('.guess-status');
 const next = document.querySelector('.next-fact');
 const ASK = 'Who is this fact about? Tap her!';
 
-// Every pal, in the same order every time, so it's easy to find her again.
-const buttons = PALS.map((pal) => {
+// Her button: her picture, name and species.
+function guessButton(pal) {
   const button = document.createElement('button');
   button.type = 'button';
   button.className = 'rival-btn guess-btn';
@@ -30,20 +30,30 @@ const buttons = PALS.map((pal) => {
   button.append(palTile(pal), name, species);
   button.addEventListener('click', () => guess(pal, button));
   return button;
-});
-document.querySelector('.guess-grid').append(...buttons);
+}
+
+const grid = document.querySelector('.guess-grid');
+let buttons = [];
 
 const counter = document.querySelector('.guess-counter');
 let deck = [];
 let total = 0;
 let current = null;
 
+// A round: 12 random pals (in their usual order, so each is easy to find)
+// and every quiz fact about them, shuffled.
+function startRound() {
+  const pals = quizPals(PALS);
+  buttons = pals.map(guessButton);
+  grid.replaceChildren(...buttons);
+  deck = factDeck(pals, QUIZ_FACTS);
+  total = deck.length;
+}
+
 function showNext() {
-  // Through every fact once, then shuffle them all again and count from 1.
-  if (deck.length === 0) {
-    deck = factDeck(PALS, QUIZ_FACTS);
-    total = deck.length;
-  }
+  // Through every fact about this round's pals once, then a new round of 12
+  // picked at random again, counting from 1.
+  if (deck.length === 0) startRound();
   current = deck.pop();
   // How far through the facts you are (2 / 88), not a score.
   counter.textContent = `Fact ${total - deck.length} of ${total}`;

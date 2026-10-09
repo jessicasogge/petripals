@@ -368,6 +368,58 @@ describe('Astrid, with two stalks', () => {
   });
 });
 
+describe('Electra, covered in nanowires', () => {
+  afterEach(() => vi.unstubAllGlobals());
+  const art = () => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.innerHTML = palById('electra').art;
+    return svg;
+  };
+  const points = (path) => path.getAttribute('d').match(/-?[\d.]+/g).map(Number);
+  const wires = (svg) => [...svg.querySelectorAll('path[stroke-width="2.6"]')];
+
+  it('has no flagella, just 16 nanowires, all the same length', () => {
+    const svg = art();
+    expect(svg.querySelector('.flagellum')).toBeNull();
+    expect(wires(svg)).toHaveLength(16);
+    const reach = wires(svg).map((wire) => {
+      const [x0, y0, ...rest] = points(wire);
+      return Math.hypot(rest.at(-2) - x0, rest.at(-1) - y0);
+    });
+    expect(Math.max(...reach) - Math.min(...reach)).toBeLessThan(1);
+  });
+
+  it('spreads them evenly all the way around her, not just on one side', () => {
+    const angles = wires(art()).map((wire) => {
+      const [x0, y0] = points(wire);
+      return Math.atan2(y0 - 102, x0 - 100); // from the middle of her rod
+    });
+    const sorted = angles.sort((a, b) => a - b);
+    const gaps = sorted.map((a, i) => (sorted[i + 1] ?? sorted[0] + 2 * Math.PI) - a);
+    expect(Math.max(...gaps)).toBeLessThan(Math.PI / 3); // no bare side
+  });
+
+  it('gives each wire a burst along it and a spark at its tip, flashing in turn out to the tip', () => {
+    const svg = art();
+    expect(svg.querySelectorAll('.burst')).toHaveLength(16);
+    expect(svg.querySelectorAll('.spark')).toHaveLength(16);
+    expect(svg.querySelector('.burst animate').getAttribute('begin')).toBe('0s');
+    expect(svg.querySelector('.spark animate').getAttribute('begin')).toBe('0.3s');
+  });
+
+  it('flashes on the home page and in the dish, but holds still on the picker', () => {
+    vi.stubGlobal('matchMedia', () => ({ matches: false }));
+    const electra = palById('electra');
+    expect(homePal(electra).querySelector('.spark animate')).not.toBeNull();
+    expect(dishPal(electra).querySelector('.spark animate')).not.toBeNull();
+    expect(palTile(electra).querySelector('.spark animate')).toBeNull();
+  });
+
+  it('shows only the tip sparks on a small tile, so the wires stay clear', () => {
+    expect(css).toMatch(/\n\.pal-icon \.burst \{[^}]*display: none/);
+  });
+});
+
 describe('wiggly flagella', () => {
 
   it("gives Mona, Vi, Sallie, Terra, Lissie, Sara, Kiki, Diffany and Astrid's swarmers, who swim with flagella, wiggling tails", () => {

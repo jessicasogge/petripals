@@ -49,6 +49,12 @@ describe('the home page title', () => {
     expect(html).toContain('<p class="tagline">Grow your colony. Dodge antibiotics.</p>');
   });
 
+  it('shows just the first six pals on a phone, in two rows of three', () => {
+    const phone = css.match(/@media \(max-width: 600px\) \{\s*\.friends > \.pal \{([^}]*)\}\s*\.friends > \.pal:nth-child\(n \+ 7\) \{([^}]*)\}/);
+    expect(phone[1]).toMatch(/max-width: calc\(\(100vw - 3\.5rem\) \/ 3\)/);
+    expect(phone[2]).toMatch(/display: none/);
+  });
+
   it('links to FunGals, the sister game', () => {
     expect(html).toMatch(/The sister game to\s*<a href="https:\/\/jessicasogge\.github\.io\/fungals\/">FunGals<\/a>\./);
   });
