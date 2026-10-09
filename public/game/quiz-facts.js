@@ -134,11 +134,18 @@ export const QUIZ_FACTS = {
     "Kiki's species name honors Riichi Sakazaki, a Japanese microbiologist.",
     "Kiki's genus is named for Cronus, the Greek Titan who swallowed his children.",
     "Kiki can cause rare but serious infections in newborns, often from powdered formula.",
-  ],
-  electra: [
+  ],  electra: [
     "Electra grows tiny hair-like wires, called nanowires, that carry electricity.",
     "Electra helps clean uranium out of groundwater by turning it into a form that stays put.",
     "Electra was first found in a ditch in Norman, Oklahoma, in the early 1990s.",
     "Electra can receive electrons directly from her relative *Geobacter metallireducens*.",
+  ],
+  diffany: [
+    "Diffany's name comes from *difficile*, Latin for \"difficult\": she was so hard to grow.",
+    "Diffany makes her oval spore near one end of her rod, not right at the tip.",
+    "Diffany makes two toxins, called toxin A and toxin B, that inflame the colon.",
+    "Diffany's colonies glow yellow-green under UV light and smell a bit like a horse stable.",
+    "A transplant of healthy gut bacteria (a \"poop transplant\") can help clear Diffany out.",
+    "Diffany was renamed in 2016, from *Clostridium* to *Clostridioides*.",
   ],
 };

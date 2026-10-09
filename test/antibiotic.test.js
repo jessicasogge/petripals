@@ -204,15 +204,18 @@ describe('touch shapes', () => {
 });
 
 describe('antibiotic choices', () => {
-  it('gives every pal five different antibiotics, each with a code and a name', () => {
+  it('gives every pal five different antibiotics (Diffany three), each with a code and a name', () => {
+    // Few drugs work on Diffany (Clostridioides difficile), so her levels
+    // reuse her three instead.
     for (const [pal, species] of Object.entries(SPECIES)) {
-      expect(species.antibiotics, pal).toHaveLength(5);
+      const count = pal === 'diffany' ? 3 : 5;
+      expect(species.antibiotics, pal).toHaveLength(count);
       for (const antibiotic of species.antibiotics) {
         expect(antibiotic.code, pal).toMatch(/^[A-Z]{1,3}$/);
         expect(antibiotic.name, pal).toBeTruthy();
       }
       const codes = new Set(species.antibiotics.map((a) => a.code));
-      expect(codes.size, pal).toBe(5);
+      expect(codes.size, pal).toBe(count);
     }
   });
 

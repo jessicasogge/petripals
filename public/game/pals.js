@@ -50,7 +50,8 @@ const eliaShine = (x) => {
     `<animate attributeName="cy" dur="${ELIA_SWIM}" repeatCount="indefinite" values="${eliaPhases.map(y).join(';')}" /></circle>`;
 };
 
-// Body-wide (peritrichous) flagella for Sallie, Terra, Lissie, Sara and Kiki,
+// Body-wide (peritrichous) flagella for Sallie, Terra, Lissie, Sara, Kiki and
+// Diffany,
 // plus Astrid's swimmers' single tail. Each starts at (x, y), extends
 // `length` at `angle` degrees, and waves 12 units either side.
 // SVG <animate>, like Mona's and Vi's tails, gives each its own speed.
@@ -122,6 +123,20 @@ const KIKI_FLAGELLA = [
   [150, 100, 0, 24, '0.65s'],
 ]
   .map((f) => flagellum('#7d7200', ...f))
+  .join('');
+// Diffany's: all around her big, plump rod, the ones on the right growing
+// from the bulge over her spore.
+const DIFFANY_FLAGELLA = [
+  [72, 72, -112, 28, '0.74s'],
+  [102, 72, -90, 28, '0.68s'],
+  [130, 69, -68, 28, '0.72s'],
+  [72, 128, 112, 28, '0.76s'],
+  [102, 128, 90, 28, '0.7s'],
+  [130, 131, 68, 28, '0.73s'],
+  [42, 100, 180, 26, '0.64s'],
+  [158, 100, 0, 24, '0.67s'],
+]
+  .map((f) => flagellum('#7a2e1a', ...f))
   .join('');
 
 // One of Ivy's rods, centered at (x, y), turned `angle` degrees, with a shine
@@ -660,8 +675,7 @@ export const PALS = [
         <path d="M94 109 Q100 115 106 109" stroke="#3b3600" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
-  },
-  // Electra: Geobacter sulfurreducens, a grape-purple rod covered in electric nanowires
+  },  // Electra: Geobacter sulfurreducens, a grape-purple rod covered in electric nanowires
   {
     id: 'electra',
     name: 'Electra',
@@ -682,6 +696,44 @@ export const PALS = [
         <ellipse cx="71" cy="111" rx="6.5" ry="3.8" fill="#f9a8d4" opacity="0.95" />
         <ellipse cx="129" cy="111" rx="6.5" ry="3.8" fill="#f9a8d4" opacity="0.95" />
         <path d="M94 110 Q100 116 106 110" stroke="#2e1065" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
+  // Diffany: Clostridioides difficile, a big, plump chestnut-brown rod with
+  // flagella all over and an oval spore near one end
+  {
+    id: 'diffany',
+    name: 'Diffany',
+    looks: 'a big, plump chestnut-brown Clostridioides difficile rod with flagella all around her and an oval spore near one end',
+    motion: 'bob',
+    frames: { home: '0 0 200 200', picker: '12 12 176 176', dish: '4 4 192 192' },
+    art: `
+      <!-- flagella all over her body -->
+      ${DIFFANY_FLAGELLA}
+      <!-- one outline: her rod, bulging a little over her spore. Drawn as a
+           thick outline under a fill, so the rod and bulge share one edge. -->
+      <g stroke="#7a2e1a" stroke-width="8" fill="#d2927f">
+        <rect x="42" y="72" width="116" height="56" rx="28" />
+        <ellipse cx="130" cy="100" rx="27" ry="31" />
+      </g>
+      <g fill="#d2927f">
+        <rect x="42" y="72" width="116" height="56" rx="28" />
+        <ellipse cx="130" cy="100" rx="27" ry="31" />
+      </g>
+      <ellipse cx="62" cy="83" rx="8" ry="3.5" fill="#f6ddd4" transform="rotate(-14 62 83)" />
+      <circle cx="54" cy="113" r="3" fill="#f6ddd4" />
+      <!-- the spore: oval, near the end but not at the tip (subterminal), and
+           pure white so a Gram stain leaves it clear, as on a real slide -->
+      <ellipse cx="132" cy="100" rx="14" ry="12" fill="#ffffff" stroke="#7a2e1a" stroke-width="2" stroke-opacity="0.45" />
+      <ellipse cx="135" cy="103" rx="7" ry="5" fill="#f6ddd4" opacity="0.7" />
+      <g class="face">
+        <circle cx="76" cy="97" r="6" fill="#3d140a" />
+        <circle cx="98" cy="97" r="6" fill="#3d140a" />
+        <circle cx="78" cy="95" r="2" fill="white" />
+        <circle cx="100" cy="95" r="2" fill="white" />
+        <ellipse cx="62" cy="109" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="111" cy="109" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <path d="M81 109 Q87 115 93 109" stroke="#3d140a" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
   },
