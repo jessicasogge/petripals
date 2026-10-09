@@ -26,7 +26,6 @@ export const QUIZ_FACTS = {
     "Elia can move through thick, gel-like body tissues that slow many other bacteria.",
   ],
   coco: [
-    "Despite her name, Coco doesn't cause the flu.",
     "During the 1889 to 1890 flu pandemic, Coco was mistakenly thought to cause influenza.",
     "\"Haemophilus\" means blood-loving: Coco needs X and V growth factors that blood provides.",
     "On blood agar, Coco can grow near Goldie, borrowing growth factors Goldie releases.",
@@ -142,8 +141,6 @@ export const QUIZ_FACTS = {
   ],
   diffany: [
     "Diffany's name comes from *difficile*, Latin for \"difficult\": she was so hard to grow.",
-    "Diffany makes her oval spore near one end of her rod, not right at the tip.",
-    "Diffany makes two toxins, called toxin A and toxin B, that inflame the colon.",
     "Diffany's colonies glow yellow-green under UV light and smell a bit like a horse stable.",
     "A transplant of healthy gut bacteria (a \"poop transplant\") can help clear Diffany out.",
     "Diffany was renamed in 2016, from *Clostridium* to *Clostridioides*.",
