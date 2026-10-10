@@ -811,12 +811,88 @@ export const SPECIES = {
       { code: 'RA', name: 'rifampin', zone: 32 },
     ],
   },
+  nova: {
+    facts: [
+      "Nova is Gram-positive, but patchy staining makes her filaments look beaded.",
+      "Nova grows long, thin, branching filaments that look a bit like fungal threads.",
+      "As Nova's colony ages, her filaments can break into short rods and round cells.",
+      "Nova is partly acid-fast: some filaments keep red dye after a weak-acid wash.",
+      "Nova shares a bacterial order with *Mycobacterium tuberculosis*, which causes TB.",
+      "Nova's genus lives in soil, dust, and decaying plants around the world.",
+      "Nova's colonies can look dry and chalky and smell musty, like a damp basement.",
+      "Nova can grow fuzzy aerial filaments that rise above her colony.",
+      "Nova needs oxygen to grow.",
+      "Nova's colonies often appear in days, but some cultures need weeks.",
+      "Nova is more likely to cause serious illness in people with weakened immunity.",
+      "Nova can enter through inhaled dust or a wound, and infection can reach the brain.",
+      "Nova doesn't normally spread from person to person.",
+      "Nova's treatment often includes trimethoprim-sulfamethoxazole and lasts months.",
+      "Nova is usually susceptible to erythromycin, unlike many other Nocardia species.",
+      "Nova's genus honors Edmond Nocard, a French vet who isolated it from sick cattle.",
+      "Nova's species name is Latin for \"new.\"",
+      "Nova has no flagella.",
+    ],
+    scientific: 'Nocardia nova',
+    color: '#0f766e', // for her name above the dish
+    kind: 'rod',
+    gram: 'positive',
+    size: 8, // her branches reach every way, so she's narrower than the rods to take up as much room
+    body: [
+      // her hub (her face)
+      [0.0, 0.021, 0.129],
+      // along her filaments, traced from her drawing
+      [-0.443, 0.144, 0.046],
+      [-0.354, 0.159, 0.046],
+      [-0.264, 0.145, 0.046],
+      [-0.18, 0.11, 0.046],
+      [-0.103, 0.062, 0.046],
+      [0.103, -0.01, 0.046],
+      [0.183, -0.048, 0.046],
+      [0.268, -0.07, 0.046],
+      [0.356, -0.074, 0.046],
+      [0.443, -0.062, 0.046],
+      [-0.301, 0.27, 0.046],
+      [-0.361, 0.361, 0.046],
+      [-0.22, 0.031, 0.046],
+      [-0.266, -0.053, 0.046],
+      [-0.33, -0.124, 0.046],
+      [-0.344, -0.038, 0.046],
+      [-0.412, -0.031, 0.046],
+      [0.0, -0.093, 0.046],
+      [0.003, -0.195, 0.046],
+      [0.025, -0.296, 0.046],
+      [0.062, -0.392, 0.046],
+      [-0.066, -0.285, 0.046],
+      [-0.124, -0.34, 0.046],
+      [0.314, -0.157, 0.046],
+      [0.349, -0.224, 0.046],
+      [0.402, -0.278, 0.046],
+      [0.285, 0.023, 0.046],
+      [0.336, 0.1, 0.046],
+      [0.402, 0.165, 0.046],
+      [0.279, 0.18, 0.046],
+      [0.268, 0.289, 0.046],
+      [0.031, 0.134, 0.046],
+      [0.041, 0.222, 0.046],
+      [0.031, 0.309, 0.046],
+      [0.0, 0.392, 0.046],
+    ],
+    // Drugs used against Nocardia. Labs test her by broth dilution, not
+    // disks, so there are no standard disk sizes and these zones are
+    // estimates. Erythromycin is here because the N. nova group, unlike
+    // most Nocardia, is usually susceptible to it.
+    antibiotics: [
+      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 30 },
+      { code: 'AN', name: 'amikacin', zone: 28 },
+      { code: 'IPM', name: 'imipenem', zone: 30 },
+      { code: 'LZD', name: 'linezolid', zone: 36 },
+      { code: 'E', name: 'erythromycin', zone: 22 },
+    ],
+  },
 };
 
-// Mixed culture mode: no disks, just you and one to three rival pals (picked
-// by you, or one at random, and steered by the computer) racing to grow a
-// colony of TARGET cells first. With more than one rival the dish fills up
-// fast, so the race is to CROWDED_TARGET instead.
+// Mixed culture: no disks; race 1–3 AI rivals (chosen or one random) to TARGET cells.
+// Multiple rivals use CROWDED_TARGET.
 export const MIXED = {
   TARGET: 64,
   CROWDED_TARGET: 32,
