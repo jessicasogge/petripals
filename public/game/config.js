@@ -830,7 +830,7 @@ export const SPECIES = {
       "Nova is usually susceptible to erythromycin, unlike many other Nocardia species.",
       "Nova's genus honors Edmond Nocard, a French vet who isolated it from sick cattle.",
       "Nova's species name is Latin for \"new.\"",
-      "Nova has no flagella and can't swim.",
+      "Nova has no flagella.",
     ],
     scientific: 'Nocardia nova',
     color: '#0f766e', // for her name above the dish

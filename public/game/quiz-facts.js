@@ -148,7 +148,6 @@ export const QUIZ_FACTS = {
   nova: [
     "Nova grows as long, thin filaments that branch again and again, a bit like a fungus.",
     "As her colony ages, Nova's filaments break apart into short rods.",
-    "Nova is partly acid-fast: she keeps a red dye that weak acid washes out of most bacteria.",
     "Nova's colonies look dry and chalky, and they can smell musty, like a damp basement.",
     "Nova's genus is named for Edmond Nocard, a French vet who found its first member in cows.",
   ],
