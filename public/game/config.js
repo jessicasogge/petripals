@@ -839,10 +839,11 @@ export const SPECIES = {
     color: '#0f766e', // for her name above the dish
     kind: 'rod',
     gram: 'positive',
+    size: 8, // her branches reach every way, so she's narrower than the rods to take up as much room
     body: [
       // her hub (her face)
       [0.0, 0.021, 0.129],
-      // along her filaments and her two loose rods, traced from her drawing
+      // along her filaments, traced from her drawing
       [-0.443, 0.144, 0.046],
       [-0.354, 0.159, 0.046],
       [-0.264, 0.145, 0.046],
@@ -878,8 +879,6 @@ export const SPECIES = {
       [0.041, 0.222, 0.046],
       [0.031, 0.309, 0.046],
       [0.0, 0.392, 0.046],
-      [0.406, 0.349, 0.046],
-      [-0.41, -0.33, 0.046],
     ],
     // Drugs used against Nocardia. Labs test her by broth dilution, not
     // disks, so there are no standard disk sizes and these zones are

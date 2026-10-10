@@ -208,9 +208,7 @@ const ELECTRA_NANOWIRES = ELECTRA_WIRES.map((wire, i) => {
 }).join('');
 
 // Nova's filaments: one through her hub, branching off and branching again,
-// nearly at right angles (Ana splits once into a Y; Nova keeps going). Then
-// two short rods that have snapped off the tips, as [x, y, angle], the way
-// Nocardia's filaments break up as the colony ages.
+// nearly at right angles (Ana splits once into a Y; Nova keeps going).
 const NOVA_FILAMENTS = [
   // the main filament, left to right through her hub
   'M14 132 Q44 142 80 116',
@@ -230,13 +228,6 @@ const NOVA_FILAMENTS = [
   'M106 130 Q112 156 100 180',
 ]
   .map((d) => `<path d="${d}" />`)
-  .concat(
-    [[182, 174, 35], [24, 38, -30]].map(([x, y, angle]) => {
-      const dx = 4 * Math.cos((angle * Math.PI) / 180);
-      const dy = 4 * Math.sin((angle * Math.PI) / 180);
-      return `<path d="M${(x - dx).toFixed(1)} ${(y - dy).toFixed(1)} L${(x + dx).toFixed(1)} ${(y + dy).toFixed(1)}" />`;
-    }),
-  )
   .join('');
 // Darker beads along her filaments, and light shines.
 const NOVA_BEADS =
@@ -740,15 +731,15 @@ export const PALS = [
     `,
   },
   // Nova: Nocardia nova, a teal filament that branches and branches again,
-  // beaded along its length, with short rods snapping off at the tips
+  // beaded along its length
   {
     id: 'nova',
     name: 'Nova',
-    looks: 'a teal Nocardia nova, a thin, beaded filament branching every which way, with short rods breaking off her tips',
+    looks: 'a teal Nocardia nova, a thin, beaded filament branching every which way',
     motion: 'wobble',
     frames: { home: '-4 0 208 208', picker: '3 7 194 194', dish: '3 7 194 194' },
     art: `
-      <!-- outline: every filament and loose rod, drawn thick in dark teal, so the whole network shares one edge -->
+      <!-- outline: every filament, drawn thick in dark teal, so the whole network shares one edge -->
       <g stroke="#0f766e" stroke-width="18" fill="none" stroke-linecap="round" stroke-linejoin="round">
         ${NOVA_FILAMENTS}
       </g>
