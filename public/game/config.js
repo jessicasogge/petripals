@@ -811,29 +811,26 @@ export const SPECIES = {
       { code: 'RA', name: 'rifampin', zone: 32 },
     ],
   },
-  // A branching filament that breaks up into short rods. In the dish she
-  // splits and slides apart like the other rods, the way her filaments
-  // fragment.
   nova: {
     facts: [
-      "Nova is Gram-positive, but she stains unevenly, so she looks like beads on a string.",
-      "Nova grows as long, thin filaments that branch again and again, a bit like a fungus.",
-      "As her colony ages, Nova's filaments break apart into short rods.",
-      "Nova is partly acid-fast: she keeps a red dye that weak acid washes out of most bacteria.",
-      "Nova is a distant cousin of *Mycobacterium tuberculosis*, the bacterium that causes TB.",
-      "Nova lives in soil, dust, and rotting plants all over the world.",
-      "Nova's colonies look dry and chalky, and they can smell musty, like a damp basement.",
-      "Nova's colonies grow fuzzy filaments that reach up into the air.",
+      "Nova is Gram-positive, but patchy staining makes her filaments look beaded.",
+      "Nova grows long, thin, branching filaments that look a bit like fungal threads.",
+      "As Nova's colony ages, her filaments can break into short rods and round cells.",
+      "Nova is partly acid-fast: some filaments keep red dye after a weak-acid wash.",
+      "Nova shares a bacterial order with *Mycobacterium tuberculosis*, which causes TB.",
+      "Nova's genus lives in soil, dust, and decaying plants around the world.",
+      "Nova's colonies can look dry and chalky and smell musty, like a damp basement.",
+      "Nova can grow fuzzy aerial filaments that rise above her colony.",
       "Nova needs oxygen to grow.",
-      "Nova grows slowly: her colonies can take a few days to a few weeks to show up in the lab.",
-      "Nova usually makes people sick only if their immune system is weak.",
-      "Nova usually gets into people when they breathe in dust, and she can spread to the brain.",
-      "Nova doesn't spread from person to person.",
-      "Nova's infections are usually treated with trimethoprim-sulfamethoxazole for months.",
-      "Unlike most of her genus, Nova can usually be killed by erythromycin.",
-      "Nova's genus is named for Edmond Nocard, a French vet who found its first member in cows.",
+      "Nova's colonies often appear in days, but some cultures need weeks.",
+      "Nova is more likely to cause serious illness in people with weakened immunity.",
+      "Nova can enter through inhaled dust or a wound, and infection can reach the brain.",
+      "Nova doesn't normally spread from person to person.",
+      "Nova's treatment often includes trimethoprim-sulfamethoxazole and lasts months.",
+      "Nova is usually susceptible to erythromycin, unlike many other Nocardia species.",
+      "Nova's genus honors Edmond Nocard, a French vet who isolated it from sick cattle.",
       "Nova's species name is Latin for \"new.\"",
-      "Nova has no flagella, so she can't swim.",
+      "Nova has no flagella and can't swim.",
     ],
     scientific: 'Nocardia nova',
     color: '#0f766e', // for her name above the dish
@@ -894,10 +891,8 @@ export const SPECIES = {
   },
 };
 
-// Mixed culture mode: no disks, just you and one to three rival pals (picked
-// by you, or one at random, and steered by the computer) racing to grow a
-// colony of TARGET cells first. With more than one rival the dish fills up
-// fast, so the race is to CROWDED_TARGET instead.
+// Mixed culture: no disks; race 1–3 AI rivals (chosen or one random) to TARGET cells.
+// Multiple rivals use CROWDED_TARGET.
 export const MIXED = {
   TARGET: 64,
   CROWDED_TARGET: 32,
