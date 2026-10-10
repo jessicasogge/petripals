@@ -168,7 +168,7 @@ describe('the pages', () => {
       ['terra', 'penny', 'vi', 'goldie', 'ana', 'lissie', 'scarlett', 'coco', 'mona', 'elia', 'ceres', 'sallie']);
   });
 
-  it('the picker has a card for every pal, each once, linking to her', async () => {
+  it('the picker has a card for every pal, each once, and the whole card picks her', async () => {
     await open('pal-picker.html', 'game/pal-picker.js');
     const cards = [...document.querySelectorAll('.pal-card')];
     const names = cards.map((c) => c.querySelector('h2').textContent);
@@ -179,8 +179,10 @@ describe('the pages', () => {
       // Her species, without Elia's "Doesn't stain well" note.
       const species = [...card.querySelector('.species').childNodes].filter((n) => !n.classList?.contains('stain-note'));
       expect(species.map((n) => n.textContent).join('')).toBe(plainText(SPECIES[id].scientific));
-      expect(card.querySelector('a').getAttribute('href')).toBe(`./choose-mode.html?pal=${id}`);
-      expect(card.querySelector('a').textContent).toBe(`Select ${name}`);
+      expect(card.tagName).toBe('A');
+      expect(card.getAttribute('href')).toBe(`./choose-mode.html?pal=${id}`);
+      expect(card.textContent).toContain(name);
+      expect(card.querySelector('a, button')).toBeNull(); // no Select button inside
     }
   });
 
