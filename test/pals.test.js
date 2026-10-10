@@ -325,6 +325,15 @@ describe('the pages', () => {
     expect(document.querySelector('.mode-mixed').getAttribute('href')).toBe('./choose-rivals.html?pal=coco');
   });
 
+  it('the mode page makes each game a whole card to tap, with no button', async () => {
+    await open('choose-mode.html', 'game/choose-mode.js', '?pal=coco');
+    const cards = [...document.querySelectorAll('.mode-card')];
+    expect(cards.map((card) => card.tagName)).toEqual(['A', 'A', 'A']);
+    expect(cards.map((card) => card.getAttribute('href'))).toEqual([
+      './petri-dish.html?pal=coco', './choose-rivals.html?pal=coco', './petri-dish.html?pal=coco&mode=tumble']);
+    for (const card of cards) expect(card.querySelector('a, button')).toBeNull();
+  });
+
   it.each(Object.keys(SPECIES))('the mode page links %s to Petri Picnic', async (id) => {
     await open('choose-mode.html', 'game/choose-mode.js', `?pal=${id}`);
     expect(document.querySelector('.mode-tumble').getAttribute('href')).toBe(`./petri-dish.html?pal=${id}&mode=tumble`);

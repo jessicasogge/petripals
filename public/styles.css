@@ -428,18 +428,11 @@ body {
   padding: 1rem;
 }
 
-/* Line the Select buttons up along the bottom, however long the name above. */
-.pal-card .pick-btn {
-  margin-top: auto;
-  white-space: nowrap;
-}
-
-/* On the picker, a little more compact than elsewhere: less padding and a
-   smaller picture, so more of the page fits on the screen. The whole card is
-   the link that picks her (game/pal-picker.js), so it lifts a little and
-   outlines itself in teal on hover, to show it can be tapped. */
-.picker-grid .pal-card {
-  padding: 1.1rem 0.75rem 0.85rem;
+/* Cards that are links, with no button: a pal on the picker
+   (game/pal-picker.js) and a game on the mode page. The whole card is tapped,
+   so it lifts a little and outlines itself in teal on hover, to show it can
+   be. */
+a.pal-card {
   color: inherit;
   text-decoration: none;
   cursor: pointer;
@@ -447,19 +440,25 @@ body {
   transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
 }
 
-.picker-grid .pal-card:hover {
+a.pal-card:hover {
   border-color: #0f766e;
   background: rgba(255, 255, 255, 0.85);
   transform: translateY(-2px);
 }
 
-.picker-grid .pal-card:active {
+a.pal-card:active {
   transform: translateY(0);
 }
 
-.picker-grid .pal-card:focus-visible {
+a.pal-card:focus-visible {
   outline: 3px solid #0f766e;
   outline-offset: 2px;
+}
+
+/* On the picker, a little more compact than elsewhere: less padding and a
+   smaller picture, so more of the page fits on the screen. */
+.picker-grid .pal-card {
+  padding: 1.1rem 0.75rem 0.85rem;
 }
 
 .picker-grid .pal-icon {
@@ -694,7 +693,7 @@ body {
 }
 
 .mode-card p {
-  margin: 0 0 1rem;
+  margin: 0;
   line-height: 1.45;
 }
 
