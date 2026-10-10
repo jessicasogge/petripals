@@ -207,6 +207,46 @@ const ELECTRA_NANOWIRES = ELECTRA_WIRES.map((wire, i) => {
   );
 }).join('');
 
+// Nova's filaments: one through her hub, branching off and branching again,
+// nearly at right angles (Ana splits once into a Y; Nova keeps going). Then
+// two short rods that have snapped off the tips, as [x, y, angle], the way
+// Nocardia's filaments break up as the colony ages.
+const NOVA_FILAMENTS = [
+  // the main filament, left to right through her hub
+  'M14 132 Q44 142 80 116',
+  'M120 102 Q150 84 186 92',
+  // left side
+  'M46 136 Q46 156 30 174',
+  'M62 128 Q58 100 36 80',
+  'M46 92 Q34 98 20 98',
+  // up from the hub, with a side branch
+  'M100 86 Q98 58 112 28',
+  'M101 56 Q88 52 76 38',
+  // right side
+  'M158 88 Q160 64 178 50',
+  'M148 92 Q158 120 178 136',
+  'M164 120 Q150 138 152 160',
+  // down from the hub
+  'M106 130 Q112 156 100 180',
+]
+  .map((d) => `<path d="${d}" />`)
+  .concat(
+    [[182, 174, 35], [24, 38, -30]].map(([x, y, angle]) => {
+      const dx = 4 * Math.cos((angle * Math.PI) / 180);
+      const dy = 4 * Math.sin((angle * Math.PI) / 180);
+      return `<path d="M${(x - dx).toFixed(1)} ${(y - dy).toFixed(1)} L${(x + dx).toFixed(1)} ${(y + dy).toFixed(1)}" />`;
+    }),
+  )
+  .join('');
+// Darker beads along her filaments, and light shines.
+const NOVA_BEADS =
+  [[30, 137], [134, 92], [170, 89], [58, 108], [108, 44], [161, 124], [109, 152], [46, 156]]
+    .map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3" fill="#3bb3a5" />`)
+    .join('') +
+  [[22, 133], [178, 90], [110, 34], [38, 82]]
+    .map(([x, y]) => `<circle cx="${x}" cy="${y - 1.5}" r="2" fill="#e6fffb" />`)
+    .join('');
+
 export const PALS = [
   // Terra: Clostridium tetani, an olive rod with a round spore at one end (a "drumstick")
   {
@@ -696,6 +736,39 @@ export const PALS = [
         <ellipse cx="71" cy="111" rx="6.5" ry="3.8" fill="#f9a8d4" opacity="0.95" />
         <ellipse cx="129" cy="111" rx="6.5" ry="3.8" fill="#f9a8d4" opacity="0.95" />
         <path d="M94 110 Q100 116 106 110" stroke="#2e1065" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
+  // Nova: Nocardia nova, a teal filament that branches and branches again,
+  // beaded along its length, with short rods snapping off at the tips
+  {
+    id: 'nova',
+    name: 'Nova',
+    looks: 'a teal Nocardia nova, a thin, beaded filament branching every which way, with short rods breaking off her tips',
+    motion: 'wobble',
+    frames: { home: '-4 0 208 208', picker: '3 7 194 194', dish: '3 7 194 194' },
+    art: `
+      <!-- outline: every filament and loose rod, drawn thick in dark teal, so the whole network shares one edge -->
+      <g stroke="#0f766e" stroke-width="18" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        ${NOVA_FILAMENTS}
+      </g>
+      <!-- her hub, where the filaments meet (her face goes here) -->
+      <circle cx="100" cy="108" r="23" fill="#8fe3d8" stroke="#0f766e" stroke-width="4" />
+      <!-- fill: the same filaments a little thinner, in light teal -->
+      <g stroke="#8fe3d8" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        ${NOVA_FILAMENTS}
+      </g>
+      <!-- beads: Nocardia stains unevenly, so her filaments look like strings of beads -->
+      ${NOVA_BEADS}
+      <circle cx="90" cy="96" r="3.2" fill="#e6fffb" />
+      <g class="face">
+        <circle cx="92" cy="105" r="5" fill="#134e4a" />
+        <circle cx="108" cy="105" r="5" fill="#134e4a" />
+        <circle cx="93.6" cy="103.4" r="1.7" fill="white" />
+        <circle cx="109.6" cy="103.4" r="1.7" fill="white" />
+        <ellipse cx="86" cy="115" rx="4" ry="2.6" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="114" cy="115" rx="4" ry="2.6" fill="#f9a8d4" opacity="0.9" />
+        <path d="M96 115 Q100 120 104 115" stroke="#134e4a" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
   },

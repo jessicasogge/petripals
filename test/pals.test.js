@@ -355,6 +355,33 @@ describe("Ivy, who can't swim", () => {
   });
 });
 
+describe('Nova, a branching filament', () => {
+  const art = () => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.innerHTML = palById('nova').art;
+    return svg;
+  };
+
+  it("has no flagella, since Nocardia can't swim", () => {
+    expect(art().querySelector('.flagellum')).toBeNull();
+  });
+
+  it('branches far more than Ana, who splits once into a Y, and draws her outline and fill along the same paths', () => {
+    const svg = art();
+    const outline = svg.querySelectorAll('g[stroke-width="18"] path');
+    const fill = svg.querySelectorAll('g[stroke-width="10"] path');
+    expect(outline.length).toBeGreaterThan(10);
+    expect([...fill].map((p) => p.getAttribute('d'))).toEqual([...outline].map((p) => p.getAttribute('d')));
+  });
+
+  it('has beads along her filaments and two short rods broken off her tips', () => {
+    const svg = art();
+    expect(svg.querySelectorAll('circle[r="3"]').length).toBeGreaterThanOrEqual(6); // the beads
+    const loose = [...svg.querySelectorAll('g[stroke-width="18"] path')].filter((p) => /^M[\d.]+ [\d.]+ L/.test(p.getAttribute('d')));
+    expect(loose).toHaveLength(2);
+  });
+});
+
 describe('Astrid, with two stalks', () => {
   it('has two stalks from her sides near her back end, a holdfast, and her swarmer tail hidden', () => {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
