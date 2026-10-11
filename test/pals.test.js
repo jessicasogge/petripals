@@ -455,6 +455,44 @@ describe('Electra, covered in nanowires', () => {
   });
 });
 
+describe('Pearl, in her capsule', () => {
+  const art = () => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.innerHTML = palById('pearl').art;
+    return svg;
+  };
+
+  it("has no flagella, since Klebsiella can't swim", () => {
+    expect(art().querySelector('.flagellum')).toBeNull();
+    expect(SWIMMERS).not.toContain('pearl');
+  });
+
+  it('has a see-through capsule all around her rod', () => {
+    const svg = art();
+    const capsule = svg.querySelector('ellipse[fill="#ffffff"]');
+    const rod = svg.querySelector('rect');
+    expect(Number(capsule.getAttribute('fill-opacity'))).toBeLessThan(1);
+    const [cx, rx] = ['cx', 'rx'].map((k) => Number(capsule.getAttribute(k)));
+    const [x, w] = ['x', 'width'].map((k) => Number(rod.getAttribute(k)));
+    expect(cx - rx).toBeLessThan(x);
+    expect(cx + rx).toBeGreaterThan(x + w);
+  });
+
+  it('has lots of tiny, still pili all around her, inside her capsule', () => {
+    const pili = [...art().querySelectorAll('.pilus')];
+    expect(pili.length).toBeGreaterThanOrEqual(20);
+    for (const pilus of pili) {
+      const [x, y, dx, dy] = pilus.getAttribute('d').match(/-?[\d.]+/g).map(Number);
+      expect(Math.hypot(dx, dy)).toBeLessThan(10); // tiny
+      const [ex, ey] = [x + dx - 100, y + dy - 100];
+      expect((ex * ex) / (70 * 70) + (ey * ey) / (45 * 45)).toBeLessThan(1); // inside her capsule
+    }
+    expect(art().querySelector('.pilus animate')).toBeNull();
+    expect(pili.some((p) => p.getAttribute('d').includes('l0.0 -'))).toBe(true); // up
+    expect(pili.some((p) => p.getAttribute('d').includes('l0.0 6'))).toBe(true); // down
+  });
+});
+
 describe('wiggly flagella', () => {
 
   it("gives Mona, Vi, Sallie, Terra, Lissie, Sara, Kiki, Diffany and Astrid's swarmers, who swim with flagella, wiggling tails", () => {

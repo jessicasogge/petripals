@@ -151,4 +151,12 @@ export const QUIZ_FACTS = {
     "Nova's colonies look dry and chalky, and they can smell musty, like a damp basement.",
     "Nova's genus is named for Edmond Nocard, a French vet who found its first member in cows.",
   ],
+  pearl: [
+    "Pearl can't swim: unlike her cousins Sallie and Kiki, she has no flagella.",
+    "Some strains of Pearl are so slimy that a loop pulls their colonies into a long string.",
+    "Pearl's genus is named for Edwin Klebs, a German microbiologist.",
+    "Pearl was first described by Carl Friedländer in 1882, so she's \"Friedländer's bacillus.\"",
+    "Pearl's pneumonia can make thick, dark red \"currant jelly\" sputum.",
+    "Some strains of Pearl can fix nitrogen from the air, like bacteria that feed plants.",
+  ],
 };

@@ -586,6 +586,10 @@ a.pal-card:focus-visible {
   background: rgba(143, 227, 216, 0.4);
 }
 
+.pearl {
+  background: rgba(232, 190, 206, 0.38);
+}
+
 .pick-btn {
   margin-top: 0.75rem;
   padding: 0.7rem 1rem;
