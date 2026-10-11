@@ -1,36 +1,28 @@
-// Disk Detective (disk-detective.html): every antibiotic disk in the game,
-// with how it works and facts to learn it by.
+// Disk Detective: all antibiotic disks, mechanisms, and facts.
+// Keys/names match config.js; `target` uses TARGETS, `family` groups drugs,
+// and `works` explains their action. Wrap scientific names in *asterisks*.
 //
-// Each drug is keyed by its disk code, the same code on its disk in Classic
-// mode (see `antibiotics` in config.js), and `name` matches the name there.
-// `target` is what the drug attacks (one of TARGETS below) and `family` is
-// the group of drugs it belongs to. `works` says how it stops bacteria, in a
-// sentence. `facts` each name the drug, so the quiz can swap in "this drug"
-// (see withBlanks in guess.js); a drug's name at the start of a sentence is
-// capitalized. Put bacteria's scientific names between asterisks for italics.
-//
-// The quiz only offers drugs that attack something different from the right
-// answer, so each fact needs to point to one drug among those, not among its
-// own family: "is a cephalosporin" is fine, "works on Pseudomonas" isn't.
+// Facts name the drug (capitalized at sentence start) for quiz substitution.
+// Distinguish it from other targets, not its family: "is a cephalosporin"
+// works; "works on Pseudomonas" doesn't.
 import { SPECIES } from './config.js';
 import { inRandomOrder, PALS } from './pals.js';
 
-// What each kind of drug attacks, in the order the guide lists them:
-// `title` for the guide and `does` for a sentence ("It jams the protein factory.").
+// What each kind of drug attacks
 export const TARGETS = {
-  wall: { title: 'Break the cell wall', does: 'breaks the cell wall' },
+  wall: { title: 'Block cell-wall building', does: 'blocks cell-wall building' },
   protein: { title: 'Jam the protein factory', does: 'jams the protein factory' },
-  dna: { title: 'Wreck the DNA', does: 'wrecks the DNA' },
-  folate: { title: 'Starve it of folate', does: 'starves bacteria of folate' },
-  rna: { title: 'Stop it reading its genes', does: 'stops bacteria reading their genes' },
+  dna: { title: 'Disrupt DNA copying', does: 'disrupts DNA copying' },
+  folate: { title: 'Block the folate supply', does: 'blocks the production of usable folate' },
+  rna: { title: 'Stop genes becoming RNA messages', does: 'stops bacteria making RNA messages from their genes' },
 };
 
 // How the beta-lactams (penicillins, cephalosporins, carbapenems) work.
-const BETA_LACTAM = 'Stops the enzymes that build the cell wall, so the cell bursts.';
-const AMINOGLYCOSIDE = 'Makes the ribosome misread its instructions, so the cell builds broken proteins.';
-const TETRACYCLINE = 'Blocks new building blocks from reaching the ribosome, so it can’t make proteins.';
-const MACROLIDE = 'Plugs the tunnel new proteins come out of in the ribosome.';
-const FLUOROQUINOLONE = 'Jams the enzymes that untwist DNA, so the cell can’t copy it.';
+const BETA_LACTAM = 'Blocks enzymes that strengthen the cell wall, so the cell can burst.';
+const AMINOGLYCOSIDE = 'Makes the ribosome misread its instructions, so it builds faulty proteins.';
+const TETRACYCLINE = 'Stops the ribosome accepting new amino acids, so it can’t extend proteins.';
+const MACROLIDE = 'Binds inside the ribosome’s exit tunnel, stalling the growth of new proteins.';
+const FLUOROQUINOLONE = 'Traps enzymes that manage DNA twists, disrupting DNA copying and causing breaks.';
 
 export const DRUGS = {
   P: {
