@@ -23,20 +23,24 @@ export function factDeck(pals, facts, random = Math.random) {
   return deck;
 }
 
-// Placeholder for the pal's name
-function blank(startsSentence) {
+// Placeholder for the pal's name ("this pal"), or another `noun`'s ("this drug")
+function blank(startsSentence, noun) {
   const gap = document.createElement('span');
   gap.className = 'fact-blank';
-  gap.textContent = startsSentence ? 'This pal' : 'this pal';
+  gap.textContent = `${startsSentence ? 'This' : 'this'} ${noun}`;
+  // So fillBlanks can capitalize a name that starts a sentence (penicillin).
+  if (startsSentence) gap.dataset.starts = '';
   return gap;
 }
 
 const SENTENCE_END = /(^|[.!?]["”]?\s+)["“]?$/;
 
-// Format fact text with name blanks and italics
-export function withBlanks(fact, name) {
+// Format fact text with name blanks and italics. Disk Detective uses it for
+// drugs too: `noun` is 'drug', and `ignoreCase` finds a drug's name at the
+// start of a sentence (Penicillin) as well as in the middle (penicillin).
+export function withBlanks(fact, name, { noun = 'pal', ignoreCase = false } = {}) {
   const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const word = new RegExp(`\\b${escaped}\\b`);
+  const word = new RegExp(`\\b${escaped}\\b`, ignoreCase ? 'i' : '');
   // Her name used as a describing word reads oddly as "this pal": "some
   // Goldie strains" becomes "some strains of this pal", not "some this pal
   // strains".
@@ -49,7 +53,7 @@ export function withBlanks(fact, name) {
     }
     const nodes = [];
     node.textContent.split(word).forEach((part, i) => {
-      if (i > 0) nodes.push(blank(SENTENCE_END.test(before)));
+      if (i > 0) nodes.push(blank(SENTENCE_END.test(before), noun));
       if (part) nodes.push(document.createTextNode(part));
       before += (i > 0 ? name : '') + part;
     });
@@ -61,6 +65,6 @@ export function fillBlanks(element, name, color) {
   for (const gap of element.querySelectorAll('.fact-blank')) {
     gap.classList.add('filled');
     gap.style.color = color;
-    gap.textContent = name;
+    gap.textContent = 'starts' in gap.dataset ? name[0].toUpperCase() + name.slice(1) : name;
   }
 }

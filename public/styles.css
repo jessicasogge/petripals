@@ -231,6 +231,15 @@ body {
   background: #ccfbf1;
 }
 
+/* Who’s That Pal? and Disk Detective, side by side (stacked on a narrow phone). */
+.home-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 0.75rem;
+  padding: 0 1rem;
+}
+
 .picker-page {
   min-height: 100vh;
   display: grid;
@@ -892,6 +901,120 @@ body {
 
 .next-fact[hidden] {
   display: none;
+}
+
+/* Disk Detective (game/disk-detective.js): a fact with "this drug" in place
+   of its name, over four antibiotic disks, then a card on how it works. */
+.drug-grid > .rival-btn {
+  flex-basis: calc((100% - 2.25rem) / 4);
+  max-width: 10rem;
+}
+
+@media (max-width: 760px) {
+  .drug-grid > .rival-btn {
+    flex-basis: calc((100% - 0.6rem) / 2);
+  }
+}
+
+.drug-btn {
+  color: #134e4a;
+  overflow-wrap: anywhere; /* trimethoprim-sulfamethoxazole */
+  line-height: 1.25;
+}
+
+/* A paper disk, like .antibiotic in the dish, with its code on it. */
+.drug-disk {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 3.6rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff, #f1f5f9);
+  border: 2px solid #cbd5e1;
+  box-shadow: 0 2px 4px rgba(19, 78, 74, 0.2);
+  color: #475569;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+/* With its clear zone of inhibition around it, on the buttons. */
+.drug-btn .drug-disk {
+  margin: 0.3rem 0 0.2rem;
+  box-shadow: 0 0 0 0.45rem rgba(255, 255, 252, 0.9), 0 0 0 0.6rem rgba(206, 192, 110, 0.35);
+}
+
+.drug-card {
+  max-width: 38rem;
+  margin: 1.25rem auto 0;
+  padding: 1rem 1.25rem;
+  background: #f0fdfa;
+  border: 2px solid #0f766e;
+  border-radius: 18px;
+  text-align: left;
+  line-height: 1.5;
+}
+
+.drug-card[hidden] {
+  display: none;
+}
+
+.drug-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  font-family: Fredoka, system-ui, sans-serif;
+  font-size: 1.4rem;
+  overflow-wrap: anywhere;
+}
+
+.drug-card p {
+  margin: 0.6rem 0 0;
+}
+
+.drug-card .drug-family {
+  font-weight: 700;
+  color: #0f766e;
+}
+
+.drug-guide {
+  max-width: 38rem;
+  margin: 1.5rem auto 0;
+  text-align: left;
+}
+
+.drug-guide summary {
+  text-align: center;
+  font-weight: 700;
+  color: #0f766e;
+  cursor: pointer;
+}
+
+.drug-guide h3 {
+  margin: 1.25rem 0 0.5rem;
+  font-family: Fredoka, system-ui, sans-serif;
+}
+
+.drug-guide ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.drug-guide li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.75rem;
+  align-items: center;
+  padding: 0.4rem 0;
+  line-height: 1.4;
+}
+
+.drug-guide li .drug-disk {
+  width: 2.8rem;
+  font-size: 0.8rem;
 }
 
 .pal-mover {

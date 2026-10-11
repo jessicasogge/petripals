@@ -119,3 +119,27 @@ describe('filling the blanks', () => {
     }
   });
 });
+
+describe('blanks for a drug (Disk Detective)', () => {
+  const drug = (fact, name) => {
+    const p = document.createElement('p');
+    p.append(...withBlanks(fact, name, { noun: 'drug', ignoreCase: true }));
+    return p;
+  };
+
+  it('says "this drug", and finds its name with or without a capital', () => {
+    expect(drug('Penicillin is a mold. Fleming found penicillin.', 'penicillin').textContent)
+      .toBe('This drug is a mold. Fleming found this drug.');
+  });
+
+  it('puts the capital back when its name starts a sentence', () => {
+    const p = drug('Penicillin is a mold. Fleming found penicillin.', 'penicillin');
+    fillBlanks(p, 'penicillin', '#0f766e');
+    expect(p.textContent).toBe('Penicillin is a mold. Fleming found penicillin.');
+  });
+
+  it('swaps a two-part name whole', () => {
+    expect(drug('Amoxicillin-clavulanate has a helper.', 'amoxicillin-clavulanate').textContent)
+      .toBe('This drug has a helper.');
+  });
+});

@@ -31,6 +31,10 @@ No steering this time. Your pal swims in a straight line on her own, and all you
 
 Tap **Who’s That Pal?** on the home page for a quiz on the pals' fun facts. Each round picks 12 pals at random and asks only about them. You get one fact with "this pal" in place of her name: tap the pal it's about. A wrong guess greys that pal out so you can try again, and the right one puts her name back in and shows her species. There's no score, so it's just for learning. A counter (like 2 / 70) shows how many of this round's facts you've seen, and you'll see each of them once before a new round picks 12 more. The quiz skips facts too broad to point to one pal (like "is Gram-positive"); the ones it uses are listed in `public/game/quiz-facts.js`.
 
+### Disk Detective
+
+Tap **Disk Detective** on the home page to learn about the antibiotics on the disks. You get a fact about one of them with "this drug" in place of its name, and four disks to choose from: tap the one it's about. The other three always attack something different (the cell wall, the protein factory, DNA, folate or reading genes), so only one fits. A wrong guess greys that disk out and tells you what that drug does. The right one fills in the name and shows a card: the drug's family, how it works, and which pals have its disk in Classic mode. There's no score. **All the antibiotic disks** at the bottom lists every disk in the game, grouped by what it attacks. The drugs and their facts are in `public/game/drugs.js`.
+
 ## The pals
 
 | Pal | Species | Shape |
@@ -111,7 +115,8 @@ The tests use [Vitest](https://vitest.dev/). Most of the game logic runs in [jsd
 | `public/choose-rivals.html` | Pick up to three rivals for Mixed Culture, or Surprise me |
 | `public/petri-dish.html` | The game, in any mode |
 | `public/whos-that-pal.html` | Who’s That Pal?, a quiz: which pal is this fact about? |
-| `public/game/` | Game code: Classic mode (`game.js`), Petri Picnic (`tumble.js`), Mixed Culture mode (`race.js`, with each rival's steering in `rival.js` and who's racing in `rivals.js`, picked on `choose-rivals.js`), what both share (a colony eating and dividing in `colony.js`, steering in `keyboard.js` and `touch.js`), how the pals grow (`rod.js`, `coccus.js`), antibiotics (`antibiotic.js`), nutrients, physics, settings and fun facts (`config.js`), the fun-fact pop-up (`facts.js`, with italics for scientific names from `italics.js`), the picker's microscope mode (`stain.js`), the win confetti (`spores.js`), Who’s That Pal? (`whos-that-pal.js`, with the facts' "this pal" swap in `guess.js` and the facts it asks about in `quiz-facts.js`), and a little surprise on the home page (`split.js`) |
+| `public/disk-detective.html` | Disk Detective, a quiz: which antibiotic is this fact about, and how does it work? |
+| `public/game/` | Game code: Classic mode (`game.js`), Petri Picnic (`tumble.js`), Mixed Culture mode (`race.js`, with each rival's steering in `rival.js` and who's racing in `rivals.js`, picked on `choose-rivals.js`), what both share (a colony eating and dividing in `colony.js`, steering in `keyboard.js` and `touch.js`), how the pals grow (`rod.js`, `coccus.js`), antibiotics (`antibiotic.js`), nutrients, physics, settings and fun facts (`config.js`), the fun-fact pop-up (`facts.js`, with italics for scientific names from `italics.js`), the picker's microscope mode (`stain.js`), the win confetti (`spores.js`), Who’s That Pal? (`whos-that-pal.js`, with the facts' "this pal" swap in `guess.js` and the facts it asks about in `quiz-facts.js`), Disk Detective (`disk-detective.js`, with every antibiotic's facts and how it works in `drugs.js`), and a little surprise on the home page (`split.js`) |
 | `public/game/pals.js` | Every pal's name and drawing, in one place. All the pages draw the pals from here, in the order listed (except the picker, which shuffles them each visit), eight to a page (`PAGE_SIZE`). To add a pal, see the notes at the top. |
 | `test/` | Tests |
 | `src/index.ts` | Small Express server for local development |
