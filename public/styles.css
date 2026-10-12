@@ -1081,6 +1081,16 @@ a.pal-card:focus-visible {
     drop-shadow(0 0 7px rgba(15, 118, 110, 0.45));
 }
 
+/* Pearl's glow traces her whole capsule, a much bigger shape than a rod
+   with thin flagella, so it gets a smaller, fainter teal ring to look like
+   everyone else's. */
+.pal-mover.player:has(> [data-pal="pearl"]:not([hidden])) {
+  filter:
+    drop-shadow(0 0 2px #fff)
+    drop-shadow(0 0 3px #fff)
+    drop-shadow(0 0 4px rgba(15, 118, 110, 0.28));
+}
+
 /* The rival's pal in mixed culture mode: a soft dark outline instead of the
    player's white glow, so you can tell who's who. */
 .pal-mover.rival {

@@ -462,6 +462,12 @@ describe('Pearl, in her capsule', () => {
     return svg;
   };
 
+  it('gets a softer teal glow when she\'s the player, since it traces her whole capsule', () => {
+    const rule = css.match(/\.pal-mover\.player:has\(> \[data-pal="pearl"\]:not\(\[hidden\]\)\) \{([^}]*)\}/);
+    expect(rule).not.toBeNull();
+    expect(rule[1]).toMatch(/drop-shadow\(0 0 4px rgba\(15, 118, 110, 0\.28\)\)/);
+  });
+
   it("has no flagella, since Klebsiella can't swim", () => {
     expect(art().querySelector('.flagellum')).toBeNull();
     expect(SWIMMERS).not.toContain('pearl');
