@@ -864,6 +864,44 @@ export const PALS = [
       </g>
     `,
   },
+  // Francisella tularensis
+  {
+    id: 'frannie',
+    name: 'Frannie',
+    looks: 'a small, plump coral Francisella tularensis with tiny bunny ears',
+    motion: 'bob',
+    // Framed roomy, so she looks small: she's one of the tiniest pals.
+    frames: { home: '0 0 200 200', picker: '26 26 148 148', dish: '22 22 156 156' },
+    art: `
+      <!-- tiny bunny ears, a nod to "snuffles," the sniffles she gives pet
+           rabbits (real cells have no ears!). Drawn first so her rod covers
+           their bases. -->
+      <g transform="rotate(-14 91 70)">
+        <ellipse cx="91" cy="66" rx="6" ry="14" fill="#ffb8a3" stroke="#a8432e" stroke-width="3" />
+        <!-- the pink middle of each ear, so they read as bunny ears -->
+        <ellipse cx="91" cy="64.5" rx="3.4" ry="10" fill="#f472b6" />
+        <ellipse cx="90" cy="61" rx="1.2" ry="4" fill="#fbcfe8" />
+      </g>
+      <g transform="rotate(14 109 70)">
+        <ellipse cx="109" cy="66" rx="6" ry="14" fill="#ffb8a3" stroke="#a8432e" stroke-width="3" />
+        <ellipse cx="109" cy="64.5" rx="3.4" ry="10" fill="#f472b6" />
+        <ellipse cx="108" cy="61" rx="1.2" ry="4" fill="#fbcfe8" />
+      </g>
+      <!-- her short, plump rod (no flagella: she can't swim) -->
+      <rect x="60" y="78" width="80" height="44" rx="22" fill="#ffb8a3" stroke="#a8432e" stroke-width="4" />
+      <circle cx="72" cy="89" r="3.2" fill="#fff1ea" />
+      <circle cx="129" cy="89" r="2.6" fill="#fff1ea" />
+      <g class="face">
+        <circle cx="92" cy="97" r="5" fill="#4a1a10" />
+        <circle cx="108" cy="97" r="5" fill="#4a1a10" />
+        <circle cx="93.6" cy="95.4" r="1.7" fill="white" />
+        <circle cx="109.6" cy="95.4" r="1.7" fill="white" />
+        <ellipse cx="80" cy="108" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="120" cy="108" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
+        <path d="M96 107 Q100 111.5 104 107" stroke="#4a1a10" stroke-width="2.8" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
 ];
 
 // The pals in the home page's row, in PALS order. The row is full: pals

@@ -933,6 +933,49 @@ export const SPECIES = {
       { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 25 },
     ],
   },
+  // Francisella tularensis
+  frannie: {
+    facts: [
+      "Frannie is a tiny Gram-negative coccobacillus: a short rod that looks almost round.",
+      "Frannie has no flagella.",
+      "Frannie's genus honors Edward Francis, an American researcher who studied tularemia.",
+      "Frannie's species name comes from Tulare County, California, where she was discovered.",
+      "McCoy and Chapin found Frannie in 1911 while studying plague in ground squirrels.",
+      "Frannie causes tularemia, an illness also nicknamed \"rabbit fever.\"",
+      "Rabbits, hares and rodents are especially vulnerable to Frannie's infections.",
+      "Infected ticks and deer flies can carry Frannie to people through their bites.",
+      "Frannie can enter through skin contact with infected animals.",
+      "People can also catch Frannie from contaminated water or inhaled dust.",
+      "Frannie can survive for weeks to months in cool water or mud.",
+      "Frannie can live inside macrophages, immune cells that normally swallow germs.",
+      "Frannie isn't known to spread from person to person.",
+    ],
+    scientific: 'Francisella tularensis',
+    color: '#a8432e', // for her name above the dish
+    kind: 'rod',
+    gram: 'negative',
+    // Small on purpose: she's one of the tiniest pals, and her frame leaves
+    // room around her, so she's drawn the smallest of the rods.
+    size: 9.5,
+    body: [
+      // her short, plump rod
+      [-0.115, 0.0, 0.154],
+      [-0.058, 0.0, 0.154],
+      [0.0, 0.0, 0.154],
+      [0.058, 0.0, 0.154],
+      [0.115, 0.0, 0.154],
+      // her ears, above it
+      [-0.058, -0.218, 0.05],
+      [0.058, -0.218, 0.05],
+    ],
+    antibiotics: [
+      { code: 'GM', name: 'gentamicin', zone: 28 },
+      { code: 'CIP', name: 'ciprofloxacin', zone: 31 },
+      { code: 'DO', name: 'doxycycline', zone: 25 },
+      { code: 'LVX', name: 'levofloxacin', zone: 33 },
+      { code: 'S', name: 'streptomycin', zone: 23 },
+    ],
+  },
 };
 
 // Mixed culture: no disks; race 1–3 AI rivals (chosen or one random) to TARGET cells.

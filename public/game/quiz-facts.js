@@ -157,4 +157,10 @@ export const QUIZ_FACTS = {
     "Pearl was first described by Carl Friedländer in 1882, so she's \"Friedländer's bacillus.\"",
     "Pearl's pneumonia can make thick, dark red \"currant jelly\" sputum.",
   ],
+  frannie: [
+    "Frannie's genus honors Edward Francis, an American researcher who studied tularemia.",
+    "Frannie's species name comes from Tulare County, California, where she was discovered.",
+    "McCoy and Chapin found Frannie in 1911 while studying plague in ground squirrels.",
+    "Frannie causes tularemia, an illness also nicknamed \"rabbit fever.\"",
+  ],
 };
