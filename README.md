@@ -31,6 +31,12 @@ No steering this time. Your pal swims in a straight line on her own, and all you
 
 Tap **Who’s That Pal?** on the home page for a quiz on the pals' fun facts. Each round picks 12 pals at random (9 on a phone) and asks only about them. You get one fact with "this pal" in place of her name: tap the pal it's about. A wrong guess greys that pal out so you can try again, and the right one puts her name back in and shows her species. There's no score, so it's just for learning. A counter (like 2 / 70) shows how many of this round's facts you've seen, and you'll see each of them once before a new round picks more. The quiz skips facts too broad to point to one pal (like "is Gram-positive"); the ones it uses are listed in `public/game/quiz-facts.js`.
 
+### Colony Stack
+
+Tap **Colony Stack** on the home page for a puzzle game on a round dish. Pieces made of pal cells drift in from the rim toward the food in the middle. Slide them around the dish (the dish turns, so the falling piece stays at the top), turn them, and drop them. Fill a ring all the way around and it clears, like a lawn of growth covering the plate edge to edge. Every 5 rings is a new level, and pieces drift in faster. The game ends when a new piece has no room at the rim.
+
+Every piece is a real way that pal's cells stick together after dividing: Scarlett's straight chain, Goldie's square cluster, Ana's branching T, Nova's right-angle L, Elia's zigzag, and Penny's pair. Use the buttons under the dish, or the arrow keys (← → slide, ↑ turn, ↓ drift in a ring) and the space bar to drop.
+
 ## The pals
 
 | Pal | Species | Shape |
@@ -113,7 +119,8 @@ The tests use [Vitest](https://vitest.dev/). Most of the game logic runs in [jsd
 | `public/choose-rivals.html` | Pick up to three rivals for Mixed Culture, or Surprise me |
 | `public/petri-dish.html` | The game, in any mode |
 | `public/whos-that-pal.html` | Who’s That Pal?, a quiz: which pal is this fact about? |
-| `public/game/` | Game code: Classic mode (`game.js`), Petri Picnic (`tumble.js`), Mixed Culture mode (`race.js`, with each rival's steering in `rival.js` and who's racing in `rivals.js`, picked on `choose-rivals.js`), what both share (a colony eating and dividing in `colony.js`, steering in `keyboard.js` and `touch.js`), how the pals grow (`rod.js`, `coccus.js`), antibiotics (`antibiotic.js`), nutrients, physics, settings and fun facts (`config.js`), the fun-fact pop-up (`facts.js`, with italics for scientific names from `italics.js`), the picker's microscope mode (`stain.js`), the win confetti (`spores.js`), Who’s That Pal? (`whos-that-pal.js`, with the facts' "this pal" swap in `guess.js` and the facts it asks about in `quiz-facts.js`), and a little surprise on the home page (`split.js`) |
+| `public/colony-stack.html` | Colony Stack, a puzzle game: fill rings around a round dish |
+| `public/game/` | Game code: Classic mode (`game.js`), Petri Picnic (`tumble.js`), Mixed Culture mode (`race.js`, with each rival's steering in `rival.js` and who's racing in `rivals.js`, picked on `choose-rivals.js`), what both share (a colony eating and dividing in `colony.js`, steering in `keyboard.js` and `touch.js`), how the pals grow (`rod.js`, `coccus.js`), antibiotics (`antibiotic.js`), nutrients, physics, settings and fun facts (`config.js`), the fun-fact pop-up (`facts.js`, with italics for scientific names from `italics.js`), the picker's microscope mode (`stain.js`), the win confetti (`spores.js`), Who’s That Pal? (`whos-that-pal.js`, with the facts' "this pal" swap in `guess.js` and the facts it asks about in `quiz-facts.js`), Colony Stack (`stack.js`, with its rules in `stack-board.js` and where its cells are drawn in `stack-draw.js`), and a little surprise on the home page (`split.js`) |
 | `public/game/pals.js` | Every pal's name and drawing, in one place. All the pages draw the pals from here, in the order listed (except the picker, which shuffles them each visit), eight to a page (`PAGE_SIZE`). To add a pal, see the notes at the top. |
 | `test/` | Tests |
 | `src/index.ts` | Small Express server for local development |
