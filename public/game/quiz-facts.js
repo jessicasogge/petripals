@@ -157,4 +157,10 @@ export const QUIZ_FACTS = {
     "Pearl was first described by Carl Friedländer in 1882, so she's \"Friedländer's bacillus.\"",
     "Pearl's pneumonia can make thick, dark red \"currant jelly\" sputum.",
   ],
+  patty: [
+    "Patty's genus is named for Louis Pasteur, who studied her as the cause of fowl cholera.",
+    "\"Multocida\" means \"kills many\" in Latin: Patty infects many kinds of animals.",
+    "Patty is often behind infected cat and dog bites, which can swell up within a day.",
+    "In rabbits, Patty causes \"snuffles,\" a sneezy, runny nose infection.",
+  ],
 };
