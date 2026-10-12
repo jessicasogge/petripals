@@ -195,6 +195,17 @@ export const DRUGS = {
       'Amikacin can be breathed in as a mist, packed into tiny bubbles of fat, to treat lung infections.',
     ],
   },
+  S: {
+    name: 'streptomycin',
+    family: 'aminoglycoside',
+    target: 'protein',
+    works: AMINOGLYCOSIDE,
+    facts: [
+      'Streptomycin was found in 1943 by Albert Schatz, a student in Selman Waksman’s lab, in a soil bacterium, *Streptomyces griseus*.',
+      'Streptomycin was the first drug that could cure tuberculosis.',
+      'Streptomycin is still one of the drugs used to treat plague.',
+    ],
+  },
   K: {
     name: 'kanamycin',
     family: 'aminoglycoside',
