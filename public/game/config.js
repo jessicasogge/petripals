@@ -933,26 +933,25 @@ export const SPECIES = {
       { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 25 },
     ],
   },
-  // Pasteurella multocida: a tiny coccobacillus with no flagella, from the
-  // mouths of cats and dogs. Her bunny ears are made up, a nod to "snuffles"
-  // in rabbits.
-  patty: {
+  // Francisella tularensis
+  frannie: {
     facts: [
-      "Patty is a Gram-negative coccobacillus, so she stains pink on a Gram stain.",
-      "Patty's genus is named for Louis Pasteur, who studied her as the cause of fowl cholera.",
-      "Around 1880, Pasteur made one of the first lab vaccines from weakened cultures of Patty.",
-      "\"Multocida\" means \"kills many\" in Latin: Patty infects many kinds of animals.",
-      "Patty lives harmlessly in the mouths of many cats and dogs.",
-      "Patty is often behind infected cat and dog bites, which can swell up within a day.",
-      "In rabbits, Patty causes \"snuffles,\" a sneezy, runny nose infection.",
-      "In cattle, Patty can cause a serious illness called hemorrhagic septicemia.",
-      "Patty has no flagella, so she can't swim.",
-      "Unlike most Gram-negative bacteria, Patty is usually killed by plain penicillin.",
-      "Patty's colonies can have a musty, \"mousy\" smell.",
-      "Patty is oxidase-positive: a drop of test reagent turns her colonies dark purple.",
-      "With some stains, Patty's cells look darker at both ends, like a safety pin.",
+      "Frannie is a tiny Gram-negative coccobacillus: a short rod that looks almost round.",
+      "Frannie has no flagella and can't swim.",
+      "Frannie doesn't make the tough survival spores that Terra and Diffany do.",
+      "Frannie's genus honors Edward Francis, an American researcher who studied tularemia.",
+      "Frannie's species name comes from Tulare County, California, where she was discovered.",
+      "McCoy and Chapin found Frannie in 1911 while studying plague in ground squirrels.",
+      "Frannie causes tularemia, an illness also nicknamed \"rabbit fever.\"",
+      "Rabbits, hares and rodents are especially vulnerable to Frannie's infections.",
+      "Infected ticks and deer flies can carry Frannie to people through their bites.",
+      "Frannie can enter through skin contact with infected animals.",
+      "People can also catch Frannie from contaminated water or inhaled dust.",
+      "Frannie can survive for weeks to months in cool water or mud.",
+      "Frannie can live inside macrophages, immune cells that normally swallow germs.",
+      "Frannie isn't known to spread from person to person.",
     ],
-    scientific: 'Pasteurella multocida',
+    scientific: 'Francisella tularensis',
     color: '#a8432e', // for her name above the dish
     kind: 'rod',
     gram: 'negative',
@@ -970,15 +969,12 @@ export const SPECIES = {
       [-0.058, -0.218, 0.05],
       [0.058, -0.218, 0.05],
     ],
-    // Drugs used against her, led by penicillin, which works on her though
-    // she's Gram-negative. Her zones are ballpark figures for a susceptible
-    // strain, near the disk sizes CLSI gives for Pasteurella.
     antibiotics: [
-      { code: 'P', name: 'penicillin', zone: 30 },
-      { code: 'AMC', name: 'amoxicillin-clavulanate', zone: 31 },
+      { code: 'GM', name: 'gentamicin', zone: 28 },
+      { code: 'CIP', name: 'ciprofloxacin', zone: 32 },
       { code: 'DO', name: 'doxycycline', zone: 28 },
-      { code: 'CRO', name: 'ceftriaxone', zone: 38 },
       { code: 'LVX', name: 'levofloxacin', zone: 33 },
+      { code: 'S', name: 'streptomycin', zone: 27 },
     ],
   },
 };
