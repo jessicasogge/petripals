@@ -186,6 +186,13 @@ describe('the pages', () => {
     }
   });
 
+  it('the picker puts two pals to a row on a phone, after the wider rules so they win', () => {
+    const phone = css.indexOf('@media (max-width: 520px) {\n  .picker-shell:has(.picker-grid)');
+    expect(phone).toBeGreaterThan(css.indexOf('\n.picker-grid .pal-card {'));
+    expect(phone).toBeGreaterThan(css.indexOf('\n.picker-grid .pal-icon {'));
+    expect(css.slice(phone, css.indexOf('\n}\n', phone))).toMatch(/flex-basis: calc\(\(100% - 0\.6rem\) \/ 2\)/);
+  });
+
   it('the picker shuffles all the pals together, then splits them into pages', async () => {
     // With Math.random always 0, the shuffle moves the first pal to the end.
     vi.spyOn(Math, 'random').mockReturnValue(0);

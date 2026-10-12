@@ -42,6 +42,16 @@ describe('Who’s That Pal?', () => {
     expect(document.querySelector('.loading-overlay').hidden).toBe(true);
   });
 
+  it('offers 9 pals on a phone, three rows of three', async () => {
+    window.matchMedia = (query) => ({ matches: query === '(max-width: 760px)' });
+    try {
+      await open();
+      expect(document.querySelectorAll('.guess-btn')).toHaveLength(9);
+    } finally {
+      delete window.matchMedia;
+    }
+  });
+
   it("only asks about those 12 pals' facts", async () => {
     await open();
     expect(new Set(deck.map(({ pal }) => pal))).toEqual(new Set(round));
