@@ -933,6 +933,54 @@ export const SPECIES = {
       { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 25 },
     ],
   },
+  // Pasteurella multocida: a tiny coccobacillus with no flagella, from the
+  // mouths of cats and dogs. Her bunny ears are made up, a nod to "snuffles"
+  // in rabbits.
+  patty: {
+    facts: [
+      "Patty is a Gram-negative coccobacillus, so she stains pink on a Gram stain.",
+      "Patty's genus is named for Louis Pasteur, who studied her as the cause of fowl cholera.",
+      "Around 1880, Pasteur made one of the first lab vaccines from weakened cultures of Patty.",
+      "\"Multocida\" means \"kills many\" in Latin: Patty infects many kinds of animals.",
+      "Patty lives harmlessly in the mouths of many cats and dogs.",
+      "Patty is often behind infected cat and dog bites, which can swell up within a day.",
+      "In rabbits, Patty causes \"snuffles,\" a sneezy, runny nose infection.",
+      "In cattle, Patty can cause a serious illness called hemorrhagic septicemia.",
+      "Patty has no flagella, so she can't swim.",
+      "Unlike most Gram-negative bacteria, Patty is usually killed by plain penicillin.",
+      "Patty's colonies can have a musty, \"mousy\" smell.",
+      "Patty is oxidase-positive: a drop of test reagent turns her colonies dark purple.",
+      "With some stains, Patty's cells look darker at both ends, like a safety pin.",
+    ],
+    scientific: 'Pasteurella multocida',
+    color: '#a8432e', // for her name above the dish
+    kind: 'rod',
+    gram: 'negative',
+    // Small on purpose: she's one of the tiniest pals, and her frame leaves
+    // room around her, so she's drawn the smallest of the rods.
+    size: 9.5,
+    body: [
+      // her short, plump rod
+      [-0.115, 0.0, 0.154],
+      [-0.058, 0.0, 0.154],
+      [0.0, 0.0, 0.154],
+      [0.058, 0.0, 0.154],
+      [0.115, 0.0, 0.154],
+      // her ears, above it
+      [-0.058, -0.218, 0.05],
+      [0.058, -0.218, 0.05],
+    ],
+    // Drugs used against her, led by penicillin, which works on her though
+    // she's Gram-negative. Her zones are ballpark figures for a susceptible
+    // strain, near the disk sizes CLSI gives for Pasteurella.
+    antibiotics: [
+      { code: 'P', name: 'penicillin', zone: 30 },
+      { code: 'AMC', name: 'amoxicillin-clavulanate', zone: 31 },
+      { code: 'DO', name: 'doxycycline', zone: 28 },
+      { code: 'CRO', name: 'ceftriaxone', zone: 38 },
+      { code: 'LVX', name: 'levofloxacin', zone: 33 },
+    ],
+  },
 };
 
 // Mixed culture: no disks; race 1–3 AI rivals (chosen or one random) to TARGET cells.
