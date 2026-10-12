@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 // Who’s That Pal? facts: shuffled into a deck, with "this pal" in place of the pal's name.
 import { describe, expect, it } from 'vitest';
-import { factDeck, fillBlanks, quizPals, withBlanks } from '../public/game/guess.js';
+import { factDeck, fillBlanks, PHONE, PHONE_ROUND_SIZE, quizPals, ROUND_SIZE, roundSize, withBlanks } from '../public/game/guess.js';
 import { PALS } from '../public/game/pals.js';
 import { QUIZ_FACTS } from '../public/game/quiz-facts.js';
 
@@ -44,6 +44,15 @@ describe("a round's pals", () => {
     expect(picked).toHaveLength(12);
     expect(new Set(picked).size).toBe(12);
     expect(picked).toEqual(PALS.filter((pal) => picked.includes(pal)));
+  });
+
+  it('uses 12 pals, or 9 on a phone, where the grid is three across', () => {
+    const screen = (phone) => ({ matchMedia: (query) => ({ matches: phone && query === PHONE }) });
+    expect(roundSize(screen(false))).toBe(ROUND_SIZE);
+    expect(roundSize(screen(true))).toBe(PHONE_ROUND_SIZE);
+    expect([ROUND_SIZE, PHONE_ROUND_SIZE]).toEqual([12, 9]);
+    expect(roundSize({})).toBe(ROUND_SIZE); // a browser that can't tell
+    expect(quizPals(PALS, PHONE_ROUND_SIZE)).toHaveLength(9);
   });
 
   it('picks different pals from round to round', () => {
