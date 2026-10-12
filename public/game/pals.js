@@ -864,12 +864,11 @@ export const PALS = [
       </g>
     `,
   },
-  // Patty: Pasteurella multocida, a small, plump coral coccobacillus with tiny
-  // bunny ears and no flagella
+  // Francisella tularensis
   {
-    id: 'patty',
-    name: 'Patty',
-    looks: 'a small, plump coral Pasteurella multocida with tiny bunny ears',
+    id: 'frannie',
+    name: 'Frannie',
+    looks: 'a small, plump coral Francisella tularensis with tiny bunny ears',
     motion: 'bob',
     // Framed roomy, so she looks small: she's one of the tiniest pals.
     frames: { home: '0 0 200 200', picker: '26 26 148 148', dish: '22 22 156 156' },
