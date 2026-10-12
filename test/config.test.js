@@ -75,8 +75,8 @@ describe('pals', () => {
     expect(Math.max(...body.map(([, , r]) => r))).toBeCloseTo(45 / 156, 2);
   });
 
-  it('makes Patty a small Gram-negative rod that splits apart, traced along her rod and up into her ears', () => {
-    const { kind, layout, gram, size, body, antibiotics } = SPECIES.patty;
+  it('makes Frannie a small Gram-negative rod that splits apart, traced along her rod and up into her ears', () => {
+    const { kind, layout, gram, size, body, antibiotics } = SPECIES.frannie;
     expect(kind).toBe('rod');
     expect(layout).toBeUndefined();
     expect(gram).toBe('negative');
@@ -88,8 +88,7 @@ describe('pals', () => {
     // Her two ears, above her rod (up is negative y).
     const ears = body.filter(([, y]) => y < 0);
     expect(ears).toHaveLength(2);
-    // Penicillin first: it works on her, though she's Gram-negative.
-    expect(antibiotics[0].code).toBe('P');
+    expect(antibiotics[0].code).toBe('GM');
   });
 
   it('makes Electra a Gram-negative rod that splits and slides apart, traced along her straight rod', () => {

@@ -506,16 +506,16 @@ describe('Pearl, in her capsule', () => {
   });
 });
 
-describe('Patty, with bunny ears', () => {
+describe('Frannie, with bunny ears', () => {
   const art = () => {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.innerHTML = palById('patty').art;
+    svg.innerHTML = palById('frannie').art;
     return svg;
   };
 
-  it("has no flagella, since Pasteurella can't swim", () => {
+  it("has no flagella, since Francisella tularensis can't swim", () => {
     expect(art().querySelector('.flagellum')).toBeNull();
-    expect(SWIMMERS).not.toContain('patty');
+    expect(SWIMMERS).not.toContain('frannie');
   });
 
   it('has two ears on top of her rod, each with a pink middle', () => {
@@ -545,9 +545,9 @@ describe('Patty, with bunny ears', () => {
 
   it('is framed roomy, so she looks small', () => {
     const width = (box) => Number(box.split(' ')[2]);
-    const patty = palById('patty');
-    expect(width(patty.frames.dish)).toBeGreaterThan(width(palById('coco').frames.dish));
-    expect(width(patty.frames.picker)).toBeLessThan(200);
+    const frannie = palById('frannie');
+    expect(width(frannie.frames.dish)).toBeGreaterThan(width(palById('coco').frames.dish));
+    expect(width(frannie.frames.picker)).toBeLessThan(200);
   });
 });
 
