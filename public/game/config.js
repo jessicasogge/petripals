@@ -971,10 +971,10 @@ export const SPECIES = {
     ],
     antibiotics: [
       { code: 'GM', name: 'gentamicin', zone: 28 },
-      { code: 'CIP', name: 'ciprofloxacin', zone: 32 },
-      { code: 'DO', name: 'doxycycline', zone: 28 },
+      { code: 'CIP', name: 'ciprofloxacin', zone: 31 },
+      { code: 'DO', name: 'doxycycline', zone: 25 },
       { code: 'LVX', name: 'levofloxacin', zone: 33 },
-      { code: 'S', name: 'streptomycin', zone: 27 },
+      { code: 'S', name: 'streptomycin', zone: 23 },
     ],
   },
 };
