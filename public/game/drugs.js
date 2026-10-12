@@ -31,10 +31,10 @@ export const DRUGS = {
     target: 'wall',
     works: BETA_LACTAM,
     facts: [
-      'Alexander Fleming discovered penicillin in 1928, when a mold landed on his plates of *Staphylococcus* and cleared the colonies around it.',
-      'Penicillin is made by a mold, *Penicillium*, like the blue-green fuzz on old bread and oranges.',
-      'The penicillin that saved soldiers in World War II came from a moldy cantaloupe bought at a market in Peoria, Illinois.',
-      'Penicillin has a square ring of atoms, the beta-lactam ring, that jams the enzymes building the cell wall.',
+      'Alexander Fleming discovered penicillin in 1928 after a mold contaminated a plate of *Staphylococcus* and stopped bacteria growing nearby.',
+      'Some *Penicillium* molds make penicillin; their relatives include the blue-green fuzz on old bread and oranges.',
+      'Mold from a cantaloupe found in Peoria, Illinois, helped scientists mass-produce penicillin during World War II.',
+      'Penicillin has a four-atom beta-lactam ring that disables enzymes needed to build strong bacterial cell walls.',
     ],
   },
   AMX: {
@@ -43,9 +43,9 @@ export const DRUGS = {
     target: 'wall',
     works: BETA_LACTAM,
     facts: [
-      'Amoxicillin is one of the antibiotics kids get most, often as a sweet liquid.',
+      'Amoxicillin is commonly prescribed to children, often as a sweet, flavored liquid.',
       'Amoxicillin is soaked up from the gut better than ampicillin, its close cousin.',
-      'Amoxicillin is a go-to drug for ear infections and strep throat.',
+      'Amoxicillin is a go-to drug for middle-ear infections and strep throat.',
     ],
   },
   AMP: {
@@ -63,11 +63,11 @@ export const DRUGS = {
     name: 'amoxicillin-clavulanate',
     family: 'penicillin',
     target: 'wall',
-    works: 'A penicillin plus a helper that blocks the enzymes bacteria use to break penicillins.',
+    works: 'A penicillin plus a helper that blocks some enzymes bacteria use to break penicillins.',
     facts: [
-      'Amoxicillin-clavulanate gives a penicillin a bodyguard: a helper that blocks the enzymes bacteria use to break penicillins.',
-      'The helper in amoxicillin-clavulanate was found in a soil bacterium, *Streptomyces clavuligerus*.',
-      'Amoxicillin-clavulanate is also called co-amoxiclav, or Augmentin.',
+      'Amoxicillin-clavulanate gives a penicillin a bodyguard: a helper that blocks many penicillin-breaking enzymes.',
+      'The helper in amoxicillin-clavulanate was discovered in a soil bacterium, *Streptomyces clavuligerus*.',
+      'Amoxicillin-clavulanate is also called co-amoxiclav, or sold under the brand name Augmentin.',
     ],
   },
   OX: {
@@ -76,8 +76,8 @@ export const DRUGS = {
     target: 'wall',
     works: BETA_LACTAM,
     facts: [
-      'Oxacillin shrugs off penicillinase, the enzyme *Staphylococcus aureus* uses to break penicillin.',
-      'A *Staphylococcus aureus* that oxacillin can’t stop is called MRSA: methicillin-resistant *S. aureus*.',
+      'Oxacillin shrugs off penicillinase, an enzyme some *Staphylococcus aureus* strains use to break penicillin.',
+      'A *Staphylococcus aureus* that tests resistant to oxacillin is reported as MRSA: methicillin-resistant *S. aureus*.',
       'Oxacillin is a close cousin of methicillin, which is hardly used anymore but gave MRSA its name.',
     ],
   },
@@ -85,9 +85,9 @@ export const DRUGS = {
     name: 'piperacillin-tazobactam',
     family: 'penicillin',
     target: 'wall',
-    works: 'A penicillin plus a helper that shields it from the enzymes bacteria use to break penicillins.',
+    works: 'A penicillin plus a helper that blocks some enzymes bacteria use to break penicillins.',
     facts: [
-      'Piperacillin-tazobactam is one of the few penicillins that work on *Pseudomonas aeruginosa*.',
+      'Piperacillin-tazobactam is one of the few penicillin combinations that can work on *Pseudomonas aeruginosa*.',
       'Piperacillin-tazobactam is given through an IV drip in hospitals, for serious infections.',
     ],
   },
@@ -108,7 +108,7 @@ export const DRUGS = {
     target: 'wall',
     works: BETA_LACTAM,
     facts: [
-      'Cefuroxime is a second-generation cephalosporin, a step between the oldest of its family and the newest.',
+      'Cefuroxime belongs to the second generation of cephalosporin antibiotics.',
       'Cefuroxime can be swallowed as a pill or given through an IV.',
     ],
   },
@@ -118,8 +118,8 @@ export const DRUGS = {
     target: 'wall',
     works: BETA_LACTAM,
     facts: [
-      'Cefotaxime, from 1980, was one of the first third-generation cephalosporins.',
-      'Cefotaxime is often picked for newborns, who shouldn’t get its cousin ceftriaxone.',
+      'Cefotaxime, introduced around 1980, was one of the first third-generation cephalosporins.',
+      'Cefotaxime has been preferred for newborns because ceftriaxone poses special risks for them.',
     ],
   },
   CFM: {
@@ -129,7 +129,7 @@ export const DRUGS = {
     works: BETA_LACTAM,
     facts: [
       'Cefixime lasts long enough in the body to be taken just once or twice a day.',
-      'Cefixime was the first third-generation cephalosporin made as a pill, in the 1980s.',
+      'Cefixime was the first third-generation cephalosporin available by mouth, in the 1980s.',
     ],
   },
   CAZ: {
@@ -138,8 +138,8 @@ export const DRUGS = {
     target: 'wall',
     works: BETA_LACTAM,
     facts: [
-      'Ceftazidime is one of the few cephalosporins that work well on *Pseudomonas aeruginosa*.',
-      'Ceftazidime is often paired with avibactam, a newer helper that blocks drug-breaking enzymes.',
+      'Ceftazidime is one of the few cephalosporins that can work on *Pseudomonas aeruginosa*.',
+      'Ceftazidime can be paired with avibactam, a newer helper that blocks some drug-breaking enzymes.',
     ],
   },
   MEM: {
@@ -148,9 +148,9 @@ export const DRUGS = {
     target: 'wall',
     works: BETA_LACTAM,
     facts: [
-      'Meropenem is a carbapenem, a family often saved for the toughest infections.',
-      'Bacteria that resist meropenem and the other carbapenems are some of the most worrying superbugs.',
-      'Meropenem reaches more kinds of bacteria than almost any other antibiotic: Gram-positives, Gram-negatives and anaerobes.',
+      'Meropenem is a carbapenem, a family often reserved for serious or resistant infections.',
+      'Bacteria that resist carbapenems like meropenem are some of the most worrying superbugs.',
+      'Meropenem covers a wide range of bacteria: many Gram-positives, Gram-negatives and anaerobes.',
     ],
   },
   IPM: {
@@ -159,20 +159,20 @@ export const DRUGS = {
     target: 'wall',
     works: BETA_LACTAM,
     facts: [
-      'Imipenem, approved in 1985, was the first carbapenem.',
-      'Imipenem is given with cilastatin, which stops the kidneys breaking it down.',
-      'Imipenem was made from thienamycin, found in the soil bacterium *Streptomyces cattleya*.',
+      'Imipenem became the first carbapenem approved for clinical use in 1985.',
+      'Imipenem is given with cilastatin, which stops a kidney enzyme from breaking it down.',
+      'Imipenem was developed from thienamycin, found in the soil bacterium *Streptomyces cattleya*.',
     ],
   },
   VA: {
     name: 'vancomycin',
     family: 'glycopeptide',
     target: 'wall',
-    works: 'Grabs the cell wall’s building blocks so they can’t be joined up, so the cell bursts.',
+    works: 'Grabs cell-wall building blocks so they can’t be joined properly, and the cell can burst.',
     facts: [
       'Vancomycin was found in a soil sample from the jungles of Borneo in the 1950s.',
       'Vancomycin got its name from the word “vanquish.”',
-      'Vancomycin is too big to get through the outer coat of Gram-negative bacteria, so it only works on Gram-positives.',
+      'Vancomycin is too big to cross most Gram-negative outer membranes, so it mainly works on Gram-positives.',
     ],
   },
   GM: {
@@ -182,7 +182,7 @@ export const DRUGS = {
     works: AMINOGLYCOSIDE,
     facts: [
       'Gentamicin is spelled with an i, not a y, because it comes from *Micromonospora*, not *Streptomyces*.',
-      'Gentamicin needs oxygen to get into a cell, so it can’t touch bacteria that live without it.',
+      'Gentamicin needs energy from bacterial respiration to get inside, so it doesn’t work on obligate anaerobes.',
     ],
   },
   AN: {
@@ -191,8 +191,8 @@ export const DRUGS = {
     target: 'protein',
     works: AMINOGLYCOSIDE,
     facts: [
-      'Amikacin was made in a lab in 1972 by tweaking kanamycin so bacteria’s enzymes can’t break it.',
-      'Amikacin can be breathed in as a mist, packed into tiny bubbles of fat, to treat lung infections.',
+      'Amikacin was developed by tweaking kanamycin so many bacterial resistance enzymes can’t inactivate it.',
+      'Amikacin can be inhaled in tiny bubbles of fat to help treat certain hard-to-treat mycobacterial lung infections.',
     ],
   },
   S: {
@@ -201,8 +201,9 @@ export const DRUGS = {
     target: 'protein',
     works: AMINOGLYCOSIDE,
     facts: [
-      'Streptomycin was found in 1943 by Albert Schatz, a student in Selman Waksman’s lab, in a soil bacterium, *Streptomyces griseus*.',
-      'Streptomycin was the first drug that could cure tuberculosis.',
+      'Albert Schatz discovered streptomycin in 1943 in Selman Waksman’s lab, with contributions from Elizabeth Bugie.',
+      'Streptomycin was first isolated from the soil bacterium *Streptomyces griseus*.',
+      'Streptomycin was the first effective antibiotic against tuberculosis.',
       'Streptomycin is still one of the drugs used to treat plague.',
     ],
   },
@@ -212,7 +213,7 @@ export const DRUGS = {
     target: 'protein',
     works: AMINOGLYCOSIDE,
     facts: [
-      'Kanamycin was discovered in Japan in 1957 by Hamao Umezawa.',
+      'Kanamycin was discovered in Japan in 1957 by Hamao Umezawa and his team.',
       'Kanamycin is made by a soil bacterium, *Streptomyces kanamyceticus*.',
     ],
   },
@@ -222,10 +223,10 @@ export const DRUGS = {
     target: 'protein',
     works: TETRACYCLINE,
     facts: [
-      'Tetracycline glows yellow under UV light.',
-      'Tetracycline can stain children’s growing teeth, so young kids usually don’t get it.',
+      'Tetracycline can glow yellow under UV light.',
+      'Tetracycline can stain developing teeth, so it is usually avoided in children under eight.',
       'Tetracycline is named for its four (tetra-) rings of atoms.',
-      'Traces of tetracycline turned up in the bones of ancient Nubians, likely from their beer.',
+      'Tetracycline was found in ancient Nubian bones, probably from fermented grain used in beer.',
     ],
   },
   DO: {
@@ -234,8 +235,8 @@ export const DRUGS = {
     target: 'protein',
     works: TETRACYCLINE,
     facts: [
-      'Doxycycline is a first-choice treatment for Lyme disease.',
-      'Doxycycline is also used to keep travelers from catching malaria.',
+      'Doxycycline is a first-choice treatment for early Lyme disease.',
+      'Doxycycline is also used to help prevent malaria in travelers.',
     ],
   },
   E: {
@@ -244,7 +245,7 @@ export const DRUGS = {
     target: 'protein',
     works: MACROLIDE,
     facts: [
-      'Erythromycin was found in 1949 in soil from the Philippines, made by a bacterium now called *Saccharopolyspora erythraea*.',
+      'Erythromycin came from Philippine soil sampled in 1949, made by a bacterium now called *Saccharopolyspora erythraea*.',
       'Erythromycin is a macrolide, named for its big ring of atoms.',
     ],
   },
@@ -256,7 +257,7 @@ export const DRUGS = {
     facts: [
       'Azithromycin was discovered in 1980 by a team at Pliva, a drug company in Croatia.',
       'Azithromycin stays in the body so long that a course is often just 3 to 5 days.',
-      'Azithromycin is a main treatment for chlamydia, often as a single dose.',
+      'Azithromycin can treat chlamydia with a single dose.',
     ],
   },
   CC: {
@@ -266,7 +267,7 @@ export const DRUGS = {
     works: 'Jams the spot in the ribosome that links building blocks into a protein.',
     facts: [
       'Clindamycin is made from lincomycin, from a soil bacterium found near Lincoln, Nebraska.',
-      'Clindamycin can switch off toxin-making in *Streptococcus* and *Staphylococcus*, so it’s added for toxic shock.',
+      'Clindamycin reduces toxin-making in some strep and staph bacteria, so it can be added for toxic shock.',
     ],
   },
   LZD: {
@@ -275,9 +276,9 @@ export const DRUGS = {
     target: 'protein',
     works: 'Stops the ribosome getting started, so it can’t make proteins.',
     facts: [
-      'Linezolid, approved in 2000, was the first of a whole new family made in a lab, the oxazolidinones.',
-      'Linezolid works on MRSA, and on enterococci that vancomycin can’t stop.',
-      'Linezolid works just as well swallowed as a pill as it does through an IV.',
+      'Linezolid, approved in 2000, was the first antibiotic in the synthetic oxazolidinone family.',
+      'Linezolid can treat MRSA and enterococci that resist vancomycin.',
+      'Linezolid is absorbed almost completely, so equivalent pill and IV doses work similarly.',
     ],
   },
   C: {
@@ -287,8 +288,8 @@ export const DRUGS = {
     works: 'Blocks the ribosome from linking building blocks into a protein.',
     facts: [
       'Chloramphenicol was found in 1947 in *Streptomyces venezuelae*, a bacterium from Venezuelan soil.',
-      'Chloramphenicol is rarely used today because, very rarely, it stops the bone marrow making blood.',
-      'Chloramphenicol was the first antibiotic made from scratch in a factory instead of grown, in 1949.',
+      'Chloramphenicol’s use is limited because it can very rarely cause life-threatening bone-marrow failure.',
+      'Introduced in 1949, chloramphenicol was the first antibiotic manufactured synthetically on a large scale.',
     ],
   },
   CIP: {
@@ -299,7 +300,7 @@ export const DRUGS = {
     facts: [
       'Ciprofloxacin was stockpiled in the U.S. during the 2001 anthrax letter attacks.',
       'Ciprofloxacin is a fluoroquinolone, a family that can, rarely, make tendons tear.',
-      'Ciprofloxacin came out in 1987 and became one of the most used antibiotics in the world.',
+      'Ciprofloxacin was approved in the U.S. in 1987.',
     ],
   },
   LVX: {
@@ -308,7 +309,7 @@ export const DRUGS = {
     target: 'dna',
     works: FLUOROQUINOLONE,
     facts: [
-      'Levofloxacin is the “left-handed” half of an older drug, ofloxacin, and the half that does the work.',
+      'Levofloxacin is the “left-handed” half of an older drug, ofloxacin, and the much more active half.',
       'Levofloxacin is called a “respiratory fluoroquinolone” because it works well on *Streptococcus pneumoniae*.',
     ],
   },
@@ -316,9 +317,9 @@ export const DRUGS = {
     name: 'metronidazole',
     family: 'nitroimidazole',
     target: 'dna',
-    works: 'Switches on only inside cells that live without oxygen, then breaks their DNA.',
+    works: 'Gets switched on inside certain microbes adapted to little or no oxygen, then damages their DNA.',
     facts: [
-      'Metronidazole only switches on inside cells that live without oxygen, so it hits anaerobes like *C. difficile*.',
+      'Metronidazole targets anaerobic bacteria—bacteria that can live without oxygen.',
       'Metronidazole also kills some parasites, like *Giardia*.',
     ],
   },
@@ -326,20 +327,20 @@ export const DRUGS = {
     name: 'trimethoprim-sulfamethoxazole',
     family: 'sulfonamide combination',
     target: 'folate',
-    works: 'Two drugs that block two steps in making folate, a vitamin bacteria need to build DNA.',
+    works: 'Two drugs that block two steps in making usable folate, a vitamin bacteria need to build DNA.',
     facts: [
-      'Trimethoprim-sulfamethoxazole blocks two steps in a row on the way to making folate, like closing two gates on one road.',
-      'Trimethoprim-sulfamethoxazole is the main treatment for *Nocardia*.',
-      'Trimethoprim-sulfamethoxazole has a sulfa drug in it, from the first family of antibacterial medicines, in the 1930s.',
+      'Trimethoprim-sulfamethoxazole blocks two steps along the folate pathway, like closing two gates on one road.',
+      'Trimethoprim-sulfamethoxazole is a main treatment for infections caused by *Nocardia*.',
+      'Trimethoprim-sulfamethoxazole contains a sulfa drug, from one of the first widely used families of antibacterial medicines in the 1930s.',
     ],
   },
   RA: {
     name: 'rifampin',
     family: 'rifamycin',
     target: 'rna',
-    works: 'Stops RNA polymerase, so the cell can’t read its genes.',
+    works: 'Stops bacterial RNA polymerase, so the cell can’t read its genes.',
     facts: [
-      'Rifampin turns tears, sweat and pee orange-red.',
+      'Rifampin can turn tears, sweat and pee orange-red.',
       'Rifampin is one of the main drugs for tuberculosis.',
       'Rifampin’s family is named after Rififi, a 1955 French heist movie.',
     ],
