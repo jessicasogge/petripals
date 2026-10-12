@@ -36,22 +36,18 @@
         <p class="stack-level">Level 1</p>
       </div>
 
-      <!-- The dish, drawn by game/stack.js. The rings and cells turn so the
-           falling piece is always at the top. -->
+      <!-- The dish, drawn by game/stack.js. Drag around it to move the
+           falling piece; tap it to turn the piece. -->
       <div class="stack-dish">
         <svg viewBox="0 0 362 362" role="img" aria-label="A round petri dish. Colony pieces drift in from the rim toward food in the middle.">
           <circle cx="181" cy="181" r="177" fill="#fffbeb" stroke="#ffffff" stroke-width="7" />
-          <g class="stack-turning">
-            <g class="stack-guides"></g>
-            <g class="stack-cells"></g>
-          </g>
+          <g class="stack-guides"></g>
+          <g class="stack-cells"></g>
           <!-- The food in the middle. -->
-          <circle cx="181" cy="181" r="30" fill="#fef3c7" stroke="#fcd34d" stroke-width="2" stroke-dasharray="4 4" />
-          <circle cx="176" cy="177" r="8" fill="#fde68a" stroke="#d97706" stroke-width="2" />
-          <circle cx="188" cy="186" r="5.5" fill="#fde68a" stroke="#d97706" stroke-width="2" />
-          <circle cx="173" cy="190" r="3.5" fill="#fde68a" stroke="#d97706" stroke-width="2" />
-          <!-- Which way pieces drift: in, toward the food. -->
-          <path d="M174 6 L181 13 L188 6" stroke="#0f766e" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+          <circle cx="181" cy="181" r="42" fill="#fef3c7" stroke="#fcd34d" stroke-width="2" stroke-dasharray="5 5" />
+          <circle cx="173" cy="174" r="13" fill="#fde68a" stroke="#d97706" stroke-width="2.5" />
+          <circle cx="193" cy="188" r="9" fill="#fde68a" stroke="#d97706" stroke-width="2.5" />
+          <circle cx="170" cy="195" r="5.5" fill="#fde68a" stroke="#d97706" stroke-width="2.5" />
         </svg>
         <p class="stack-cheer" aria-live="polite" hidden></p>
       </div>
@@ -70,24 +66,24 @@
       <p class="stack-fact"></p>
 
       <div class="stack-controls">
-        <button class="stack-left" type="button" aria-label="Slide left around the dish">
+        <button class="stack-left" type="button" aria-label="Move counterclockwise">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 15 A8 8 0 0 0 5 12" /><path d="M3 8 L5 12 L9 10.5" /></svg>
-          <span>Left</span>
+          <span>Back</span>
         </button>
         <button class="stack-turn" type="button" aria-label="Turn the piece">
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2" /><path d="M12 2 A10 10 0 0 1 22 12" /><path d="M22 8 L22 12 L18 12" /></svg>
           <span>Turn</span>
         </button>
-        <button class="stack-right" type="button" aria-label="Slide right around the dish">
+        <button class="stack-right" type="button" aria-label="Move clockwise">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15 A8 8 0 0 1 19 12" /><path d="M21 8 L19 12 L15 10.5" /></svg>
-          <span>Right</span>
+          <span>Ahead</span>
         </button>
         <button class="stack-drop" type="button" aria-label="Drop the piece in">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="19" r="2.5" /><path d="M7 4 L12 9 L17 4" /><path d="M7 10 L12 15 L17 10" /></svg>
           <span>Drop</span>
         </button>
       </div>
-      <p class="stack-keys">Keys: ← → slide, ↑ turn, ↓ drift in, space to drop.</p>
+      <p class="stack-keys">Drag around the dish to move the piece, tap it to turn.<span class="stack-key-list"> Keys: ← → around, ↑ turn, ↓ drift in, space to drop.</span></p>
 
       <!-- The colony reached the rim. -->
       <div class="stack-over" hidden>

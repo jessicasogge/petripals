@@ -33,9 +33,9 @@ Tap **Who’s That Pal?** on the home page for a quiz on the pals' fun facts. Ea
 
 ### Colony Stack
 
-Tap **Colony Stack** on the home page for a puzzle game on a round dish. Pieces made of pal cells drift in from the rim toward the food in the middle. Slide them around the dish (the dish turns, so the falling piece stays at the top), turn them, and drop them. Fill a ring all the way around and it clears, like a lawn of growth covering the plate edge to edge. Every 5 rings is a new level, and pieces drift in faster. The game ends when a new piece has no room at the rim.
+Tap **Colony Stack** on the home page for a puzzle game on a round dish. Pieces made of pal cells drift in from the rim toward the food in the middle. Drag a finger around the dish and the falling piece follows it; tap the dish to turn the piece. Fill a ring all the way around (12 spots, so three of Scarlett's chains) and it clears, like a lawn of growth covering the plate edge to edge. Every 5 rings is a new level, and pieces drift in faster. The game ends when a new piece has no room at the rim.
 
-Every piece is a real way that pal's cells stick together after dividing: Scarlett's straight chain, Goldie's square cluster, Ana's branching T, Nova's right-angle L, Elia's zigzag, and Penny's pair. Use the buttons under the dish, or the arrow keys (← → slide, ↑ turn, ↓ drift in a ring) and the space bar to drop.
+Every piece is a real way that pal's cells stick together after dividing: Scarlett's straight chain, Goldie's square cluster, Ana's branching T, Nova's right-angle L, Elia's zigzag, and Penny's pair. There are buttons under the dish too, and on a computer the arrow keys (← → around the dish, ↑ turn, ↓ drift in a ring) and the space bar to drop. Every cell is drawn the same size wherever it is, on a soft patch of its colony's color, so a piece looks the same at the rim as by the food.
 
 ## The pals
 

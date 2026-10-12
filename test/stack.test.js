@@ -17,6 +17,7 @@ vi.mock('../public/game/stack-board.js', async (original) => {
 
 const board = await import('../public/game/stack-board.js');
 const { PIECES, STACK, driftMs, emptyBoard, shuffledPals } = board;
+const { spotCenter } = await import('../public/game/stack-draw.js');
 
 const page = readFileSync(resolve(process.cwd(), 'public/colony-stack.html'), 'utf8');
 
@@ -49,7 +50,8 @@ const $ = (selector) => document.querySelector(selector);
 const text = (selector) => $(selector).textContent;
 const press = (key) => window.dispatchEvent(new KeyboardEvent('keydown', { key, cancelable: true }));
 const click = (name) => $(`.stack-${name}`).click();
-const turn = () => $('.stack-turning').style.transform;
+// Where the falling piece's face is: it's drawn last, and the ghost has none.
+const turn = () => [...document.querySelectorAll('.stack-cells .face')].at(-1).getAttribute('transform');
 const cellCount = () => Number(text('.stack-cell-count'));
 // The pals in the order they come, with Math.random pinned to 0.
 const order = shuffledPals(() => 0).reverse();
@@ -123,7 +125,7 @@ describe('Colony Stack', () => {
     expect(text('.stack-fact')).toMatch(/^Penny /);
   });
 
-  it('slides around the dish with the buttons and arrow keys, turning the dish', async () => {
+  it('moves around the dish with the buttons and arrow keys', async () => {
     await open();
     const start = turn();
     click('right');
@@ -139,7 +141,7 @@ describe('Colony Stack', () => {
 
   it("doesn't slide into another cell", async () => {
     await open();
-    // Scarlett lands in the innermost ring, sectors 15, 0, 1 and 2.
+    // Scarlett lands in the innermost ring, sectors 11, 0, 1 and 2.
     click('drop');
     // Penny (sectors 0 and 1) slides to 3 and 4 and drifts in beside her...
     for (let i = 0; i < 3; i++) click('right');
@@ -155,7 +157,7 @@ describe('Colony Stack', () => {
   it("doesn't slide into another cell on the other side either", async () => {
     await open();
     click('drop');
-    // Penny at 13 and 14, just left of Scarlett.
+    // Penny at 9 and 10, just counterclockwise of Scarlett.
     for (let i = 0; i < 3; i++) click('left');
     for (let i = 0; i < STACK.RINGS - 1; i++) press('ArrowDown');
     const beside = turn();
@@ -268,5 +270,82 @@ describe('Colony Stack', () => {
       click('drop');
     }
     expect(new Set(seen.slice(0, 6)).size).toBe(6);
+  });
+  describe('on the dish', () => {
+    const svg = () => $('.stack-dish > svg');
+    const pointer = (type, x, y) => svg().dispatchEvent(new MouseEvent(type, { clientX: x, clientY: y, bubbles: true }));
+    // The dish drawn at its own size, at the top left of the page.
+    const place = () => { svg().getBoundingClientRect = () => ({ left: 0, top: 0, width: 362, height: 362 }); };
+    const facing = (sector) => {
+      const { x, y } = spotCenter(STACK.RINGS - 1, sector);
+      return `translate(${x} ${y})`;
+    };
+
+    it('moves the piece to where a finger drags it, the short way round', async () => {
+      await open();
+      place();
+      pointer('pointerdown', 190, 10);
+      // Round to the right-hand side: sector 3 of 12.
+      pointer('pointermove', 352, 190);
+      expect(turn()).toBe(facing(STACK.SECTORS / 4));
+      pointer('pointerup', 352, 190);
+      // Now back past the top to the left-hand side.
+      pointer('pointerdown', 352, 190);
+      pointer('pointermove', 10, 170);
+      expect(turn()).toBe(facing(3 * STACK.SECTORS / 4));
+      pointer('pointerup', 10, 170);
+    });
+
+    it('turns the piece for a tap, but not for a finger that strays a little', async () => {
+      await open();
+      place();
+      const before = $('.stack-cells').innerHTML;
+      pointer('pointerdown', 190, 10);
+      pointer('pointermove', 193, 12);
+      expect($('.stack-cells').innerHTML).toBe(before);
+      pointer('pointerup', 193, 12);
+      expect($('.stack-cells').innerHTML).not.toBe(before);
+    });
+
+    it('stops the piece at whatever is in the way', async () => {
+      await open();
+      place();
+      click('drop');
+      for (let i = 0; i < 3; i++) click('right');
+      for (let i = 0; i < STACK.RINGS - 1; i++) press('ArrowDown');
+      const beside = turn();
+      pointer('pointerdown', 352, 190);
+      // Dragged back toward the top, through Scarlett.
+      pointer('pointermove', 190, 10);
+      expect(turn()).toBe(beside);
+    });
+
+    it('ignores a finger that never touched down, or was cancelled, or a game that is over', async () => {
+      await open();
+      place();
+      const before = $('.stack-cells').innerHTML;
+      pointer('pointermove', 352, 190);
+      pointer('pointerup', 352, 190);
+      pointer('pointerdown', 190, 10);
+      svg().dispatchEvent(new MouseEvent('pointercancel'));
+      pointer('pointermove', 352, 190);
+      pointer('pointerup', 352, 190);
+      expect($('.stack-cells').innerHTML).toBe(before);
+      for (let i = 0; i < 20 && $('.stack-over').hidden; i++) click('drop');
+      const over = $('.stack-cells').innerHTML;
+      pointer('pointerdown', 190, 10);
+      pointer('pointerup', 190, 10);
+      expect($('.stack-cells').innerHTML).toBe(over);
+    });
+
+    it('stops following a finger once the game is over', async () => {
+      await open();
+      place();
+      pointer('pointerdown', 190, 10);
+      for (let i = 0; i < 20 && $('.stack-over').hidden; i++) click('drop');
+      const over = $('.stack-cells').innerHTML;
+      pointer('pointermove', 352, 190);
+      expect($('.stack-cells').innerHTML).toBe(over);
+    });
   });
 });

@@ -1,6 +1,7 @@
 // Colony Stack: colony pieces drift in from the rim of a round dish toward
-// the food in the middle. Slide them around the dish and turn them, and fill
-// a ring all the way around to clear it. The game ends when a new piece has
+// the food in the middle. Move them around the dish (with a finger, the
+// buttons or the arrow keys) and turn them, and fill a ring all the way
+// around to clear it. The game ends when a new piece has
 // no room at the rim. The rules are in stack-board.js, the drawing math in
 // stack-draw.js.
 import { withItalics } from './italics.js';
@@ -11,14 +12,16 @@ import {
   PIECES, cellsOf, clearRings, driftMs, emptyBoard, fits, landing, levelFor,
   moved, newPiece, pointsFor, settle, shuffledPals, turned,
 } from './stack-board.js';
-import { cellCenter, cellPath, dishTurn, flatCells, guideCircles, guideSpokes } from './stack-draw.js';
+import {
+  DISH, cellShape, flatCells, guideCircles, guideSpokes, sectorAt, spotCenter, spotPath, stepsBetween,
+} from './stack-draw.js';
 import { track } from './track.js';
 
 // "Growing the colony…" while the next screen loads.
 watchLoading();
 
 const $ = (selector) => document.querySelector(selector);
-const turning = $('.stack-turning');
+const dish = $('.stack-dish > svg');
 const cellsLayer = $('.stack-cells');
 const cheer = $('.stack-cheer');
 const over = $('.stack-over');
@@ -27,6 +30,8 @@ const over = $('.stack-over');
 // tab doesn't drop a pile of pieces at once.
 const MAX_FRAME_MS = 250;
 const CHEER_MS = 1200;
+// A finger that moves less than this (in px) before lifting is a tap.
+const TAP_PX = 10;
 
 let board;
 let piece;
@@ -52,18 +57,21 @@ function nextPal() {
   return queue.pop();
 }
 
-// One cell, with her face if it's the piece's first cell. `ghost` is the
-// dashed outline of where the falling piece will land.
+// One cell: a patch of her colony's color on the agar, with her cell on top
+// and her face if it's the piece's first cell. `ghost` is just the dashed
+// outline of a spot, for where the falling piece will land.
 function cellSvg({ ring, sector, face }, pal, ghost = false) {
   const { round, fill, line } = PIECES[pal];
-  const d = cellPath(ring, sector, round);
+  const d = spotPath(ring, sector);
   if (ghost) return `<path class="ghost" d="${d}" stroke="${line}" />`;
-  let svg = `<path d="${d}" fill="${fill}" stroke="${line}" />`;
+  const { tag, attrs } = cellShape(ring, sector, round);
+  const shape = Object.entries(attrs).map(([name, value]) => `${name}="${value}"`).join(' ');
+  let svg = `<path class="patch" d="${d}" fill="${fill}" /><${tag} class="cell" ${shape} fill="${fill}" stroke="${line}" />`;
   if (face) {
-    const { x, y } = cellCenter(ring, sector);
+    const { x, y } = spotCenter(ring, sector);
     svg += `<g class="face" transform="translate(${x} ${y})" fill="${line}" stroke="${line}">` +
-      '<circle cx="-2.6" cy="-1" r="1.3" /><circle cx="2.6" cy="-1" r="1.3" />' +
-      '<path d="M-2.6 2 Q0 4.4 2.6 2" fill="none" /></g>';
+      '<circle cx="-2.4" cy="-1" r="1.2" /><circle cx="2.4" cy="-1" r="1.2" />' +
+      '<path d="M-2.4 1.8 Q0 4 2.4 1.8" fill="none" /></g>';
   }
   return svg;
 }
@@ -77,7 +85,6 @@ function draw() {
     const ghost = landing(board, piece);
     if (ghost.ring !== piece.ring) for (const cell of cellsOf(ghost)) parts.push(cellSvg(cell, piece.pal, true));
     for (const cell of cellsOf(piece)) parts.push(cellSvg(cell, piece.pal));
-    turning.style.transform = `rotate(${dishTurn(piece.sector)}deg)`;
   }
   cellsLayer.innerHTML = parts.join('');
 }
@@ -112,9 +119,9 @@ function showFact() {
   $('.stack-fact').replaceChildren(name, ' ', ...withItalics(PIECES[piece.pal].fact));
 }
 
-// A new piece at the rim, where the last one was. No room means game over.
-function spawn(sector) {
-  piece = newPiece(upNext, sector);
+// A new piece at the top of the rim. No room means game over.
+function spawn() {
+  piece = newPiece(upNext);
   upNext = nextPal();
   showNext();
   if (!fits(board, piece)) {
@@ -152,7 +159,7 @@ function land() {
       track(`colony-stack/level-${level}`);
     }
   }
-  spawn(piece.sector);
+  spawn();
   showStats();
   draw();
 }
@@ -203,16 +210,24 @@ function start() {
   over.hidden = true;
   playing = true;
   upNext = nextPal();
-  spawn(0);
+  spawn();
   showStats();
   draw();
   requestAnimationFrame(frame);
 }
 
+// Move the piece one sector around the dish, if there's room. True if it moved.
+function slide(way) {
+  if (!fits(board, moved(piece, 0, way))) return false;
+  piece = moved(piece, 0, way);
+  return true;
+}
+
 // What each control does. Each redraws straight away, so it feels quick.
+// Left is counterclockwise around the dish, right is clockwise.
 const ACTIONS = {
-  left: () => { if (fits(board, moved(piece, 0, -1))) piece = moved(piece, 0, -1); },
-  right: () => { if (fits(board, moved(piece, 0, 1))) piece = moved(piece, 0, 1); },
+  left: () => slide(-1),
+  right: () => slide(1),
   turn: () => { piece = turned(board, piece); },
   // One ring in, and a point for hurrying.
   in: () => { score += 1; showStats(); driftIn(); waited = 0; },
@@ -246,6 +261,33 @@ window.addEventListener('keydown', (event) => {
   event.preventDefault();
   act(name);
 });
+
+// On the dish itself: drag around it and the piece follows your finger, as
+// far as there's room; tap it to turn the piece.
+let touch = null;
+const sectorUnder = (event) => {
+  const box = dish.getBoundingClientRect();
+  const scale = DISH.SIZE / box.width;
+  return sectorAt((event.clientX - box.left) * scale, (event.clientY - box.top) * scale);
+};
+dish.addEventListener('pointerdown', (event) => {
+  if (!playing) return;
+  touch = { x: event.clientX, y: event.clientY, dragged: false };
+  dish.setPointerCapture?.(event.pointerId);
+});
+dish.addEventListener('pointermove', (event) => {
+  if (!touch || !playing) return;
+  if (Math.hypot(event.clientX - touch.x, event.clientY - touch.y) >= TAP_PX) touch.dragged = true;
+  if (!touch.dragged) return;
+  const steps = stepsBetween(piece.sector, sectorUnder(event));
+  for (let i = 0; i < Math.abs(steps); i++) if (!slide(Math.sign(steps))) break;
+  draw();
+});
+dish.addEventListener('pointerup', () => {
+  if (touch && !touch.dragged) act('turn');
+  touch = null;
+});
+dish.addEventListener('pointercancel', () => { touch = null; });
 
 $('.stack-again').addEventListener('click', start);
 

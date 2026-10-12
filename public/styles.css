@@ -1623,13 +1623,9 @@ body:not(.picker-page) .signature {
   display: block;
   width: 100%;
   height: auto;
-}
-
-/* The rings turn around the middle of the dish so the falling piece stays
-   at the top. */
-.stack-turning {
-  transform-origin: 181px 181px;
-  transition: transform 0.15s ease;
+  cursor: pointer;
+  /* Dragging on the dish moves the piece, not the page. */
+  touch-action: none;
 }
 
 .stack-guides {
@@ -1638,9 +1634,14 @@ body:not(.picker-page) .signature {
   stroke-width: 1;
 }
 
-.stack-cells path {
-  stroke-width: 2.2;
-  stroke-linejoin: round;
+/* Each cell sits on a soft patch of her colony's color, so a piece reads
+   as one colony. */
+.stack-cells .patch {
+  fill-opacity: 0.35;
+}
+
+.stack-cells .cell {
+  stroke-width: 2;
 }
 
 .stack-cells .ghost {
@@ -1769,9 +1770,9 @@ body:not(.picker-page) .signature {
   opacity: 0.75;
 }
 
-/* Arrow keys need a keyboard; on a touch screen it's just the buttons. */
+/* Arrow keys need a keyboard; on a touch screen it's the dish and buttons. */
 @media (pointer: coarse) {
-  .stack-keys {
+  .stack-key-list {
     display: none;
   }
 }
@@ -1807,10 +1808,4 @@ body:not(.picker-page) .signature {
 .stack-over-card .back-link {
   display: block;
   margin-top: 1rem;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .stack-turning {
-    transition: none;
-  }
 }

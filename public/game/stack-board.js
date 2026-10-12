@@ -10,8 +10,8 @@
 // though (see PIECES).
 
 export const STACK = {
-  RINGS: 9,
-  SECTORS: 16,
+  RINGS: 8,
+  SECTORS: 12, // a full ring is three of Scarlett's chains
   START_MS: 900, // how often a piece drifts in one ring, at level 1
   SPEEDUP: 0.85, // each level drifts this much faster
   MIN_MS: 120,
