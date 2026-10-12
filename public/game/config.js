@@ -937,8 +937,7 @@ export const SPECIES = {
   frannie: {
     facts: [
       "Frannie is a tiny Gram-negative coccobacillus: a short rod that looks almost round.",
-      "Frannie has no flagella and can't swim.",
-      "Frannie doesn't make the tough survival spores that Terra and Diffany do.",
+      "Frannie has no flagella.",
       "Frannie's genus honors Edward Francis, an American researcher who studied tularemia.",
       "Frannie's species name comes from Tulare County, California, where she was discovered.",
       "McCoy and Chapin found Frannie in 1911 while studying plague in ground squirrels.",
