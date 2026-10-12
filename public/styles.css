@@ -259,7 +259,6 @@ body {
   box-shadow: 0 20px 40px rgba(19, 78, 74, 0.08);
 }
 
-
 /* The pal picker is wider than the other cards, to fit four pals across. */
 .picker-wide {
   width: min(1000px, 100%);
@@ -392,12 +391,6 @@ body {
   }
 }
 
-@media (max-width: 520px) {
-  .picker-grid > .pal-card {
-    flex-basis: 100%;
-  }
-}
-
 /* Back and More pals, under the cards. */
 .picker-pager {
   display: flex;
@@ -437,16 +430,37 @@ body {
   padding: 1rem;
 }
 
-/* Line the Select buttons up along the bottom, however long the name above. */
-.pal-card .pick-btn {
-  margin-top: auto;
-  white-space: nowrap;
+/* Cards that are links, with no button: a pal on the picker
+   (game/pal-picker.js) and a game on the mode page. The whole card is tapped,
+   so it lifts a little and outlines itself in teal on hover, to show it can
+   be. */
+a.pal-card {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+
+a.pal-card:hover {
+  border-color: #0f766e;
+  background: rgba(255, 255, 255, 0.85);
+  transform: translateY(-2px);
+}
+
+a.pal-card:active {
+  transform: translateY(0);
+}
+
+a.pal-card:focus-visible {
+  outline: 3px solid #0f766e;
+  outline-offset: 2px;
 }
 
 /* On the picker, a little more compact than elsewhere: less padding and a
    smaller picture, so more of the page fits on the screen. */
 .picker-grid .pal-card {
-  padding: 0.75rem 0.75rem 0.85rem;
+  padding: 1.1rem 0.75rem 0.85rem;
 }
 
 .picker-grid .pal-icon {
@@ -470,9 +484,49 @@ body {
    so a long one that wraps (Streptococcus pneumoniae) doesn't make her card
    look different from the rest. */
 .picker-grid .species {
-  margin: 0 0 0.6rem;
+  margin: 0;
   line-height: 1.3;
   min-height: 2.6em;
+}
+
+/* On a phone, two pals to a row instead of one, a little smaller, with
+   less padding around the grid, so most of a page fits on the screen. */
+@media (max-width: 520px) {
+  .picker-shell:has(.picker-grid) {
+    padding: 1.25rem 0.75rem;
+  }
+
+  .picker-grid {
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+
+  .picker-grid > .pal-card {
+    flex-basis: calc((100% - 0.6rem) / 2);
+  }
+
+  .picker-grid .pal-card {
+    padding: 0.7rem 0.4rem 0.5rem;
+  }
+
+  .picker-grid .pal-icon {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 0.35rem;
+  }
+
+  .picker-grid .pal-icon svg {
+    width: 60px;
+    height: 60px;
+  }
+
+  .picker-grid .pal-card h2 {
+    font-size: 1.2rem;
+  }
+
+  .picker-grid .species {
+    font-size: 0.8rem;
+  }
 }
 
 .pal-icon {
@@ -572,6 +626,14 @@ body {
 
 .nova {
   background: rgba(143, 227, 216, 0.4);
+}
+
+.pearl {
+  background: rgba(232, 190, 206, 0.38);
+}
+
+.frannie {
+  background: rgba(255, 201, 181, 0.45);
 }
 
 .pick-btn {
@@ -681,7 +743,7 @@ body {
 }
 
 .mode-card p {
-  margin: 0 0 1rem;
+  margin: 0;
   line-height: 1.45;
 }
 
@@ -1177,6 +1239,16 @@ body {
     drop-shadow(0 0 2px #fff)
     drop-shadow(0 0 3px #fff)
     drop-shadow(0 0 7px rgba(15, 118, 110, 0.45));
+}
+
+/* Pearl's glow traces her whole capsule, a much bigger shape than a rod
+   with thin flagella, so it gets a smaller, fainter teal ring to look like
+   everyone else's. */
+.pal-mover.player:has(> [data-pal="pearl"]:not([hidden])) {
+  filter:
+    drop-shadow(0 0 2px #fff)
+    drop-shadow(0 0 3px #fff)
+    drop-shadow(0 0 4px rgba(15, 118, 110, 0.28));
 }
 
 /* The rival's pal in mixed culture mode: a soft dark outline instead of the

@@ -51,9 +51,11 @@ more.addEventListener('click', () => {
 });
 showPage(0);
 
+// Her card: the whole card is the link that picks her.
 function card(pal) {
-  const article = document.createElement('article');
-  article.className = 'pal-card';
+  const link = document.createElement('a');
+  link.className = 'pal-card';
+  link.href = `./choose-mode.html?pal=${pal.id}`;
 
   const name = document.createElement('h2');
   name.textContent = pal.name;
@@ -70,17 +72,12 @@ function card(pal) {
     species.append(note);
   }
 
-  const pick = document.createElement('a');
-  pick.className = 'pick-btn';
-  pick.href = `./choose-mode.html?pal=${pal.id}`;
-  pick.textContent = `Select ${pal.name}`;
-
   const tile = palTile(pal);
   tile.classList.add(`gram-${gram}`);
   if (faintStain) tile.classList.add('faint-stain');
 
-  article.append(tile, name, species, pick);
-  return article;
+  link.append(tile, name, species);
+  return link;
 }
 
 // The microscope button: switch every pal between her colors and her Gram

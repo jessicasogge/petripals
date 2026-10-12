@@ -151,4 +151,16 @@ export const QUIZ_FACTS = {
     "Nova's colonies look dry and chalky, and they can smell musty, like a damp basement.",
     "Nova's genus is named for Edmond Nocard, a French vet who found its first member in cows.",
   ],
+  pearl: [
+    "Some strains of Pearl are so slimy that a loop pulls their colonies into a long string.",
+    "Pearl's genus is named for Edwin Klebs, a German microbiologist.",
+    "Pearl was first described by Carl Friedländer in 1882, so she's \"Friedländer's bacillus.\"",
+    "Pearl's pneumonia can make thick, dark red \"currant jelly\" sputum.",
+  ],
+  frannie: [
+    "Frannie's genus honors Edward Francis, an American researcher who studied tularemia.",
+    "Frannie's species name comes from Tulare County, California, where she was discovered.",
+    "McCoy and Chapin found Frannie in 1911 while studying plague in ground squirrels.",
+    "Frannie causes tularemia, an illness also nicknamed \"rabbit fever.\"",
+  ],
 };

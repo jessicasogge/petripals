@@ -33,22 +33,20 @@
     <main class="picker-shell mode-shell">
       <div class="mode-pal" aria-hidden="true"></div>
       <h1>How should <span class="mode-pal-name">your pal</span> play?</h1>
+      <!-- Each card is the link to its game (game/choose-mode.js sets where). -->
       <section class="mode-grid">
-        <article class="pal-card mode-card">
+        <a class="pal-card mode-card mode-classic" href="./petri-dish.html">
           <h2>Classic</h2>
           <p>Grow your colony through 7 levels without touching the antibiotic disks.</p>
-          <a class="pick-btn mode-classic" href="./petri-dish.html">Play Classic</a>
-        </article>
-        <article class="pal-card mode-card">
+        </a>
+        <a class="pal-card mode-card mode-mixed" href="./petri-dish.html">
           <h2>Mixed Culture</h2>
           <p>No antibiotics. Race up to 3 rival pals to grow your colony first!</p>
-          <a class="pick-btn mode-mixed" href="./petri-dish.html">Play Mixed Culture</a>
-        </article>
-        <article class="pal-card mode-card">
+        </a>
+        <a class="pal-card mode-card mode-tumble" href="./petri-dish.html">
           <h2>Petri Picnic</h2>
           <p>No steering! Your pal swims straight. Tap to tumble a new way, and hunt for food like real bacteria.</p>
-          <a class="pick-btn mode-tumble" href="./petri-dish.html">Play Petri Picnic</a>
-        </article>
+        </a>
       </section>
       <a class="back-link" href="./pal-picker.html">Pick a different pal</a>
     </main>

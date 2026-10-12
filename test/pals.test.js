@@ -168,7 +168,7 @@ describe('the pages', () => {
       ['terra', 'penny', 'vi', 'goldie', 'ana', 'lissie', 'scarlett', 'coco', 'mona', 'elia', 'ceres', 'sallie']);
   });
 
-  it('the picker has a card for every pal, each once, linking to her', async () => {
+  it('the picker has a card for every pal, each once, and the whole card picks her', async () => {
     await open('pal-picker.html', 'game/pal-picker.js');
     const cards = [...document.querySelectorAll('.pal-card')];
     const names = cards.map((c) => c.querySelector('h2').textContent);
@@ -179,9 +179,18 @@ describe('the pages', () => {
       // Her species, without Elia's "Doesn't stain well" note.
       const species = [...card.querySelector('.species').childNodes].filter((n) => !n.classList?.contains('stain-note'));
       expect(species.map((n) => n.textContent).join('')).toBe(plainText(SPECIES[id].scientific));
-      expect(card.querySelector('a').getAttribute('href')).toBe(`./choose-mode.html?pal=${id}`);
-      expect(card.querySelector('a').textContent).toBe(`Select ${name}`);
+      expect(card.tagName).toBe('A');
+      expect(card.getAttribute('href')).toBe(`./choose-mode.html?pal=${id}`);
+      expect(card.textContent).toContain(name);
+      expect(card.querySelector('a, button')).toBeNull(); // no Select button inside
     }
+  });
+
+  it('the picker puts two pals to a row on a phone, after the wider rules so they win', () => {
+    const phone = css.indexOf('@media (max-width: 520px) {\n  .picker-shell:has(.picker-grid)');
+    expect(phone).toBeGreaterThan(css.indexOf('\n.picker-grid .pal-card {'));
+    expect(phone).toBeGreaterThan(css.indexOf('\n.picker-grid .pal-icon {'));
+    expect(css.slice(phone, css.indexOf('\n}\n', phone))).toMatch(/flex-basis: calc\(\(100% - 0\.6rem\) \/ 2\)/);
   });
 
   it('the picker shuffles all the pals together, then splits them into pages', async () => {
@@ -323,6 +332,15 @@ describe('the pages', () => {
     expect(document.querySelector('.mode-mixed').getAttribute('href')).toBe('./choose-rivals.html?pal=coco');
   });
 
+  it('the mode page makes each game a whole card to tap, with no button', async () => {
+    await open('choose-mode.html', 'game/choose-mode.js', '?pal=coco');
+    const cards = [...document.querySelectorAll('.mode-card')];
+    expect(cards.map((card) => card.tagName)).toEqual(['A', 'A', 'A']);
+    expect(cards.map((card) => card.getAttribute('href'))).toEqual([
+      './petri-dish.html?pal=coco', './choose-rivals.html?pal=coco', './petri-dish.html?pal=coco&mode=tumble']);
+    for (const card of cards) expect(card.querySelector('a, button')).toBeNull();
+  });
+
   it.each(Object.keys(SPECIES))('the mode page links %s to Petri Picnic', async (id) => {
     await open('choose-mode.html', 'game/choose-mode.js', `?pal=${id}`);
     expect(document.querySelector('.mode-tumble').getAttribute('href')).toBe(`./petri-dish.html?pal=${id}&mode=tumble`);
@@ -441,6 +459,95 @@ describe('Electra, covered in nanowires', () => {
 
   it('shows only the tip sparks on a small tile, so the wires stay clear', () => {
     expect(css).toMatch(/\n\.pal-icon \.burst \{[^}]*display: none/);
+  });
+});
+
+describe('Pearl, in her capsule', () => {
+  const art = () => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.innerHTML = palById('pearl').art;
+    return svg;
+  };
+
+  it('gets a softer teal glow when she\'s the player, since it traces her whole capsule', () => {
+    const rule = css.match(/\.pal-mover\.player:has\(> \[data-pal="pearl"\]:not\(\[hidden\]\)\) \{([^}]*)\}/);
+    expect(rule).not.toBeNull();
+    expect(rule[1]).toMatch(/drop-shadow\(0 0 4px rgba\(15, 118, 110, 0\.28\)\)/);
+  });
+
+  it("has no flagella, since Klebsiella can't swim", () => {
+    expect(art().querySelector('.flagellum')).toBeNull();
+    expect(SWIMMERS).not.toContain('pearl');
+  });
+
+  it('has a see-through capsule all around her rod', () => {
+    const svg = art();
+    const capsule = svg.querySelector('ellipse[fill="#ffffff"]');
+    const rod = svg.querySelector('rect');
+    expect(Number(capsule.getAttribute('fill-opacity'))).toBeLessThan(1);
+    const [cx, rx] = ['cx', 'rx'].map((k) => Number(capsule.getAttribute(k)));
+    const [x, w] = ['x', 'width'].map((k) => Number(rod.getAttribute(k)));
+    expect(cx - rx).toBeLessThan(x);
+    expect(cx + rx).toBeGreaterThan(x + w);
+  });
+
+  it('has lots of tiny, still pili all around her, inside her capsule', () => {
+    const pili = [...art().querySelectorAll('.pilus')];
+    expect(pili.length).toBeGreaterThanOrEqual(20);
+    for (const pilus of pili) {
+      const [x, y, dx, dy] = pilus.getAttribute('d').match(/-?[\d.]+/g).map(Number);
+      expect(Math.hypot(dx, dy)).toBeLessThan(10); // tiny
+      const [ex, ey] = [x + dx - 100, y + dy - 100];
+      expect((ex * ex) / (70 * 70) + (ey * ey) / (45 * 45)).toBeLessThan(1); // inside her capsule
+    }
+    expect(art().querySelector('.pilus animate')).toBeNull();
+    expect(pili.some((p) => p.getAttribute('d').includes('l0.0 -'))).toBe(true); // up
+    expect(pili.some((p) => p.getAttribute('d').includes('l0.0 6'))).toBe(true); // down
+  });
+});
+
+describe('Frannie, with bunny ears', () => {
+  const art = () => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.innerHTML = palById('frannie').art;
+    return svg;
+  };
+
+  it("has no flagella, since Francisella tularensis can't swim", () => {
+    expect(art().querySelector('.flagellum')).toBeNull();
+    expect(SWIMMERS).not.toContain('frannie');
+  });
+
+  it('has two ears on top of her rod, each with a pink middle', () => {
+    const svg = art();
+    const rod = svg.querySelector('rect');
+    const top = Number(rod.getAttribute('y'));
+    const ears = [...svg.querySelectorAll(':scope > g[transform^="rotate"]')];
+    expect(ears).toHaveLength(2);
+    for (const ear of ears) {
+      const [outer, middle] = ear.querySelectorAll('ellipse');
+      expect(Number(outer.getAttribute('cy')) - Number(outer.getAttribute('ry'))).toBeLessThan(top); // sticks up
+      expect(Number(outer.getAttribute('cy')) + Number(outer.getAttribute('ry'))).toBeGreaterThan(top); // tucked behind her rod
+      expect(Number(middle.getAttribute('rx'))).toBeLessThan(Number(outer.getAttribute('rx')));
+      expect(middle.getAttribute('fill')).not.toBe(outer.getAttribute('fill'));
+    }
+    // Behind her rod, so it covers their bases.
+    expect([...svg.children].indexOf(ears[1])).toBeLessThan([...svg.children].indexOf(rod));
+  });
+
+  it('is all one color, outside her face', () => {
+    const svg = art();
+    expect(svg.querySelector('rect').getAttribute('fill')).toBe('#ffb8a3');
+    for (const ear of svg.querySelectorAll(':scope > g[transform^="rotate"] ellipse:first-child')) {
+      expect(ear.getAttribute('fill')).toBe('#ffb8a3');
+    }
+  });
+
+  it('is framed roomy, so she looks small', () => {
+    const width = (box) => Number(box.split(' ')[2]);
+    const frannie = palById('frannie');
+    expect(width(frannie.frames.dish)).toBeGreaterThan(width(palById('coco').frames.dish));
+    expect(width(frannie.frames.picker)).toBeLessThan(200);
   });
 });
 

@@ -65,6 +65,32 @@ describe('pals', () => {
     expect(body.at(-1)[0]).toBe(Math.max(...body.map(([x]) => x)));
   });
 
+  it('makes Pearl a Gram-negative rod traced around her capsule, not just the rod inside it', () => {
+    const { kind, layout, gram, body } = SPECIES.pearl;
+    expect(kind).toBe('rod');
+    expect(layout).toBeUndefined();
+    expect(gram).toBe('negative');
+    // Her capsule is 140 wide and 90 tall in her 156-wide dish drawing.
+    expect(Math.max(...body.map(([x, , r]) => x + r))).toBeCloseTo(70 / 156, 2);
+    expect(Math.max(...body.map(([, , r]) => r))).toBeCloseTo(45 / 156, 2);
+  });
+
+  it('makes Frannie a small Gram-negative rod that splits apart, traced along her rod and up into her ears', () => {
+    const { kind, layout, gram, size, body, antibiotics } = SPECIES.frannie;
+    expect(kind).toBe('rod');
+    expect(layout).toBeUndefined();
+    expect(gram).toBe('negative');
+    expect(size).toBeLessThan(12);
+    // Her rod is 84 wide and 48 tall (outline and all) in her 156-wide dish drawing.
+    const rod = body.filter(([, y]) => y === 0);
+    expect(Math.max(...rod.map(([x, , r]) => x + r))).toBeCloseTo(42 / 156, 2);
+    expect(Math.max(...rod.map(([, , r]) => r))).toBeCloseTo(24 / 156, 2);
+    // Her two ears, above her rod (up is negative y).
+    const ears = body.filter(([, y]) => y < 0);
+    expect(ears).toHaveLength(2);
+    expect(antibiotics[0].code).toBe('GM');
+  });
+
   it('makes Electra a Gram-negative rod that splits and slides apart, traced along her straight rod', () => {
     const { kind, layout, gram, body } = SPECIES.electra;
     expect(kind).toBe('rod');

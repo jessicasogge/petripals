@@ -3,8 +3,17 @@
 import { withItalics } from './italics.js';
 import { inRandomOrder } from './pals.js';
 
-// How many pals each round of the quiz uses.
+// How many pals each round of the quiz uses: 12 (two rows of six), or 9 on
+// a phone, where the grid is three across (styles.css), so three rows of
+// three fit without much scrolling.
 export const ROUND_SIZE = 12;
+export const PHONE_ROUND_SIZE = 9;
+export const PHONE = '(max-width: 760px)';
+
+// This round's size for the screen it's on.
+export function roundSize(win = window) {
+  return win.matchMedia?.(PHONE).matches ? PHONE_ROUND_SIZE : ROUND_SIZE;
+}
 
 // A random `count` of `pals` for one round, kept in their usual order so
 // each is easy to find.

@@ -1,6 +1,6 @@
 // Quiz: identify each pal from a fact
 import { SPECIES } from './config.js';
-import { factDeck, fillBlanks, quizPals, withBlanks } from './guess.js';
+import { factDeck, fillBlanks, quizPals, roundSize, withBlanks } from './guess.js';
 import { shortSpeciesName, speciesName } from './italics.js';
 import { pageReady, watchLoading } from './loading.js';
 import { PALS, palTile } from './pals.js';
@@ -40,10 +40,10 @@ let deck = [];
 let total = 0;
 let current = null;
 
-// A round: 12 random pals (in their usual order, so each is easy to find)
-// and every quiz fact about them, shuffled.
+// A round: 12 random pals (9 on a phone), in their usual order so each is
+// easy to find, and every quiz fact about them, shuffled.
 function startRound() {
-  const pals = quizPals(PALS);
+  const pals = quizPals(PALS, roundSize());
   buttons = pals.map(guessButton);
   grid.replaceChildren(...buttons);
   deck = factDeck(pals, QUIZ_FACTS);
@@ -51,7 +51,7 @@ function startRound() {
 }
 
 function showNext() {
-  // Through every fact about this round's pals once, then a new round of 12
+  // Through every fact about this round's pals once, then a new round
   // picked at random again, counting from 1.
   if (deck.length === 0) startRound();
   current = deck.pop();
