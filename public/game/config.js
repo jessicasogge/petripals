@@ -913,7 +913,9 @@ export const SPECIES = {
     color: '#6a5070', // for her name above the dish
     kind: 'rod',
     gram: 'negative',
-    size: 10.5,
+    // About Kiki's size with her capsule included, so her rod is a little
+    // smaller than Kiki's.
+    size: 9.5,
     // Her capsule, not just the rod inside it: it's part of her.
     body: [
       [-0.16, 0.0, 0.288],
