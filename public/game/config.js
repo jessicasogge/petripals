@@ -892,29 +892,26 @@ export const SPECIES = {
   pearl: {
     facts: [
       "Pearl is a Gram-negative rod, so she stains pink on a Gram stain.",
-      "Pearl wraps herself in a thick, slimy capsule that helps her hide from the immune system.",
-      "Pearl can't swim: unlike her cousins Sallie and Kiki, she has no flagella.",
-      "Pearl is covered in tiny sticky hairs called pili that help her cling to cells.",
+      "Pearl's thick, slimy capsule helps protect her from immune defenses.",
+      "Pearl has no flagella.",
+      "Pearl has tiny sticky hairs called fimbriae, or pili, that help her cling to cells.",
       "Pearl's pili help her stick to medical tubing, like catheters, and build biofilms.",
       "On blood agar, Pearl's colonies are big, glossy and grayish-white, like pearls.",
       "On MacConkey agar, Pearl's colonies turn pink because she ferments lactose.",
-      "Some strains of Pearl are so slimy that a loop pulls their colonies into a long string.",
-      "Pearl is naturally resistant to ampicillin, so doctors don't use it against her.",
-      "Pearl's genus is named for Edwin Klebs, a German microbiologist.",
+      "Some Pearl strains form a long, sticky string when a colony is lifted with a loop.",
+      "Pearl is naturally resistant to ampicillin.",
+      "Pearl's genus honors Edwin Klebs, a German-Swiss microbiologist.",
       "Pearl was first described by Carl Friedländer in 1882, so she's \"Friedländer's bacillus.\"",
       "Pearl's pneumonia can make thick, dark red \"currant jelly\" sputum.",
       "Pearl is a common cause of infections picked up in hospitals.",
-      "Some strains of Pearl resist carbapenems, some of our strongest antibiotics.",
-      "Pearl lives harmlessly in many people's guts and noses.",
-      "Some strains of Pearl can fix nitrogen from the air, like bacteria that feed plants.",
+      "Some Pearl strains resist carbapenems, important drugs for serious infections.",
+      "Pearl can live harmlessly in many people's guts and noses.",
       "Pearl lives in soil, water and on plants, not just in people.",
     ],
     scientific: 'Klebsiella pneumoniae',
     color: '#6a5070', // for her name above the dish
     kind: 'rod',
     gram: 'negative',
-    // About Kiki's size with her capsule included, so her rod is a little
-    // smaller than Kiki's.
     size: 9.5,
     // Her capsule, not just the rod inside it: it's part of her.
     body: [
