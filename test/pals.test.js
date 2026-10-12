@@ -506,6 +506,51 @@ describe('Pearl, in her capsule', () => {
   });
 });
 
+describe('Patty, with bunny ears', () => {
+  const art = () => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.innerHTML = palById('patty').art;
+    return svg;
+  };
+
+  it("has no flagella, since Pasteurella can't swim", () => {
+    expect(art().querySelector('.flagellum')).toBeNull();
+    expect(SWIMMERS).not.toContain('patty');
+  });
+
+  it('has two ears on top of her rod, each with a pink middle', () => {
+    const svg = art();
+    const rod = svg.querySelector('rect');
+    const top = Number(rod.getAttribute('y'));
+    const ears = [...svg.querySelectorAll(':scope > g[transform^="rotate"]')];
+    expect(ears).toHaveLength(2);
+    for (const ear of ears) {
+      const [outer, middle] = ear.querySelectorAll('ellipse');
+      expect(Number(outer.getAttribute('cy')) - Number(outer.getAttribute('ry'))).toBeLessThan(top); // sticks up
+      expect(Number(outer.getAttribute('cy')) + Number(outer.getAttribute('ry'))).toBeGreaterThan(top); // tucked behind her rod
+      expect(Number(middle.getAttribute('rx'))).toBeLessThan(Number(outer.getAttribute('rx')));
+      expect(middle.getAttribute('fill')).not.toBe(outer.getAttribute('fill'));
+    }
+    // Behind her rod, so it covers their bases.
+    expect([...svg.children].indexOf(ears[1])).toBeLessThan([...svg.children].indexOf(rod));
+  });
+
+  it('is all one color, outside her face', () => {
+    const svg = art();
+    expect(svg.querySelector('rect').getAttribute('fill')).toBe('#ffb8a3');
+    for (const ear of svg.querySelectorAll(':scope > g[transform^="rotate"] ellipse:first-child')) {
+      expect(ear.getAttribute('fill')).toBe('#ffb8a3');
+    }
+  });
+
+  it('is framed roomy, so she looks small', () => {
+    const width = (box) => Number(box.split(' ')[2]);
+    const patty = palById('patty');
+    expect(width(patty.frames.dish)).toBeGreaterThan(width(palById('coco').frames.dish));
+    expect(width(patty.frames.picker)).toBeLessThan(200);
+  });
+});
+
 describe('wiggly flagella', () => {
 
   it("gives Mona, Vi, Sallie, Terra, Lissie, Sara, Kiki, Diffany and Astrid's swarmers, who swim with flagella, wiggling tails", () => {
