@@ -238,6 +238,36 @@ const NOVA_BEADS =
     .map(([x, y]) => `<circle cx="${x}" cy="${y - 1.5}" r="2" fill="#e6fffb" />`)
     .join('');
 
+// Pearl's pili (fimbriae): short, straight, sticky hairs spread evenly
+// around her rod (a stadium from x 58 to 142, y 76 to 124), each pointing
+// straight out. They're short enough to stay inside her capsule, and they
+// don't move: pili aren't for swimming.
+const PEARL_PILI = (() => {
+  const [x1, x2, cy, r] = [82, 118, 100, 24];
+  const straight = x2 - x1;
+  const arc = Math.PI * r;
+  const total = 2 * straight + 2 * arc;
+  const count = 26;
+  const length = 6;
+  const hairs = [];
+  for (let i = 0; i < count; i++) {
+    let d = ((i + 0.5) / count) * total;
+    let point;
+    if (d < straight) point = [x1 + d, cy - r, 0, -1];
+    else if ((d -= straight) < arc) {
+      const a = -Math.PI / 2 + d / r;
+      point = [x2 + r * Math.cos(a), cy + r * Math.sin(a), Math.cos(a), Math.sin(a)];
+    } else if ((d -= arc) < straight) point = [x2 - d, cy + r, 0, 1];
+    else {
+      const a = Math.PI / 2 + (d - straight) / r;
+      point = [x1 + r * Math.cos(a), cy + r * Math.sin(a), Math.cos(a), Math.sin(a)];
+    }
+    const [x, y, nx, ny] = point;
+    hairs.push(`<path class="pilus" d="M${x.toFixed(1)} ${y.toFixed(1)} l${(nx * length).toFixed(1)} ${(ny * length).toFixed(1)}" />`);
+  }
+  return hairs.join('');
+})();
+
 export const PALS = [
   // Terra: Clostridium tetani, an olive rod with a round spore at one end (a "drumstick")
   {
@@ -798,6 +828,39 @@ export const PALS = [
         <ellipse cx="62" cy="109" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
         <ellipse cx="111" cy="109" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
         <path d="M81 109 Q87 115 93 109" stroke="#3d140a" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
+  // Pearl: Klebsiella pneumoniae, a short, plump pink rod in a thick, glossy
+  // capsule, with tiny pili and no flagella
+  {
+    id: 'pearl',
+    name: 'Pearl',
+    looks: 'a short, plump pink Klebsiella pneumoniae rod in a thick, glossy capsule, with tiny hairs all around her',
+    motion: 'bob',
+    frames: { home: '0 0 200 200', picker: '26 26 148 148', dish: '22 22 156 156' },
+    // A soft pearly pink with a slate outline, so she doesn't look like
+    // Scarlett (red outline) or Ana and Sara (hot pink).
+    art: `
+      <!-- her capsule: a thick, slimy coat around her, glossy and see-through.
+           Pure white, so a Gram stain leaves it clear, as on a real slide -->
+      <ellipse cx="100" cy="100" rx="70" ry="45" fill="#ffffff" fill-opacity="0.55" stroke="#e6dcef" stroke-width="3.5" />
+      <path d="M52 78 Q70 60 102 58" stroke="#ffffff" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.9" />
+      <circle cx="146" cy="126" r="3" fill="#ffffff" opacity="0.9" />
+      <!-- her pili: tiny sticky hairs all around her, inside her capsule -->
+      <g stroke="#5c5670" stroke-width="1.8" stroke-linecap="round" opacity="0.85">${PEARL_PILI}</g>
+      <!-- her short, plump rod -->
+      <rect x="58" y="76" width="84" height="48" rx="24" fill="#efc6cd" stroke="#5c5670" stroke-width="4" />
+      <ellipse cx="124" cy="86" rx="7" ry="3.5" fill="#fdeef0" transform="rotate(-12 124 86)" />
+      <circle cx="70" cy="113" r="2.8" fill="#fdeef0" />
+      <g class="face">
+        <circle cx="89" cy="97" r="5.5" fill="#2a2534" />
+        <circle cx="111" cy="97" r="5.5" fill="#2a2534" />
+        <circle cx="90.8" cy="95.2" r="1.9" fill="white" />
+        <circle cx="112.8" cy="95.2" r="1.9" fill="white" />
+        <ellipse cx="76" cy="108" rx="6" ry="3.5" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="124" cy="108" rx="6" ry="3.5" fill="#f9a8d4" opacity="0.9" />
+        <path d="M95 108 Q100 113 105 108" stroke="#2a2534" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
   },

@@ -889,6 +889,50 @@ export const SPECIES = {
       { code: 'E', name: 'erythromycin', zone: 22 },
     ],
   },
+  pearl: {
+    facts: [
+      "Pearl is a Gram-negative rod, so she stains pink on a Gram stain.",
+      "Pearl's thick, slimy capsule helps protect her from immune defenses.",
+      "Pearl has no flagella.",
+      "Pearl has tiny sticky hairs called fimbriae, or pili, that help her cling to cells.",
+      "Pearl's pili help her stick to medical tubing, like catheters, and build biofilms.",
+      "On blood agar, Pearl's colonies are big, glossy and grayish-white, like pearls.",
+      "On MacConkey agar, Pearl's colonies turn pink because she ferments lactose.",
+      "Some Pearl strains form a long, sticky string when a colony is lifted with a loop.",
+      "Pearl is naturally resistant to ampicillin.",
+      "Pearl's genus honors Edwin Klebs, a German-Swiss microbiologist.",
+      "Pearl was first described by Carl Friedländer in 1882, so she's \"Friedländer's bacillus.\"",
+      "Pearl's pneumonia can make thick, dark red \"currant jelly\" sputum.",
+      "Pearl is a common cause of infections picked up in hospitals.",
+      "Some Pearl strains resist carbapenems, important drugs for serious infections.",
+      "Pearl can live harmlessly in many people's guts and noses.",
+      "Pearl lives in soil, water and on plants, not just in people.",
+    ],
+    scientific: 'Klebsiella pneumoniae',
+    color: '#6a5070', // for her name above the dish
+    kind: 'rod',
+    gram: 'negative',
+    size: 9.5,
+    // Her capsule, not just the rod inside it: it's part of her.
+    body: [
+      [-0.16, 0.0, 0.288],
+      [-0.08, 0.0, 0.288],
+      [0.0, 0.0, 0.288],
+      [0.08, 0.0, 0.288],
+      [0.16, 0.0, 0.288],
+    ],
+    // Drugs used against her. There are no disk sizes just for Klebsiella
+    // (labs use the ones for her whole order, Enterobacterales), so these
+    // zones are ballpark figures for a susceptible strain. No ampicillin:
+    // she's naturally resistant to it.
+    antibiotics: [
+      { code: 'CRO', name: 'ceftriaxone', zone: 27 },
+      { code: 'MEM', name: 'meropenem', zone: 29 },
+      { code: 'CIP', name: 'ciprofloxacin', zone: 30 },
+      { code: 'GM', name: 'gentamicin', zone: 20 },
+      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 25 },
+    ],
+  },
 };
 
 // Mixed culture: no disks; race 1–3 AI rivals (chosen or one random) to TARGET cells.

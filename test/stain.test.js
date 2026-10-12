@@ -71,6 +71,14 @@ describe('the stain shades', () => {
     expect(svg.querySelector('path[d^="M50 80"]').style.fill).toBe(rgb(STAINS.positive.body));
   });
 
+  it("leaves Pearl's capsule clear, the way capsules show up on a slide, while her rod turns pink", () => {
+    const svg = dishPal(palById('pearl'));
+    stainPal(svg, SPECIES.pearl);
+    expect(svg.querySelector('ellipse[fill="#ffffff"]').style.fill).toBe('');
+    expect(svg.querySelector('rect').style.fill).toBe(rgb(STAINS.negative.body));
+    expect(svg.querySelector('rect').style.stroke).toBe(rgb(STAINS.negative.outline));
+  });
+
   it("leaves Diffany's spore clear too, while her rod and its outline take the stain", () => {
     const svg = dishPal(palById('diffany'));
     stainPal(svg, SPECIES.diffany);
