@@ -623,6 +623,10 @@ a.pal-card:focus-visible {
   background: rgba(232, 190, 206, 0.38);
 }
 
+.patty {
+  background: rgba(255, 201, 181, 0.45);
+}
+
 .pick-btn {
   margin-top: 0.75rem;
   padding: 0.7rem 1rem;
