@@ -627,6 +627,10 @@ a.pal-card:focus-visible {
   background: rgba(255, 201, 181, 0.45);
 }
 
+.colette {
+  background: rgba(168, 236, 94, 0.35);
+}
+
 .pick-btn {
   margin-top: 0.75rem;
   padding: 0.7rem 1rem;

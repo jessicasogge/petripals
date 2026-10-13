@@ -976,6 +976,57 @@ export const SPECIES = {
       { code: 'S', name: 'streptomycin', zone: 23 },
     ],
   },
+  colette: {
+    facts: [
+      "Colette is a Gram-negative rod, so she stains pink on a Gram stain.",
+      "Colette swims with flagella spread all over her body.",
+      "When Colette's flagella spin together she swims straight, and when some flip she tumbles.",
+      "Colette's genus is named for Theodor Escherich, who first described her in 1885.",
+      "\"Coli\" means \"of the colon\": Colette lives in the guts of people and many animals.",
+      "Most strains of Colette are harmless, and some help us by making vitamin K.",
+      "Some strains of Colette, like O157:H7, make toxins that cause serious food poisoning.",
+      "Colette is the most common cause of urinary tract infections.",
+      "In good conditions, Colette can divide about every 20 minutes.",
+      "On EMB agar, Colette's colonies often shine with a metallic green sheen.",
+      "Colette can live with or without oxygen.",
+      "Colette keeps her genes on one circular chromosome, about 4.6 million letters long.",
+      "Colette is one of the most studied living things, a favorite of labs around the world.",
+      "Since 1988, scientists have grown Colette for over 75,000 generations to watch her evolve.",
+      "Scientists taught Colette to make human insulin, first sold as a medicine in 1982.",
+      "Finding Colette in drinking water is a sign that it has touched poop.",
+      "Colette is a cousin of our pals Sallie, Sara, Kiki and Pearl.",
+    ],
+    scientific: 'Escherichia coli',
+    color: '#2e6b0e', // for her name above the dish
+    kind: 'rod',
+    gram: 'negative',
+    size: 10.5,
+    body: [
+      // tail (the flagellum behind her)
+      [-0.45, 0.0, 0.04],
+      [-0.41, 0.0, 0.04],
+      [-0.37, 0.0, 0.04],
+      // her long, slim rod
+      [-0.229, 0.0, 0.115],
+      [-0.153, 0.0, 0.115],
+      [-0.076, 0.0, 0.115],
+      [0.0, 0.0, 0.115],
+      [0.076, 0.0, 0.115],
+      [0.153, 0.0, 0.115],
+      [0.229, 0.0, 0.115],
+    ],
+    // Drugs used against her, many for urinary tract infections. Zones are
+    // ballpark figures for a susceptible strain, using the disk sizes for
+    // her order, Enterobacterales. Unlike Pearl, she isn't naturally
+    // resistant to ampicillin, though many strains have picked up resistance.
+    antibiotics: [
+      { code: 'AMP', name: 'ampicillin', zone: 20 },
+      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 25 },
+      { code: 'CIP', name: 'ciprofloxacin', zone: 32 },
+      { code: 'CRO', name: 'ceftriaxone', zone: 30 },
+      { code: 'GM', name: 'gentamicin', zone: 21 },
+    ],
+  },
 };
 
 // Mixed culture: no disks; race 1–3 AI rivals (chosen or one random) to TARGET cells.

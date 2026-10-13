@@ -553,8 +553,8 @@ describe('Frannie, with bunny ears', () => {
 
 describe('wiggly flagella', () => {
 
-  it("gives Mona, Vi, Sallie, Terra, Lissie, Sara, Kiki, Diffany and Astrid's swarmers, who swim with flagella, wiggling tails", () => {
-    expect([...SWIMMERS].sort()).toEqual(['astrid', 'diffany', 'kiki', 'lissie', 'mona', 'sallie', 'sara', 'terra', 'vi']);
+  it("gives Mona, Vi, Sallie, Terra, Lissie, Sara, Kiki, Diffany, Colette and Astrid's swarmers, who swim with flagella, wiggling tails", () => {
+    expect([...SWIMMERS].sort()).toEqual(['astrid', 'colette', 'diffany', 'kiki', 'lissie', 'mona', 'sallie', 'sara', 'terra', 'vi']);
   });
 
   it('gives Sallie flagella all over her body (peritrichous), each wiggling at its own speed', () => {
@@ -579,6 +579,33 @@ describe('wiggly flagella', () => {
     expect(starts.length).toBeGreaterThanOrEqual(6);
     expect(starts.some(([, y]) => y < 80)).toBe(true);
     expect(starts.some(([, y]) => y > 120)).toBe(true);
+  });
+
+  it("gives Colette flagella all over her long, slim rod, the same lengths as Sallie's", () => {
+    const flagella = (id) => {
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.innerHTML = palById(id).art;
+      return [...svg.querySelectorAll('.flagellum')];
+    };
+    const starts = flagella('colette').map((f) => f.getAttribute('d').match(/^M([\d.]+) ([\d.]+)/).slice(1).map(Number));
+    expect(starts.length).toBeGreaterThanOrEqual(6);
+    expect(starts.some(([, y]) => y < 80)).toBe(true);
+    expect(starts.some(([, y]) => y > 120)).toBe(true);
+    // Each runs from its start to its tip, so the straight-line distance is its length.
+    const lengths = (id) => flagella(id).map((f) => {
+      const n = f.getAttribute('d').match(/-?[\d.]+/g).map(Number);
+      return Math.round(Math.hypot(n[6] - n[0], n[7] - n[1]));
+    }).sort();
+    expect(lengths('colette')).toEqual(lengths('sallie'));
+    // Longer and slimmer than Sallie's rod: E. coli is about 2 to 3 times as long as wide.
+    const rod = (id) => {
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.innerHTML = palById(id).art;
+      const r = svg.querySelector('rect');
+      return Number(r.getAttribute('width')) / Number(r.getAttribute('height'));
+    };
+    expect(rod('colette')).toBeGreaterThan(rod('sallie'));
+    expect(rod('colette')).toBeGreaterThanOrEqual(2.5);
   });
 
   it('gives Diffany flagella all over her body, with her spore near one end but not at the tip', () => {

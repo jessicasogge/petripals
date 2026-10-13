@@ -297,6 +297,13 @@ describe("a drug she's resistant to (no zone)", () => {
     for (const { zone } of SPECIES.sara.antibiotics) expect(zone).not.toBeNull();
   });
 
+  it("gives Colette drugs used for her urinary tract infections, starting with ampicillin", () => {
+    const codes = SPECIES.colette.antibiotics.map((a) => a.code);
+    expect(codes[0]).toBe('AMP'); // unlike Pearl, she isn't naturally resistant to it
+    expect(codes).toContain('SXT');
+    for (const { zone } of SPECIES.colette.antibiotics) expect(zone).not.toBeNull();
+  });
+
   it("gives Ivy only drugs that work on her: no penicillin or its relatives, like her cousin Ceres", () => {
     const codes = SPECIES.ivy.antibiotics.map((a) => a.code);
     for (const betaLactam of ['P', 'AMP', 'AMX', 'AMC', 'OX', 'CRO', 'CTX']) expect(codes).not.toContain(betaLactam);

@@ -65,6 +65,17 @@ describe('pals', () => {
     expect(body.at(-1)[0]).toBe(Math.max(...body.map(([x]) => x)));
   });
 
+  it('makes Colette a Gram-negative rod that swims apart after dividing, traced along her long, slim rod', () => {
+    const { kind, layout, gram, body } = SPECIES.colette;
+    expect(kind).toBe('rod');
+    expect(layout).toBeUndefined();
+    expect(gram).toBe('negative');
+    // Her rod is 132 wide and 44 tall in her 192-wide dish drawing.
+    const rod = body.filter(([, , r]) => r > 0.05);
+    expect(Math.max(...rod.map(([x, , r]) => x + r))).toBeCloseTo(66 / 192, 2);
+    expect(Math.max(...rod.map(([, , r]) => r))).toBeCloseTo(22 / 192, 2);
+  });
+
   it('makes Pearl a Gram-negative rod traced around her capsule, not just the rod inside it', () => {
     const { kind, layout, gram, body } = SPECIES.pearl;
     expect(kind).toBe('rod');

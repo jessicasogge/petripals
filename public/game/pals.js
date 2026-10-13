@@ -50,8 +50,8 @@ const eliaShine = (x) => {
     `<animate attributeName="cy" dur="${ELIA_SWIM}" repeatCount="indefinite" values="${eliaPhases.map(y).join(';')}" /></circle>`;
 };
 
-// Body-wide (peritrichous) flagella for Sallie, Terra, Lissie, Sara, Kiki and
-// Diffany,
+// Body-wide (peritrichous) flagella for Sallie, Terra, Lissie, Sara, Kiki,
+// Diffany and Colette,
 // plus Astrid's swimmers' single tail. Each starts at (x, y), extends
 // `length` at `angle` degrees, and waves 12 units either side.
 // SVG <animate>, like Mona's and Vi's tails, gives each its own speed.
@@ -237,6 +237,20 @@ const NOVA_BEADS =
   [[22, 133], [178, 90], [110, 34], [38, 82]]
     .map(([x, y]) => `<circle cx="${x}" cy="${y - 1.5}" r="2" fill="#e6fffb" />`)
     .join('');
+
+// Colette's: all around her long, slim rod, the same lengths as Sallie's.
+const COLETTE_FLAGELLA = [
+  [60, 80, -115, 34, '0.7s'],
+  [100, 78, -90, 32, '0.64s'],
+  [140, 80, -65, 34, '0.74s'],
+  [60, 120, 115, 34, '0.72s'],
+  [100, 122, 90, 32, '0.68s'],
+  [140, 120, 65, 34, '0.7s'],
+  [36, 100, 180, 32, '0.6s'],
+  [164, 100, 0, 30, '0.66s'],
+]
+  .map((f) => flagellum('#2e6b0e', ...f))
+  .join('');
 
 // Pearl's pili (fimbriae): short, straight, sticky hairs spread evenly
 // around her rod (a stadium from x 58 to 142, y 76 to 124), each pointing
@@ -899,6 +913,32 @@ export const PALS = [
         <ellipse cx="80" cy="108" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
         <ellipse cx="120" cy="108" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
         <path d="M96 107 Q100 111.5 104 107" stroke="#4a1a10" stroke-width="2.8" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
+  // Colette: Escherichia coli, a long, slim green-apple rod with flagella all over
+  {
+    id: 'colette',
+    name: 'Colette',
+    looks: 'a long, slim green Escherichia coli rod with flagella all around her',
+    motion: 'bob',
+    frames: { home: '0 0 200 200', picker: '10 10 180 180', dish: '4 4 192 192' },
+    // A bright green apple with a deep green outline, so she doesn't look
+    // like Terra (olive) or Mona (mint).
+    art: `
+      <!-- flagella all over her body -->
+      ${COLETTE_FLAGELLA}
+      <rect x="34" y="78" width="132" height="44" rx="22" fill="#abee64" stroke="#2e6b0e" stroke-width="4" />
+      <path d="M118 85 Q136 81 152 88" stroke="#effde0" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.95" />
+      <circle cx="148" cy="113" r="2.8" fill="#effde0" />
+      <g class="face">
+        <circle cx="88" cy="97" r="6" fill="#14300a" />
+        <circle cx="112" cy="97" r="6" fill="#14300a" />
+        <circle cx="90" cy="95" r="2" fill="white" />
+        <circle cx="114" cy="95" r="2" fill="white" />
+        <ellipse cx="74" cy="109" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="126" cy="109" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
+        <path d="M94 109 Q100 115 106 109" stroke="#14300a" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
   },
