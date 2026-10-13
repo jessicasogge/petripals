@@ -1014,10 +1014,8 @@ export const SPECIES = {
       [0.153, 0.0, 0.115],
       [0.229, 0.0, 0.115],
     ],
-    // Drugs used against her, many for urinary tract infections. Zones are
-    // ballpark figures for a susceptible strain, using the disk sizes for
-    // her order, Enterobacterales. Unlike Pearl, she isn't naturally
-    // resistant to ampicillin, though many strains have picked up resistance.
+    // Zones are ballpark figures for a susceptible strain, using the disk sizes for
+    // her order, Enterobacterales.
     antibiotics: [
       { code: 'AMP', name: 'ampicillin', zone: 20 },
       { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 25 },

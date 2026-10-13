@@ -168,6 +168,5 @@ export const QUIZ_FACTS = {
     "On EMB agar, Colette's colonies often shine with a metallic green sheen.",
     "Since 1988, scientists have grown Colette for over 75,000 generations to watch her evolve.",
     "Scientists taught Colette to make human insulin, first sold as a medicine in 1982.",
-    "Colette is the most common cause of urinary tract infections.",
   ],
 };
