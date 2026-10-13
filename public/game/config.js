@@ -976,6 +976,54 @@ export const SPECIES = {
       { code: 'S', name: 'streptomycin', zone: 23 },
     ],
   },
+  colette: {
+    facts: [
+      "Colette is a Gram-negative rod, so she stains pink on a Gram stain.",
+      "Many Colette strains swim with flagella spread all over their bodies.",
+      "When Colette's flagella bundle, she swims straight; when they unbundle, she tumbles.",
+      "Colette's genus is named for Theodor Escherich, who first described her in 1885.",
+      "\"Coli\" means \"of the colon\": Colette lives in the guts of people and many animals.",
+      "Most strains of Colette are harmless, and some gut strains help make vitamin K.",
+      "Some Colette strains, like O157:H7, make Shiga toxins that cause serious food poisoning.",
+      "Colette is the most common cause of uncomplicated urinary tract infections.",
+      "In good conditions, Colette can divide about every 20 minutes.",
+      "On EMB agar, Colette's colonies often shine with a metallic green sheen.",
+      "Colette can live with or without oxygen.",
+      "Colette keeps her genes on one circular chromosome, about 4.6 million letters long.",
+      "Colette is one of the most studied living things, a favorite of labs worldwide.",
+      "Since 1988, scientists have grown Colette for 75,000 generations to watch evolution.",
+      "Scientists taught Colette to make human insulin, first sold as a medicine in 1982.",
+      "Finding Colette in drinking water can signal fecal contamination.",
+    ],
+    scientific: 'Escherichia coli',
+    color: '#2e6b0e', // for her name above the dish
+    kind: 'rod',
+    gram: 'negative',
+    size: 10.5,
+    body: [
+      // tail (the flagellum behind her)
+      [-0.45, 0.0, 0.04],
+      [-0.41, 0.0, 0.04],
+      [-0.37, 0.0, 0.04],
+      // her long, slim rod
+      [-0.229, 0.0, 0.115],
+      [-0.153, 0.0, 0.115],
+      [-0.076, 0.0, 0.115],
+      [0.0, 0.0, 0.115],
+      [0.076, 0.0, 0.115],
+      [0.153, 0.0, 0.115],
+      [0.229, 0.0, 0.115],
+    ],
+    // Zones are ballpark figures for a susceptible strain, using the disk sizes for
+    // her order, Enterobacterales.
+    antibiotics: [
+      { code: 'AMP', name: 'ampicillin', zone: 20 },
+      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 25 },
+      { code: 'CIP', name: 'ciprofloxacin', zone: 32 },
+      { code: 'CRO', name: 'ceftriaxone', zone: 30 },
+      { code: 'GM', name: 'gentamicin', zone: 21 },
+    ],
+  },
 };
 
 // Mixed culture: no disks; race 1–3 AI rivals (chosen or one random) to TARGET cells.

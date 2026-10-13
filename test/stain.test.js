@@ -71,6 +71,13 @@ describe('the stain shades', () => {
     expect(svg.querySelector('path[d^="M50 80"]').style.fill).toBe(rgb(STAINS.positive.body));
   });
 
+  it("turns Colette's green-apple rod pink, with a pink outline", () => {
+    const svg = dishPal(palById('colette'));
+    stainPal(svg, SPECIES.colette);
+    expect(svg.querySelector('rect').style.fill).toBe(rgb(STAINS.negative.body));
+    expect(svg.querySelector('rect').style.stroke).toBe(rgb(STAINS.negative.outline));
+  });
+
   it("leaves Pearl's capsule clear, the way capsules show up on a slide, while her rod turns pink", () => {
     const svg = dishPal(palById('pearl'));
     stainPal(svg, SPECIES.pearl);

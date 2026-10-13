@@ -163,4 +163,10 @@ export const QUIZ_FACTS = {
     "McCoy and Chapin found Frannie in 1911 while studying plague in ground squirrels.",
     "Frannie causes tularemia, an illness also nicknamed \"rabbit fever.\"",
   ],
+  colette: [
+    "Colette's genus is named for Theodor Escherich, who first described her in 1885.",
+    "On EMB agar, Colette's colonies often shine with a metallic green sheen.",
+    "Since 1988, scientists have grown Colette for over 75,000 generations to watch her evolve.",
+    "Scientists taught Colette to make human insulin, first sold as a medicine in 1982.",
+  ],
 };
