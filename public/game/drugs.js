@@ -3,8 +3,12 @@
 // and `works` explains their action. Wrap scientific names in *asterisks*.
 //
 // Facts name the drug (capitalized at sentence start) for quiz substitution.
-// Distinguish it from other targets, not its family: "is a cephalosporin"
-// works; "works on Pseudomonas" doesn't.
+// The wrong disks offered with a fact always attack something else (see
+// choicesFor), so a fact only has to rule out drugs with a different target,
+// not its own family: "is a cephalosporin" works. Before adding a fact, check
+// it isn't also true of a drug with another target. What a drug treats or how
+// it's taken usually is: "works on Pseudomonas", "treats tuberculosis" or
+// "comes as a pill or an IV" fit several disks at once.
 import { SPECIES } from './config.js';
 import { inRandomOrder, PALS } from './pals.js';
 
@@ -45,7 +49,7 @@ export const DRUGS = {
     facts: [
       'Amoxicillin is commonly prescribed to children, often as a sweet, flavored liquid.',
       'Amoxicillin is soaked up from the gut better than ampicillin, its close cousin.',
-      'Amoxicillin is a go-to drug for middle-ear infections and strep throat.',
+      'Amoxicillin was launched in 1972 by Beecham, the British company that had made ampicillin.',
     ],
   },
   AMP: {
@@ -97,7 +101,7 @@ export const DRUGS = {
     target: 'wall',
     works: BETA_LACTAM,
     facts: [
-      'Ceftriaxone lasts so long in the body that one dose a day is often enough.',
+      'Ceftriaxone can form crystals with calcium, so newborns on calcium drips are given a different cephalosporin.',
       'Ceftriaxone is a cephalosporin, a family first found in a mold growing near a sewer outlet in Sardinia, Italy, in 1945.',
       'Ceftriaxone is a main treatment for gonorrhea and for bacterial meningitis.',
     ],
@@ -109,7 +113,7 @@ export const DRUGS = {
     works: BETA_LACTAM,
     facts: [
       'Cefuroxime belongs to the second generation of cephalosporin antibiotics.',
-      'Cefuroxime can be swallowed as a pill or given through an IV.',
+      'Cefuroxime is one of the few cephalosporins that can be swallowed as a pill or given through an IV.',
     ],
   },
   CTX: {
@@ -128,7 +132,7 @@ export const DRUGS = {
     target: 'wall',
     works: BETA_LACTAM,
     facts: [
-      'Cefixime lasts long enough in the body to be taken just once or twice a day.',
+      'Cefixime is a cephalosporin that comes as a pill or a liquid to swallow, not as a shot.',
       'Cefixime was the first third-generation cephalosporin available by mouth, in the 1980s.',
     ],
   },
@@ -150,7 +154,7 @@ export const DRUGS = {
     facts: [
       'Meropenem is a carbapenem, a family often reserved for serious or resistant infections.',
       'Bacteria that resist carbapenems like meropenem are some of the most worrying superbugs.',
-      'Meropenem covers a wide range of bacteria: many Gram-positives, Gram-negatives and anaerobes.',
+      'Meropenem holds up against a kidney enzyme that breaks down imipenem, so it needs no helper drug.',
     ],
   },
   IPM: {
@@ -204,7 +208,7 @@ export const DRUGS = {
       'Albert Schatz discovered streptomycin in 1943 in Selman Waksman’s lab, with contributions from Elizabeth Bugie.',
       'Streptomycin was first isolated from the soil bacterium *Streptomyces griseus*.',
       'Streptomycin was the first effective antibiotic against tuberculosis.',
-      'Streptomycin is still one of the drugs used to treat plague.',
+      'Streptomycin was the first antibiotic tested in a randomized controlled trial, for tuberculosis in 1948.',
     ],
   },
   K: {
@@ -235,7 +239,7 @@ export const DRUGS = {
     target: 'protein',
     works: TETRACYCLINE,
     facts: [
-      'Doxycycline is a first-choice treatment for early Lyme disease.',
+      'Doxycycline is a first-choice treatment for Rocky Mountain spotted fever, spread by ticks.',
       'Doxycycline is also used to help prevent malaria in travelers.',
     ],
   },
@@ -278,7 +282,7 @@ export const DRUGS = {
     facts: [
       'Linezolid, approved in 2000, was the first antibiotic in the synthetic oxazolidinone family.',
       'Linezolid can treat MRSA and enterococci that resist vancomycin.',
-      'Linezolid is absorbed almost completely, so equivalent pill and IV doses work similarly.',
+      'Linezolid taken for weeks can lower the platelets that help blood clot.',
     ],
   },
   C: {
@@ -319,7 +323,7 @@ export const DRUGS = {
     target: 'dna',
     works: 'Gets switched on inside certain microbes adapted to little or no oxygen, then damages their DNA.',
     facts: [
-      'Metronidazole targets anaerobic bacteria—bacteria that can live without oxygen.',
+      'People taking metronidazole are told to avoid alcohol, which may make them feel very sick.',
       'Metronidazole also kills some parasites, like *Giardia*.',
     ],
   },
@@ -341,7 +345,7 @@ export const DRUGS = {
     works: 'Stops bacterial RNA polymerase, so the cell can’t read its genes.',
     facts: [
       'Rifampin can turn tears, sweat and pee orange-red.',
-      'Rifampin is one of the main drugs for tuberculosis.',
+      'Rifampin is almost never used alone to treat an infection, because bacteria quickly resist it.',
       'Rifampin’s family is named after Rififi, a 1955 French heist movie.',
     ],
   },
