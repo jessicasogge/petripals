@@ -19,7 +19,7 @@ const SVG = 'http://www.w3.org/2000/svg';
 
 // How far the tail tip is from the middle of the drawing, as a fraction of
 // the dish radius. The tail is what lands on a cell.
-export const TAIL = 0.035;
+export const TAIL = 0.042;
 
 // A generic tailed phage, like T4: a twenty-sided head full of DNA, a tail
 // it injects the DNA through, and tail fibers it lands on. Drawn tail down;
