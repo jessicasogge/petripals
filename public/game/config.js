@@ -1,7 +1,8 @@
 // How each pal grows. Every pal is a single cell that divides each time it
 // eats. Rods (Mona, Vi) separate after dividing. Cocci are round cells whose
 // daughters stick together: in chains for Streptococcus (divides in one
-// plane) or grape-like clusters for Staphylococcus (divides in several).
+// plane), grape-like clusters for Staphylococcus (divides in several), or
+// squares of four for Deinococcus (divides in two planes at right angles).
 // Ceres is a rod whose daughters stick together too, so she grows like a
 // coccus chain, with rod-shaped cells (`shape: 'rod'`).
 //
@@ -1022,6 +1023,49 @@ export const SPECIES = {
       { code: 'CIP', name: 'ciprofloxacin', zone: 32 },
       { code: 'CRO', name: 'ceftriaxone', zone: 30 },
       { code: 'GM', name: 'gentamicin', zone: 21 },
+    ],
+  },
+  // Deinococcus radiodurans, the toughest bacterium known: round cells that
+  // stick together in squares of four (tetrads), so she grows with the
+  // tetrad code in coccus.js, up to four cells to a group. Her name comes
+  // from Deino-coccus. Real colonies are pinkish red, from a pigment called
+  // deinoxanthin; she's orchid so she doesn't look like Sara, Scarlett or
+  // Frannie. Labs don't test her with disks, so these zones are estimates,
+  // from drugs geneticists use on her (as markers that kill cells without a
+  // resistance gene).
+  dina: {
+    facts: [
+      "Dina is nicknamed \"Conan the Bacterium\" for how tough she is.",
+      "Dina can survive about 1,000 times the radiation that would kill a person.",
+      "Dina's cells often stick together in squares of four, called tetrads.",
+      "Dina's genus means \"terrible berry\" in Greek; radiodurans means radiation-surviving.",
+      "Dina was found in 1956, in canned meat that spoiled after being sterilized with radiation.",
+      "Radiation can shatter Dina's DNA into hundreds of pieces, and she rebuilds it in hours.",
+      "Dina keeps several copies of her DNA in every cell, so she has spares to repair from.",
+      "Dina stockpiles manganese, which helps shield her proteins from radiation damage.",
+      "Dina's real colonies are pinkish red, from a pigment called deinoxanthin.",
+      "Dina survives drying out for a long time, which may be why she's so good at fixing DNA.",
+      "Clumps of Dina survived three years outside the International Space Station.",
+      "Dina has been called the world's toughest bacterium by Guinness World Records.",
+      "Dina is Gram-positive and stains purple, though her cell wall has extra outer layers.",
+      "Dina has no flagella, so she can't swim.",
+      "Scientists engineered Dina to help clean up toxic mercury at radioactive waste sites.",
+      "Dina isn't known to cause disease in people.",
+      "Dina's DNA is split between two chromosomes and two plasmids.",
+    ],
+    scientific: 'Deinococcus radiodurans',
+    color: '#a21caf', // for her name above the dish
+    kind: 'coccus',
+    gram: 'positive',
+    layout: 'tetrad',
+    maxCells: 4, // squares of four
+    colors: { fill: '#f0abfc', stroke: '#a21caf', highlight: '#fdf4ff', dark: '#701a75' },
+    antibiotics: [
+      { code: 'C', name: 'chloramphenicol', zone: 30 },
+      { code: 'TE', name: 'tetracycline', zone: 27 },
+      { code: 'K', name: 'kanamycin', zone: 18 },
+      { code: 'RA', name: 'rifampin', zone: 22 },
+      { code: 'E', name: 'erythromycin', zone: 25 },
     ],
   },
 };

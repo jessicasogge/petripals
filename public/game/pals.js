@@ -282,6 +282,14 @@ const PEARL_PILI = (() => {
   return hairs.join('');
 })();
 
+// Dina's four cells, two across and two down: rounded squares, so the walls
+// between them look flat, each with a shine near its top-left corner.
+const DINA_CELLS = [[32, 32], [100, 32], [32, 100], [100, 100]]
+  .map(([x, y]) =>
+    `<rect x="${x}" y="${y}" width="68" height="68" rx="27" fill="#f0abfc" stroke="#a21caf" stroke-width="4" />` +
+    `<circle cx="${x + 18}" cy="${y + 16}" r="4" fill="#fdf4ff" />`)
+  .join('');
+
 export const PALS = [
   // Terra: Clostridium tetani, an olive rod with a round spore at one end (a "drumstick")
   {
@@ -939,6 +947,28 @@ export const PALS = [
         <ellipse cx="74" cy="109" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
         <ellipse cx="126" cy="109" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
         <path d="M94 109 Q100 115 106 109" stroke="#14300a" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
+  // Dina: Deinococcus radiodurans, an orchid square of four round cells (a tetrad)
+  {
+    id: 'dina',
+    name: 'Dina',
+    looks: 'an orchid-pink square of four round Deinococcus radiodurans cells',
+    motion: 'squish',
+    frames: { home: '0 0 200 200', picker: '16 16 168 168', dish: '20 20 160 160' },
+    art: `
+      <!-- a tetrad: four cells in a square, pressed a little flat where they
+           touch, since each division splits a cell straight across -->
+      ${DINA_CELLS}
+      <g class="face">
+        <circle cx="56" cy="132" r="5.5" fill="#701a75" />
+        <circle cx="78" cy="132" r="5.5" fill="#701a75" />
+        <circle cx="57.8" cy="130.2" r="1.9" fill="white" />
+        <circle cx="79.8" cy="130.2" r="1.9" fill="white" />
+        <ellipse cx="46" cy="143" rx="5.5" ry="3.4" fill="#f9a8d4" opacity="0.95" />
+        <ellipse cx="88" cy="143" rx="5.5" ry="3.4" fill="#f9a8d4" opacity="0.95" />
+        <path d="M62 143 Q67 148 72 143" stroke="#701a75" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
   },

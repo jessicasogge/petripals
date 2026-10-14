@@ -169,4 +169,11 @@ export const QUIZ_FACTS = {
     "Since 1988, scientists have grown Colette for over 75,000 generations to watch her evolve.",
     "Scientists taught Colette to make human insulin, first sold as a medicine in 1982.",
   ],
+  dina: [
+    "Dina is nicknamed \"Conan the Bacterium\" for how tough she is.",
+    "Dina can survive about 1,000 times the radiation that would kill a person.",
+    "Dina's cells often stick together in squares of four, called tetrads.",
+    "Dina was found in 1956, in canned meat that spoiled after being sterilized with radiation.",
+    "Clumps of Dina survived three years outside the International Space Station.",
+  ],
 };

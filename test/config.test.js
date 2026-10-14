@@ -32,7 +32,7 @@ describe('pals', () => {
         expect(species.size).toBeLessThanOrEqual(12);
       }
     } else {
-      expect(['chain', 'cluster']).toContain(species.layout);
+      expect(['chain', 'cluster', 'tetrad']).toContain(species.layout);
       for (const part of ['fill', 'stroke', 'highlight', 'dark']) {
         expect(species.colors[part]).toMatch(/^#[0-9a-f]{6}$/i);
       }
@@ -42,6 +42,13 @@ describe('pals', () => {
   it('makes Scarlett a chain (Streptococcus) and Goldie a cluster (Staphylococcus)', () => {
     expect(SPECIES.scarlett.layout).toBe('chain');
     expect(SPECIES.goldie.layout).toBe('cluster');
+  });
+
+  it('makes Dina a Deinococcus that grows in squares of four (tetrads)', () => {
+    expect(SPECIES.dina.kind).toBe('coccus');
+    expect(SPECIES.dina.layout).toBe('tetrad');
+    expect(SPECIES.dina.maxCells).toBe(4);
+    expect(SPECIES.dina.gram).toBe('positive');
   });
 
   it('makes Penny a Streptococcus whose chains stop at pairs (Streptococcus pneumoniae)', () => {
@@ -229,9 +236,9 @@ describe('Gram stains', () => {
     }
   });
 
-  it('matches the real bacteria: the cocci, Ana, Ceres, Terra, Lissie, Diffany and Nova are Gram-positive, the other rods negative', () => {
+  it('matches the real bacteria: the cocci (Dina too), Ana, Ceres, Terra, Lissie, Diffany and Nova are Gram-positive, the other rods negative', () => {
     const positive = Object.keys(SPECIES).filter((name) => SPECIES[name].gram === 'positive').sort();
-    expect(positive).toEqual(['ana', 'ceres', 'diffany', 'goldie', 'ivy', 'lissie', 'nova', 'penny', 'scarlett', 'terra']);
+    expect(positive).toEqual(['ana', 'ceres', 'diffany', 'dina', 'goldie', 'ivy', 'lissie', 'nova', 'penny', 'scarlett', 'terra']);
   });
 
   it('marks only Elia as barely taking the stain', () => {

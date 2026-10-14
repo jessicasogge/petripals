@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { chainSpot, clusterSpot, R, SPACING, wobble } from '../public/game/attach.js';
+import { chainSpot, clusterSpot, R, SPACING, tetradSpot, wobble } from '../public/game/attach.js';
 
 const cell = (x, y) => ({ x, y });
 const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
@@ -168,5 +168,59 @@ describe('clusterSpot', () => {
     const before = JSON.stringify(cells);
     clusterSpot(cells, 1.2, 50, 50);
     expect(JSON.stringify(cells)).toBe(before);
+  });
+});
+
+describe('tetradSpot', () => {
+  // Grow a tetrad the way the game does, approaching from (px, py) each time.
+  function growTetrad(px, py) {
+    const cells = [cell(0, 0)];
+    for (let i = 1; i < 4; i++) {
+      const spot = tetradSpot(cells, px, py);
+      cells.push(cell(spot.x, spot.y));
+    }
+    return cells;
+  }
+
+  it('puts the second cell toward the player, touching the first', () => {
+    const spot = tetradSpot([cell(0, 0)], 100, 0);
+    expect(spot.x).toBeCloseTo(SPACING);
+    expect(spot.y).toBeCloseTo(0);
+  });
+
+  it('grows four cells into a square, from any side', () => {
+    for (const [px, py] of [[100, 0], [-30, 80], [50, -50], [0, -100]]) {
+      const cells = growTetrad(px, py);
+      // Every cell touches two others and sits across the square from the third.
+      for (const c of cells) {
+        const gaps = cells.filter((o) => o !== c).map((o) => distance(c, o)).sort((a, b) => a - b);
+        expect(gaps[0]).toBeCloseTo(SPACING);
+        expect(gaps[1]).toBeCloseTo(SPACING);
+        expect(gaps[2]).toBeCloseTo(SPACING * Math.SQRT2);
+      }
+    }
+  });
+
+  it('builds the square on the side of a pair facing the player', () => {
+    const spot = tetradSpot([cell(0, 0), cell(SPACING, 0)], SPACING, 100);
+    expect(spot.y).toBeCloseTo(SPACING);
+    expect(spot.x).toBeCloseTo(SPACING);
+  });
+
+  it('fills in the missing corners when a pair is corner to corner', () => {
+    const spot = tetradSpot([cell(0, 0), cell(SPACING, SPACING)], 0, 100);
+    expect(spot.x).toBeCloseTo(0);
+    expect(spot.y).toBeCloseTo(SPACING);
+  });
+
+  it('has no room once the square is full', () => {
+    expect(tetradSpot(growTetrad(100, 0), 0, 0)).toBeNull();
+  });
+
+  it('skips corners that are not allowed', () => {
+    const cells = [cell(0, 0), cell(SPACING, 0)];
+    const spot = tetradSpot(cells, SPACING, 100, (x, y) => y < 0);
+    expect(spot.y).toBeCloseTo(-SPACING);
+    expect(tetradSpot(cells, 0, 0, () => false)).toBeNull();
   });
 });
