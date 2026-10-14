@@ -306,7 +306,7 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
     setTimeout(() => {
       showFact(pal, you.species);
       showBanner('You outgrew the phages!',
-        `Your colony reached ${target} cells, even with ${swarm.count()} ${swarm.count() === 1 ? 'phage' : 'phages'} on the hunt.`);
+        `Your colony reached ${target} cells before the phages could stop it.`);
     }, Math.max(0, GAME.DIVIDE_MS - colony.sinceAnyDivision));
   }
 

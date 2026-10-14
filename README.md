@@ -29,7 +29,7 @@ No steering this time. Your pal swims in a straight line on her own, and all you
 
 ### Phage Attack
 
-No antibiotics, but **bacteriophages** (phages for short), viruses that infect bacteria, drift in from the rim and hunt your colony. Grow to **32 cells** to win. Phages go after your offspring first, so the cells you leave behind draw them away from your pal, but if she swims too close, they'll come for her. A phage that lands on one of your offspring infects it: the cell turns grey and throbs, and a few seconds later it bursts and lets out two new phages, so every cell they catch makes more of them. A chain or cluster loses just the infected cell. If a phage lands on your pal herself, it's game over. One phage starts on the plate, another drifts in every ten seconds, and there are never more than six. You get a head start, and they're much slower than you, so keep moving.
+No antibiotics, but **bacteriophages** (phages for short), viruses that infect bacteria, drift in from the rim and hunt your colony. Grow to **64 cells** to win. Phages go after your offspring first, so the cells you leave behind draw them away from your pal, but if she swims too close, they'll come for her. A phage that lands on one of your offspring infects it: the cell turns grey and throbs, and a few seconds later it bursts and lets out two new phages, so every cell they catch makes more of them. A chain or cluster loses just the infected cell. If a phage lands on your pal herself, it's game over. One phage starts on the plate, another drifts in every twelve seconds, and there are never more than four. You get a head start, and they're much slower than you, so keep moving.
 
 ### Who’s That Pal?
 

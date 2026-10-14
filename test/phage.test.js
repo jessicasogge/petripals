@@ -509,21 +509,11 @@ describe('Phage Attack', () => {
     expect(banner().hidden).toBe(false);
     expect(banner().querySelector('h2').textContent).toBe('You outgrew the phages!');
     expect(banner().querySelector('.win-message').textContent).toBe(
-      'Your colony reached 4 cells, even with 2 phages on the hunt.');
+      'Your colony reached 4 cells before the phages could stop it.');
     expect(banner().querySelector('.play-again').textContent).toBe('Play again');
     expect(banner().querySelector('.start-over').textContent).toBe('Choose a mode');
     expect(banner().querySelector('.start-over').hidden).toBe(false);
     expect(document.activeElement).toBe(banner().querySelector('.play-again'));
-  });
-
-  it('says "phage" for just one', () => {
-    const { swarm } = play('mona', 4);
-    swarm.remove(swarm.phages[0]);
-    colony.addCells(3);
-    frame();
-    vi.advanceTimersByTime(GAME.DIVIDE_MS);
-    expect(banner().querySelector('.win-message').textContent).toBe(
-      'Your colony reached 4 cells, even with 1 phage on the hunt.');
   });
 
   it('plays again, or goes back to the modes', () => {

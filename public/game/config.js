@@ -1053,15 +1053,15 @@ export const TUMBLE = {
 // Landing on the pal is game over. Generic phages infect every pal;
 // real bursts release ~100 phages, not 2.
 export const PHAGE = {
-  TARGET: 32,
-  NUTRIENTS: 20,
+  TARGET: 64,
+  NUTRIENTS: 28,
   START: 1, // phages on the agar at the start
-  MAX: 6, // no more than this many hunting at once
+  MAX: 4, // no more than this many hunting at once
   NOTICE: 0.25, // phages go after your offspring, unless your pal swims this close (fraction of the dish radius)
   SPEED: 0.15, // fraction of the dish radius per second (you swim at GAME.SPEED)
   WANDER: 0.9, // how much they weave off course, in radians
   REACH: 0.025, // how close a phage's tail has to get to land, as a fraction of the dish radius
-  ARRIVE_MS: 10000, // a new phage drifts in from the rim this often
+  ARRIVE_MS: 12000, // a new phage drifts in from the rim this often
   START_MS: 2500, // the phages wait this long before they start, so you get a head start
   LATENT_MS: 3000, // how long an infected cell lives before it bursts
   BURST: 2, // new phages let out when an infected cell bursts
