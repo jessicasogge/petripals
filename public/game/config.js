@@ -1057,7 +1057,7 @@ export const PHAGE = {
   NUTRIENTS: 28,
   START: 1, // phages on the agar at the start
   NOTICE: 0.25, // phages go after your offspring, unless your pal swims this close (fraction of the dish radius)
-  SPEED: 0.15, // fraction of the dish radius per second (you swim at GAME.SPEED)
+  SPEED: 0.13, // fraction of the dish radius per second (you swim at GAME.SPEED)
   WANDER: 0.9, // how much they weave off course, in radians
   REACH: 0.025, // how close a phage's tail has to get to land, as a fraction of the dish radius
   START_MS: 2500, // the phages wait this long before they start, so you get a head start
