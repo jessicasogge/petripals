@@ -170,7 +170,6 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
   let eaten = 0;
   const colony = makeColony({
     leader, nutrients, dishRadius, target: Infinity, color,
-    onDivide: () => updateCounter(),
     onLeaderEat: (ate) => { eaten += ate; },
   });
 
@@ -192,11 +191,8 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
   document.querySelector('.start-over').addEventListener('click', () => goTo(`./choose-mode.html?pal=${pal}`));
 
   function updateCounter() {
-    const shown = Math.min(eaten, target);
-    const cells = colony.cellCount();
-    const n = swarm.count();
-    counter.textContent = `${shown} / ${target} nutrients · ${cells} ${cells === 1 ? 'cell' : 'cells'} · ` +
-      `${n} ${n === 1 ? 'phage' : 'phages'}`;
+    // Just the nutrients: counting cells and phages too was confusing.
+    counter.textContent = `${Math.min(eaten, target)} / ${target} nutrients`;
   }
 
   // Every healthy cell in the dish, for the phages to hunt: one per circle

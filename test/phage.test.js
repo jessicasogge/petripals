@@ -14,9 +14,9 @@ const fake = vi.hoisted(() => ({ colony: null }));
 
 vi.mock('../public/game/colony.js', () => ({
   // The real colony starts with your pal in it.
-  makeColony: vi.fn(({ leader, target, onDivide, onLeaderEat }) => {
+  makeColony: vi.fn(({ leader, target, onLeaderEat }) => {
     fake.colony.groups.push(leader);
-    Object.assign(fake.colony, { target, onDivide, onLeaderEat });
+    Object.assign(fake.colony, { target, onLeaderEat });
     return fake.colony;
   }),
   moveGroups: vi.fn(),
@@ -286,18 +286,12 @@ describe('phageSwarm', () => {
 });
 
 describe('Phage Attack', () => {
-  it(`starts with ${PHAGE.START} phage on the rim, and counts it`, () => {
+  it(`starts with ${PHAGE.START} phage on the rim, and counts only the nutrients`, () => {
     const { swarm } = start();
     expect(swarm.count()).toBe(PHAGE.START);
     for (const phage of swarm.phages) expect(Math.hypot(phage.fx, phage.fy)).toBeCloseTo(0.9);
-    expect(counter()).toBe(`0 / ${PHAGE.TARGET} nutrients · 1 cell · 1 phage`);
+    expect(counter()).toBe(`0 / ${PHAGE.TARGET} nutrients`);
     expect(document.querySelector('.pal-mover').classList).toContain('player');
-  });
-
-  it('counts phages in the plural too', () => {
-    play();
-    frame();
-    expect(counter()).toBe(`0 / ${PHAGE.TARGET} nutrients · 1 cell · 2 phages`);
   });
 
   it('goes after your offspring, not your pal, unless she swims close', () => {
@@ -356,7 +350,7 @@ describe('Phage Attack', () => {
     expect(swarm.count()).toBe(2);
     waitFor(200);
     expect(swarm.count()).toBe(3);
-    expect(counter()).toBe(`0 / ${PHAGE.TARGET} nutrients · 1 cell · 3 phages`);
+    expect(counter()).toBe(`0 / ${PHAGE.TARGET} nutrients`);
   });
 
   it('is game over when a phage lands on your pal', () => {
@@ -393,14 +387,14 @@ describe('Phage Attack', () => {
     expect(rod.pending).toBe(-Infinity);
     expect(rod.mover.classList).toContain('infected');
     expect(swarm.count()).toBe(1);
-    expect(counter()).toBe(`0 / ${PHAGE.TARGET} nutrients · 2 cells · 1 phage`);
+    expect(counter()).toBe(`0 / ${PHAGE.TARGET} nutrients`);
 
     run(PHAGE.LATENT_MS);
     expect(colony.groups).not.toContain(rod);
     expect(rod.mover.isConnected).toBe(false);
     expect(showPop).toHaveBeenCalledWith(document.querySelector('.agar'), [100, 0, 10], SPECIES.mona.color);
     expect(swarm.count()).toBe(1 + PHAGE.BURST);
-    expect(counter()).toBe(`0 / ${PHAGE.TARGET} nutrients · 1 cell · ${1 + PHAGE.BURST} phages`);
+    expect(counter()).toBe(`0 / ${PHAGE.TARGET} nutrients`);
   });
 
   it("doesn't let two phages land on the same cell", () => {
@@ -501,19 +495,12 @@ describe('Phage Attack', () => {
     expect(colony.target).toBe(Infinity);
   });
 
-  it('counts the cells as soon as one divides', () => {
-    play();
-    colony.addCells(1);
-    colony.onDivide();
-    expect(counter()).toBe(`0 / ${PHAGE.TARGET} nutrients · 2 cells · 2 phages`);
-  });
-
   it('counts the nutrients your pal eats, and you win once she has eaten enough', () => {
     play('mona', 4);
     colony.meal = 3;
     frame();
     expect(colony.divideLeader).toHaveBeenCalledTimes(1);
-    expect(counter()).toBe('3 / 4 nutrients · 1 cell · 2 phages');
+    expect(counter()).toBe('3 / 4 nutrients');
     // Her offspring don't add to the count (they're the colony's to eat with,
     // and the colony only tells the game what she ate).
     colony.addCells(5);
@@ -524,7 +511,7 @@ describe('Phage Attack', () => {
     expect(sporeBurst).toHaveBeenCalledWith(document.querySelector('.pal-mover'));
     expect(nutrients.stop).toHaveBeenCalled();
     expect(track).toHaveBeenCalledWith('phage/won/mona', 'Mona outgrew the phages');
-    expect(counter()).toBe('4 / 4 nutrients · 6 cells · 2 phages');
+    expect(counter()).toBe('4 / 4 nutrients');
     vi.advanceTimersByTime(GAME.DIVIDE_MS - 200 - 1);
     expect(banner().hidden).toBe(true);
     vi.advanceTimersByTime(1);
