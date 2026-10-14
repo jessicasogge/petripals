@@ -114,14 +114,14 @@ function drawing(pal) {
 
 // Start Phage Attack with Mona (or `me`), with a second phage on the agar
 // (straight across from the first) so tests can use one and park the other.
-function play(me = 'mona', target = PHAGE.LEVELS[0], level = 1) {
-  const game = start(me, target, level);
+function play(me = 'mona', target = PHAGE.TARGET) {
+  const game = start(me, target);
   while (game.swarm.count() < 2) game.swarm.arrive(Math.PI);
   return game;
 }
 
-function start(me = 'mona', target = PHAGE.LEVELS[0], level = 1) {
-  return playPhage({ you: { svg: drawing(me), species: SPECIES[me] }, nutrients, level, target, random: () => 0.5 });
+function start(me = 'mona', target = PHAGE.TARGET) {
+  return playPhage({ you: { svg: drawing(me), species: SPECIES[me] }, nutrients, target, random: () => 0.5 });
 }
 
 function frame(ms = 50) {
@@ -294,7 +294,7 @@ describe('Phage Attack', () => {
     const { swarm } = start();
     expect(swarm.count()).toBe(PHAGE.START);
     for (const phage of swarm.phages) expect(Math.hypot(phage.fx, phage.fy)).toBeCloseTo(0.9);
-    expect(counter()).toBe(`Level 1 · 0 / ${PHAGE.LEVELS[0]} nutrients`);
+    expect(counter()).toBe(`0 / ${PHAGE.TARGET} nutrients`);
     expect(document.querySelector('.pal-mover').classList).toContain('player');
   });
 
@@ -359,7 +359,7 @@ describe('Phage Attack', () => {
     frame();
     expect(document.querySelector('.pal-mover').classList).toContain('killed');
     expect(nutrients.stop).toHaveBeenCalled();
-    expect(track).toHaveBeenCalledWith('phage/lost/mona/level-1', 'Mona was caught by a phage on level 1');
+    expect(track).toHaveBeenCalledWith('phage/lost/mona', 'Mona was caught by a phage');
     expect(swarm.count()).toBe(1);
     // Nothing more happens once it's over.
     frame();
@@ -370,9 +370,6 @@ describe('Phage Attack', () => {
     expect(banner().querySelector('h2').textContent).toBe('Game over');
     expect(banner().querySelector('.win-message').textContent).toBe(
       'A phage landed on Mona and injected its DNA. Phages are viruses that infect bacteria!');
-    expect(banner().querySelector('.play-again').textContent).toBe('Try level 1 again');
-    banner().querySelector('.play-again').click();
-    expect(location.href).toBe('http://localhost/petri-dish.html?pal=mona&mode=phage&level=1');
     expect(showFact).toHaveBeenCalledWith('mona', SPECIES.mona);
   });
 
@@ -388,14 +385,14 @@ describe('Phage Attack', () => {
     expect(rod.pending).toBe(-Infinity);
     expect(rod.mover.classList).toContain('infected');
     expect(swarm.count()).toBe(1);
-    expect(counter()).toBe(`Level 1 · 0 / ${PHAGE.LEVELS[0]} nutrients`);
+    expect(counter()).toBe(`0 / ${PHAGE.TARGET} nutrients`);
 
     run(PHAGE.LATENT_MS);
     expect(colony.groups).not.toContain(rod);
     expect(rod.mover.isConnected).toBe(false);
     expect(showPop).toHaveBeenCalledWith(document.querySelector('.agar'), [100, 0, 10], SPECIES.mona.color);
     expect(swarm.count()).toBe(1 + PHAGE.BURST);
-    expect(counter()).toBe(`Level 1 · 0 / ${PHAGE.LEVELS[0]} nutrients`);
+    expect(counter()).toBe(`0 / ${PHAGE.TARGET} nutrients`);
   });
 
   it('only lands when its tail really touches a long rod, not just comes near it', () => {
@@ -548,7 +545,7 @@ describe('Phage Attack', () => {
     colony.meal = 3;
     frame();
     expect(colony.divideLeader).toHaveBeenCalledTimes(1);
-    expect(counter()).toBe('Level 1 · 3 / 4 nutrients');
+    expect(counter()).toBe('3 / 4 nutrients');
     // Her offspring don't add to the count (they're the colony's to eat with,
     // and the colony only tells the game what she ate).
     colony.addCells(5);
@@ -556,54 +553,28 @@ describe('Phage Attack', () => {
     colony.sinceAnyDivision = 200;
     frame();
     expect(colony.divideLeader).toHaveBeenCalledTimes(1);
-    expect(sporeBurst).toHaveBeenCalledWith(document.querySelector('.pal-mover'), { big: false });
+    expect(sporeBurst).toHaveBeenCalledWith(document.querySelector('.pal-mover'));
     expect(nutrients.stop).toHaveBeenCalled();
-    expect(track).toHaveBeenCalledWith('phage/level-complete/mona/level-1', 'Mona finished Phage Attack level 1');
-    expect(track).toHaveBeenCalledTimes(1);
-    expect(counter()).toBe('Level 1 · 4 / 4 nutrients');
+    expect(track).toHaveBeenCalledWith('phage/won/mona', 'Mona outgrew the phages');
+    expect(counter()).toBe('4 / 4 nutrients');
     vi.advanceTimersByTime(GAME.DIVIDE_MS - 200 - 1);
     expect(banner().hidden).toBe(true);
     vi.advanceTimersByTime(1);
     expect(banner().hidden).toBe(false);
-    expect(banner().querySelector('h2').textContent).toBe('Level 1 complete!');
+    expect(banner().querySelector('h2').textContent).toBe('You outgrew the phages!');
     expect(banner().querySelector('.win-message').textContent).toBe(
       'You ate 4 nutrients before the phages could stop you.');
-    expect(banner().querySelector('.play-again').textContent).toBe('Play level 2');
+    expect(banner().querySelector('.play-again').textContent).toBe('Play again');
     expect(banner().querySelector('.start-over').textContent).toBe('Choose a mode');
     expect(banner().querySelector('.start-over').hidden).toBe(false);
     expect(document.activeElement).toBe(banner().querySelector('.play-again'));
   });
 
-  it('goes on to the next level, or back to the modes', () => {
-    play('mona', 4);
-    colony.meal = 4;
-    frame();
-    vi.advanceTimersByTime(GAME.DIVIDE_MS);
+  it('plays again, or goes back to the modes', () => {
+    play();
     banner().querySelector('.play-again').click();
-    expect(location.href).toBe('http://localhost/petri-dish.html?pal=mona&mode=phage&level=2');
+    expect(location.href).toBe('http://localhost/petri-dish.html?pal=mona&mode=phage');
     banner().querySelector('.start-over').click();
     expect(location.href).toBe('./choose-mode.html?pal=mona');
-  });
-
-  it(`celebrates beating all ${PHAGE.LEVELS.length} levels, and starts over from level 1`, () => {
-    const last = PHAGE.LEVELS.length;
-    location.href = `http://localhost/petri-dish.html?pal=mona&mode=phage&level=${last}`;
-    play('mona', 4, last);
-    colony.meal = 4;
-    frame();
-    expect(sporeBurst).toHaveBeenCalledWith(document.querySelector('.pal-mover'), { big: true });
-    expect(track).toHaveBeenCalledWith('phage/won-all-levels/mona', 'Mona beat every Phage Attack level');
-    vi.advanceTimersByTime(GAME.DIVIDE_MS);
-    expect(banner().querySelector('h2').textContent).toBe('You beat the phages!');
-    expect(banner().querySelector('.win-message').textContent).toBe(
-      `You beat all ${last} levels! You ate 4 nutrients before the phages could stop you.`);
-    expect(banner().querySelector('.play-again').textContent).toBe('Play again');
-    banner().querySelector('.play-again').click();
-    expect(location.href).toBe('http://localhost/petri-dish.html?pal=mona&mode=phage&level=1');
-  });
-
-  it(`plays to ${PHAGE.LEVELS[0]} nutrients on level 1 unless told otherwise`, () => {
-    playPhage({ you: { svg: drawing('mona'), species: SPECIES.mona }, nutrients });
-    expect(counter()).toBe(`Level 1 · 0 / ${PHAGE.LEVELS[0]} nutrients`);
   });
 });
