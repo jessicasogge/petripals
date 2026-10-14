@@ -1,8 +1,8 @@
-// Phage Attack: grow your colony to the target size while bacteriophages,
-// viruses that infect bacteria, hunt it down. A phage that lands on one of
+// Phage Attack: eat the target number of nutrients while bacteriophages,
+// viruses that infect bacteria, hunt your colony down. A phage that lands on one of
 // your offspring injects its DNA, and a few seconds later that cell bursts
 // open (lysis) and lets out new phages, so the more cells they catch, the
-// more of them there are. One landing on your pal is game over. No
+// more of them there are, with no limit. One landing on your pal is game over. No
 // antibiotic disks this time.
 import { makeColony, moveGroups, showPop } from './colony.js';
 import { GAME, PHAGE } from './config.js';
@@ -71,7 +71,6 @@ export function phageSwarm(agar, random = Math.random) {
   const phages = [];
 
   function add(fx, fy, heading, grace = 0) {
-    if (phages.length >= PHAGE.MAX) return null;
     const el = document.createElement('div');
     el.className = 'phage';
     el.appendChild(phageDrawing());
@@ -102,8 +101,7 @@ export function phageSwarm(agar, random = Math.random) {
       const made = [];
       for (let i = 0; i < count; i++) {
         const heading = random() * 2 * Math.PI + (2 * Math.PI * i) / count;
-        const phage = add(fx, fy, heading, PHAGE.GRACE_MS);
-        if (phage) made.push(phage);
+        made.push(add(fx, fy, heading, PHAGE.GRACE_MS));
       }
       return made;
     },
@@ -152,7 +150,7 @@ export function phageSwarm(agar, random = Math.random) {
 }
 
 // `you` is { svg, species }: your pal's drawing on the page and her settings
-// from config.js. `target` is how many cells win. Returns the phages, for
+// from config.js. `target` is how many nutrients win. Returns the phages, for
 // the tests.
 export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math.random }) {
   const agar = document.querySelector('.agar');
@@ -166,7 +164,15 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
   playerMover.classList.add('player');
   const makeGroup = you.species.kind === 'rod' ? rodGroup : coccusGroup;
   const leader = makeGroup({ mover: playerMover, svg: you.svg, species: you.species, isPlayer: true });
-  const colony = makeColony({ leader, nutrients, dishRadius, target, color, onDivide: () => updateCounter() });
+  // Only what your pal eats herself counts toward winning; her offspring
+  // eat and divide too, but don't add to it. There's no cap on the colony's
+  // size, since it's the nutrients that count.
+  let eaten = 0;
+  const colony = makeColony({
+    leader, nutrients, dishRadius, target: Infinity, color,
+    onDivide: () => updateCounter(),
+    onLeaderEat: (ate) => { eaten += ate; },
+  });
 
   const swarm = phageSwarm(agar, random);
   // The first phages start spread around the rim.
@@ -186,9 +192,11 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
   document.querySelector('.start-over').addEventListener('click', () => goTo(`./choose-mode.html?pal=${pal}`));
 
   function updateCounter() {
-    const shown = Math.min(colony.cellCount(), target);
+    const shown = Math.min(eaten, target);
+    const cells = colony.cellCount();
     const n = swarm.count();
-    counter.textContent = `${shown} / ${target} cells · ${n} ${n === 1 ? 'phage' : 'phages'}`;
+    counter.textContent = `${shown} / ${target} nutrients · ${cells} ${cells === 1 ? 'cell' : 'cells'} · ` +
+      `${n} ${n === 1 ? 'phage' : 'phages'}`;
   }
 
   // Every healthy cell in the dish, for the phages to hunt: one per circle
@@ -284,7 +292,7 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
         if (group.infected.ms <= 0) lyse(group, radius);
       }
       colony.eat(seconds, radius);
-      if (colony.cellCount() >= target) win();
+      if (eaten >= target) win();
       else colony.divideLeader();
       updateCounter();
     }
@@ -307,7 +315,7 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
     setTimeout(() => {
       showFact(pal, you.species);
       showBanner('You outgrew the phages!',
-        `Your colony reached ${target} cells before the phages could stop it.`);
+        `Your colony ate ${target} nutrients before the phages could stop it.`);
     }, Math.max(0, GAME.DIVIDE_MS - colony.sinceAnyDivision));
   }
 

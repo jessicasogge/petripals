@@ -138,7 +138,7 @@ function startPhage() {
   document.querySelector('.species-name').replaceChildren(...speciesName(species.scientific));
 
   document.querySelector('.how-to-play').replaceChildren(
-    `Grow to ${PHAGE.TARGET} cells before the phages get ${pal.dataset.name}! `,
+    `Eat ${PHAGE.TARGET} nutrients before the phages get ${pal.dataset.name}! Only the ones she eats herself count. `,
     // Arrow-key or touch wording, whichever fits the device (see styles.css).
     wording('for-keys', 'Use the arrow keys to swim.'),
     wording('for-touch', 'Touch the dish and slide your finger to swim.'),

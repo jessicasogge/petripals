@@ -152,6 +152,24 @@ describe('a division', () => {
   });
 });
 
+describe('telling the game what your pal ate', () => {
+  it('passes on just the nutrients she eats herself, not her offspring\'s', () => {
+    const onLeaderEat = vi.fn();
+    const leader = cell({ x: -100 });
+    const nutrients = food(0);
+    const colony = colonyOf(leader, nutrients, { onLeaderEat });
+    colony.groups.push(cell({ x: 50, y: 0 }));
+    // Every cell finds one nutrient: the leader (on the left) and the offspring.
+    nutrients.eatNear.mockImplementation(() => 1);
+    colony.eat(0.016, RADIUS);
+    expect(onLeaderEat.mock.calls).toEqual([[1]]);
+    // Nothing eaten, nothing to tell.
+    nutrients.eatNear.mockImplementation(() => 0);
+    colony.eat(0.016, RADIUS);
+    expect(onLeaderEat).toHaveBeenCalledTimes(1);
+  });
+});
+
 describe('offspring dividing', () => {
   // A colony whose leader is off to the side, with one offspring at (50, 0).
   function withOffspring({ meals, target = 64, cells = 1 }) {

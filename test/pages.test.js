@@ -35,8 +35,8 @@ describe('the mode choice page', () => {
     expect(html).toContain(`through ${LEVELS.length} levels`);
   });
 
-  it('says how many cells win Phage Attack', () => {
-    expect(html).toContain(`Grow to ${PHAGE.TARGET} cells before`);
+  it('says how many nutrients win Phage Attack', () => {
+    expect(html).toContain(`Your pal must eat ${PHAGE.TARGET} nutrients before`);
   });
 
   it('says how many rivals a mixed culture race can have', () => {

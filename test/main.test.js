@@ -261,6 +261,6 @@ describe('Phage Attack', () => {
     const howTo = document.querySelector('.how-to-play');
     expect(howTo.querySelector('.for-keys').textContent).toBe('Use the arrow keys to swim.');
     expect(howTo.querySelector('.for-touch').textContent).toBe('Touch the dish and slide your finger to swim.');
-    expect(howTo.textContent).toContain(`Grow to ${PHAGE.TARGET} cells before the phages get Sara!`);
+    expect(howTo.textContent).toContain(`Eat ${PHAGE.TARGET} nutrients before the phages get Sara!`);
   });
 });
