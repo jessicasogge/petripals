@@ -22,7 +22,8 @@ const SVG = 'http://www.w3.org/2000/svg';
 export const TAIL = 0.042;
 
 // A generic tailed phage, like T4: a twenty-sided head full of DNA, a tail
-// it injects the DNA through, and tail fibers it lands on. Drawn tail down;
+// it injects the DNA through, and tail fibers it lands on, in near-black so
+// they stand out on the agar. Drawn tail down;
 // the game turns it to point the way it's swimming. The angry little face
 // is made up.
 export function phageDrawing() {
@@ -30,19 +31,19 @@ export function phageDrawing() {
   svg.setAttribute('viewBox', '0 0 40 60');
   svg.setAttribute('aria-hidden', 'true');
   svg.innerHTML = `
-    <g fill="none" stroke="#4c1d95" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <g fill="none" stroke="#0f0a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <polyline points="15,46 8,51 5,59" /><polyline points="18,47 14,53 12,60" />
       <polyline points="25,46 32,51 35,59" /><polyline points="22,47 26,53 28,60" />
     </g>
-    <rect x="16.5" y="25" width="7" height="20" rx="1.5" fill="#a78bfa" stroke="#4c1d95" stroke-width="1.4" />
-    <path d="M16.5 30h7M16.5 35h7M16.5 40h7" stroke="#4c1d95" stroke-width="0.9" />
-    <rect x="13" y="44" width="14" height="3.5" rx="1.5" fill="#7c3aed" stroke="#4c1d95" stroke-width="1.2" />
-    <polygon points="20,2 30.4,8 30.4,20 20,26 9.6,20 9.6,8" fill="#ddd6fe" stroke="#4c1d95" stroke-width="1.6" stroke-linejoin="round" />
-    <path d="M9.6 8L20 14L30.4 8M20 14V26" fill="none" stroke="#a78bfa" stroke-width="0.9" />
+    <rect x="16.5" y="25" width="7" height="20" rx="1.5" fill="#2a1f3d" stroke="#0f0a1a" stroke-width="1.4" />
+    <path d="M16.5 30h7M16.5 35h7M16.5 40h7" stroke="#4a3d63" stroke-width="0.9" />
+    <rect x="13" y="44" width="14" height="3.5" rx="1.5" fill="#1a1226" stroke="#0f0a1a" stroke-width="1.2" />
+    <polygon points="20,2 30.4,8 30.4,20 20,26 9.6,20 9.6,8" fill="#1f1730" stroke="#0f0a1a" stroke-width="1.6" stroke-linejoin="round" />
+    <path d="M9.6 8L20 14L30.4 8M20 14V26" fill="none" stroke="#3d3157" stroke-width="0.9" />
     <g class="phage-face">
-      <path d="M13.5 11.5l4 1.6M26.5 11.5l-4 1.6" stroke="#2e1065" stroke-width="1.4" stroke-linecap="round" />
-      <circle cx="16" cy="15.5" r="1.7" fill="#2e1065" /><circle cx="24" cy="15.5" r="1.7" fill="#2e1065" />
-      <path d="M17.5 20.5q2.5 -1.6 5 0" fill="none" stroke="#2e1065" stroke-width="1.2" stroke-linecap="round" />
+      <path d="M13.5 11.5l4 1.6M26.5 11.5l-4 1.6" stroke="#f5f3ff" stroke-width="1.4" stroke-linecap="round" />
+      <circle cx="16" cy="15.5" r="1.7" fill="#f5f3ff" /><circle cx="24" cy="15.5" r="1.7" fill="#f5f3ff" />
+      <path d="M17.5 20.5q2.5 -1.6 5 0" fill="none" stroke="#f5f3ff" stroke-width="1.2" stroke-linecap="round" />
     </g>`;
   return svg;
 }

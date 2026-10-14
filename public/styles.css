@@ -1586,7 +1586,8 @@ body:not(.picker-page) .signature {
   z-index: 3; /* over the cells they land on */
   pointer-events: none;
   transform: translate(-50%, -50%) rotate(var(--turn, 0deg));
-  filter: drop-shadow(0 0 1.5px rgba(46, 16, 101, 0.4));
+  /* A thin light halo, so the dark phages stand out even over a cell. */
+  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.85));
 }
 
 .phage svg {
