@@ -137,7 +137,7 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
         (species.glasses ? glasses() : '') +
         '</g>';
     }
-    // A cell a phage has landed on (Phage Attack): just this one goes grey
+    // A cell a phage has landed on (Phage Attack): just this one goes dark
     // and throbs (see .infected-cell in styles.css), not the whole chain.
     if (c.infected) out = `<g class="infected-cell">${out}</g>`;
     return out;

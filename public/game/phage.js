@@ -223,7 +223,7 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
   const isHealthy = ({ group, index }) => !(group.removeCells ? group.cells[index].infected : group.infected);
 
   // A phage landing on `hit`, one of healthyCells(). In a chain or cluster
-  // only that cell is infected (and only it turns grey and throbs, see
+  // only that cell is infected (and only it turns dark and throbs, see
   // infectCell in coccus.js); the others can still be caught.
   function infect(hit) {
     const { group } = hit;
