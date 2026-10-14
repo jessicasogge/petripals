@@ -137,6 +137,9 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
         (species.glasses ? glasses() : '') +
         '</g>';
     }
+    // A cell a phage has landed on (Phage Attack): just this one goes grey
+    // and throbs (see .infected-cell in styles.css), not the whole chain.
+    if (c.infected) out = `<g class="infected-cell">${out}</g>`;
     return out;
   }
 
@@ -185,6 +188,14 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
         if (t >= 1) group.moveFor = null;
         draw();
       }
+    },
+    // Mark the cell at this place in the list (the same order as body()) as
+    // infected by a phage, and return it.
+    infectCell(index) {
+      const cell = group.cells[index];
+      cell.infected = true;
+      draw();
+      return cell;
     },
     // Remove the cells at these places in the list (the same order as body()),
     // when they pop. The others stay exactly where they are.

@@ -1610,11 +1610,23 @@ body:not(.picker-page) .signature {
 
 /* An infected cell, filling up with new phages before it bursts: it goes
    grey with a phage-purple glow, and throbs. (Not a hue shift: that
-   flashes rainbow as it changes.) */
-.pal-mover.offspring.infected .dish-pal {
+   flashes rainbow as it changes.) A rod is one cell, so the whole drawing
+   does; in a chain or cluster, just the infected cell (game/coccus.js). */
+.pal-mover.offspring.infected .dish-pal,
+.infected-cell {
   filter: grayscale(0.7) drop-shadow(0 0 3px #7c3aed);
   animation: infected 0.5s ease-in-out infinite alternate;
   transform-origin: center;
+}
+
+.infected-cell {
+  transform-box: fill-box;
+}
+
+/* Let the glow spill past the edge of the drawing instead of being cut off
+   square. */
+svg:has(.infected-cell) {
+  overflow: visible;
 }
 
 @keyframes infected {
@@ -1624,7 +1636,8 @@ body:not(.picker-page) .signature {
 
 @media (prefers-reduced-motion: reduce) {
   .phage.landed,
-  .pal-mover.offspring.infected .dish-pal {
+  .pal-mover.offspring.infected .dish-pal,
+  .infected-cell {
     animation-duration: 0.01s;
   }
 }

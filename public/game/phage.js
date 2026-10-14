@@ -195,45 +195,62 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
     counter.textContent = `${Math.min(eaten, target)} / ${target} nutrients`;
   }
 
+  // Cells a phage has landed on, filling up with new phages:
+  // { group, cell, ms }, where `cell` is the infected cell of a chain or
+  // cluster (an entry in group.cells), or null for a rod, which is one cell.
+  const infections = [];
+
   // Every healthy cell in the dish, for the phages to hunt: one per circle
-  // of a chain or cluster, one per rod.
+  // of a chain or cluster (`index` says which), one per rod.
   function healthyCells(radius) {
     const cells = [];
     for (const group of colony.groups) {
-      if (group.infected) continue;
-      const body = group.removeCells ? group.body() : [[group.x, group.y, group.reach()]];
-      for (const [x, y, r] of body) cells.push({ fx: x / radius, fy: y / radius, r: r / radius, group });
+      if (group.removeCells) {
+        group.body().forEach(([x, y, r], index) => {
+          if (!group.cells[index].infected) cells.push({ fx: x / radius, fy: y / radius, r: r / radius, group, index });
+        });
+      } else if (!group.infected) {
+        cells.push({ fx: group.x / radius, fy: group.y / radius, r: group.reach() / radius, group });
+      }
     }
     return cells;
   }
 
-  // A phage landing on a cell of `group` at (fx, fy).
-  function infect(group, fx, fy, radius) {
+  const isHealthy = ({ group, index }) => !(group.removeCells ? group.cells[index].infected : group.infected);
+
+  // A phage landing on `hit`, one of healthyCells(). In a chain or cluster
+  // only that cell is infected (and only it turns grey and throbs, see
+  // infectCell in coccus.js); the others can still be caught.
+  function infect(hit) {
+    const { group } = hit;
     if (group === leader) {
       lose();
       return;
     }
-    group.infected = { ms: PHAGE.LATENT_MS, dx: fx * radius - group.x, dy: fy * radius - group.y };
-    group.pending = -Infinity; // busy making phages, not dividing
-    group.mover.classList.add('infected');
+    if (group.removeCells) {
+      infections.push({ group, cell: group.infectCell(hit.index), ms: PHAGE.LATENT_MS });
+    } else {
+      group.infected = true;
+      group.pending = -Infinity; // busy making phages, not dividing
+      group.mover.classList.add('infected');
+      infections.push({ group, cell: null, ms: PHAGE.LATENT_MS });
+    }
   }
 
   // An infected cell bursts: it dies and lets out new phages. A chain or
-  // cluster loses just the infected cell; a rod is one cell, so it goes.
-  function lyse(group, radius) {
-    const x = group.x + group.infected.dx;
-    const y = group.y + group.infected.dy;
+  // cluster loses just the infected cell; a rod, or the last cell of a
+  // chain, goes whole.
+  function lyse({ group, cell }, radius) {
     const dish = group.mover.parentElement;
     const body = group.body();
-    if (group.removeCells && body.length > 1) {
-      const cells = body.map(([cx, cy], i) => ({ fx: cx, fy: cy, i }));
-      const nearest = nearestCell(x, y, cells).i;
-      showPop(dish, body[nearest], color);
-      group.removeCells([nearest]);
-      group.infected = null;
-      group.pending = 0;
-      group.mover.classList.remove('infected');
+    let [x, y] = [group.x, group.y];
+    if (cell && body.length > 1) {
+      const i = group.cells.indexOf(cell);
+      [x, y] = body[i];
+      showPop(dish, body[i], color);
+      group.removeCells([i]);
     } else {
+      if (cell) [x, y] = body[0];
       showPop(dish, [group.x, group.y, group.reach()], color);
       colony.groups.splice(colony.groups.indexOf(group), 1);
       group.mover.remove();
@@ -264,11 +281,11 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
         for (const phage of [...swarm.phages]) {
           if (phage.grace > 0) continue;
           const [tx, ty] = swarm.tip(phage);
-          const hit = cells.find((cell) => !cell.group.infected &&
+          const hit = cells.find((cell) => isHealthy(cell) &&
             Math.hypot(cell.fx - tx, cell.fy - ty) < cell.r + PHAGE.REACH);
           if (!hit) continue;
           swarm.remove(phage);
-          infect(hit.group, tx, ty, radius);
+          infect(hit);
           if (finished) break;
         }
       }
@@ -276,10 +293,11 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
 
     if (!finished) {
       // Infected cells burst when their time is up.
-      for (const group of [...colony.groups]) {
-        if (!group.infected) continue;
-        group.infected.ms -= seconds * 1000;
-        if (group.infected.ms <= 0) lyse(group, radius);
+      for (const infection of [...infections]) {
+        infection.ms -= seconds * 1000;
+        if (infection.ms > 0) continue;
+        infections.splice(infections.indexOf(infection), 1);
+        lyse(infection, radius);
       }
       colony.eat(seconds, radius);
       if (eaten >= target) win();

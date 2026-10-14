@@ -93,9 +93,13 @@ function offspring(x, y) {
 // An offspring chain of cocci, one cell of radius 10 px at each spot.
 function chain(spots) {
   const g = offspring(spots[0][0], spots[0][1]);
-  g.cells = spots.map(([x, y]) => [x, y, 10]);
-  g.body = () => g.cells;
+  g.cells = spots.map(([x, y]) => ({ x, y }));
+  g.body = () => g.cells.map(({ x, y }) => [x, y, 10]);
   g.cellCount = () => g.cells.length;
+  g.infectCell = vi.fn((i) => {
+    g.cells[i].infected = true;
+    return g.cells[i];
+  });
   g.removeCells = vi.fn((indexes) => { g.cells = g.cells.filter((_, i) => !indexes.includes(i)); });
   return g;
 }
@@ -404,24 +408,47 @@ describe('Phage Attack', () => {
 
   it('pops just the infected cell of a chain, and the rest live on', () => {
     const { swarm } = play();
+    const burst = vi.spyOn(swarm, 'burst');
     const pair = chain([[100, 0], [120, 0]]);
     colony.groups.push(pair);
     run(PHAGE.START_MS);
     park(swarm.phages[1]);
     landOn(swarm.phages[0], 120, 0);
     frame();
-    expect(pair.mover.classList).toContain('infected');
+    // Just that cell is infected, not the whole chain.
+    expect(pair.infectCell).toHaveBeenCalledWith(1);
+    expect(pair.mover.classList).not.toContain('infected');
+    expect(pair.infected).toBeUndefined();
     run(PHAGE.LATENT_MS);
     expect(pair.removeCells).toHaveBeenCalledWith([1]);
     expect(showPop).toHaveBeenCalledWith(document.querySelector('.agar'), [120, 0, 10], SPECIES.mona.color);
     expect(colony.groups).toContain(pair);
-    expect(pair.infected).toBeNull();
-    expect(pair.pending).toBe(0);
-    expect(pair.mover.classList).not.toContain('infected');
+    expect(pair.cells).toEqual([{ x: 100, y: 0 }]);
+    expect(swarm.count()).toBe(1 + PHAGE.BURST);
+    // The new phages come out of the cell that burst.
+    expect(burst).toHaveBeenCalledWith(120 / RADIUS, 0, PHAGE.BURST);
+  });
+
+  it('can infect other cells of a chain while one is infected, and each bursts in turn', () => {
+    const { swarm } = play();
+    const trio = chain([[100, 0], [120, 0], [140, 0]]);
+    colony.groups.push(trio);
+    run(PHAGE.START_MS);
+    landOn(swarm.phages[0], 140, 0);
+    frame();
+    // The infected cell is left alone; a phage on it lands on the healthy
+    // one next door instead.
+    landOn(swarm.phages[0], 125, 0);
+    frame();
+    expect(trio.infectCell.mock.calls).toEqual([[2], [1]]);
+    run(PHAGE.LATENT_MS);
+    expect(trio.removeCells.mock.calls).toEqual([[[2]], [[1]]]);
+    expect(trio.cells).toEqual([{ x: 100, y: 0 }]);
   });
 
   it('pops a chain of one cell whole', () => {
     const { swarm } = play();
+    const burst = vi.spyOn(swarm, 'burst');
     const single = chain([[100, 0]]);
     colony.groups.push(single);
     run(PHAGE.START_MS);
@@ -431,6 +458,8 @@ describe('Phage Attack', () => {
     run(PHAGE.LATENT_MS);
     expect(single.removeCells).not.toHaveBeenCalled();
     expect(colony.groups).not.toContain(single);
+    expect(single.mover.isConnected).toBe(false);
+    expect(burst).toHaveBeenCalledWith(100 / RADIUS, 0, PHAGE.BURST);
   });
 
   it("leaves infected cells alone, and new phages don't land the moment they're out", () => {
