@@ -102,8 +102,15 @@ function drawing(pal) {
   return svg;
 }
 
-// Start Phage Attack with Mona (or `me`).
+// Start Phage Attack with Mona (or `me`), with a second phage on the agar
+// (straight across from the first) so tests can use one and park the other.
 function play(me = 'mona', target = PHAGE.TARGET) {
+  const game = start(me, target);
+  while (game.swarm.count() < 2) game.swarm.arrive(Math.PI);
+  return game;
+}
+
+function start(me = 'mona', target = PHAGE.TARGET) {
   return playPhage({ you: { svg: drawing(me), species: SPECIES[me] }, nutrients, target, random: () => 0.5 });
 }
 
@@ -274,14 +281,37 @@ describe('phageSwarm', () => {
 });
 
 describe('Phage Attack', () => {
-  it('starts with the phages spread around the rim, and counts them', () => {
-    const { swarm } = play();
+  it(`starts with ${PHAGE.START} phage on the rim, and counts it`, () => {
+    const { swarm } = start();
     expect(swarm.count()).toBe(PHAGE.START);
-    const [a, b] = swarm.phages;
-    expect(Math.hypot(a.fx, a.fy)).toBeCloseTo(0.9);
-    expect(Math.hypot(a.fx + b.fx, a.fy + b.fy)).toBeCloseTo(0); // straight across
-    expect(counter()).toBe(`1 / ${PHAGE.TARGET} cells · ${PHAGE.START} phages`);
+    for (const phage of swarm.phages) expect(Math.hypot(phage.fx, phage.fy)).toBeCloseTo(0.9);
+    expect(counter()).toBe(`1 / ${PHAGE.TARGET} cells · 1 phage`);
     expect(document.querySelector('.pal-mover').classList).toContain('player');
+  });
+
+  it('counts phages in the plural too', () => {
+    play();
+    frame();
+    expect(counter()).toBe(`1 / ${PHAGE.TARGET} cells · 2 phages`);
+  });
+
+  it('goes after your offspring, not your pal, unless she swims close', () => {
+    const { swarm } = play();
+    const [phage, other] = swarm.phages;
+    park(other);
+    colony.groups.push(offspring(0, 160)); // straight below the middle
+    run(PHAGE.START_MS);
+    // Your pal is in the middle, nearer than the offspring, but far enough
+    // away not to be noticed: it heads for the offspring.
+    phage.fx = 0;
+    phage.fy = 0.4;
+    frame();
+    expect(phage.heading).toBeCloseTo(Math.PI / 2, 0);
+    // Swim close and it comes for you instead.
+    phage.fx = 0;
+    phage.fy = PHAGE.NOTICE - 0.05;
+    frame();
+    expect(phage.heading).toBeCloseTo(-Math.PI / 2, 0);
   });
 
   it('uses the coccus drawing for round pals', () => {
@@ -318,10 +348,10 @@ describe('Phage Attack', () => {
       }
     };
     waitFor(PHAGE.START_MS + PHAGE.ARRIVE_MS - 100);
-    expect(swarm.count()).toBe(PHAGE.START);
+    expect(swarm.count()).toBe(2);
     waitFor(200);
-    expect(swarm.count()).toBe(PHAGE.START + 1);
-    expect(counter()).toBe(`1 / ${PHAGE.TARGET} cells · ${PHAGE.START + 1} phages`);
+    expect(swarm.count()).toBe(3);
+    expect(counter()).toBe(`1 / ${PHAGE.TARGET} cells · 3 phages`);
   });
 
   it('is game over when a phage lands on your pal', () => {
@@ -472,14 +502,14 @@ describe('Phage Attack', () => {
     expect(sporeBurst).toHaveBeenCalledWith(document.querySelector('.pal-mover'));
     expect(nutrients.stop).toHaveBeenCalled();
     expect(track).toHaveBeenCalledWith('phage/won/mona', 'Mona outgrew the phages');
-    expect(counter()).toBe(`4 / 4 cells · ${PHAGE.START} phages`);
+    expect(counter()).toBe('4 / 4 cells · 2 phages');
     vi.advanceTimersByTime(GAME.DIVIDE_MS - 200 - 1);
     expect(banner().hidden).toBe(true);
     vi.advanceTimersByTime(1);
     expect(banner().hidden).toBe(false);
     expect(banner().querySelector('h2').textContent).toBe('You outgrew the phages!');
     expect(banner().querySelector('.win-message').textContent).toBe(
-      `Your colony reached 4 cells, even with ${PHAGE.START} phages on the hunt.`);
+      'Your colony reached 4 cells, even with 2 phages on the hunt.');
     expect(banner().querySelector('.play-again').textContent).toBe('Play again');
     expect(banner().querySelector('.start-over').textContent).toBe('Choose a mode');
     expect(banner().querySelector('.start-over').hidden).toBe(false);

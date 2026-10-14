@@ -111,13 +111,17 @@ export function phageSwarm(agar, random = Math.random) {
       return [phage.fx + TAIL * Math.cos(phage.heading), phage.fy + TAIL * Math.sin(phage.heading)];
     },
     // One frame: each phage swims toward the nearest of `cells` ({ fx, fy }),
-    // weaving a little, or straight on while it's fresh out of a burst.
-    step(seconds, cells) {
+    // your offspring, weaving a little, or straight on while it's fresh out
+    // of a burst. It goes after `pal` (your pal, { fx, fy }) instead when
+    // she's within PHAGE.NOTICE, or when there's nothing else to hunt, so
+    // the cells you leave behind draw them away from her.
+    step(seconds, cells, pal = null) {
       for (const phage of phages) {
         if (phage.grace > 0) {
           phage.grace -= seconds * 1000;
         } else {
-          const target = nearestCell(phage.fx, phage.fy, cells);
+          const near = pal && Math.hypot(pal.fx - phage.fx, pal.fy - phage.fy) < PHAGE.NOTICE;
+          const target = near ? pal : (nearestCell(phage.fx, phage.fy, cells) ?? pal);
           if (target) {
             phage.wander += (random() - 0.5) * 6 * seconds;
             phage.wander = Math.max(-PHAGE.WANDER, Math.min(PHAGE.WANDER, phage.wander));
@@ -256,7 +260,7 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
           swarm.arrive();
         }
         const cells = healthyCells(radius);
-        swarm.step(seconds, cells);
+        swarm.step(seconds, cells.filter((cell) => cell.group !== leader), { fx: leader.x / radius, fy: leader.y / radius });
         // Any phage whose tail touches a healthy cell lands on it.
         for (const phage of [...swarm.phages]) {
           if (phage.grace > 0) continue;
