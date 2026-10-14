@@ -129,6 +129,18 @@ describe('popping part of a chain or cluster', () => {
     return chain;
   }
 
+  it('marks just one cell as infected by a phage, so only it goes grey and throbs', () => {
+    const chain = chainOf(3);
+    const cell = chain.infectCell(1);
+    expect(cell).toBe(chain.cells[1]);
+    expect(cell.infected).toBe(true);
+    const infected = chain.svg.querySelectorAll('.infected-cell');
+    expect(infected).toHaveLength(1);
+    expect(infected[0].querySelectorAll('.cell-body')).toHaveLength(1);
+    expect(chain.svg.querySelectorAll('.cell-body')).toHaveLength(3);
+    expect(chain.mover.classList).not.toContain('infected');
+  });
+
   it('pops only the cells touching the zone, and the rest live on where they were', () => {
     const chain = chainOf(5);
     const before = chain.body();

@@ -1033,7 +1033,7 @@ export const MIXED = {
   CROWDED_TARGET: 32,
   MAX_RIVALS: 3,
   CHOICES: 12, // pals offered on the rival screen; with more, a random 12
-  NUTRIENTS_PER_PAL: 7, // flecks on the agar at a time, for each pal in the dish
+  NUTRIENTS_PER_PAL: 7,
   RIVAL_SPEED: 0.55, // fraction of the dish radius per second (you swim at GAME.SPEED)
   RIVAL_REACT_MS: 500, // how often the rival looks around for a new nutrient
   RIVAL_WANDER: 0.5, // how much the rival weaves off course, in radians
@@ -1044,9 +1044,25 @@ export const MIXED = {
 // and all you can do is make her tumble to face a random new way
 export const TUMBLE = {
   TARGET: 256,
-  NUTRIENTS: 30, // flecks on the agar at a time
+  NUTRIENTS: 30,
   SPEED: 0.60, // how fast she swims, as a fraction of the dish radius per second
   TUMBLE_MS: 300, // how long a tumble takes, spinning on the spot
+};
+
+// Phage Attack: phages infect offspring, which lyse and release more phages.
+// Landing on the pal is game over. Generic phages infect every pal;
+// real bursts release ~100 phages, not 2.
+export const PHAGE = {
+  TARGET: 50, // nutrients to eat
+  NUTRIENTS: 28,
+  START: 1, // phages on the agar at the start
+  NOTICE: 0.25, // phages go after your offspring, unless your pal swims this close (fraction of the dish radius)
+  SPEED: 0.14, // fraction of the dish radius per second (you swim at GAME.SPEED)
+  WANDER: 0.9, // how much they weave off course, in radians
+  START_MS: 2500, // the phages wait this long before they start, so you get a head start
+  LATENT_MS: 3000, // how long an infected cell lives before it bursts
+  BURST: 2, // new phages let out when an infected cell bursts
+  GRACE_MS: 700, // new phages drift out of the burst this long before they hunt
 };
 
 // How many cells win a race against `rivals` rival pals.

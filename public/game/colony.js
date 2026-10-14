@@ -7,10 +7,12 @@ import { keepInDish, pushApart, pushInsideRim } from './physics.js';
 
 // `leader` is the steered group, `target` the size the colony stops dividing
 // at, `onDivide` is called after every division and `onPop` after offspring
-// cells pop in an antibiotic zone. `color` tints the pop.
+// cells pop in an antibiotic zone. `color` tints the pop. `onLeaderEat` is
+// told how many nutrients the leader itself just ate (Phage Attack counts
+// only those).
 export function makeColony({
   leader, nutrients, disks = [], dishRadius, target, color = '#94a3b8',
-  onDivide = () => {}, onPop = () => {},
+  onDivide = () => {}, onPop = () => {}, onLeaderEat = () => {},
 }) {
   const groups = [leader];
   let pending = 0; // nutrients the leader has eaten toward its next division
@@ -50,7 +52,9 @@ export function makeColony({
     // they've eaten enough; the leader's division waits for divideLeader().
     eat(seconds, radius) {
       for (const [x, y, reach] of leader.body()) {
-        pending += nutrients.eatNear(x / radius, y / radius, reach / radius);
+        const ate = nutrients.eatNear(x / radius, y / radius, reach / radius);
+        pending += ate;
+        if (ate > 0) onLeaderEat(ate);
       }
       for (const group of [...groups]) {
         if (group === leader) continue;
