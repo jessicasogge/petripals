@@ -17,9 +17,11 @@ import { track } from './track.js';
 
 const SVG = 'http://www.w3.org/2000/svg';
 
-// How far the tail tip is from the middle of the drawing, as a fraction of
-// the dish radius. The tail is what lands on a cell.
-export const TAIL = 0.042;
+// How far the tips of the tail fibers are from the middle of the drawing, as
+// a fraction of the dish radius: the drawing is 3% of the dish across (see
+// .phage in styles.css) and half again as tall. The tips are what land on a
+// cell, so a phage has to really touch it.
+export const TAIL = 0.044;
 
 // A generic tailed phage, like T4: a twenty-sided head full of DNA, a tail
 // it injects the DNA through, and tail fibers it lands on, in a deep plum
@@ -200,8 +202,10 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
   // cluster (an entry in group.cells), or null for a rod, which is one cell.
   const infections = [];
 
-  // Every healthy cell in the dish, for the phages to hunt: one per circle
-  // of a chain or cluster (`index` says which), one per rod.
+  // Every healthy cell in the dish, for the phages to hunt and land on, as
+  // the circles that trace its outline (body()): one per cell of a chain or
+  // cluster (`index` says which), and a few along each rod, so a phage has
+  // to really touch a long, thin rod, not just come near it.
   function healthyCells(radius) {
     const cells = [];
     for (const group of colony.groups) {
@@ -210,7 +214,7 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
           if (!group.cells[index].infected) cells.push({ fx: x / radius, fy: y / radius, r: r / radius, group, index });
         });
       } else if (!group.infected) {
-        cells.push({ fx: group.x / radius, fy: group.y / radius, r: group.reach() / radius, group });
+        for (const [x, y, r] of group.body()) cells.push({ fx: x / radius, fy: y / radius, r: r / radius, group });
       }
     }
     return cells;
@@ -282,7 +286,7 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
           if (phage.grace > 0) continue;
           const [tx, ty] = swarm.tip(phage);
           const hit = cells.find((cell) => isHealthy(cell) &&
-            Math.hypot(cell.fx - tx, cell.fy - ty) < cell.r + PHAGE.REACH);
+            Math.hypot(cell.fx - tx, cell.fy - ty) < cell.r);
           if (!hit) continue;
           swarm.remove(phage);
           infect(hit);

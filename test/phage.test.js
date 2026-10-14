@@ -395,6 +395,28 @@ describe('Phage Attack', () => {
     expect(counter()).toBe(`0 / ${PHAGE.TARGET} nutrients`);
   });
 
+  it('only lands when its tail really touches a long rod, not just comes near it', () => {
+    const { swarm } = play();
+    // A long, thin rod lying along x: 80 px long, 16 px tall, traced by
+    // circles along it.
+    const rod = offspring(100, 0);
+    rod.reach = () => 40;
+    rod.body = () => [-30, -15, 0, 15, 30].map((dx) => [rod.x + dx, rod.y, 8]);
+    colony.groups.push(rod);
+    run(PHAGE.START_MS);
+    park(swarm.phages[1]);
+    // Beside it, well inside its length but clear of its side: no landing.
+    landOn(swarm.phages[0], 100, -12, Math.PI / 2);
+    frame();
+    expect(rod.infected).toBeUndefined();
+    expect(swarm.count()).toBe(2);
+    // Touching its side: it lands.
+    landOn(swarm.phages[0], 100, -6, Math.PI / 2);
+    frame();
+    expect(rod.infected).toBe(true);
+    expect(swarm.count()).toBe(1);
+  });
+
   it("doesn't let two phages land on the same cell", () => {
     const { swarm } = play();
     const rod = offspring(100, 0);
