@@ -245,22 +245,36 @@ describe('Phage Attack', () => {
   it.each(Object.keys(SPECIES))('starts Phage Attack for %s', async (pal) => {
     const playPhage = await openPhage(`?pal=${pal}&mode=phage`);
     expect(playPhage).toHaveBeenCalledTimes(1);
-    const [{ you, nutrients, target }] = playPhage.mock.calls[0];
+    const [{ you, nutrients, level, target }] = playPhage.mock.calls[0];
     expect(you.svg.dataset.pal).toBe(pal);
     expect(you.species).toEqual(SPECIES[pal]);
     expect(nutrients.positions()).toHaveLength(PHAGE.NUTRIENTS);
-    expect(target).toBe(PHAGE.TARGET);
+    expect(level).toBe(1);
+    expect(target).toBe(PHAGE.LEVELS[0]);
     expect(document.body.classList).toContain('phage-mode');
   });
 
   it('names the mode in the tab and explains how to play', async () => {
     await openPhage('?pal=sara&mode=phage');
-    expect(document.title).toBe('PetriPals | Sara | Phage Attack');
+    expect(document.title).toBe('PetriPals | Sara | Phage Attack | Level 1');
     expect(document.querySelector('.pal-name').textContent).toBe('Sara');
     expect(document.querySelector('.species-name').textContent).toBe('Serratia marcescens');
     const howTo = document.querySelector('.how-to-play');
     expect(howTo.querySelector('.for-keys').textContent).toBe('Use the arrow keys to swim.');
     expect(howTo.querySelector('.for-touch').textContent).toBe('Touch the dish and slide your finger to swim.');
-    expect(howTo.textContent).toContain(`Eat ${PHAGE.TARGET} nutrients before the phages get Sara!`);
+    expect(howTo.textContent).toContain(`Eat ${PHAGE.LEVELS[0]} nutrients before the phages get Sara!`);
+  });
+
+  it.each(PHAGE.LEVELS.map((target, i) => [i + 1, target]))('plays level %i to %i nutrients', async (level, target) => {
+    const playPhage = await openPhage(`?pal=mona&mode=phage&level=${level}`);
+    expect(playPhage.mock.calls[0][0]).toMatchObject({ level, target });
+    expect(document.title).toBe(`PetriPals | Mona | Phage Attack | Level ${level}`);
+    expect(document.querySelector('.how-to-play').textContent).toContain(`Eat ${target} nutrients`);
+  });
+
+  it.each(['0', '99', 'abc'])('plays a made-up level (%s) as the nearest real one', async (level) => {
+    const playPhage = await openPhage(`?pal=mona&mode=phage&level=${level}`);
+    const expected = level === '99' ? PHAGE.LEVELS.length : 1;
+    expect(playPhage.mock.calls[0][0].level).toBe(expected);
   });
 });

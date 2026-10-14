@@ -1,4 +1,5 @@
-// Phage Attack: eat the target number of nutrients while bacteriophages,
+// Phage Attack: eat the target number of nutrients, through four levels
+// that each double it, while bacteriophages,
 // viruses that infect bacteria, hunt your colony down. A phage that lands on one of
 // your offspring injects its DNA, and a few seconds later that cell bursts
 // open (lysis) and lets out new phages, so the more cells they catch, the
@@ -153,9 +154,12 @@ export function phageSwarm(agar, random = Math.random) {
 }
 
 // `you` is { svg, species }: your pal's drawing on the page and her settings
-// from config.js. `target` is how many nutrients win. Returns the phages, for
-// the tests.
-export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math.random }) {
+// from config.js. `level` is which level this is (1 to PHAGE.LEVELS.length)
+// and `target` how many nutrients finish it. Returns the phages, for the
+// tests.
+export function playPhage({
+  you, nutrients, level = 1, target = PHAGE.LEVELS[level - 1], random = Math.random,
+}) {
   const agar = document.querySelector('.agar');
   const counter = document.querySelector('.cell-count');
   const dishRadius = () => agar.clientWidth / 2;
@@ -189,12 +193,21 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
   let lysed = 0; // cells the phages have burst
 
   // "Play again" starts a new dish; "Choose a mode" goes back to the modes.
-  document.querySelector('.play-again').addEventListener('click', () => goTo(window.location.href));
+  // The pop-up's main button goes to the next level, back to level 1 after
+  // the last, or tries this level again after a game over; the other one
+  // goes back to the modes.
+  const last = PHAGE.LEVELS.length;
+  let nextLevel = level;
+  document.querySelector('.play-again').addEventListener('click', () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('level', nextLevel);
+    goTo(url.toString());
+  });
   document.querySelector('.start-over').addEventListener('click', () => goTo(`./choose-mode.html?pal=${pal}`));
 
   function updateCounter() {
     // Just the nutrients: counting cells and phages too was confusing.
-    counter.textContent = `${Math.min(eaten, target)} / ${target} nutrients`;
+    counter.textContent = `Level ${level} · ${Math.min(eaten, target)} / ${target} nutrients`;
   }
 
   // Cells a phage has landed on, filling up with new phages:
@@ -322,31 +335,39 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
 
   function win() {
     stop();
-    sporeBurst(playerMover);
-    track(`phage/won/${pal}`, `${name} outgrew the phages`);
+    sporeBurst(playerMover, { big: level === last });
+    track(`phage/level-complete/${pal}/level-${level}`, `${name} finished Phage Attack level ${level}`);
+    if (level === last) track(`phage/won-all-levels/${pal}`, `${name} beat every Phage Attack level`);
     setTimeout(() => {
       showFact(pal, you.species);
-      showBanner('You outgrew the phages!',
-        `You ate ${target} nutrients before the phages could stop you.`);
+      const ate = `You ate ${target} nutrients before the phages could stop you.`;
+      if (level < last) {
+        nextLevel = level + 1;
+        showBanner(`Level ${level} complete!`, ate, `Play level ${nextLevel}`);
+      } else {
+        nextLevel = 1;
+        showBanner('You beat the phages!', `You beat all ${last} levels! ${ate}`, 'Play again');
+      }
     }, Math.max(0, GAME.DIVIDE_MS - colony.sinceAnyDivision));
   }
 
   function lose() {
     stop();
     playerMover.classList.add('killed');
-    track(`phage/lost/${pal}`, `${name} was caught by a phage`);
+    track(`phage/lost/${pal}/level-${level}`, `${name} was caught by a phage on level ${level}`);
     setTimeout(() => {
       showFact(pal, you.species);
       const lost = lysed === 0 ? '' : ` They burst ${lysed} ${lysed === 1 ? 'cell' : 'cells'} of her colony first.`;
-      showBanner('Game over', `A phage landed on ${name} and injected its DNA. Phages are viruses that infect bacteria!${lost}`);
+      showBanner('Game over', `A phage landed on ${name} and injected its DNA. Phages are viruses that infect bacteria!${lost}`,
+        `Try level ${level} again`);
     }, 500);
   }
 
-  function showBanner(title, message) {
+  function showBanner(title, message, button) {
     const banner = document.querySelector('.win-banner');
     banner.querySelector('h2').textContent = title;
     banner.querySelector('.win-message').textContent = message;
-    banner.querySelector('.play-again').textContent = 'Play again';
+    banner.querySelector('.play-again').textContent = button;
     const modes = banner.querySelector('.start-over');
     modes.textContent = 'Choose a mode';
     modes.hidden = false;
