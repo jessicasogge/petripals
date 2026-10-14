@@ -91,8 +91,9 @@ export function phageSwarm(agar, random = Math.random) {
   return {
     phages,
     count: () => phages.length,
-    // A new phage drifts in from the rim, heading inward: at `angle`
-    // (radians), or a random spot.
+    // A phage on the rim at the start, heading inward: at `angle`
+    // (radians), or a random spot. After that, new phages only come out of
+    // the cells they burst.
     arrive(angle = random() * 2 * Math.PI) {
       return add(0.9 * Math.cos(angle), 0.9 * Math.sin(angle), angle + Math.PI);
     },
@@ -183,7 +184,6 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
   let finished = false;
   let lastTime = null;
   let elapsed = 0; // ms since the start
-  let sinceArrival = 0; // ms since the last phage drifted in
   let lysed = 0; // cells the phages have burst
 
   // "Play again" starts a new dish; "Choose a mode" goes back to the modes.
@@ -258,12 +258,6 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
     if (!finished) {
       elapsed += seconds * 1000;
       if (elapsed >= PHAGE.START_MS) {
-        // More phages keep drifting in.
-        sinceArrival += seconds * 1000;
-        if (sinceArrival >= PHAGE.ARRIVE_MS) {
-          sinceArrival = 0;
-          swarm.arrive();
-        }
         const cells = healthyCells(radius);
         swarm.step(seconds, cells.filter((cell) => cell.group !== leader), { fx: leader.x / radius, fy: leader.y / radius });
         // Any phage whose tail touches a healthy cell lands on it.

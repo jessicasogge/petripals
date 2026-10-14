@@ -337,20 +337,14 @@ describe('Phage Attack', () => {
     expect([phage.fx, phage.fy]).not.toEqual(start);
   });
 
-  it('sends in another phage from the rim every so often', () => {
+  it("doesn't send in any new phages from the rim: they only come out of burst cells", () => {
     const { swarm } = play();
     // Keep them all away from your pal while we wait.
-    const waitFor = (ms) => {
-      for (let t = 0; t < ms; t += 50) {
-        for (const phage of swarm.phages) park(phage);
-        frame(50);
-      }
-    };
-    waitFor(PHAGE.START_MS + PHAGE.ARRIVE_MS - 100);
+    for (let t = 0; t < 60000; t += 50) {
+      for (const phage of swarm.phages) park(phage);
+      frame(50);
+    }
     expect(swarm.count()).toBe(2);
-    waitFor(200);
-    expect(swarm.count()).toBe(3);
-    expect(counter()).toBe(`0 / ${PHAGE.TARGET} nutrients`);
   });
 
   it('is game over when a phage lands on your pal', () => {
