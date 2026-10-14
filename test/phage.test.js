@@ -563,7 +563,7 @@ describe('Phage Attack', () => {
     expect(banner().hidden).toBe(false);
     expect(banner().querySelector('h2').textContent).toBe('You outgrew the phages!');
     expect(banner().querySelector('.win-message').textContent).toBe(
-      'Your colony ate 4 nutrients before the phages could stop it.');
+      'You ate 4 nutrients before the phages could stop you.');
     expect(banner().querySelector('.play-again').textContent).toBe('Play again');
     expect(banner().querySelector('.start-over').textContent).toBe('Choose a mode');
     expect(banner().querySelector('.start-over').hidden).toBe(false);

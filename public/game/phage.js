@@ -327,7 +327,7 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
     setTimeout(() => {
       showFact(pal, you.species);
       showBanner('You outgrew the phages!',
-        `Your colony ate ${target} nutrients before the phages could stop it.`);
+        `You ate ${target} nutrients before the phages could stop you.`);
     }, Math.max(0, GAME.DIVIDE_MS - colony.sinceAnyDivision));
   }
 

@@ -728,8 +728,8 @@ a.pal-card:focus-visible {
 
 .mode-grid {
   display: grid;
-  /* Two by two, or one above another on a phone. */
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  /* Two by two, on a phone too. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
   margin-top: 1.5rem;
 }
@@ -741,6 +741,27 @@ a.pal-card:focus-visible {
 .mode-card p {
   margin: 0;
   line-height: 1.45;
+}
+
+/* On a phone the two-by-two cards are narrow, so give the words more room:
+   less padding, a closer gap, and slightly smaller text. */
+@media (max-width: 600px) {
+  .mode-grid {
+    gap: 0.6rem;
+  }
+
+  .mode-shell .mode-card {
+    padding: 0.75rem 0.6rem;
+  }
+
+  .mode-card h2 {
+    font-size: 1.15rem;
+  }
+
+  .mode-card p {
+    font-size: 0.85rem;
+    line-height: 1.35;
+  }
 }
 
 /* Picking rivals before a mixed culture race (game/choose-rivals.js): a
