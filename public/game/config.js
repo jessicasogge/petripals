@@ -1033,7 +1033,7 @@ export const MIXED = {
   CROWDED_TARGET: 32,
   MAX_RIVALS: 3,
   CHOICES: 12, // pals offered on the rival screen; with more, a random 12
-  NUTRIENTS_PER_PAL: 7, // flecks on the agar at a time, for each pal in the dish
+  NUTRIENTS_PER_PAL: 7,
   RIVAL_SPEED: 0.55, // fraction of the dish radius per second (you swim at GAME.SPEED)
   RIVAL_REACT_MS: 500, // how often the rival looks around for a new nutrient
   RIVAL_WANDER: 0.5, // how much the rival weaves off course, in radians
@@ -1044,20 +1044,17 @@ export const MIXED = {
 // and all you can do is make her tumble to face a random new way
 export const TUMBLE = {
   TARGET: 256,
-  NUTRIENTS: 30, // flecks on the agar at a time
+  NUTRIENTS: 30,
   SPEED: 0.60, // how fast she swims, as a fraction of the dish radius per second
   TUMBLE_MS: 300, // how long a tumble takes, spinning on the spot
 };
 
-// Phage Attack (game/phage.js): no disks, but bacteriophages, viruses that
-// infect bacteria, hunt your colony. A phage that lands on an offspring cell
-// infects it, and a few seconds later the cell bursts open (lysis) and lets
-// out new phages. One landing on your pal is game over. The phages are
-// generic: real ones only infect a narrow range of hosts, but these infect
-// every pal. A real burst lets out around 100 new phages, not 2.
+// Phage Attack: phages infect offspring, which lyse and release more phages.
+// Landing on the pal is game over. Generic phages infect every pal;
+// real bursts release ~100 phages, not 2.
 export const PHAGE = {
   TARGET: 48,
-  NUTRIENTS: 14, // flecks on the agar at a time
+  NUTRIENTS: 14,
   START: 2, // phages on the agar at the start
   MAX: 9, // no more than this many hunting at once
   SPEED: 0.2, // fraction of the dish radius per second (you swim at GAME.SPEED)
