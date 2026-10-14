@@ -728,7 +728,8 @@ a.pal-card:focus-visible {
 
 .mode-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  /* Two by two, or one above another on a phone. */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 1rem;
   margin-top: 1.5rem;
 }
@@ -1574,5 +1575,55 @@ body:not(.picker-page) .signature {
 
   .loading-cells span:last-child {
     transform: translateX(6px);
+  }
+}
+
+/* Phage Attack (game/phage.js): bacteriophages hunting the colony, turned
+   (--turn) so the tail leads. */
+.phage {
+  position: absolute;
+  width: 6.5%;
+  z-index: 3; /* over the cells they land on */
+  pointer-events: none;
+  transform: translate(-50%, -50%) rotate(var(--turn, 0deg));
+  filter: drop-shadow(0 0 1.5px rgba(46, 16, 101, 0.4));
+}
+
+.phage svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* A phage that landed: it has injected its DNA, so its empty coat fades. */
+.phage.landed {
+  animation: phage-land 0.5s ease-in forwards;
+}
+
+@keyframes phage-land {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(var(--turn, 0deg)) scale(0.6);
+  }
+}
+
+/* An infected cell, filling up with new phages before it bursts: it goes
+   grey with a phage-purple glow, and throbs. (Not a hue shift: that
+   flashes rainbow as it changes.) */
+.pal-mover.offspring.infected .dish-pal {
+  filter: grayscale(0.7) drop-shadow(0 0 3px #7c3aed);
+  animation: infected 0.5s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+@keyframes infected {
+  from { transform: scale(1); }
+  to { transform: scale(1.12); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phage.landed,
+  .pal-mover.offspring.infected .dish-pal {
+    animation-duration: 0.01s;
   }
 }

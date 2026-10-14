@@ -4,13 +4,15 @@
 //   petri-dish.html?pal=mona&mode=mixed mixed culture against a random rival
 //                                       (or &rivals=vi,elia for up to three)
 //   petri-dish.html?pal=mona&mode=tumble Petri Picnic
+//   petri-dish.html?pal=mona&mode=phage  Phage Attack
 import { antibioticsFor, placeAntibiotics } from './antibiotic.js';
-import { LEVELS, MIXED, raceTarget, SPECIES, TUMBLE } from './config.js';
+import { LEVELS, MIXED, PHAGE, raceTarget, SPECIES, TUMBLE } from './config.js';
 import { playGame } from './game.js';
 import { speciesName } from './italics.js';
 import { pageReady, watchLoading } from './loading.js';
 import { scatterNutrients } from './nutrients.js';
 import { dishPal, PALS } from './pals.js';
+import { playPhage } from './phage.js';
 import { playRace } from './race.js';
 import { listOf, rivalsFor } from './rivals.js';
 import { watchInputMode } from './touch.js';
@@ -42,6 +44,7 @@ if (!pal) {
 } else {
   if (params.get('mode') === 'mixed') startMixed();
   else if (params.get('mode') === 'tumble') startTumble();
+  else if (params.get('mode') === 'phage') startPhage();
   else startClassic();
   // The dish is set up: take the loading card away.
   pageReady();
@@ -122,6 +125,29 @@ function startTumble() {
 
   const nutrients = scatterNutrients({ count: TUMBLE.NUTRIENTS });
   playTumble({ you: { svg: pal, species }, nutrients, target: TUMBLE.TARGET });
+}
+
+function startPhage() {
+  pal.removeAttribute('hidden');
+  const species = SPECIES[pal.dataset.pal];
+  document.title = `PetriPals | ${pal.dataset.name} | Phage Attack`;
+  document.body.classList.add('phage-mode');
+  const title = document.querySelector('.pal-name');
+  title.textContent = pal.dataset.name;
+  title.style.color = species.color;
+  document.querySelector('.species-name').replaceChildren(...speciesName(species.scientific));
+
+  document.querySelector('.how-to-play').replaceChildren(
+    `Grow to ${PHAGE.TARGET} cells before the phages get ${pal.dataset.name}! `,
+    // Arrow-key or touch wording, whichever fits the device (see styles.css).
+    wording('for-keys', 'Use the arrow keys to swim.'),
+    wording('for-touch', 'Touch the dish and slide your finger to swim.'),
+    document.createElement('br'),
+    'A phage that lands on one of your cells infects it, and the cell soon bursts and lets out more phages. Keep your colony spread out, and keep your pal away from them!',
+  );
+
+  const nutrients = scatterNutrients({ count: PHAGE.NUTRIENTS });
+  playPhage({ you: { svg: pal, species }, nutrients, target: PHAGE.TARGET });
 }
 
 // Lists of nodes joined like listOf: "A", "A and B", "A, B and C".

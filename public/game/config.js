@@ -1049,6 +1049,27 @@ export const TUMBLE = {
   TUMBLE_MS: 300, // how long a tumble takes, spinning on the spot
 };
 
+// Phage Attack (game/phage.js): no disks, but bacteriophages, viruses that
+// infect bacteria, hunt your colony. A phage that lands on an offspring cell
+// infects it, and a few seconds later the cell bursts open (lysis) and lets
+// out new phages. One landing on your pal is game over. The phages are
+// generic: real ones only infect a narrow range of hosts, but these infect
+// every pal. A real burst lets out around 100 new phages, not 2.
+export const PHAGE = {
+  TARGET: 48,
+  NUTRIENTS: 14, // flecks on the agar at a time
+  START: 2, // phages on the agar at the start
+  MAX: 9, // no more than this many hunting at once
+  SPEED: 0.2, // fraction of the dish radius per second (you swim at GAME.SPEED)
+  WANDER: 0.9, // how much they weave off course, in radians
+  REACH: 0.025, // how close a phage's tail has to get to land, as a fraction of the dish radius
+  ARRIVE_MS: 7000, // a new phage drifts in from the rim this often
+  START_MS: 1500, // the phages wait this long before they start, so you get a head start
+  LATENT_MS: 2500, // how long an infected cell lives before it bursts
+  BURST: 2, // new phages let out when an infected cell bursts
+  GRACE_MS: 700, // new phages drift out of the burst this long before they hunt
+};
+
 // How many cells win a race against `rivals` rival pals.
 export function raceTarget(rivals) {
   return rivals > 1 ? MIXED.CROWDED_TARGET : MIXED.TARGET;

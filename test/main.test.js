@@ -6,12 +6,13 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { LEVELS, MIXED, SPECIES, TUMBLE } from '../public/game/config.js';
+import { LEVELS, MIXED, PHAGE, SPECIES, TUMBLE } from '../public/game/config.js';
 
 // Don't run the real game loop; just record how the game was started.
 vi.mock('../public/game/game.js', () => ({ playGame: vi.fn() }));
 vi.mock('../public/game/race.js', () => ({ playRace: vi.fn() }));
 vi.mock('../public/game/tumble.js', () => ({ playTumble: vi.fn() }));
+vi.mock('../public/game/phage.js', () => ({ playPhage: vi.fn() }));
 // The real nutrients, watched so a test can see how many were asked for.
 vi.mock('../public/game/nutrients.js', async (original) => {
   const real = await original();
@@ -232,4 +233,34 @@ describe('Petri Picnic', () => {
     expect(howTo.textContent).toContain(`grow to ${TUMBLE.TARGET} cells`);
   });
 
+});
+
+describe('Phage Attack', () => {
+  async function openPhage(search) {
+    await open(search);
+    const { playPhage } = await import('../public/game/phage.js');
+    return playPhage;
+  }
+
+  it.each(Object.keys(SPECIES))('starts Phage Attack for %s', async (pal) => {
+    const playPhage = await openPhage(`?pal=${pal}&mode=phage`);
+    expect(playPhage).toHaveBeenCalledTimes(1);
+    const [{ you, nutrients, target }] = playPhage.mock.calls[0];
+    expect(you.svg.dataset.pal).toBe(pal);
+    expect(you.species).toEqual(SPECIES[pal]);
+    expect(nutrients.positions()).toHaveLength(PHAGE.NUTRIENTS);
+    expect(target).toBe(PHAGE.TARGET);
+    expect(document.body.classList).toContain('phage-mode');
+  });
+
+  it('names the mode in the tab and explains how to play', async () => {
+    await openPhage('?pal=sara&mode=phage');
+    expect(document.title).toBe('PetriPals | Sara | Phage Attack');
+    expect(document.querySelector('.pal-name').textContent).toBe('Sara');
+    expect(document.querySelector('.species-name').textContent).toBe('Serratia marcescens');
+    const howTo = document.querySelector('.how-to-play');
+    expect(howTo.querySelector('.for-keys').textContent).toBe('Use the arrow keys to swim.');
+    expect(howTo.querySelector('.for-touch').textContent).toBe('Touch the dish and slide your finger to swim.');
+    expect(howTo.textContent).toContain(`Grow to ${PHAGE.TARGET} cells before the phages get Sara!`);
+  });
 });
