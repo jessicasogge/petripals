@@ -1025,33 +1025,25 @@ export const SPECIES = {
       { code: 'GM', name: 'gentamicin', zone: 21 },
     ],
   },
-  // Deinococcus radiodurans, the toughest bacterium known: round cells that
-  // stick together in squares of four (tetrads), so she grows with the
-  // tetrad code in coccus.js, up to four cells to a group. Her name comes
-  // from Deino-coccus. Real colonies are pinkish red, from a pigment called
-  // deinoxanthin; she's orchid so she doesn't look like Sara, Scarlett or
-  // Frannie. Labs don't test her with disks, so these zones are estimates,
-  // from drugs geneticists use on her (as markers that kill cells without a
-  // resistance gene).
   dina: {
     facts: [
       "Dina is nicknamed \"Conan the Bacterium\" for how tough she is.",
-      "Dina can survive about 1,000 times the radiation that would kill a person.",
+      "Dina can survive about 1,000 times the radiation dose that would kill a person.",
       "Dina's cells often stick together in squares of four, called tetrads.",
-      "Dina's genus means \"terrible berry\" in Greek; radiodurans means radiation-surviving.",
-      "Dina was found in 1956, in canned meat that spoiled after being sterilized with radiation.",
-      "Radiation can shatter Dina's DNA into hundreds of pieces, and she rebuilds it in hours.",
-      "Dina keeps several copies of her DNA in every cell, so she has spares to repair from.",
+      "Dina's name means \"terrible berry\" and \"radiation-enduring.\"",
+      "Dina was found in 1956 in canned meat that survived radiation treatment.",
+      "Radiation can shatter Dina's DNA into hundreds of pieces; she repairs it in hours.",
+      "Dina keeps several copies of her DNA in each cell, giving her templates for repair.",
       "Dina stockpiles manganese, which helps shield her proteins from radiation damage.",
-      "Dina's real colonies are pinkish red, from a pigment called deinoxanthin.",
-      "Dina survives drying out for a long time, which may be why she's so good at fixing DNA.",
-      "Clumps of Dina survived three years outside the International Space Station.",
-      "Dina has been called the world's toughest bacterium by Guinness World Records.",
-      "Dina is Gram-positive and stains purple, though her cell wall has extra outer layers.",
-      "Dina has no flagella, so she can't swim.",
-      "Scientists engineered Dina to help clean up toxic mercury at radioactive waste sites.",
+      "Dina's real colonies are pinkish red, mainly from a pigment called deinoxanthin.",
+      "Dina survives long dry spells, which may help explain her radiation resistance.",
+      "Cells in clumps of Dina survived three years outside the International Space Station.",
+      "Guinness World Records has called Dina the world's toughest bacterium.",
+      "Dina stains Gram-positive purple, despite having an unusual outer membrane.",
+      "Dina has no flagella and doesn't swim.",
+      "Scientists engineered Dina to detoxify mercury in radioactive-waste cleanup research.",
       "Dina isn't known to cause disease in people.",
-      "Dina's DNA is split between two chromosomes and two plasmids.",
+      "Dina's reference strain R1 has two chromosomes, a megaplasmid and a smaller plasmid.",
     ],
     scientific: 'Deinococcus radiodurans',
     color: '#a21caf', // for her name above the dish

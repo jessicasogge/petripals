@@ -171,9 +171,8 @@ export const QUIZ_FACTS = {
   ],
   dina: [
     "Dina is nicknamed \"Conan the Bacterium\" for how tough she is.",
-    "Dina can survive about 1,000 times the radiation that would kill a person.",
-    "Dina's cells often stick together in squares of four, called tetrads.",
-    "Dina was found in 1956, in canned meat that spoiled after being sterilized with radiation.",
+    "Dina can survive about 1,000 times the radiation dose that would kill a person.",
+    "Dina was found in 1956 in canned meat that spoiled despite radiation treatment.",
     "Clumps of Dina survived three years outside the International Space Station.",
   ],
 };
