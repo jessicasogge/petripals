@@ -4,15 +4,11 @@ import { GAME } from './config.js';
 import { idlePose, newMover } from './mover.js';
 import { coaster } from './physics.js';
 
-// A round cell (Scarlett, Penny, Goldie, Dina), or a rod whose daughters stick
-// together in chains like cocci do (Ceres). The player is always a single cell.
-// Offspring are chains or clusters of cocci that grow one cell at a time as
-// daughters join them (the player's, or their own cells' when they eat), up to
-// GROUP_CAP cells, or the pal's own maxCells. A chain grows from whichever end
-// is nearer the player; a cluster grows on the side facing the player. So
-// Scarlett builds chains along the lines she swims, Penny leaves a trail of
-// pairs, Goldie builds bunches wherever she lingers, and Dina packs hers
-// into squares of four.
+// Cocci (Scarlett, Penny, Goldie, Dina) and chained rods (Ceres).
+// The player stays one cell; daughters join chains or clusters up to
+// GROUP_CAP or the pal's maxCells. Chains grow from the nearer end;
+// clusters grow toward the player. Scarlett lines up, Penny pairs,
+// Goldie bunches, and Dina squares.
 export function coccusGroup({ mover, svg, species, isPlayer }) {
   const CELL_SIZE = 5; // one cell's width, as a percent of the dish
   const OUTLINE = 1.7; // each cell's outline width, in SVG units

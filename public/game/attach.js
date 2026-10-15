@@ -90,11 +90,8 @@ export function clusterSpot(cells, twist, px, py, allowed = () => true) {
   return best;
 }
 
-// Where a new cell would attach to a tetrad: a square of four cells, two
-// across and two down, the way Deinococcus divides in two planes at right
-// angles (Dina). The second cell sits toward (px, py); the third and fourth
-// fill in the corners of the square nearest (px, py). `allowed(x, y)` can rule
-// spots out. Returns null when the square is full or no corner is allowed.
+// Find a Dina tetrad attachment spot: second cell toward (px, py), then the
+// nearest open corners. Returns null if full or blocked by `allowed(x, y)`.
 export function tetradSpot(cells, px, py, allowed = () => true) {
   if (cells.length === 1) return chainSpot(cells, px, py, allowed);
   const corners = [];
