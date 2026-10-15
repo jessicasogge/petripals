@@ -268,16 +268,12 @@ describe('the pop-up buttons', () => {
     expect(location.href).toBe('./choose-rivals.html?pal=mona');
   });
 
-  it('"Play Classic" goes to level 1 with the same pal', () => {
-    const classic = finished().querySelector('.start-over');
-    expect(classic.hidden).toBe(false);
-    expect(classic.textContent).toBe('Play Classic');
-    classic.click();
-    const url = new URL(location.href, 'http://localhost/');
-    expect(url.pathname).toMatch(/petri-dish\.html$/);
-    expect(url.searchParams.get('pal')).toBe('mona');
-    expect(url.searchParams.has('mode')).toBe(false); // classic
-    expect(url.searchParams.get('level') ?? '1').toBe('1');
+  it('"Choose a mode" goes back to the modes for the same pal', () => {
+    const modes = finished().querySelector('.start-over');
+    expect(modes.hidden).toBe(false);
+    expect(modes.textContent).toBe('Choose a mode');
+    modes.click();
+    expect(location.href).toBe('./choose-mode.html?pal=mona');
   });
 });
 
