@@ -1105,14 +1105,16 @@ a.pal-card:focus-visible {
   display: none;
 }
 
-/* The second choice in the pop-up: outlined instead of filled. */
-.start-over {
+/* The other choices in the pop-up: outlined instead of filled. */
+.start-over,
+.back-to-modes {
   background: white;
   color: #0f766e;
   box-shadow: inset 0 0 0 2px #0f766e;
 }
 
-.start-over:hover {
+.start-over:hover,
+.back-to-modes:hover {
   background: #ccfbf1;
 }
 

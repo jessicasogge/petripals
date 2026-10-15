@@ -147,6 +147,7 @@ describe('beating a level', () => {
     expect(banner.querySelector('.win-message').textContent).toBe('You grew a colony of 8 cells!');
     expect(banner.querySelector('.play-again').textContent).toBe('Play level 3');
     expect(banner.querySelector('.start-over').hidden).toBe(true);
+    expect(banner.querySelector('.back-to-modes').hidden).toBe(true);
   });
 
   it('says "You won!" after the last level and starts over from level 1', () => {
@@ -280,6 +281,16 @@ describe('the game-over buttons', () => {
 
   it('hides "Start over" on level 1, where it would do the same thing', () => {
     expect(gameOver(1).querySelector('.start-over').hidden).toBe(true);
+  });
+
+  it('"Back to modes" goes back to the modes for the same pal, on any level', () => {
+    for (const level of [1, 3]) {
+      const modes = gameOver(level).querySelector('.back-to-modes');
+      expect(modes.hidden).toBe(false);
+      expect(modes.textContent).toBe('Back to modes');
+    }
+    document.querySelector('.back-to-modes').click();
+    expect(location.href).toMatch(/^\.\/choose-mode\.html\?pal=\w+$/);
   });
 });
 

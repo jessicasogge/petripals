@@ -42,7 +42,7 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
 
   // The pop-up's buttons: the main one goes to the next level, back to
   // level 1, or tries this level again; after a game over, "Start over" goes
-  // back to level 1.
+  // back to level 1 and "Back to modes" goes back to the modes.
   let nextLevel = level;
   function goToLevel(n) {
     const url = new URL(window.location.href);
@@ -51,6 +51,9 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
   }
   document.querySelector('.play-again').addEventListener('click', () => goToLevel(nextLevel));
   document.querySelector('.start-over').addEventListener('click', () => goToLevel(1));
+  document.querySelector('.back-to-modes').addEventListener('click', () => {
+    goTo(`./choose-mode.html?pal=${palEl.dataset.pal}`);
+  });
 
   function updateCounter() {
     const shown = Math.min(colony.cellCount(), target);
@@ -112,12 +115,13 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
     requestAnimationFrame(step);
   }
 
-  function showBanner(title, message, button, { startOver = false } = {}) {
+  function showBanner(title, message, button, { startOver = false, modes = false } = {}) {
     const banner = document.querySelector('.win-banner');
     banner.querySelector('h2').textContent = title;
     banner.querySelector('.win-message').textContent = message;
     banner.querySelector('.play-again').textContent = button;
     banner.querySelector('.start-over').hidden = !startOver;
+    banner.querySelector('.back-to-modes').hidden = !modes;
     banner.removeAttribute('hidden');
     banner.querySelector('.play-again').focus();
   }
@@ -148,7 +152,7 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
       'Game over',
       touchMessage(palEl.dataset.name, disk),
       `Try level ${level} again`,
-      { startOver: level > 1 }, // on level 1 they'd do the same thing
+      { startOver: level > 1, modes: true }, // on level 1 "Start over" would just try again
     );
   }
 
