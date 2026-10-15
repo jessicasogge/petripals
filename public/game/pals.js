@@ -282,13 +282,25 @@ const PEARL_PILI = (() => {
   return hairs.join('');
 })();
 
-// Dina's four cells, two across and two down: rounded squares, so the walls
-// between them look flat, each with a shine near its top-left corner.
-const DINA_CELLS = [[32, 32], [100, 32], [32, 100], [100, 100]]
-  .map(([x, y]) =>
-    `<rect x="${x}" y="${y}" width="68" height="68" rx="27" fill="#f0abfc" stroke="#a21caf" stroke-width="4" />` +
-    `<circle cx="${x + 18}" cy="${y + 16}" r="4" fill="#fdf4ff" />`)
-  .join('');
+// Dina's four cells, two across and two down. Each is fully round on its
+// outer corner, rounder than a tile on the sides it shares with one
+// neighbor, and only a little rounded where all four meet, so the walls
+// between them look pressed flat. Radii go top-left, top-right,
+// bottom-right, bottom-left. Each has a shine near its top-left.
+function dinaCell(x, y, [tl, tr, br, bl]) {
+  const s = 68;
+  return `<path d="M${x + tl} ${y} H${x + s - tr} A${tr} ${tr} 0 0 1 ${x + s} ${y + tr} ` +
+    `V${y + s - br} A${br} ${br} 0 0 1 ${x + s - br} ${y + s} H${x + bl} A${bl} ${bl} 0 0 1 ${x} ${y + s - bl} ` +
+    `V${y + tl} A${tl} ${tl} 0 0 1 ${x + tl} ${y} Z" fill="#f0abfc" stroke="#a21caf" stroke-width="4" />` +
+    `<circle cx="${x + 18}" cy="${y + 16}" r="4" fill="#fdf4ff" />`;
+}
+const [OUTER, SIDE, INNER] = [34, 30, 4];
+const DINA_CELLS = [
+  dinaCell(32, 32, [OUTER, SIDE, INNER, SIDE]),
+  dinaCell(100, 32, [SIDE, OUTER, SIDE, INNER]),
+  dinaCell(32, 100, [SIDE, INNER, SIDE, OUTER]),
+  dinaCell(100, 100, [INNER, SIDE, OUTER, SIDE]),
+].join('');
 
 export const PALS = [
   // Terra: Clostridium tetani, an olive rod with a round spore at one end (a "drumstick")
