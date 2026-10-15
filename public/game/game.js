@@ -42,7 +42,7 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
 
   // The pop-up's buttons: the main one goes to the next level, back to
   // level 1, or tries this level again; after a game over, "Start over" goes
-  // back to level 1 and "Back to modes" goes back to the modes.
+  // back to level 1 and "Choose a mode" goes back to the modes.
   let nextLevel = level;
   function goToLevel(n) {
     const url = new URL(window.location.href);

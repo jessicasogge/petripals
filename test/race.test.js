@@ -268,10 +268,10 @@ describe('the pop-up buttons', () => {
     expect(location.href).toBe('./choose-rivals.html?pal=mona');
   });
 
-  it('"Back to modes" goes back to the modes for the same pal', () => {
+  it('"Choose a mode" goes back to the modes for the same pal', () => {
     const modes = finished().querySelector('.start-over');
     expect(modes.hidden).toBe(false);
-    expect(modes.textContent).toBe('Back to modes');
+    expect(modes.textContent).toBe('Choose a mode');
     modes.click();
     expect(location.href).toBe('./choose-mode.html?pal=mona');
   });

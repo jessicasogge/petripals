@@ -283,11 +283,11 @@ describe('the game-over buttons', () => {
     expect(gameOver(1).querySelector('.start-over').hidden).toBe(true);
   });
 
-  it('"Back to modes" goes back to the modes for the same pal, on any level', () => {
+  it('"Choose a mode" goes back to the modes for the same pal, on any level', () => {
     for (const level of [1, 3]) {
       const modes = gameOver(level).querySelector('.back-to-modes');
       expect(modes.hidden).toBe(false);
-      expect(modes.textContent).toBe('Back to modes');
+      expect(modes.textContent).toBe('Choose a mode');
     }
     document.querySelector('.back-to-modes').click();
     expect(location.href).toMatch(/^\.\/choose-mode\.html\?pal=\w+$/);
