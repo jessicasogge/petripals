@@ -282,6 +282,26 @@ const PEARL_PILI = (() => {
   return hairs.join('');
 })();
 
+// Dina's four cells, two across and two down. Each is fully round on its
+// outer corner, rounder than a tile on the sides it shares with one
+// neighbor, and only a little rounded where all four meet, so the walls
+// between them look pressed flat. Radii go top-left, top-right,
+// bottom-right, bottom-left. Each has a shine near its top-left.
+function dinaCell(x, y, [tl, tr, br, bl]) {
+  const s = 68;
+  return `<path d="M${x + tl} ${y} H${x + s - tr} A${tr} ${tr} 0 0 1 ${x + s} ${y + tr} ` +
+    `V${y + s - br} A${br} ${br} 0 0 1 ${x + s - br} ${y + s} H${x + bl} A${bl} ${bl} 0 0 1 ${x} ${y + s - bl} ` +
+    `V${y + tl} A${tl} ${tl} 0 0 1 ${x + tl} ${y} Z" fill="#f0abfc" stroke="#a21caf" stroke-width="4" />` +
+    `<circle cx="${x + 18}" cy="${y + 16}" r="4" fill="#fdf4ff" />`;
+}
+const [OUTER, SIDE, INNER] = [34, 30, 4];
+const DINA_CELLS = [
+  dinaCell(32, 32, [OUTER, SIDE, INNER, SIDE]),
+  dinaCell(100, 32, [SIDE, OUTER, SIDE, INNER]),
+  dinaCell(32, 100, [SIDE, INNER, SIDE, OUTER]),
+  dinaCell(100, 100, [INNER, SIDE, OUTER, SIDE]),
+].join('');
+
 export const PALS = [
   // Terra: Clostridium tetani, an olive rod with a round spore at one end (a "drumstick")
   {
@@ -939,6 +959,28 @@ export const PALS = [
         <ellipse cx="74" cy="109" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
         <ellipse cx="126" cy="109" rx="7" ry="4" fill="#f9a8d4" opacity="0.9" />
         <path d="M94 109 Q100 115 106 109" stroke="#14300a" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
+  // Dina: Deinococcus radiodurans, an orchid square of four round cells (a tetrad)
+  {
+    id: 'dina',
+    name: 'Dina',
+    looks: 'an orchid-pink square of four round Deinococcus radiodurans cells',
+    motion: 'squish',
+    frames: { home: '0 0 200 200', picker: '16 16 168 168', dish: '20 20 160 160' },
+    art: `
+      <!-- a tetrad: four cells in a square, pressed a little flat where they
+           touch, since each division splits a cell straight across -->
+      ${DINA_CELLS}
+      <g class="face">
+        <circle cx="56" cy="132" r="5.5" fill="#701a75" />
+        <circle cx="78" cy="132" r="5.5" fill="#701a75" />
+        <circle cx="57.8" cy="130.2" r="1.9" fill="white" />
+        <circle cx="79.8" cy="130.2" r="1.9" fill="white" />
+        <ellipse cx="46" cy="143" rx="5.5" ry="3.4" fill="#f9a8d4" opacity="0.95" />
+        <ellipse cx="88" cy="143" rx="5.5" ry="3.4" fill="#f9a8d4" opacity="0.95" />
+        <path d="M62 143 Q67 148 72 143" stroke="#701a75" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
   },

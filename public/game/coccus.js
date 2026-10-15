@@ -1,17 +1,14 @@
 import { touchesDisk } from './antibiotic.js';
-import { chainSpot, clusterSpot, R } from './attach.js';
+import { chainSpot, clusterSpot, R, tetradSpot } from './attach.js';
 import { GAME } from './config.js';
 import { idlePose, newMover } from './mover.js';
 import { coaster } from './physics.js';
 
-// A round cell (Scarlett, Penny, Goldie), or a rod whose daughters stick
-// together in chains like cocci do (Ceres). The player is always a single cell.
-// Offspring are chains or clusters of cocci that grow one cell at a time as
-// daughters join them (the player's, or their own cells' when they eat), up to
-// GROUP_CAP cells, or the pal's own maxCells. A chain grows from whichever end
-// is nearer the player; a cluster grows on the side facing the player. So
-// Scarlett builds chains along the lines she swims, Penny leaves a trail of
-// pairs, and Goldie builds bunches wherever she lingers.
+// Cocci (Scarlett, Penny, Goldie, Dina) and chained rods (Ceres).
+// The player stays one cell; daughters join chains or clusters up to
+// GROUP_CAP or the pal's maxCells. Chains grow from the nearer end;
+// clusters grow toward the player. Scarlett lines up, Penny pairs,
+// Goldie bunches, and Dina squares.
 export function coccusGroup({ mover, svg, species, isPlayer }) {
   const CELL_SIZE = 5; // one cell's width, as a percent of the dish
   const OUTLINE = 1.7; // each cell's outline width, in SVG units
@@ -222,9 +219,13 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
         return !disks.some((disk) =>
           touchesDisk(disk, [[sx, sy, cellRadius]], dishRadius));
       };
+      // A tetrad's corners are worked out from where its cells will end up,
+      // so a cell still sliding into place doesn't knock the square askew.
       const spot = layout === 'chain'
         ? chainSpot(group.cells, px, py, allowed)
-        : clusterSpot(group.cells, group.twist, px, py, allowed);
+        : layout === 'tetrad'
+          ? tetradSpot(group.cells.map((c) => ({ x: c.toX, y: c.toY })), px, py, allowed)
+          : clusterSpot(group.cells, group.twist, px, py, allowed);
       if (!spot) return null;
       spot.world = toWorld(spot.x, spot.y);
       return spot;
@@ -232,9 +233,11 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
     // Slide a new cell from (wx, wy) in the dish into `spot`.
     addCell(spot, wx, wy) {
       const [fx, fy] = toLocal(wx, wy);
+      // A cell still sliding in from the last division carries on from where
+      // it is to where it was going.
       for (const c of group.cells) {
-        c.fromX = c.toX = c.x;
-        c.fromY = c.toY = c.y;
+        c.fromX = c.x;
+        c.fromY = c.y;
       }
       const cell = { x: fx, y: fy, fromX: fx, fromY: fy, toX: spot.x, toY: spot.y, face: false };
       if (spot.atStart) group.cells.unshift(cell);

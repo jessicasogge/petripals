@@ -1,7 +1,8 @@
 // How each pal grows. Every pal is a single cell that divides each time it
 // eats. Rods (Mona, Vi) separate after dividing. Cocci are round cells whose
 // daughters stick together: in chains for Streptococcus (divides in one
-// plane) or grape-like clusters for Staphylococcus (divides in several).
+// plane), grape-like clusters for Staphylococcus (divides in several), or
+// squares of four for Deinococcus (divides in two planes at right angles).
 // Ceres is a rod whose daughters stick together too, so she grows like a
 // coccus chain, with rod-shaped cells (`shape: 'rod'`).
 //
@@ -1022,6 +1023,41 @@ export const SPECIES = {
       { code: 'CIP', name: 'ciprofloxacin', zone: 32 },
       { code: 'CRO', name: 'ceftriaxone', zone: 30 },
       { code: 'GM', name: 'gentamicin', zone: 21 },
+    ],
+  },
+  dina: {
+    facts: [
+      "Dina is nicknamed \"Conan the Bacterium\" for how tough she is.",
+      "Dina can survive about 1,000 times the radiation dose that would kill a person.",
+      "Dina's cells often stick together in squares of four, called tetrads.",
+      "Dina's name means \"terrible berry\" and \"radiation-enduring.\"",
+      "Dina was found in 1956 in canned meat that survived radiation treatment.",
+      "Radiation can shatter Dina's DNA into hundreds of pieces; she repairs it in hours.",
+      "Dina keeps several copies of her DNA in each cell, giving her templates for repair.",
+      "Dina stockpiles manganese, which helps shield her proteins from radiation damage.",
+      "Dina's real colonies are pinkish red, mainly from a pigment called deinoxanthin.",
+      "Dina survives long dry spells, which may help explain her radiation resistance.",
+      "Cells in clumps of Dina survived three years outside the International Space Station.",
+      "Guinness World Records has called Dina the world's toughest bacterium.",
+      "Dina stains Gram-positive purple, despite having an unusual outer membrane.",
+      "Dina has no flagella and doesn't swim.",
+      "Scientists engineered Dina to detoxify mercury in radioactive-waste cleanup research.",
+      "Dina isn't known to cause disease in people.",
+      "Dina's reference strain R1 has two chromosomes, a megaplasmid and a smaller plasmid.",
+    ],
+    scientific: 'Deinococcus radiodurans',
+    color: '#a21caf', // for her name above the dish
+    kind: 'coccus',
+    gram: 'positive',
+    layout: 'tetrad',
+    maxCells: 4, // squares of four
+    colors: { fill: '#f0abfc', stroke: '#a21caf', highlight: '#fdf4ff', dark: '#701a75' },
+    antibiotics: [
+      { code: 'C', name: 'chloramphenicol', zone: 30 },
+      { code: 'TE', name: 'tetracycline', zone: 27 },
+      { code: 'K', name: 'kanamycin', zone: 18 },
+      { code: 'RA', name: 'rifampin', zone: 22 },
+      { code: 'E', name: 'erythromycin', zone: 25 },
     ],
   },
 };

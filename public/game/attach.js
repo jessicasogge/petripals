@@ -89,3 +89,42 @@ export function clusterSpot(cells, twist, px, py, allowed = () => true) {
 
   return best;
 }
+
+// Find a Dina tetrad attachment spot: second cell toward (px, py), then the
+// nearest open corners. Returns null if full or blocked by `allowed(x, y)`.
+export function tetradSpot(cells, px, py, allowed = () => true) {
+  if (cells.length === 1) return chainSpot(cells, px, py, allowed);
+  const corners = [];
+  if (cells.length === 2) {
+    const [a, b] = cells;
+    const dx = b.x - a.x;
+    const dy = b.y - a.y;
+    const gap = Math.hypot(dx, dy) || 1;
+    if (gap < SPACING * 1.2) {
+      // Side by side: the square can grow on either side of them.
+      const nx = (-dy / gap) * SPACING;
+      const ny = (dx / gap) * SPACING;
+      for (const s of [1, -1]) {
+        corners.push({ x: a.x + s * nx, y: a.y + s * ny }, { x: b.x + s * nx, y: b.y + s * ny });
+      }
+    } else {
+      // Corner to corner (one between them popped): the other two corners.
+      const mx = (a.x + b.x) / 2;
+      const my = (a.y + b.y) / 2;
+      corners.push({ x: mx - dy / 2, y: my + dx / 2 }, { x: mx + dy / 2, y: my - dx / 2 });
+    }
+  } else if (cells.length === 3) {
+    // The corner the other two each sit next to; the fourth is across from it.
+    const spread = (c) => Math.max(...cells.map((o) => Math.hypot(o.x - c.x, o.y - c.y)));
+    const elbow = cells.reduce((best, c) => (spread(c) < spread(best) ? c : best));
+    const [p, q] = cells.filter((c) => c !== elbow);
+    corners.push({ x: p.x + q.x - elbow.x, y: p.y + q.y - elbow.y });
+  }
+  let best = null;
+  for (const { x, y } of corners) {
+    if (!allowed(x, y)) continue;
+    const distance = Math.hypot(x - px, y - py);
+    if (!best || distance < best.distance) best = { x, y, atStart: false, distance };
+  }
+  return best;
+}
