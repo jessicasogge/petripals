@@ -175,4 +175,11 @@ export const QUIZ_FACTS = {
     "Dina was found in 1956 in canned meat that spoiled despite radiation treatment.",
     "Clumps of Dina survived three years outside the International Space Station.",
   ],
+  ari: [
+    "Ari grows in long chains of cells, called filaments, that look like strings of beads.",
+    "When nitrogen runs low, some of Ari's cells turn into heterocysts that fix nitrogen.",
+    "Ari's heterocysts trade nitrogen to their neighbors for sugar the neighbors make.",
+    "Ari's blue-green color comes from chlorophyll plus a blue pigment called phycocyanin.",
+    "A cousin of Ari's lives inside the water fern *Azolla*, helping fertilize rice paddies.",
+  ],
 };
