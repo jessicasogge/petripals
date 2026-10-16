@@ -180,6 +180,5 @@ export const QUIZ_FACTS = {
     "When nitrogen runs low, some of Ari's cells turn into heterocysts that fix nitrogen.",
     "Ari's heterocysts trade nitrogen to their neighbors for sugar the neighbors make.",
     "Ari's blue-green color comes from chlorophyll plus a blue pigment called phycocyanin.",
-    "A cousin of Ari's lives inside the water fern *Azolla*, helping fertilize rice paddies.",
   ],
 };
