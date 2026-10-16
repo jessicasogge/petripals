@@ -1025,6 +1025,43 @@ export const SPECIES = {
       { code: 'GM', name: 'gentamicin', zone: 21 },
     ],
   },
+  // Real heterocysts come every 10 to 15 cells; chains stop at GROUP_CAP, so
+  // hers come every fifth. Zones are estimates (no standard disk sizes).
+  ari: {
+    facts: [
+      "Ari is a cyanobacterium: she makes her own food from sunlight, like a plant.",
+      "Ari grows in long chains of cells, called filaments, that look like strings of beads.",
+      "When nitrogen runs low, some of Ari's cells turn into heterocysts that fix nitrogen.",
+      "Ari's heterocysts pull nitrogen gas from the air and turn it into food for her chain.",
+      "Oxygen ruins Ari's nitrogen-fixing enzyme, so her heterocysts stop making it.",
+      "Ari's heterocysts trade nitrogen to their neighbors for sugar the neighbors make.",
+      "Ari's heterocysts appear about every 10 to 15 cells along her filament.",
+      "Once one of Ari's cells becomes a heterocyst, it never divides again.",
+      "Ari can make akinetes: tough, thick-walled resting cells that wait out hard times.",
+      "Ari's blue-green color comes from chlorophyll plus a blue pigment called phycocyanin.",
+      "Unlike many cyanobacteria, Ari can also grow in the dark by eating a sugar, fructose.",
+      "Cyanobacteria like Ari first filled Earth's air with oxygen, over 2 billion years ago.",
+      "The chloroplasts in plant cells descend from cyanobacteria, Ari's relatives.",
+      "A cousin of Ari's lives inside the water fern *Azolla*, helping fertilize rice paddies.",
+      "Ari lives in fresh water and damp soil.",
+      "Ari is Gram-negative, so she stains pink on a Gram stain.",
+      "Ari has no flagella.",
+    ],
+    scientific: 'Anabaena variabilis',
+    color: '#0d6e50', // for her name above the dish
+    kind: 'coccus',
+    gram: 'negative',
+    layout: 'chain',
+    colors: { fill: '#7dd8b0', stroke: '#0d5c43', highlight: '#e2f8ee', dark: '#06321f' },
+    heterocyst: { every: 5, fill: '#f6e7a6', stroke: '#9a7b12', highlight: '#fffbe6' },
+    antibiotics: [
+      { code: 'E', name: 'erythromycin', zone: 29 },
+      { code: 'C', name: 'chloramphenicol', zone: 26 },
+      { code: 'TE', name: 'tetracycline', zone: 24 },
+      { code: 'K', name: 'kanamycin', zone: 20 },
+      { code: 'S', name: 'streptomycin', zone: 18 },
+    ],
+  },
   dina: {
     facts: [
       "Dina is nicknamed \"Conan the Bacterium\" for how tough she is.",

@@ -631,6 +631,10 @@ a.pal-card:focus-visible {
   background: rgba(168, 236, 94, 0.35);
 }
 
+.ari {
+  background: rgba(63, 185, 138, 0.28);
+}
+
 .dina {
   background: rgba(240, 171, 252, 0.4);
 }

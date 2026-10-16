@@ -302,6 +302,52 @@ const DINA_CELLS = [
   dinaCell(100, 100, [INNER, SIDE, OUTER, SIDE]),
 ].join('');
 
+// Ari's filament: round cells along a gentle wave, each just overlapping the
+// next, as [radius, kind]. Her face is on the big one; the gold one is a
+// heterocyst, thick walled, with a bright plug where it meets each neighbor.
+const ARI_CELLS = (() => {
+  const cells = [[13, 'veg'], [15, 'veg'], [24, 'face'], [16, 'veg'], [19, 'het'], [15, 'veg'], [13, 'veg']];
+  const waveY = (x) => 100 + 10 * Math.sin(((x - 100) / 160) * 2 * Math.PI * 0.8 + 0.35);
+  const gaps = cells.slice(1).map(([r], i) => (r + cells[i][0]) * 0.8);
+  let x = 100 - gaps.reduce((a, b) => a + b, 0) / 2;
+  const placed = [{ x, y: waveY(x) }];
+  for (const gap of gaps) {
+    const last = placed.at(-1);
+    x = last.x;
+    while (Math.hypot(x - last.x, waveY(x) - last.y) < gap) x += 0.05;
+    placed.push({ x, y: waveY(x) });
+  }
+  const at = placed.map((p, i) => ({ ...p, r: cells[i][0], kind: cells[i][1] }));
+  const f = (n) => n.toFixed(1);
+  let out = '';
+  // Plain cells first, so the heterocyst and her face sit on top.
+  for (const c of [...at].sort((a, b) => (a.kind === 'veg' ? 0 : 1) - (b.kind === 'veg' ? 0 : 1))) {
+    if (c.kind === 'het') {
+      out += `<circle cx="${f(c.x)}" cy="${f(c.y)}" r="${c.r}" fill="#f6e7a6" stroke="#9a7b12" stroke-width="5" />`;
+      const i = at.indexOf(c);
+      for (const n of [at[i - 1], at[i + 1]]) {
+        const d = Math.hypot(n.x - c.x, n.y - c.y);
+        out += `<circle cx="${f(c.x + ((n.x - c.x) / d) * (c.r - 3.5))}" cy="${f(c.y + ((n.y - c.y) / d) * (c.r - 3.5))}" ` +
+          'r="2.6" fill="#fffbe6" stroke="#9a7b12" stroke-width="1.2" />';
+      }
+      out += `<circle cx="${f(c.x - 4)}" cy="${f(c.y - 5)}" r="2.6" fill="#fffbe6" />`;
+      continue;
+    }
+    out += `<circle cx="${f(c.x)}" cy="${f(c.y)}" r="${c.r}" fill="#7dd8b0" stroke="#0d5c43" stroke-width="3.5" />` +
+      `<circle cx="${f(c.x - c.r * 0.38)}" cy="${f(c.y - c.r * 0.42)}" r="${f(c.r * 0.2)}" fill="#e2f8ee" />`;
+    if (c.kind === 'face') {
+      out += `<g class="face" transform="translate(${f(c.x)} ${f(c.y)}) scale(${(c.r / 17).toFixed(2)})">` +
+        '<circle cx="-6" cy="0" r="4.3" fill="#06321f" /><circle cx="6" cy="0" r="4.3" fill="#06321f" />' +
+        '<circle cx="-4.6" cy="-1.4" r="1.5" fill="white" /><circle cx="7.4" cy="-1.4" r="1.5" fill="white" />' +
+        '<ellipse cx="-10.5" cy="7" rx="3.4" ry="2.2" fill="#f9a8d4" opacity="0.95" />' +
+        '<ellipse cx="10.5" cy="7" rx="3.4" ry="2.2" fill="#f9a8d4" opacity="0.95" />' +
+        '<path d="M-3.5 6.5 Q0 10.5 3.5 6.5" stroke="#06321f" stroke-width="2.4" fill="none" stroke-linecap="round" />' +
+        '</g>';
+    }
+  }
+  return out;
+})();
+
 export const PALS = [
   // Terra: Clostridium tetani, an olive rod with a round spore at one end (a "drumstick")
   {
@@ -982,6 +1028,17 @@ export const PALS = [
         <ellipse cx="88" cy="143" rx="5.5" ry="3.4" fill="#f9a8d4" opacity="0.95" />
         <path d="M62 143 Q67 148 72 143" stroke="#701a75" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
+    `,
+  },
+  // Ari: Anabaena variabilis, a jade string of beads with one gold heterocyst
+  {
+    id: 'ari',
+    name: 'Ari',
+    looks: 'a jade-green Anabaena variabilis, a string of round cells with one pale gold heterocyst',
+    motion: 'wobble',
+    frames: { home: '0 0 200 200', picker: '2 2 196 196', dish: '2 2 196 196' },
+    art: `
+      ${ARI_CELLS}
     `,
   },
 ];

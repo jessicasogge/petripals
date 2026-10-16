@@ -44,6 +44,15 @@ describe('pals', () => {
     expect(SPECIES.goldie.layout).toBe('cluster');
   });
 
+  it('makes Ari a Gram-negative chain of round cells, with a heterocyst every fifth cell', () => {
+    const { kind, layout, gram, heterocyst } = SPECIES.ari;
+    expect(kind).toBe('coccus');
+    expect(layout).toBe('chain');
+    expect(gram).toBe('negative');
+    expect(heterocyst.every).toBe(5);
+    for (const part of ['fill', 'stroke', 'highlight']) expect(heterocyst[part]).toMatch(/^#[0-9a-f]{6}$/i);
+  });
+
   it('makes Dina a Deinococcus that grows in squares of four (tetrads)', () => {
     expect(SPECIES.dina.kind).toBe('coccus');
     expect(SPECIES.dina.layout).toBe('tetrad');

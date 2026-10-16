@@ -4,11 +4,12 @@ import { GAME } from './config.js';
 import { idlePose, newMover } from './mover.js';
 import { coaster } from './physics.js';
 
-// Cocci (Scarlett, Penny, Goldie, Dina) and chained rods (Ceres).
+// Cocci (Scarlett, Penny, Goldie, Dina, Ari) and chained rods (Ceres).
 // The player stays one cell; daughters join chains or clusters up to
 // GROUP_CAP or the pal's maxCells. Chains grow from the nearer end;
 // clusters grow toward the player. Scarlett lines up, Penny pairs,
-// Goldie bunches, and Dina squares.
+// Goldie bunches, Dina squares, and Ari strings beads with a heterocyst
+// every few cells.
 export function coccusGroup({ mover, svg, species, isPlayer }) {
   const CELL_SIZE = 5; // one cell's width, as a percent of the dish
   const OUTLINE = 1.7; // each cell's outline width, in SVG units
@@ -30,6 +31,7 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
     cells: [{ x: 0, y: 0, fromX: 0, fromY: 0, toX: 0, toY: 0, face: isPlayer }],
     moveFor: null, // ms into sliding a new cell into place, or null
     twist: Math.random() * Math.PI * 2, // each cluster packs at its own angle
+    added: 1, // cells ever added, for spacing Ari's heterocysts
     cellCount: () => group.cells.length,
   };
 
@@ -99,8 +101,13 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
     return (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI;
   }
 
+  // Heterocysts (Ari's) get their own colors and a thicker wall.
+  const heterocyst = species.heterocyst;
+  const paintOf = (c) => (c.het ? heterocyst : colors);
+
   function cellBody(c) {
-    const paint = `fill="${colors.fill}" stroke="${colors.stroke}" stroke-width="${OUTLINE}"`;
+    const { fill, stroke } = paintOf(c);
+    const paint = `fill="${fill}" stroke="${stroke}" stroke-width="${c.het ? OUTLINE * 1.6 : OUTLINE}"`;
     if (species.shape === 'rod') {
       // A square-ended rod, like her picture, that fits inside the cell's
       // circle, so what she touches doesn't change. Rods next to each other
@@ -120,7 +127,7 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
   function cellMarkup(c) {
     let out =
       cellBody(c) +
-      `<circle cx="${c.x - 2.7}" cy="${c.y - 3.2}" r="1.5" fill="${colors.highlight}" />`;
+      `<circle cx="${c.x - 2.7}" cy="${c.y - 3.2}" r="1.5" fill="${paintOf(c).highlight}" />`;
     if (c.face) {
       out +=
         `<g transform="translate(${c.x} ${c.y})${FACE_SCALE === 1 ? '' : ` scale(${FACE_SCALE})`}">` +
@@ -239,7 +246,9 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
         c.fromX = c.x;
         c.fromY = c.y;
       }
-      const cell = { x: fx, y: fy, fromX: fx, fromY: fy, toX: spot.x, toY: spot.y, face: false };
+      group.added += 1;
+      const het = Boolean(heterocyst) && group.added % heterocyst.every === 0;
+      const cell = { x: fx, y: fy, fromX: fx, fromY: fy, toX: spot.x, toY: spot.y, face: false, het };
       if (spot.atStart) group.cells.unshift(cell);
       else group.cells.push(cell);
       group.moveFor = 0;

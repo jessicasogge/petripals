@@ -517,3 +517,36 @@ describe('Dina (Deinococcus radiodurans)', () => {
     expect(svg.querySelector('circle.cell-body').getAttribute('fill')).toBe(SPECIES.dina.colors.fill);
   });
 });
+
+describe('Ari (Anabaena variabilis)', () => {
+  it('grows a heterocyst every fifth cell, in its own colors with a thicker wall', () => {
+    const group = makeGroup('ari');
+    grow(group, 5);
+    const { heterocyst, colors } = SPECIES.ari;
+    const bodies = [...group.svg.querySelectorAll('.cell-body')];
+    const het = bodies.filter((b) => b.getAttribute('fill') === heterocyst.fill);
+    expect(het).toHaveLength(1);
+    expect(het[0].getAttribute('stroke')).toBe(heterocyst.stroke);
+    const plain = bodies.find((b) => b.getAttribute('fill') === colors.fill);
+    expect(Number(het[0].getAttribute('stroke-width'))).toBeGreaterThan(Number(plain.getAttribute('stroke-width')));
+  });
+
+  it('keeps the player and a group under five cells free of heterocysts', () => {
+    const group = makeGroup('ari');
+    grow(group, 4);
+    const player = makeGroup('ari', { isPlayer: true });
+    for (const svg of [group.svg, player.svg]) {
+      for (const body of svg.querySelectorAll('.cell-body')) {
+        expect(body.getAttribute('fill')).toBe(SPECIES.ari.colors.fill);
+      }
+    }
+  });
+
+  it("gives other pals' chains no heterocysts", () => {
+    const group = makeGroup('scarlett');
+    grow(group, 5);
+    for (const body of group.svg.querySelectorAll('.cell-body')) {
+      expect(body.getAttribute('fill')).toBe(SPECIES.scarlett.colors.fill);
+    }
+  });
+});
