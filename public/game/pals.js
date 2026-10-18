@@ -11,8 +11,10 @@
 //   art     200 x 200 drawing; wrap the face in <g class="face"> so dish
 //           offspring can hide it
 //
-// To add a pal: append here and to SPECIES, then add a .<id> tile color
-// beside .penny in styles.css. New pals are picker-only; don't add to HOME.
+// To add a pal: append here and to SPECIES (with her `tile` color). New pals
+// are picker-only; don't add to HOME.
+
+import { SPECIES } from './config.js';
 
 const SVG = 'http://www.w3.org/2000/svg';
 
@@ -1107,6 +1109,7 @@ export function homePal(pal) {
 export function palTile(pal) {
   const tile = document.createElement('div');
   tile.className = `pal-icon ${pal.id}`;
+  tile.style.setProperty('--tile', SPECIES[pal.id].tile);
   const svg = drawing(pal, 'picker');
   svg.setAttribute('aria-hidden', 'true');
   tile.append(svg);

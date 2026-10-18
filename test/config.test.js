@@ -245,10 +245,16 @@ describe('Gram stains', () => {
     }
   });
 
-  it('matches the real bacteria: the cocci (Dina too), Ana, Ceres, Terra, Lissie, Diffany and Nova are Gram-positive, the other rods negative', () => {
-    const positive = Object.keys(SPECIES).filter((name) => SPECIES[name].gram === 'positive').sort();
-    expect(positive).toEqual(['ana', 'ceres', 'diffany', 'dina', 'goldie', 'ivy', 'lissie', 'nova', 'penny', 'scarlett', 'terra']);
-  });
+  // Spot checks against the real bacteria, one pal at a time, so adding a pal
+  // doesn't mean editing a list here (the test above checks every pal).
+  it.each(['ana', 'ceres', 'diffany', 'dina', 'goldie', 'ivy', 'lissie', 'nova', 'penny', 'scarlett', 'terra'])(
+    '%s is Gram-positive, like her real species',
+    (name) => expect(SPECIES[name].gram).toBe('positive'),
+  );
+  it.each(['mona', 'vi', 'elia', 'coco', 'sallie', 'sara', 'astrid', 'kiki', 'electra', 'pearl', 'frannie', 'colette', 'ari'])(
+    '%s is Gram-negative, like her real species',
+    (name) => expect(SPECIES[name].gram).toBe('negative'),
+  );
 
   it('marks only Elia as barely taking the stain', () => {
     expect(Object.keys(SPECIES).filter((name) => SPECIES[name].faintStain)).toEqual(['elia']);
