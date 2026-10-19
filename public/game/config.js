@@ -18,6 +18,8 @@
 // top): drugs commonly used against that species, labeled with their
 // standard disk codes.
 //
+// `tile` is the background of her tile on the picker and other pages.
+//
 // `scientific` is the species name shown above the dish, with the pal's name
 // in her `color`. It's all in italics, unless it marks the italic part
 // between asterisks: Sallie's is *Salmonella* Typhi, since Typhi is a
@@ -57,6 +59,7 @@ export const SPECIES = {
     ],
     scientific: 'Pseudomonas aeruginosa',
     color: '#15803d', // for her name above the dish
+    tile: 'rgba(134, 239, 172, 0.45)',
     kind: 'rod',
     gram: 'negative',
     size: 9.5,
@@ -99,6 +102,7 @@ export const SPECIES = {
     ],
     scientific: 'Vibrio cholerae',
     color: '#c2410c', // for her name above the dish
+    tile: 'rgba(253, 186, 116, 0.45)',
     kind: 'rod',
     gram: 'negative',
     size: 9.5,
@@ -145,6 +149,7 @@ export const SPECIES = {
     ],
     scientific: 'Borrelia burgdorferi',
     color: '#7e22ce', // for her name above the dish
+    tile: 'rgba(216, 180, 254, 0.45)',
     kind: 'rod',
     gram: 'negative',
     faintStain: true, // too thin to show up well on a Gram stain
@@ -194,6 +199,7 @@ export const SPECIES = {
     ],
     scientific: 'Haemophilus influenzae',
     color: '#7c4a2d', // for her name above the dish
+    tile: 'rgba(212, 176, 140, 0.45)',
     kind: 'rod',
     gram: 'negative',
     size: 8.5,
@@ -238,6 +244,7 @@ export const SPECIES = {
     ],
     scientific: 'Bifidobacterium bifidum',
     color: '#be185d', // for her name above the dish: strawberry-yogurt pink's deeper rose
+    tile: 'rgba(249, 168, 212, 0.4)',
     kind: 'rod',
     gram: 'positive',
     size: 8.5,
@@ -290,6 +297,7 @@ export const SPECIES = {
     ],
     scientific: 'Streptococcus pneumoniae',
     color: '#4f46e5', // for her name above the dish: bluish purple, next to Elia's purple
+    tile: 'rgba(165, 180, 252, 0.45)',
     kind: 'coccus',
     gram: 'positive',
     layout: 'chain',
@@ -329,6 +337,7 @@ export const SPECIES = {
     ],
     scientific: 'Streptococcus pyogenes',
     color: '#b91c1c', // for her name above the dish
+    tile: 'rgba(252, 165, 165, 0.45)',
     kind: 'coccus',
     gram: 'positive',
     layout: 'chain',
@@ -362,6 +371,7 @@ export const SPECIES = {
     ],
     scientific: 'Staphylococcus aureus',
     color: '#b45309', // for her name above the dish
+    tile: 'rgba(253, 230, 138, 0.45)',
     kind: 'coccus',
     gram: 'positive',
     layout: 'cluster',
@@ -405,6 +415,7 @@ export const SPECIES = {
     ],
     scientific: 'Bacillus cereus',
     color: '#0369a1', // for her name above the dish
+    tile: 'rgba(125, 211, 252, 0.2)',
     kind: 'coccus', // grows in chains (see above), though her cells are rods
     gram: 'positive',
     layout: 'chain',
@@ -448,6 +459,7 @@ export const SPECIES = {
     ],
     scientific: '*Salmonella* Typhi',
     color: '#52525b', // for her name above the dish
+    tile: 'rgba(161, 161, 170, 0.2)',
     kind: 'rod',
     gram: 'negative',
     size: 10.5,
@@ -491,6 +503,7 @@ export const SPECIES = {
     ],
     scientific: 'Clostridium tetani',
     color: '#5f6f12', // for her name above the dish
+    tile: 'rgba(217, 223, 160, 0.5)',
     kind: 'rod',
     gram: 'positive',
     size: 10.5,
@@ -535,6 +548,7 @@ export const SPECIES = {
     ],
     scientific: 'Listeria monocytogenes',
     color: '#2c4f7c', // for her name above the dish
+    tile: 'rgba(122, 156, 199, 0.42)',
     kind: 'rod',
     gram: 'positive',
     size: 10.5,
@@ -578,6 +592,7 @@ export const SPECIES = {
     ],
     scientific: 'Serratia marcescens',
     color: '#c2003a', // for her name above the dish
+    tile: 'rgba(255, 90, 110, 0.22)',
     kind: 'rod',
     gram: 'negative',
     size: 10.5,
@@ -622,6 +637,7 @@ export const SPECIES = {
     ],
     scientific: 'Bacillus mycoides',
     color: '#4d6b3c', // for her name above the dish
+    tile: 'rgba(150, 190, 120, 0.3)',
     kind: 'coccus', // grows in chains with the chain code, like Ceres, though her cells are rods
     gram: 'positive',
     layout: 'chain',
@@ -660,6 +676,7 @@ export const SPECIES = {
     ],
     scientific: 'Asticcacaulis biprosthecum',
     color: '#1a4f9c', // for her name above the dish
+    tile: 'rgba(90, 169, 245, 0.3)',
     kind: 'rod',
     gram: 'negative',
     size: 10,
@@ -703,6 +720,7 @@ export const SPECIES = {
     ],
     scientific: 'Cronobacter sakazakii',
     color: '#7d7200', // for her name above the dish
+    tile: 'rgba(255, 240, 60, 0.35)',
     kind: 'rod',
     gram: 'negative',
     size: 10.5,
@@ -744,6 +762,7 @@ export const SPECIES = {
     ],
     scientific: 'Geobacter sulfurreducens',
     color: '#4c1d95', // for her name above the dish: grape, darker than Elia's purple
+    tile: 'rgba(178, 126, 224, 0.35)',
     kind: 'rod',
     gram: 'negative',
     size: 11, // a touch smaller than most, since her nanowires take up room around her
@@ -783,6 +802,7 @@ export const SPECIES = {
     ],
     scientific: 'Clostridioides difficile',
     color: '#7a2e1a', // for her name above the dish
+    tile: 'rgba(210, 146, 127, 0.3)',
     kind: 'rod',
     gram: 'positive',
     // Big and plump, the biggest of the rods.
@@ -835,6 +855,7 @@ export const SPECIES = {
     ],
     scientific: 'Nocardia nova',
     color: '#0f766e', // for her name above the dish
+    tile: 'rgba(143, 227, 216, 0.4)',
     kind: 'rod',
     gram: 'positive',
     size: 8, // her branches reach every way, so she's narrower than the rods to take up as much room
@@ -911,6 +932,7 @@ export const SPECIES = {
     ],
     scientific: 'Klebsiella pneumoniae',
     color: '#6a5070', // for her name above the dish
+    tile: 'rgba(232, 190, 206, 0.38)',
     kind: 'rod',
     gram: 'negative',
     size: 9.5,
@@ -953,6 +975,7 @@ export const SPECIES = {
     ],
     scientific: 'Francisella tularensis',
     color: '#a8432e', // for her name above the dish
+    tile: 'rgba(255, 201, 181, 0.45)',
     kind: 'rod',
     gram: 'negative',
     // Small on purpose: she's one of the tiniest pals, and her frame leaves
@@ -998,6 +1021,7 @@ export const SPECIES = {
     ],
     scientific: 'Escherichia coli',
     color: '#2e6b0e', // for her name above the dish
+    tile: 'rgba(168, 236, 94, 0.35)',
     kind: 'rod',
     gram: 'negative',
     size: 10.5,
@@ -1047,6 +1071,7 @@ export const SPECIES = {
     ],
     scientific: 'Anabaena variabilis',
     color: '#0d6e50', // for her name above the dish
+    tile: 'rgba(63, 185, 138, 0.28)',
     kind: 'coccus',
     gram: 'negative',
     layout: 'chain',
@@ -1082,6 +1107,7 @@ export const SPECIES = {
     ],
     scientific: 'Deinococcus radiodurans',
     color: '#a21caf', // for her name above the dish
+    tile: 'rgba(240, 171, 252, 0.4)',
     kind: 'coccus',
     gram: 'positive',
     layout: 'tetrad',
