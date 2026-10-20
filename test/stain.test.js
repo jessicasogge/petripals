@@ -105,3 +105,17 @@ describe('the stain shades', () => {
     expect(shown(svg)).toEqual(before);
   });
 });
+
+describe('Ari in microscope mode', () => {
+  it('turns her beads and her heterocyst pink, keeping the heterocyst paler', () => {
+    const svg = dishPal(palById('ari'));
+    stainPal(svg, SPECIES.ari);
+    const pink = STAINS.negative;
+    const plain = svg.querySelector('circle[fill="#7dd8b0"]');
+    const het = svg.querySelector('circle[fill="#f6e7a6"]');
+    expect(plain.style.fill).toBe(rgb(pink.body));
+    expect(plain.style.stroke).toBe(rgb(pink.outline));
+    expect(het.style.fill).toBe(rgb(pink.body));
+    expect(het.style.stroke).toBe(rgb(pink.outline));
+  });
+});

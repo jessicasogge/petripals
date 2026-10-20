@@ -1,7 +1,8 @@
 // How each pal grows. Every pal is a single cell that divides each time it
 // eats. Rods (Mona, Vi) separate after dividing. Cocci are round cells whose
 // daughters stick together: in chains for Streptococcus (divides in one
-// plane) or grape-like clusters for Staphylococcus (divides in several).
+// plane), grape-like clusters for Staphylococcus (divides in several), or
+// squares of four for Deinococcus (divides in two planes at right angles).
 // Ceres is a rod whose daughters stick together too, so she grows like a
 // coccus chain, with rod-shaped cells (`shape: 'rod'`).
 //
@@ -16,6 +17,8 @@
 // uses the first, level 5 all five, and later levels start over from the
 // top): drugs commonly used against that species, labeled with their
 // standard disk codes.
+//
+// `tile` is the background of her tile on the picker and other pages.
 //
 // `scientific` is the species name shown above the dish, with the pal's name
 // in her `color`. It's all in italics, unless it marks the italic part
@@ -56,6 +59,7 @@ export const SPECIES = {
     ],
     scientific: 'Pseudomonas aeruginosa',
     color: '#15803d', // for her name above the dish
+    tile: 'rgba(134, 239, 172, 0.45)',
     kind: 'rod',
     gram: 'negative',
     size: 9.5,
@@ -98,6 +102,7 @@ export const SPECIES = {
     ],
     scientific: 'Vibrio cholerae',
     color: '#c2410c', // for her name above the dish
+    tile: 'rgba(253, 186, 116, 0.45)',
     kind: 'rod',
     gram: 'negative',
     size: 9.5,
@@ -144,6 +149,7 @@ export const SPECIES = {
     ],
     scientific: 'Borrelia burgdorferi',
     color: '#7e22ce', // for her name above the dish
+    tile: 'rgba(216, 180, 254, 0.45)',
     kind: 'rod',
     gram: 'negative',
     faintStain: true, // too thin to show up well on a Gram stain
@@ -193,6 +199,7 @@ export const SPECIES = {
     ],
     scientific: 'Haemophilus influenzae',
     color: '#7c4a2d', // for her name above the dish
+    tile: 'rgba(212, 176, 140, 0.45)',
     kind: 'rod',
     gram: 'negative',
     size: 8.5,
@@ -237,6 +244,7 @@ export const SPECIES = {
     ],
     scientific: 'Bifidobacterium bifidum',
     color: '#be185d', // for her name above the dish: strawberry-yogurt pink's deeper rose
+    tile: 'rgba(249, 168, 212, 0.4)',
     kind: 'rod',
     gram: 'positive',
     size: 8.5,
@@ -289,6 +297,7 @@ export const SPECIES = {
     ],
     scientific: 'Streptococcus pneumoniae',
     color: '#4f46e5', // for her name above the dish: bluish purple, next to Elia's purple
+    tile: 'rgba(165, 180, 252, 0.45)',
     kind: 'coccus',
     gram: 'positive',
     layout: 'chain',
@@ -328,6 +337,7 @@ export const SPECIES = {
     ],
     scientific: 'Streptococcus pyogenes',
     color: '#b91c1c', // for her name above the dish
+    tile: 'rgba(252, 165, 165, 0.45)',
     kind: 'coccus',
     gram: 'positive',
     layout: 'chain',
@@ -361,6 +371,7 @@ export const SPECIES = {
     ],
     scientific: 'Staphylococcus aureus',
     color: '#b45309', // for her name above the dish
+    tile: 'rgba(253, 230, 138, 0.45)',
     kind: 'coccus',
     gram: 'positive',
     layout: 'cluster',
@@ -404,6 +415,7 @@ export const SPECIES = {
     ],
     scientific: 'Bacillus cereus',
     color: '#0369a1', // for her name above the dish
+    tile: 'rgba(125, 211, 252, 0.2)',
     kind: 'coccus', // grows in chains (see above), though her cells are rods
     gram: 'positive',
     layout: 'chain',
@@ -447,6 +459,7 @@ export const SPECIES = {
     ],
     scientific: '*Salmonella* Typhi',
     color: '#52525b', // for her name above the dish
+    tile: 'rgba(161, 161, 170, 0.2)',
     kind: 'rod',
     gram: 'negative',
     size: 10.5,
@@ -490,6 +503,7 @@ export const SPECIES = {
     ],
     scientific: 'Clostridium tetani',
     color: '#5f6f12', // for her name above the dish
+    tile: 'rgba(217, 223, 160, 0.5)',
     kind: 'rod',
     gram: 'positive',
     size: 10.5,
@@ -534,6 +548,7 @@ export const SPECIES = {
     ],
     scientific: 'Listeria monocytogenes',
     color: '#2c4f7c', // for her name above the dish
+    tile: 'rgba(122, 156, 199, 0.42)',
     kind: 'rod',
     gram: 'positive',
     size: 10.5,
@@ -577,6 +592,7 @@ export const SPECIES = {
     ],
     scientific: 'Serratia marcescens',
     color: '#c2003a', // for her name above the dish
+    tile: 'rgba(255, 90, 110, 0.22)',
     kind: 'rod',
     gram: 'negative',
     size: 10.5,
@@ -621,6 +637,7 @@ export const SPECIES = {
     ],
     scientific: 'Bacillus mycoides',
     color: '#4d6b3c', // for her name above the dish
+    tile: 'rgba(150, 190, 120, 0.3)',
     kind: 'coccus', // grows in chains with the chain code, like Ceres, though her cells are rods
     gram: 'positive',
     layout: 'chain',
@@ -659,6 +676,7 @@ export const SPECIES = {
     ],
     scientific: 'Asticcacaulis biprosthecum',
     color: '#1a4f9c', // for her name above the dish
+    tile: 'rgba(90, 169, 245, 0.3)',
     kind: 'rod',
     gram: 'negative',
     size: 10,
@@ -702,6 +720,7 @@ export const SPECIES = {
     ],
     scientific: 'Cronobacter sakazakii',
     color: '#7d7200', // for her name above the dish
+    tile: 'rgba(255, 240, 60, 0.35)',
     kind: 'rod',
     gram: 'negative',
     size: 10.5,
@@ -743,6 +762,7 @@ export const SPECIES = {
     ],
     scientific: 'Geobacter sulfurreducens',
     color: '#4c1d95', // for her name above the dish: grape, darker than Elia's purple
+    tile: 'rgba(178, 126, 224, 0.35)',
     kind: 'rod',
     gram: 'negative',
     size: 11, // a touch smaller than most, since her nanowires take up room around her
@@ -782,6 +802,7 @@ export const SPECIES = {
     ],
     scientific: 'Clostridioides difficile',
     color: '#7a2e1a', // for her name above the dish
+    tile: 'rgba(210, 146, 127, 0.3)',
     kind: 'rod',
     gram: 'positive',
     // Big and plump, the biggest of the rods.
@@ -834,6 +855,7 @@ export const SPECIES = {
     ],
     scientific: 'Nocardia nova',
     color: '#0f766e', // for her name above the dish
+    tile: 'rgba(143, 227, 216, 0.4)',
     kind: 'rod',
     gram: 'positive',
     size: 8, // her branches reach every way, so she's narrower than the rods to take up as much room
@@ -910,6 +932,7 @@ export const SPECIES = {
     ],
     scientific: 'Klebsiella pneumoniae',
     color: '#6a5070', // for her name above the dish
+    tile: 'rgba(232, 190, 206, 0.38)',
     kind: 'rod',
     gram: 'negative',
     size: 9.5,
@@ -952,6 +975,7 @@ export const SPECIES = {
     ],
     scientific: 'Francisella tularensis',
     color: '#a8432e', // for her name above the dish
+    tile: 'rgba(255, 201, 181, 0.45)',
     kind: 'rod',
     gram: 'negative',
     // Small on purpose: she's one of the tiniest pals, and her frame leaves
@@ -997,6 +1021,7 @@ export const SPECIES = {
     ],
     scientific: 'Escherichia coli',
     color: '#2e6b0e', // for her name above the dish
+    tile: 'rgba(168, 236, 94, 0.35)',
     kind: 'rod',
     gram: 'negative',
     size: 10.5,
@@ -1022,6 +1047,78 @@ export const SPECIES = {
       { code: 'CIP', name: 'ciprofloxacin', zone: 32 },
       { code: 'CRO', name: 'ceftriaxone', zone: 30 },
       { code: 'GM', name: 'gentamicin', zone: 21 },
+    ],
+  },
+  ari: {
+    facts: [
+      "Ari is a cyanobacterium: she makes her own food using sunlight, like a plant.",
+      "Ari grows in long chains of cells called filaments, like strings of beads.",
+      "When usable nitrogen runs low, some of Ari's cells become nitrogen-fixing heterocysts.",
+      "Ari's heterocysts turn nitrogen gas into compounds her chain can use to grow.",
+      "Oxygen damages Ari's nitrogen-fixing enzyme, so her heterocysts stop producing oxygen.",
+      "Ari's heterocysts share usable nitrogen and receive sugar from neighboring cells.",
+      "Ari's heterocysts are often separated by about 10 ordinary cells.",
+      "Once one of Ari's cells becomes a heterocyst, it stops dividing.",
+      "Ari can make akinetes: tough, thick-walled resting cells that wait out hard times.",
+      "Ari's blue-green color comes from chlorophyll and a blue pigment called phycocyanin.",
+      "Unlike many cyanobacteria, Ari can grow in the dark using the sugar fructose.",
+      "Cyanobacteria like Ari helped oxygen build up in Earth's air over 2 billion years ago.",
+      "The chloroplasts in plant cells descend from cyanobacteria, Ari's relatives.",
+      "A cousin of Ari's lives in the water fern *Azolla*, helping fertilize rice paddies.",
+      "Ari lives in fresh water and damp soil.",
+      "Ari has a Gram-negative-type cell envelope, including an outer membrane.",
+      "Ari has no flagella.",
+    ],
+    scientific: 'Anabaena variabilis',
+    color: '#0d6e50', // for her name above the dish
+    tile: 'rgba(63, 185, 138, 0.28)',
+    kind: 'coccus',
+    gram: 'negative',
+    layout: 'chain',
+    colors: { fill: '#7dd8b0', stroke: '#0d5c43', highlight: '#e2f8ee', dark: '#06321f' },
+    heterocyst: { every: 5, fill: '#f6e7a6', stroke: '#9a7b12', highlight: '#fffbe6' },
+    antibiotics: [
+      { code: 'E', name: 'erythromycin', zone: 29 },
+      { code: 'C', name: 'chloramphenicol', zone: 26 },
+      { code: 'TE', name: 'tetracycline', zone: 24 },
+      { code: 'K', name: 'kanamycin', zone: 20 },
+      { code: 'S', name: 'streptomycin', zone: 18 },
+    ],
+  },
+  dina: {
+    facts: [
+      "Dina is nicknamed \"Conan the Bacterium\" for how tough she is.",
+      "Dina can survive about 1,000 times the radiation dose that would kill a person.",
+      "Dina's cells often stick together in squares of four, called tetrads.",
+      "Dina's name means \"terrible berry\" and \"radiation-enduring.\"",
+      "Dina was found in 1956 in canned meat that survived radiation treatment.",
+      "Radiation can shatter Dina's DNA into hundreds of pieces; she repairs it in hours.",
+      "Dina keeps several copies of her DNA in each cell, giving her templates for repair.",
+      "Dina stockpiles manganese, which helps shield her proteins from radiation damage.",
+      "Dina's real colonies are pinkish red, mainly from a pigment called deinoxanthin.",
+      "Dina survives long dry spells, which may help explain her radiation resistance.",
+      "Cells in clumps of Dina survived three years outside the International Space Station.",
+      "Guinness World Records has called Dina the world's toughest bacterium.",
+      "Dina stains Gram-positive purple, despite having an unusual outer membrane.",
+      "Dina has no flagella and doesn't swim.",
+      "Scientists engineered Dina to detoxify mercury in radioactive-waste cleanup research.",
+      "Dina isn't known to cause disease in people.",
+      "Dina's reference strain R1 has two chromosomes, a megaplasmid and a smaller plasmid.",
+    ],
+    scientific: 'Deinococcus radiodurans',
+    color: '#a21caf', // for her name above the dish
+    tile: 'rgba(240, 171, 252, 0.4)',
+    kind: 'coccus',
+    gram: 'positive',
+    layout: 'tetrad',
+    maxCells: 4, // squares of four
+    colors: { fill: '#f0abfc', stroke: '#a21caf', highlight: '#fdf4ff', dark: '#701a75' },
+    antibiotics: [
+      { code: 'C', name: 'chloramphenicol', zone: 30 },
+      { code: 'TE', name: 'tetracycline', zone: 27 },
+      { code: 'K', name: 'kanamycin', zone: 18 },
+      { code: 'RA', name: 'rifampin', zone: 22 },
+      { code: 'E', name: 'erythromycin', zone: 25 },
     ],
   },
 };

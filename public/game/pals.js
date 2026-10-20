@@ -11,8 +11,10 @@
 //   art     200 x 200 drawing; wrap the face in <g class="face"> so dish
 //           offspring can hide it
 //
-// To add a pal: append here and to SPECIES, then add a .<id> tile color
-// beside .penny in styles.css. New pals are picker-only; don't add to HOME.
+// To add a pal: append here and to SPECIES (with her `tile` color). New pals
+// are picker-only; don't add to HOME.
+
+import { SPECIES } from './config.js';
 
 const SVG = 'http://www.w3.org/2000/svg';
 
@@ -280,6 +282,72 @@ const PEARL_PILI = (() => {
     hairs.push(`<path class="pilus" d="M${x.toFixed(1)} ${y.toFixed(1)} l${(nx * length).toFixed(1)} ${(ny * length).toFixed(1)}" />`);
   }
   return hairs.join('');
+})();
+
+// Dina's four cells, two across and two down. Each is fully round on its
+// outer corner, rounder than a tile on the sides it shares with one
+// neighbor, and only a little rounded where all four meet, so the walls
+// between them look pressed flat. Radii go top-left, top-right,
+// bottom-right, bottom-left. Each has a shine near its top-left.
+function dinaCell(x, y, [tl, tr, br, bl]) {
+  const s = 68;
+  return `<path d="M${x + tl} ${y} H${x + s - tr} A${tr} ${tr} 0 0 1 ${x + s} ${y + tr} ` +
+    `V${y + s - br} A${br} ${br} 0 0 1 ${x + s - br} ${y + s} H${x + bl} A${bl} ${bl} 0 0 1 ${x} ${y + s - bl} ` +
+    `V${y + tl} A${tl} ${tl} 0 0 1 ${x + tl} ${y} Z" fill="#f0abfc" stroke="#a21caf" stroke-width="4" />` +
+    `<circle cx="${x + 18}" cy="${y + 16}" r="4" fill="#fdf4ff" />`;
+}
+const [OUTER, SIDE, INNER] = [34, 30, 4];
+const DINA_CELLS = [
+  dinaCell(32, 32, [OUTER, SIDE, INNER, SIDE]),
+  dinaCell(100, 32, [SIDE, OUTER, SIDE, INNER]),
+  dinaCell(32, 100, [SIDE, INNER, SIDE, OUTER]),
+  dinaCell(100, 100, [INNER, SIDE, OUTER, SIDE]),
+].join('');
+
+// Ari's filament: round cells along a gentle wave, each just overlapping the
+// next, as [radius, kind]. Her face is on the big one; the gold one is a
+// heterocyst, thick walled, with a bright plug where it meets each neighbor.
+const ARI_CELLS = (() => {
+  const cells = [[13, 'veg'], [15, 'veg'], [24, 'face'], [16, 'veg'], [19, 'het'], [15, 'veg'], [13, 'veg']];
+  const waveY = (x) => 100 + 10 * Math.sin(((x - 100) / 160) * 2 * Math.PI * 0.8 + 0.35);
+  const gaps = cells.slice(1).map(([r], i) => (r + cells[i][0]) * 0.8);
+  let x = 100 - gaps.reduce((a, b) => a + b, 0) / 2;
+  const placed = [{ x, y: waveY(x) }];
+  for (const gap of gaps) {
+    const last = placed.at(-1);
+    x = last.x;
+    while (Math.hypot(x - last.x, waveY(x) - last.y) < gap) x += 0.05;
+    placed.push({ x, y: waveY(x) });
+  }
+  const at = placed.map((p, i) => ({ ...p, r: cells[i][0], kind: cells[i][1] }));
+  const f = (n) => n.toFixed(1);
+  let out = '';
+  // Plain cells first, so the heterocyst and her face sit on top.
+  for (const c of [...at].sort((a, b) => (a.kind === 'veg' ? 0 : 1) - (b.kind === 'veg' ? 0 : 1))) {
+    if (c.kind === 'het') {
+      out += `<circle cx="${f(c.x)}" cy="${f(c.y)}" r="${c.r}" fill="#f6e7a6" stroke="#9a7b12" stroke-width="5" />`;
+      const i = at.indexOf(c);
+      for (const n of [at[i - 1], at[i + 1]]) {
+        const d = Math.hypot(n.x - c.x, n.y - c.y);
+        out += `<circle cx="${f(c.x + ((n.x - c.x) / d) * (c.r - 3.5))}" cy="${f(c.y + ((n.y - c.y) / d) * (c.r - 3.5))}" ` +
+          'r="2.6" fill="#fffbe6" stroke="#9a7b12" stroke-width="1.2" />';
+      }
+      out += `<circle cx="${f(c.x - 4)}" cy="${f(c.y - 5)}" r="2.6" fill="#fffbe6" />`;
+      continue;
+    }
+    out += `<circle cx="${f(c.x)}" cy="${f(c.y)}" r="${c.r}" fill="#7dd8b0" stroke="#0d5c43" stroke-width="3.5" />` +
+      `<circle cx="${f(c.x - c.r * 0.38)}" cy="${f(c.y - c.r * 0.42)}" r="${f(c.r * 0.2)}" fill="#e2f8ee" />`;
+    if (c.kind === 'face') {
+      out += `<g class="face" transform="translate(${f(c.x)} ${f(c.y)}) scale(${(c.r / 17).toFixed(2)})">` +
+        '<circle cx="-6" cy="0" r="4.3" fill="#06321f" /><circle cx="6" cy="0" r="4.3" fill="#06321f" />' +
+        '<circle cx="-4.6" cy="-1.4" r="1.5" fill="white" /><circle cx="7.4" cy="-1.4" r="1.5" fill="white" />' +
+        '<ellipse cx="-10.5" cy="7" rx="3.4" ry="2.2" fill="#f9a8d4" opacity="0.95" />' +
+        '<ellipse cx="10.5" cy="7" rx="3.4" ry="2.2" fill="#f9a8d4" opacity="0.95" />' +
+        '<path d="M-3.5 6.5 Q0 10.5 3.5 6.5" stroke="#06321f" stroke-width="2.4" fill="none" stroke-linecap="round" />' +
+        '</g>';
+    }
+  }
+  return out;
 })();
 
 export const PALS = [
@@ -942,6 +1010,39 @@ export const PALS = [
       </g>
     `,
   },
+  // Dina: Deinococcus radiodurans, an orchid square of four round cells (a tetrad)
+  {
+    id: 'dina',
+    name: 'Dina',
+    looks: 'an orchid-pink square of four round Deinococcus radiodurans cells',
+    motion: 'squish',
+    frames: { home: '0 0 200 200', picker: '16 16 168 168', dish: '20 20 160 160' },
+    art: `
+      <!-- a tetrad: four cells in a square, pressed a little flat where they
+           touch, since each division splits a cell straight across -->
+      ${DINA_CELLS}
+      <g class="face">
+        <circle cx="56" cy="132" r="5.5" fill="#701a75" />
+        <circle cx="78" cy="132" r="5.5" fill="#701a75" />
+        <circle cx="57.8" cy="130.2" r="1.9" fill="white" />
+        <circle cx="79.8" cy="130.2" r="1.9" fill="white" />
+        <ellipse cx="46" cy="143" rx="5.5" ry="3.4" fill="#f9a8d4" opacity="0.95" />
+        <ellipse cx="88" cy="143" rx="5.5" ry="3.4" fill="#f9a8d4" opacity="0.95" />
+        <path d="M62 143 Q67 148 72 143" stroke="#701a75" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
+  // Ari: Anabaena variabilis, a jade string of beads with one gold heterocyst
+  {
+    id: 'ari',
+    name: 'Ari',
+    looks: 'a jade-green Anabaena variabilis, a string of round cells with one pale gold heterocyst',
+    motion: 'wobble',
+    frames: { home: '0 0 200 200', picker: '2 2 196 196', dish: '2 2 196 196' },
+    art: `
+      ${ARI_CELLS}
+    `,
+  },
 ];
 
 // The pals in the home page's row, in PALS order. The row is full: pals
@@ -1008,6 +1109,7 @@ export function homePal(pal) {
 export function palTile(pal) {
   const tile = document.createElement('div');
   tile.className = `pal-icon ${pal.id}`;
+  tile.style.setProperty('--tile', SPECIES[pal.id].tile);
   const svg = drawing(pal, 'picker');
   svg.setAttribute('aria-hidden', 'true');
   tile.append(svg);

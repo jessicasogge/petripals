@@ -51,9 +51,9 @@ describe('the pals', () => {
     expect(pal.looks).toContain(plainText(SPECIES[pal.id].scientific).split(' ')[0]);
   });
 
-  it.each(PALS)("$id's idle animation and tile color are in styles.css", (pal) => {
+  it.each(PALS)("$id's idle animation is in styles.css, and she has a tile color", (pal) => {
     expect(css).toMatch(new RegExp(`\\n\\.${pal.motion} \\{[^}]*animation:`));
-    expect(css).toMatch(new RegExp(`\\n\\.${pal.id} \\{[^}]*background:`));
+    expect(SPECIES[pal.id].tile).toMatch(/^rgba\(\d+, \d+, \d+, (0|1|0?\.\d+)\)$/);
   });
 
   it.each(PALS)('$id is framed for every page', (pal) => {
@@ -122,6 +122,7 @@ describe('her drawing', () => {
   it('on a tile, has her tile color and is hidden from screen readers', () => {
     const tile = palTile(ana);
     expect(tile.className).toBe('pal-icon ana');
+    expect(tile.style.getPropertyValue('--tile')).toBe(SPECIES.ana.tile);
     expect(tile.firstChild.getAttribute('viewBox')).toBe(ana.frames.picker);
     expect(tile.firstChild.getAttribute('aria-hidden')).toBe('true');
   });
@@ -559,9 +560,15 @@ describe('Frannie, with bunny ears', () => {
 
 describe('wiggly flagella', () => {
 
-  it("gives Mona, Vi, Sallie, Terra, Lissie, Sara, Kiki, Diffany, Colette and Astrid's swarmers, who swim with flagella, wiggling tails", () => {
-    expect([...SWIMMERS].sort()).toEqual(['astrid', 'colette', 'diffany', 'kiki', 'lissie', 'mona', 'sallie', 'sara', 'terra', 'vi']);
-  });
+  // One pal at a time, so adding a pal doesn't mean editing a list here.
+  it.each(['astrid', 'colette', 'diffany', 'kiki', 'lissie', 'mona', 'sallie', 'sara', 'terra', 'vi'])(
+    '%s swims with flagella, so she has wiggling tails (Astrid on her swarmers)',
+    (id) => expect(SWIMMERS).toContain(id),
+  );
+  it.each(['goldie', 'scarlett', 'penny', 'coco', 'ana', 'ivy', 'nova', 'pearl', 'frannie', 'electra', 'dina', 'ari', 'elia', 'ceres'])(
+    "%s has no wiggling tails (Elia's flagella are inside her; the others can't swim, or Ceres's are left off)",
+    (id) => expect(SWIMMERS).not.toContain(id),
+  );
 
   it('gives Sallie flagella all over her body (peritrichous), each wiggling at its own speed', () => {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');

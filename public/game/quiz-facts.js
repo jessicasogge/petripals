@@ -169,4 +169,16 @@ export const QUIZ_FACTS = {
     "Since 1988, scientists have grown Colette for over 75,000 generations to watch her evolve.",
     "Scientists taught Colette to make human insulin, first sold as a medicine in 1982.",
   ],
+  dina: [
+    "Dina is nicknamed \"Conan the Bacterium\" for how tough she is.",
+    "Dina can survive about 1,000 times the radiation dose that would kill a person.",
+    "Dina was found in 1956 in canned meat that spoiled despite radiation treatment.",
+    "Clumps of Dina survived three years outside the International Space Station.",
+  ],
+  ari: [
+    "Ari grows in long chains of cells, called filaments, that look like strings of beads.",
+    "When nitrogen runs low, some of Ari's cells turn into heterocysts that fix nitrogen.",
+    "Ari's heterocysts trade nitrogen to their neighbors for sugar the neighbors make.",
+    "Ari's blue-green color comes from chlorophyll plus a blue pigment called phycocyanin.",
+  ],
 };

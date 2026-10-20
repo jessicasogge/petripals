@@ -32,7 +32,7 @@ describe('pals', () => {
         expect(species.size).toBeLessThanOrEqual(12);
       }
     } else {
-      expect(['chain', 'cluster']).toContain(species.layout);
+      expect(['chain', 'cluster', 'tetrad']).toContain(species.layout);
       for (const part of ['fill', 'stroke', 'highlight', 'dark']) {
         expect(species.colors[part]).toMatch(/^#[0-9a-f]{6}$/i);
       }
@@ -42,6 +42,22 @@ describe('pals', () => {
   it('makes Scarlett a chain (Streptococcus) and Goldie a cluster (Staphylococcus)', () => {
     expect(SPECIES.scarlett.layout).toBe('chain');
     expect(SPECIES.goldie.layout).toBe('cluster');
+  });
+
+  it('makes Ari a Gram-negative chain of round cells, with a heterocyst every fifth cell', () => {
+    const { kind, layout, gram, heterocyst } = SPECIES.ari;
+    expect(kind).toBe('coccus');
+    expect(layout).toBe('chain');
+    expect(gram).toBe('negative');
+    expect(heterocyst.every).toBe(5);
+    for (const part of ['fill', 'stroke', 'highlight']) expect(heterocyst[part]).toMatch(/^#[0-9a-f]{6}$/i);
+  });
+
+  it('makes Dina a Deinococcus that grows in squares of four (tetrads)', () => {
+    expect(SPECIES.dina.kind).toBe('coccus');
+    expect(SPECIES.dina.layout).toBe('tetrad');
+    expect(SPECIES.dina.maxCells).toBe(4);
+    expect(SPECIES.dina.gram).toBe('positive');
   });
 
   it('makes Penny a Streptococcus whose chains stop at pairs (Streptococcus pneumoniae)', () => {
@@ -229,10 +245,16 @@ describe('Gram stains', () => {
     }
   });
 
-  it('matches the real bacteria: the cocci, Ana, Ceres, Terra, Lissie, Diffany and Nova are Gram-positive, the other rods negative', () => {
-    const positive = Object.keys(SPECIES).filter((name) => SPECIES[name].gram === 'positive').sort();
-    expect(positive).toEqual(['ana', 'ceres', 'diffany', 'goldie', 'ivy', 'lissie', 'nova', 'penny', 'scarlett', 'terra']);
-  });
+  // Spot checks against the real bacteria, one pal at a time, so adding a pal
+  // doesn't mean editing a list here (the test above checks every pal).
+  it.each(['ana', 'ceres', 'diffany', 'dina', 'goldie', 'ivy', 'lissie', 'nova', 'penny', 'scarlett', 'terra'])(
+    '%s is Gram-positive, like her real species',
+    (name) => expect(SPECIES[name].gram).toBe('positive'),
+  );
+  it.each(['mona', 'vi', 'elia', 'coco', 'sallie', 'sara', 'astrid', 'kiki', 'electra', 'pearl', 'frannie', 'colette', 'ari'])(
+    '%s is Gram-negative, like her real species',
+    (name) => expect(SPECIES[name].gram).toBe('negative'),
+  );
 
   it('marks only Elia as barely taking the stain', () => {
     expect(Object.keys(SPECIES).filter((name) => SPECIES[name].faintStain)).toEqual(['elia']);

@@ -1,17 +1,15 @@
 import { touchesDisk } from './antibiotic.js';
-import { chainSpot, clusterSpot, R } from './attach.js';
+import { chainSpot, clusterSpot, R, tetradSpot } from './attach.js';
 import { GAME } from './config.js';
 import { idlePose, newMover } from './mover.js';
 import { coaster } from './physics.js';
 
-// A round cell (Scarlett, Penny, Goldie), or a rod whose daughters stick
-// together in chains like cocci do (Ceres). The player is always a single cell.
-// Offspring are chains or clusters of cocci that grow one cell at a time as
-// daughters join them (the player's, or their own cells' when they eat), up to
-// GROUP_CAP cells, or the pal's own maxCells. A chain grows from whichever end
-// is nearer the player; a cluster grows on the side facing the player. So
-// Scarlett builds chains along the lines she swims, Penny leaves a trail of
-// pairs, and Goldie builds bunches wherever she lingers.
+// Cocci (Scarlett, Penny, Goldie, Dina, Ari) and chained rods (Ceres).
+// The player stays one cell; daughters join chains or clusters up to
+// GROUP_CAP or the pal's maxCells. Chains grow from the nearer end;
+// clusters grow toward the player. Scarlett lines up, Penny pairs,
+// Goldie bunches, Dina squares, and Ari strings beads with a heterocyst
+// every few cells.
 export function coccusGroup({ mover, svg, species, isPlayer }) {
   const CELL_SIZE = 5; // one cell's width, as a percent of the dish
   const OUTLINE = 1.7; // each cell's outline width, in SVG units
@@ -33,6 +31,7 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
     cells: [{ x: 0, y: 0, fromX: 0, fromY: 0, toX: 0, toY: 0, face: isPlayer }],
     moveFor: null, // ms into sliding a new cell into place, or null
     twist: Math.random() * Math.PI * 2, // each cluster packs at its own angle
+    added: 1, // cells ever added, for spacing Ari's heterocysts
     cellCount: () => group.cells.length,
   };
 
@@ -102,8 +101,13 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
     return (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI;
   }
 
+  // Heterocysts (Ari's) get their own colors and a thicker wall.
+  const heterocyst = species.heterocyst;
+  const paintOf = (c) => (c.het ? heterocyst : colors);
+
   function cellBody(c) {
-    const paint = `fill="${colors.fill}" stroke="${colors.stroke}" stroke-width="${OUTLINE}"`;
+    const { fill, stroke } = paintOf(c);
+    const paint = `fill="${fill}" stroke="${stroke}" stroke-width="${c.het ? OUTLINE * 1.6 : OUTLINE}"`;
     if (species.shape === 'rod') {
       // A square-ended rod, like her picture, that fits inside the cell's
       // circle, so what she touches doesn't change. Rods next to each other
@@ -123,7 +127,7 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
   function cellMarkup(c) {
     let out =
       cellBody(c) +
-      `<circle cx="${c.x - 2.7}" cy="${c.y - 3.2}" r="1.5" fill="${colors.highlight}" />`;
+      `<circle cx="${c.x - 2.7}" cy="${c.y - 3.2}" r="1.5" fill="${paintOf(c).highlight}" />`;
     if (c.face) {
       out +=
         `<g transform="translate(${c.x} ${c.y})${FACE_SCALE === 1 ? '' : ` scale(${FACE_SCALE})`}">` +
@@ -233,9 +237,13 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
         return !disks.some((disk) =>
           touchesDisk(disk, [[sx, sy, cellRadius]], dishRadius));
       };
+      // A tetrad's corners are worked out from where its cells will end up,
+      // so a cell still sliding into place doesn't knock the square askew.
       const spot = layout === 'chain'
         ? chainSpot(group.cells, px, py, allowed)
-        : clusterSpot(group.cells, group.twist, px, py, allowed);
+        : layout === 'tetrad'
+          ? tetradSpot(group.cells.map((c) => ({ x: c.toX, y: c.toY })), px, py, allowed)
+          : clusterSpot(group.cells, group.twist, px, py, allowed);
       if (!spot) return null;
       spot.world = toWorld(spot.x, spot.y);
       return spot;
@@ -243,11 +251,15 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
     // Slide a new cell from (wx, wy) in the dish into `spot`.
     addCell(spot, wx, wy) {
       const [fx, fy] = toLocal(wx, wy);
+      // A cell still sliding in from the last division carries on from where
+      // it is to where it was going.
       for (const c of group.cells) {
-        c.fromX = c.toX = c.x;
-        c.fromY = c.toY = c.y;
+        c.fromX = c.x;
+        c.fromY = c.y;
       }
-      const cell = { x: fx, y: fy, fromX: fx, fromY: fy, toX: spot.x, toY: spot.y, face: false };
+      group.added += 1;
+      const het = Boolean(heterocyst) && group.added % heterocyst.every === 0;
+      const cell = { x: fx, y: fy, fromX: fx, fromY: fy, toX: spot.x, toY: spot.y, face: false, het };
       if (spot.atStart) group.cells.unshift(cell);
       else group.cells.push(cell);
       group.moveFor = 0;

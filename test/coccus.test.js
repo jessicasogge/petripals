@@ -479,3 +479,74 @@ describe("Ceres's face in the dish", () => {
     for (const name of ['scarlett', 'goldie', 'penny']) expect(faceTransform(name)).not.toMatch(/scale/);
   });
 });
+
+describe('Dina (Deinococcus radiodurans)', () => {
+  it('grows in squares of four, then starts a new group', () => {
+    const group = makeGroup('dina');
+    const player = makeGroup('dina', { isPlayer: true, x: 15, y: 10 });
+    while (group.cellCount() < 4) {
+      expect(player.divide([group], DISH_RADIUS)).toBeNull();
+      group.update(1);
+    }
+    const cells = cellCenters(group);
+    for (const c of cells) {
+      const gaps = cells.filter((o) => o !== c).map((o) => distance(c, o)).sort((a, b) => a - b);
+      expect(gaps[0]).toBeCloseTo(SPACING * UNIT);
+      expect(gaps[1]).toBeCloseTo(SPACING * UNIT);
+      expect(gaps[2]).toBeCloseTo(SPACING * UNIT * Math.SQRT2);
+    }
+    expect(player.divide([group], DISH_RADIUS)).not.toBeNull();
+    expect(group.cellCount()).toBe(4);
+  });
+
+  it('still makes a square when cells join before the last one has finished sliding in', () => {
+    const group = makeGroup('dina');
+    const player = makeGroup('dina', { isPlayer: true, x: 15, y: 10 });
+    for (let i = 0; i < 3; i++) {
+      player.divide([group], DISH_RADIUS);
+      group.update(0.05); // barely started sliding
+    }
+    group.update(1);
+    const cells = cellCenters(group);
+    const gaps = cells.flatMap((c, i) => cells.slice(i + 1).map((o) => distance(c, o))).sort((a, b) => a - b);
+    expect(gaps.slice(0, 4).every((g) => Math.abs(g - SPACING * UNIT) < 1e-6)).toBe(true);
+  });
+
+  it('draws in her orchid colors, with round cells', () => {
+    const svg = makeGroup('dina', { isPlayer: true }).svg;
+    expect(svg.querySelector('circle.cell-body').getAttribute('fill')).toBe(SPECIES.dina.colors.fill);
+  });
+});
+
+describe('Ari (Anabaena variabilis)', () => {
+  it('grows a heterocyst every fifth cell, in its own colors with a thicker wall', () => {
+    const group = makeGroup('ari');
+    grow(group, 5);
+    const { heterocyst, colors } = SPECIES.ari;
+    const bodies = [...group.svg.querySelectorAll('.cell-body')];
+    const het = bodies.filter((b) => b.getAttribute('fill') === heterocyst.fill);
+    expect(het).toHaveLength(1);
+    expect(het[0].getAttribute('stroke')).toBe(heterocyst.stroke);
+    const plain = bodies.find((b) => b.getAttribute('fill') === colors.fill);
+    expect(Number(het[0].getAttribute('stroke-width'))).toBeGreaterThan(Number(plain.getAttribute('stroke-width')));
+  });
+
+  it('keeps the player and a group under five cells free of heterocysts', () => {
+    const group = makeGroup('ari');
+    grow(group, 4);
+    const player = makeGroup('ari', { isPlayer: true });
+    for (const svg of [group.svg, player.svg]) {
+      for (const body of svg.querySelectorAll('.cell-body')) {
+        expect(body.getAttribute('fill')).toBe(SPECIES.ari.colors.fill);
+      }
+    }
+  });
+
+  it("gives other pals' chains no heterocysts", () => {
+    const group = makeGroup('scarlett');
+    grow(group, 5);
+    for (const body of group.svg.querySelectorAll('.cell-body')) {
+      expect(body.getAttribute('fill')).toBe(SPECIES.scarlett.colors.fill);
+    }
+  });
+});

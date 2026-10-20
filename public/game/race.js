@@ -66,12 +66,12 @@ export function playRace({ you, rivals, nutrients, target }) {
   let finished = false;
   let lastTime = null;
 
-  // "Race again" goes back to picking rivals; "Play Classic" goes to the levels.
+  // "Race again" goes back to picking rivals; "Choose a mode" goes back to the modes.
   document.querySelector('.play-again').addEventListener('click', () => {
     goTo(`./choose-rivals.html?pal=${you.svg.dataset.pal}`);
   });
   document.querySelector('.start-over').addEventListener('click', () => {
-    goTo(`./petri-dish.html?pal=${you.svg.dataset.pal}`);
+    goTo(`./choose-mode.html?pal=${you.svg.dataset.pal}`);
   });
 
   function updateCounter() {
@@ -140,9 +140,9 @@ export function playRace({ you, rivals, nutrients, target }) {
     banner.querySelector('h2').textContent = title;
     banner.querySelector('.win-message').textContent = message;
     banner.querySelector('.play-again').textContent = 'Race again';
-    const classic = banner.querySelector('.start-over');
-    classic.textContent = 'Play Classic';
-    classic.hidden = false;
+    const modes = banner.querySelector('.start-over');
+    modes.textContent = 'Choose a mode';
+    modes.hidden = false;
     banner.removeAttribute('hidden');
     banner.querySelector('.play-again').focus();
   }
