@@ -1150,7 +1150,7 @@ export const TUMBLE = {
 // Landing on the pal is game over. Generic phages infect every pal;
 // real bursts release ~100 phages, not 2.
 export const PHAGE = {
-  TARGET: 40, // nutrients to eat on every level
+  TARGET: 45, // nutrients to eat on every level
   LEVELS: [1, 2, 3, 4, 5], // phages on the rim at the start of each level
   NUTRIENTS: 23,
   NOTICE: 0.25, // phages go after your offspring, unless your pal swims this close (fraction of the dish radius)
