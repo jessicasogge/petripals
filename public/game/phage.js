@@ -1,5 +1,5 @@
-// Phage Attack: eat the target number of nutrients on each of five levels,
-// each starting with one more phage, while bacteriophages,
+// Phage Attack: eat the target number of nutrients on each of seven levels,
+// each a little longer and starting with more phages, while bacteriophages,
 // viruses that infect bacteria, hunt your colony down. A phage that lands on one of
 // your offspring injects its DNA, and a few seconds later that cell bursts
 // open (lysis) and lets out new phages, so the more cells they catch, the
@@ -155,9 +155,9 @@ export function phageSwarm(agar, random = Math.random) {
 
 // `you` is { svg, species }: your pal's drawing on the page and her settings
 // from config.js. `level` is which level this is (1 to PHAGE.LEVELS.length),
-// which sets how many phages start, and `target` is how many nutrients
-// finish it. Returns the phages, for the tests.
-export function playPhage({ you, nutrients, level = 1, target = PHAGE.TARGET, random = Math.random }) {
+// which sets how many phages start and how many nutrients finish it
+// (`target`, which the tests can set). Returns the phages, for the tests.
+export function playPhage({ you, nutrients, level = 1, target = PHAGE.LEVELS[level - 1].target, random = Math.random }) {
   const agar = document.querySelector('.agar');
   const counter = document.querySelector('.cell-count');
   const dishRadius = () => agar.clientWidth / 2;
@@ -179,8 +179,8 @@ export function playPhage({ you, nutrients, level = 1, target = PHAGE.TARGET, ra
   });
 
   const swarm = phageSwarm(agar, random);
-  // The first phages, one more each level, start spread evenly around the rim.
-  const start = PHAGE.LEVELS[level - 1];
+  // The level's phages start spread evenly around the rim.
+  const start = PHAGE.LEVELS[level - 1].phages;
   const first = random() * 2 * Math.PI;
   for (let i = 0; i < start; i++) swarm.arrive(first + (2 * Math.PI * i) / start);
 

@@ -140,8 +140,8 @@ function startPhage() {
   document.querySelector('.species-name').replaceChildren(...speciesName(species.scientific));
 
   document.querySelector('.how-to-play').replaceChildren(
-    `Eat ${PHAGE.TARGET} nutrients before the phages get ${pal.dataset.name}! Only the ones she eats herself count. `,
-    `Level ${level} starts with ${PHAGE.LEVELS[level - 1]} ${PHAGE.LEVELS[level - 1] === 1 ? 'phage' : 'phages'}. `,
+    `Eat ${PHAGE.LEVELS[level - 1].target} nutrients before the phages get ${pal.dataset.name}! Only the ones she eats herself count. `,
+    `Level ${level} starts with ${PHAGE.LEVELS[level - 1].phages} ${PHAGE.LEVELS[level - 1].phages === 1 ? 'phage' : 'phages'}. `,
     // Arrow-key or touch wording, whichever fits the device (see styles.css).
     wording('for-keys', 'Use the arrow keys to swim.'),
     wording('for-touch', 'Touch the dish and slide your finger to swim.'),

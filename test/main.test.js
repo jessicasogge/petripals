@@ -261,15 +261,16 @@ describe('Phage Attack', () => {
     const howTo = document.querySelector('.how-to-play');
     expect(howTo.querySelector('.for-keys').textContent).toBe('Use the arrow keys to swim.');
     expect(howTo.querySelector('.for-touch').textContent).toBe('Touch the dish and slide your finger to swim.');
-    expect(howTo.textContent).toContain(`Eat ${PHAGE.TARGET} nutrients before the phages get Sara!`);
-    expect(howTo.textContent).toContain('Level 1 starts with 1 phage.');
+    expect(howTo.textContent).toContain(`Eat ${PHAGE.LEVELS[0].target} nutrients before the phages get Sara!`);
+    expect(howTo.textContent).toContain(`Level 1 starts with ${PHAGE.LEVELS[0].phages} phages.`);
   });
 
   it('plays the level in the address, and says how many phages it starts with', async () => {
     const playPhage = await openPhage('?pal=sara&mode=phage&level=3');
     expect(playPhage.mock.calls[0][0].level).toBe(3);
     expect(document.title).toBe('PetriPals | Sara | Phage Attack | Level 3');
-    expect(document.querySelector('.how-to-play').textContent).toContain('Level 3 starts with 3 phages.');
+    expect(document.querySelector('.how-to-play').textContent).toContain(`Eat ${PHAGE.LEVELS[2].target} nutrients`);
+    expect(document.querySelector('.how-to-play').textContent).toContain(`Level 3 starts with ${PHAGE.LEVELS[2].phages} phages.`);
   });
 
   it.each([['0', 1], ['9', PHAGE.LEVELS.length], ['nope', 1]])('turns level=%s into level %i', async (asked, level) => {

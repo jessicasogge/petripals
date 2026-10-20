@@ -114,13 +114,13 @@ function drawing(pal) {
 
 // Start Phage Attack with Mona (or `me`), with a second phage on the agar
 // (straight across from the first) so tests can use one and park the other.
-function play(me = 'mona', target = PHAGE.TARGET, level = 1) {
+function play(me = 'mona', target = undefined, level = 1) {
   const game = start(me, target, level);
   while (game.swarm.count() < 2) game.swarm.arrive(Math.PI);
   return game;
 }
 
-function start(me = 'mona', target = PHAGE.TARGET, level = 1) {
+function start(me = 'mona', target = undefined, level = 1) {
   return playPhage({ you: { svg: drawing(me), species: SPECIES[me] }, nutrients, target, level, random: () => 0.5 });
 }
 
@@ -290,11 +290,11 @@ describe('phageSwarm', () => {
 });
 
 describe('Phage Attack', () => {
-  it('starts level 1 with one phage on the rim, and counts only the nutrients', () => {
+  it("starts level 1 with its phages on the rim, and counts only the nutrients", () => {
     const { swarm } = start();
-    expect(swarm.count()).toBe(1);
+    expect(swarm.count()).toBe(PHAGE.LEVELS[0].phages);
     for (const phage of swarm.phages) expect(Math.hypot(phage.fx, phage.fy)).toBeCloseTo(0.9);
-    expect(counter()).toBe(`Level 1 · 0 / ${PHAGE.TARGET} nutrients`);
+    expect(counter()).toBe(`Level 1 · 0 / ${PHAGE.LEVELS[0].target} nutrients`);
     expect(document.querySelector('.pal-mover').classList).toContain('player');
   });
 
@@ -378,7 +378,7 @@ describe('Phage Attack', () => {
   });
 
   it('offers "Start over" after a game over on a later level', () => {
-    const { swarm } = start('mona', PHAGE.TARGET, 3);
+    const { swarm } = start('mona', undefined, 3);
     run(PHAGE.START_MS);
     for (const phage of swarm.phages.slice(1)) park(phage);
     landOn(swarm.phages[0], 0, 0);
@@ -402,14 +402,14 @@ describe('Phage Attack', () => {
     expect(rod.pending).toBe(-Infinity);
     expect(rod.mover.classList).toContain('infected');
     expect(swarm.count()).toBe(1);
-    expect(counter()).toBe(`Level 1 · 0 / ${PHAGE.TARGET} nutrients`);
+    expect(counter()).toBe(`Level 1 · 0 / ${PHAGE.LEVELS[0].target} nutrients`);
 
     run(PHAGE.LATENT_MS);
     expect(colony.groups).not.toContain(rod);
     expect(rod.mover.isConnected).toBe(false);
     expect(showPop).toHaveBeenCalledWith(document.querySelector('.agar'), [100, 0, 10], SPECIES.mona.color);
     expect(swarm.count()).toBe(1 + PHAGE.BURST);
-    expect(counter()).toBe(`Level 1 · 0 / ${PHAGE.TARGET} nutrients`);
+    expect(counter()).toBe(`Level 1 · 0 / ${PHAGE.LEVELS[0].target} nutrients`);
   });
 
   it('only lands when its tail really touches a long rod, not just comes near it', () => {
@@ -606,19 +606,19 @@ describe('Phage Attack', () => {
     expect(new URL(location.href).searchParams.get('level')).toBe('1');
   });
 
-  it.each(PHAGE.LEVELS.map((phages, i) => [i + 1, phages]))(
-    'starts level %i with %i phages, spread evenly around the rim',
-    (level, phages) => {
-      const { swarm } = start('mona', PHAGE.TARGET, level);
+  it.each(PHAGE.LEVELS.map(({ phages, target }, i) => [i + 1, phages, target]))(
+    'starts level %i with %i phages, spread evenly around the rim, and a goal of %i nutrients',
+    (level, phages, target) => {
+      const { swarm } = start('mona', undefined, level);
       expect(swarm.count()).toBe(phages);
       const angles = swarm.phages.map((p) => Math.atan2(p.fy, p.fx)).sort((a, b) => a - b);
       for (let i = 1; i < angles.length; i++) expect(angles[i] - angles[i - 1]).toBeCloseTo((2 * Math.PI) / phages);
-      expect(counter()).toBe(`Level ${level} · 0 / ${PHAGE.TARGET} nutrients`);
+      expect(counter()).toBe(`Level ${level} · 0 / ${target} nutrients`);
     },
   );
 
   it('tries the level again, starts over, or goes back to the modes', () => {
-    play('mona', PHAGE.TARGET, 3);
+    play('mona', undefined, 3);
     banner().querySelector('.play-again').click();
     expect(new URL(location.href).searchParams.get('level')).toBe('3');
     banner().querySelector('.start-over').click();
