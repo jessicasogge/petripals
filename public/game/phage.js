@@ -1,4 +1,5 @@
-// Phage Attack: eat the target number of nutrients while bacteriophages,
+// Phage Attack: eat the target number of nutrients on each of five levels,
+// each starting with one more phage, while bacteriophages,
 // viruses that infect bacteria, hunt your colony down. A phage that lands on one of
 // your offspring injects its DNA, and a few seconds later that cell bursts
 // open (lysis) and lets out new phages, so the more cells they catch, the
@@ -153,9 +154,10 @@ export function phageSwarm(agar, random = Math.random) {
 }
 
 // `you` is { svg, species }: your pal's drawing on the page and her settings
-// from config.js. `target` is how many nutrients win. Returns the phages, for
-// the tests.
-export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math.random }) {
+// from config.js. `level` is which level this is (1 to PHAGE.LEVELS.length),
+// which sets how many phages start, and `target` is how many nutrients
+// finish it. Returns the phages, for the tests.
+export function playPhage({ you, nutrients, level = 1, target = PHAGE.TARGET, random = Math.random }) {
   const agar = document.querySelector('.agar');
   const counter = document.querySelector('.cell-count');
   const dishRadius = () => agar.clientWidth / 2;
@@ -177,9 +179,10 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
   });
 
   const swarm = phageSwarm(agar, random);
-  // The first phages start spread around the rim.
+  // The first phages, one more each level, start spread evenly around the rim.
+  const start = PHAGE.LEVELS[level - 1];
   const first = random() * 2 * Math.PI;
-  for (let i = 0; i < PHAGE.START; i++) swarm.arrive(first + (2 * Math.PI * i) / PHAGE.START);
+  for (let i = 0; i < start; i++) swarm.arrive(first + (2 * Math.PI * i) / start);
 
   const keys = arrowKeys();
   const touch = touchSteering(agar, agar.closest('.petri-dish') ?? agar);
@@ -188,13 +191,24 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
   let elapsed = 0; // ms since the start
   let lysed = 0; // cells the phages have burst
 
-  // "Play again" starts a new dish; "Choose a mode" goes back to the modes.
-  document.querySelector('.play-again').addEventListener('click', () => goTo(window.location.href));
-  document.querySelector('.start-over').addEventListener('click', () => goTo(`./choose-mode.html?pal=${pal}`));
+  // The pop-up's buttons, like Classic's: the main one goes to the next
+  // level, back to level 1 after the last, or tries this level again after a
+  // game over; "Start over" goes back to level 1; "Choose a mode" goes back
+  // to the modes.
+  const last = PHAGE.LEVELS.length;
+  let nextLevel = level;
+  function goToLevel(n) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('level', n);
+    goTo(url.toString());
+  }
+  document.querySelector('.play-again').addEventListener('click', () => goToLevel(nextLevel));
+  document.querySelector('.start-over').addEventListener('click', () => goToLevel(1));
+  document.querySelector('.back-to-modes').addEventListener('click', () => goTo(`./choose-mode.html?pal=${pal}`));
 
   function updateCounter() {
-    // Just the nutrients: counting cells and phages too was confusing.
-    counter.textContent = `${Math.min(eaten, target)} / ${target} nutrients`;
+    // Just the level and nutrients: counting cells and phages too was confusing.
+    counter.textContent = `Level ${level} · ${Math.min(eaten, target)} / ${target} nutrients`;
   }
 
   // Cells a phage has landed on, filling up with new phages:
@@ -322,34 +336,41 @@ export function playPhage({ you, nutrients, target = PHAGE.TARGET, random = Math
 
   function win() {
     stop();
-    sporeBurst(playerMover);
-    track(`phage/won/${pal}`, `${name} outgrew the phages`);
+    sporeBurst(playerMover, { big: level === last });
+    track(`phage/level-complete/${pal}/level-${level}`, `${name} finished Phage Attack level ${level}`);
+    if (level === last) track(`phage/won-all-levels/${pal}`, `${name} beat every Phage Attack level`);
     setTimeout(() => {
       showFact(pal, you.species);
-      showBanner('You outgrew the phages!',
-        `You ate ${target} nutrients before the phages could stop you.`);
+      const ate = `You ate ${target} nutrients before the phages could stop you.`;
+      if (level < last) {
+        nextLevel = level + 1;
+        showBanner(`Level ${level} complete!`, ate, `Play level ${nextLevel}`);
+      } else {
+        nextLevel = 1;
+        showBanner('You outgrew the phages!', `You beat all ${last} levels! ${ate}`, 'Play again');
+      }
     }, Math.max(0, GAME.DIVIDE_MS - colony.sinceAnyDivision));
   }
 
   function lose() {
     stop();
     playerMover.classList.add('killed');
-    track(`phage/lost/${pal}`, `${name} was caught by a phage`);
+    track(`phage/lost/${pal}/level-${level}`, `${name} was caught by a phage on level ${level}`);
     setTimeout(() => {
       showFact(pal, you.species);
       const lost = lysed === 0 ? '' : ` They burst ${lysed} ${lysed === 1 ? 'cell' : 'cells'} of her colony first.`;
-      showBanner('Game over', `A phage landed on ${name} and injected its DNA. Phages are viruses that infect bacteria!${lost}`);
+      showBanner('Game over', `A phage landed on ${name} and injected its DNA. Phages are viruses that infect bacteria!${lost}`,
+        `Try level ${level} again`, { startOver: level > 1 }); // on level 1 "Start over" would just try again
     }, 500);
   }
 
-  function showBanner(title, message) {
+  function showBanner(title, message, button, { startOver = false } = {}) {
     const banner = document.querySelector('.win-banner');
     banner.querySelector('h2').textContent = title;
     banner.querySelector('.win-message').textContent = message;
-    banner.querySelector('.play-again').textContent = 'Play again';
-    const modes = banner.querySelector('.start-over');
-    modes.textContent = 'Choose a mode';
-    modes.hidden = false;
+    banner.querySelector('.play-again').textContent = button;
+    banner.querySelector('.start-over').hidden = !startOver;
+    banner.querySelector('.back-to-modes').hidden = false;
     banner.removeAttribute('hidden');
     banner.querySelector('.play-again').focus();
   }

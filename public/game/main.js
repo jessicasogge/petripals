@@ -4,7 +4,7 @@
 //   petri-dish.html?pal=mona&mode=mixed mixed culture against a random rival
 //                                       (or &rivals=vi,elia for up to three)
 //   petri-dish.html?pal=mona&mode=tumble Petri Picnic
-//   petri-dish.html?pal=mona&mode=phage  Phage Attack
+//   petri-dish.html?pal=mona&mode=phage  Phage Attack (&level=2 for level 2)
 import { antibioticsFor, placeAntibiotics } from './antibiotic.js';
 import { LEVELS, MIXED, PHAGE, raceTarget, SPECIES, TUMBLE } from './config.js';
 import { playGame } from './game.js';
@@ -130,7 +130,9 @@ function startTumble() {
 function startPhage() {
   pal.removeAttribute('hidden');
   const species = SPECIES[pal.dataset.pal];
-  document.title = `PetriPals | ${pal.dataset.name} | Phage Attack`;
+  // Level 1 unless the URL says otherwise.
+  const level = Math.min(Math.max(parseInt(params.get('level'), 10) || 1, 1), PHAGE.LEVELS.length);
+  document.title = `PetriPals | ${pal.dataset.name} | Phage Attack | Level ${level}`;
   document.body.classList.add('phage-mode');
   const title = document.querySelector('.pal-name');
   title.textContent = pal.dataset.name;
@@ -139,6 +141,7 @@ function startPhage() {
 
   document.querySelector('.how-to-play').replaceChildren(
     `Eat ${PHAGE.TARGET} nutrients before the phages get ${pal.dataset.name}! Only the ones she eats herself count. `,
+    `Level ${level} starts with ${PHAGE.LEVELS[level - 1]} ${PHAGE.LEVELS[level - 1] === 1 ? 'phage' : 'phages'}. `,
     // Arrow-key or touch wording, whichever fits the device (see styles.css).
     wording('for-keys', 'Use the arrow keys to swim.'),
     wording('for-touch', 'Touch the dish and slide your finger to swim.'),
@@ -147,7 +150,7 @@ function startPhage() {
   );
 
   const nutrients = scatterNutrients({ count: PHAGE.NUTRIENTS });
-  playPhage({ you: { svg: pal, species }, nutrients, target: PHAGE.TARGET });
+  playPhage({ you: { svg: pal, species }, nutrients, level });
 }
 
 // Lists of nodes joined like listOf: "A", "A and B", "A, B and C".

@@ -245,22 +245,35 @@ describe('Phage Attack', () => {
   it.each(Object.keys(SPECIES))('starts Phage Attack for %s', async (pal) => {
     const playPhage = await openPhage(`?pal=${pal}&mode=phage`);
     expect(playPhage).toHaveBeenCalledTimes(1);
-    const [{ you, nutrients, target }] = playPhage.mock.calls[0];
+    const [{ you, nutrients, level }] = playPhage.mock.calls[0];
     expect(you.svg.dataset.pal).toBe(pal);
     expect(you.species).toEqual(SPECIES[pal]);
     expect(nutrients.positions()).toHaveLength(PHAGE.NUTRIENTS);
-    expect(target).toBe(PHAGE.TARGET);
+    expect(level).toBe(1);
     expect(document.body.classList).toContain('phage-mode');
   });
 
   it('names the mode in the tab and explains how to play', async () => {
     await openPhage('?pal=sara&mode=phage');
-    expect(document.title).toBe('PetriPals | Sara | Phage Attack');
+    expect(document.title).toBe('PetriPals | Sara | Phage Attack | Level 1');
     expect(document.querySelector('.pal-name').textContent).toBe('Sara');
     expect(document.querySelector('.species-name').textContent).toBe('Serratia marcescens');
     const howTo = document.querySelector('.how-to-play');
     expect(howTo.querySelector('.for-keys').textContent).toBe('Use the arrow keys to swim.');
     expect(howTo.querySelector('.for-touch').textContent).toBe('Touch the dish and slide your finger to swim.');
     expect(howTo.textContent).toContain(`Eat ${PHAGE.TARGET} nutrients before the phages get Sara!`);
+    expect(howTo.textContent).toContain('Level 1 starts with 1 phage.');
+  });
+
+  it('plays the level in the address, and says how many phages it starts with', async () => {
+    const playPhage = await openPhage('?pal=sara&mode=phage&level=3');
+    expect(playPhage.mock.calls[0][0].level).toBe(3);
+    expect(document.title).toBe('PetriPals | Sara | Phage Attack | Level 3');
+    expect(document.querySelector('.how-to-play').textContent).toContain('Level 3 starts with 3 phages.');
+  });
+
+  it.each([['0', 1], ['9', PHAGE.LEVELS.length], ['nope', 1]])('turns level=%s into level %i', async (asked, level) => {
+    const playPhage = await openPhage(`?pal=sara&mode=phage&level=${asked}`);
+    expect(playPhage.mock.calls[0][0].level).toBe(level);
   });
 });
