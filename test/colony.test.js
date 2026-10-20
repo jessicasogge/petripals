@@ -137,6 +137,11 @@ describe('popping part of a chain or cluster', () => {
     const infected = chain.svg.querySelectorAll('.infected-cell');
     expect(infected).toHaveLength(1);
     expect(infected[0].querySelectorAll('.cell-body')).toHaveLength(1);
+    // Drawn dark in its own markup, so it shows in every browser (Safari
+    // ignores CSS filters inside an SVG).
+    const body = infected[0].querySelector('.cell-body');
+    expect(body.getAttribute('fill')).toBe('#1c1917');
+    expect(infected[0].querySelector('.infected-glow')).not.toBeNull();
     expect(chain.svg.querySelectorAll('.cell-body')).toHaveLength(3);
     expect(chain.mover.classList).not.toContain('infected');
   });

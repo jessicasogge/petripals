@@ -1548,10 +1548,14 @@ body:not(.picker-page) .signature {
    very dark, with a phage-purple glow, and throbs, so it's clear which
    cells are infected. (Not a hue shift: that
    flashes rainbow as it changes.) A rod is one cell, so the whole drawing
-   does; in a chain or cluster, just the infected cell (game/coccus.js). */
+   does, with a filter; in a chain or cluster, just the infected cell, which
+   game/coccus.js draws dark itself (Safari ignores filters inside an SVG). */
+.pal-mover.offspring.infected .dish-pal {
+  filter: grayscale(0.6) brightness(0.12) drop-shadow(0 0 3px #a855f7);
+}
+
 .pal-mover.offspring.infected .dish-pal,
 .infected-cell {
-  filter: grayscale(0.6) brightness(0.12) drop-shadow(0 0 3px #a855f7);
   animation: infected 0.5s ease-in-out infinite alternate;
   transform-origin: center;
 }
