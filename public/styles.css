@@ -1518,7 +1518,7 @@ body:not(.picker-page) .signature {
    (--turn) so the tail leads. */
 .phage {
   position: absolute;
-  width: 3%;
+  width: 3.3%;
   z-index: 3; /* over the cells they land on */
   pointer-events: none;
   transform: translate(-50%, -50%) rotate(var(--turn, 0deg));

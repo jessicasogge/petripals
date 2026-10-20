@@ -1157,7 +1157,7 @@ export const PHAGE = {
   SPEED: 0.15, // fraction of the dish radius per second (you swim at GAME.SPEED)
   WANDER: 0.9, // how much they weave off course, in radians
   START_MS: 1500, // the phages wait this long before they start, so you get a head start
-  LATENT_MS: 3000, // how long an infected cell lives before it bursts
+  LATENT_MS: 2700, // how long an infected cell lives before it bursts
   BURST: 2, // new phages let out when an infected cell bursts
   GRACE_MS: 700, // new phages drift out of the burst this long before they hunt
 };

@@ -19,10 +19,10 @@ import { track } from './track.js';
 const SVG = 'http://www.w3.org/2000/svg';
 
 // How far the tips of the tail fibers are from the middle of the drawing, as
-// a fraction of the dish radius: the drawing is 3% of the dish across (see
+// a fraction of the dish radius: the drawing is 3.3% of the dish across (see
 // .phage in styles.css) and half again as tall. The tips are what land on a
 // cell, so a phage has to really touch it.
-export const TAIL = 0.044;
+export const TAIL = 0.0484;
 
 // A generic tailed phage, like T4: a twenty-sided head full of DNA, a tail
 // it injects the DNA through, and tail fibers it lands on, in a deep plum
