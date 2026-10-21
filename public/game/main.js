@@ -140,13 +140,13 @@ function startPhage() {
   document.querySelector('.species-name').replaceChildren(...speciesName(species.scientific));
 
   document.querySelector('.how-to-play').replaceChildren(
-    `Eat ${PHAGE.LEVELS[level - 1].target} nutrients before the phages get ${pal.dataset.name}! Only the ones she eats herself count. `,
+    `Eat ${PHAGE.LEVELS[level - 1].target} nutrients with ${pal.dataset.name} to win. Only those she eats count! `,
     `Level ${level} starts with ${PHAGE.LEVELS[level - 1].phages} ${PHAGE.LEVELS[level - 1].phages === 1 ? 'phage' : 'phages'}. `,
     // Arrow-key or touch wording, whichever fits the device (see styles.css).
     wording('for-keys', 'Use the arrow keys to swim.'),
     wording('for-touch', 'Touch the dish and slide your finger to swim.'),
     document.createElement('br'),
-    'A phage that lands on one of your cells infects it, and the cell soon bursts and lets out more phages. Keep your colony spread out, and keep your pal away from them!',
+    `Phages infect cells, which burst and release more. Spread out your colony and keep ${pal.dataset.name} safe!`,
   );
 
   const nutrients = scatterNutrients({ count: PHAGE.NUTRIENTS });

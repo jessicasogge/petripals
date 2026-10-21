@@ -261,7 +261,8 @@ describe('Phage Attack', () => {
     const howTo = document.querySelector('.how-to-play');
     expect(howTo.querySelector('.for-keys').textContent).toBe('Use the arrow keys to swim.');
     expect(howTo.querySelector('.for-touch').textContent).toBe('Touch the dish and slide your finger to swim.');
-    expect(howTo.textContent).toContain(`Eat ${PHAGE.LEVELS[0].target} nutrients before the phages get Sara!`);
+    expect(howTo.textContent).toContain(`Eat ${PHAGE.LEVELS[0].target} nutrients with Sara to win. Only those she eats count!`);
+    expect(howTo.textContent).toContain('Phages infect cells, which burst and release more. Spread out your colony and keep Sara safe!');
     expect(howTo.textContent).toContain(`Level 1 starts with ${PHAGE.LEVELS[0].phages} phages.`);
   });
 
