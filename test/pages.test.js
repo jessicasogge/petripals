@@ -14,9 +14,21 @@ describe('tab icon', () => {
     expect(html).toContain('<link rel="icon" href="./favicon-32.png" type="image/png" sizes="32x32" />');
   });
 
+  it.each(PAGES)('%s links the home-screen icon and name for iPhones and iPads', (page) => {
+    const html = readFileSync(file(page), 'utf8');
+    expect(html).toContain('<link rel="apple-touch-icon" href="./apple-touch-icon.png" />');
+    expect(html).toContain('<meta name="apple-mobile-web-app-title" content="PetriPals" />');
+  });
+
   it('has both icon files', () => {
     expect(existsSync(file('favicon.svg'))).toBe(true);
     expect(existsSync(file('favicon-32.png'))).toBe(true);
+  });
+
+  it('has a 180 by 180 home-screen icon (iOS wants a PNG, not an SVG)', () => {
+    const png = readFileSync(file('apple-touch-icon.png'));
+    expect(png.subarray(1, 4).toString()).toBe('PNG');
+    expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([180, 180]);
   });
 });
 
