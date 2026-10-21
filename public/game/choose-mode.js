@@ -1,6 +1,6 @@
 // The mode screen after picking a pal (choose-mode.html?pal=mona): shows the
 // pal and links to classic for her, to picking rivals for mixed culture, or
-// to Petri Picnic.
+// to Petri Picnic or Phage Attack.
 import { SPECIES } from './config.js';
 import { pageReady, watchLoading } from './loading.js';
 import { palById, palTile } from './pals.js';
@@ -17,6 +17,7 @@ if (!pal || !Object.hasOwn(SPECIES, id)) {
   document.querySelector('.mode-classic').href = `./petri-dish.html?pal=${id}`;
   document.querySelector('.mode-mixed').href = `./choose-rivals.html?pal=${id}`;
   document.querySelector('.mode-tumble').href = `./petri-dish.html?pal=${id}&mode=tumble`;
+  document.querySelector('.mode-phage').href = `./petri-dish.html?pal=${id}&mode=phage`;
 
   // Her picture on its tile, as on the picker, and her name in her color.
   document.querySelector('.mode-pal').append(palTile(pal));

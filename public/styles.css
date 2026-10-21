@@ -641,7 +641,8 @@ a.pal-card:focus-visible {
 
 .mode-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  /* Two by two, on a phone too. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
   margin-top: 1.5rem;
 }
@@ -653,6 +654,27 @@ a.pal-card:focus-visible {
 .mode-card p {
   margin: 0;
   line-height: 1.45;
+}
+
+/* On a phone the two-by-two cards are narrow, so give the words more room:
+   less padding, a closer gap, and slightly smaller text. */
+@media (max-width: 600px) {
+  .mode-grid {
+    gap: 0.6rem;
+  }
+
+  .mode-shell .mode-card {
+    padding: 0.75rem 0.6rem;
+  }
+
+  .mode-card h2 {
+    font-size: 1.15rem;
+  }
+
+  .mode-card p {
+    font-size: 0.85rem;
+    line-height: 1.35;
+  }
 }
 
 /* Picking rivals before a mixed culture race (game/choose-rivals.js): a
@@ -1489,5 +1511,87 @@ body:not(.picker-page) .signature {
 
   .loading-cells span:last-child {
     transform: translateX(6px);
+  }
+}
+
+/* Phage Attack (game/phage.js): bacteriophages hunting the colony, turned
+   (--turn) so the tail leads. */
+.phage {
+  position: absolute;
+  width: 3.3%;
+  z-index: 3; /* over the cells they land on */
+  pointer-events: none;
+  transform: translate(-50%, -50%) rotate(var(--turn, 0deg));
+  /* A thin light halo, so the dark phages stand out even over a cell. */
+  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.85));
+}
+
+.phage svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* A phage that landed: it has injected its DNA, so its empty coat fades. */
+.phage.landed {
+  animation: phage-land 0.5s ease-in forwards;
+}
+
+@keyframes phage-land {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(var(--turn, 0deg)) scale(0.6);
+  }
+}
+
+/* An infected cell, filling up with new phages before it bursts: it goes
+   very dark, with a phage-purple glow, and throbs, so it's clear which
+   cells are infected. (Not a hue shift: that
+   flashes rainbow as it changes.) A rod is one cell, so the whole drawing
+   does, with a filter; in a chain or cluster, just the infected cell, which
+   game/coccus.js draws dark itself (Safari ignores filters inside an SVG). */
+.pal-mover.offspring.infected .dish-pal {
+  filter: grayscale(0.6) brightness(0.12) drop-shadow(0 0 3px #a855f7);
+}
+
+.pal-mover.offspring.infected .dish-pal,
+.infected-cell {
+  animation: infected 0.5s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+.infected-cell {
+  transform-box: fill-box;
+}
+
+/* A rod is one cell, so drop the offspring's washed-out look too and let
+   it go fully dark. */
+.pal-mover.offspring.infected {
+  opacity: 1;
+  filter: none;
+}
+
+/* A chain or cluster with an infected cell: make it solid, so the infected
+   cell isn't washed out by the offspring's see-through look. */
+.pal-mover.offspring:has(.infected-cell) {
+  opacity: 1;
+}
+
+/* Let the glow spill past the edge of the drawing instead of being cut off
+   square. */
+svg:has(.infected-cell) {
+  overflow: visible;
+}
+
+@keyframes infected {
+  from { transform: scale(1); }
+  to { transform: scale(1.12); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phage.landed,
+  .pal-mover.offspring.infected .dish-pal,
+  .infected-cell {
+    animation-duration: 0.01s;
   }
 }

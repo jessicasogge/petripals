@@ -4,13 +4,15 @@
 //   petri-dish.html?pal=mona&mode=mixed mixed culture against a random rival
 //                                       (or &rivals=vi,elia for up to three)
 //   petri-dish.html?pal=mona&mode=tumble Petri Picnic
+//   petri-dish.html?pal=mona&mode=phage  Phage Attack (&level=2 for level 2)
 import { antibioticsFor, placeAntibiotics } from './antibiotic.js';
-import { LEVELS, MIXED, raceTarget, SPECIES, TUMBLE } from './config.js';
+import { LEVELS, MIXED, PHAGE, raceTarget, SPECIES, TUMBLE } from './config.js';
 import { playGame } from './game.js';
 import { speciesName } from './italics.js';
 import { pageReady, watchLoading } from './loading.js';
 import { scatterNutrients } from './nutrients.js';
 import { dishPal, PALS } from './pals.js';
+import { playPhage } from './phage.js';
 import { playRace } from './race.js';
 import { listOf, rivalsFor } from './rivals.js';
 import { watchInputMode } from './touch.js';
@@ -42,6 +44,7 @@ if (!pal) {
 } else {
   if (params.get('mode') === 'mixed') startMixed();
   else if (params.get('mode') === 'tumble') startTumble();
+  else if (params.get('mode') === 'phage') startPhage();
   else startClassic();
   // The dish is set up: take the loading card away.
   pageReady();
@@ -122,6 +125,32 @@ function startTumble() {
 
   const nutrients = scatterNutrients({ count: TUMBLE.NUTRIENTS });
   playTumble({ you: { svg: pal, species }, nutrients, target: TUMBLE.TARGET });
+}
+
+function startPhage() {
+  pal.removeAttribute('hidden');
+  const species = SPECIES[pal.dataset.pal];
+  // Level 1 unless the URL says otherwise.
+  const level = Math.min(Math.max(parseInt(params.get('level'), 10) || 1, 1), PHAGE.LEVELS.length);
+  document.title = `PetriPals | ${pal.dataset.name} | Phage Attack | Level ${level}`;
+  document.body.classList.add('phage-mode');
+  const title = document.querySelector('.pal-name');
+  title.textContent = pal.dataset.name;
+  title.style.color = species.color;
+  document.querySelector('.species-name').replaceChildren(...speciesName(species.scientific));
+
+  document.querySelector('.how-to-play').replaceChildren(
+    `Eat ${PHAGE.LEVELS[level - 1].target} nutrients with ${pal.dataset.name} to win. Only those she eats count! `,
+    `Level ${level} starts with ${PHAGE.LEVELS[level - 1].phages} ${PHAGE.LEVELS[level - 1].phages === 1 ? 'phage' : 'phages'}. `,
+    // Arrow-key or touch wording, whichever fits the device (see styles.css).
+    wording('for-keys', 'Use the arrow keys to swim.'),
+    wording('for-touch', 'Touch the dish and slide your finger to swim.'),
+    document.createElement('br'),
+    `Phages infect cells, which burst and release more. Spread out your colony and keep ${pal.dataset.name} safe!`,
+  );
+
+  const nutrients = scatterNutrients({ count: PHAGE.NUTRIENTS });
+  playPhage({ you: { svg: pal, species }, nutrients, level });
 }
 
 // Lists of nodes joined like listOf: "A", "A and B", "A, B and C".

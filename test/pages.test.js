@@ -2,7 +2,7 @@
 // browser's generic globe) and Jess's signature at the foot.
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { LEVELS, MIXED } from '../public/game/config.js';
+import { LEVELS, MIXED, PHAGE } from '../public/game/config.js';
 
 const file = (name) => new URL(`../public/${name}`, import.meta.url);
 const PAGES = ['index.html', 'pal-picker.html', 'choose-mode.html', 'choose-rivals.html', 'petri-dish.html', 'whos-that-pal.html'];
@@ -45,6 +45,10 @@ describe('the mode choice page', () => {
 
   it('says how many levels classic has', () => {
     expect(html).toContain(`through ${LEVELS.length} levels`);
+  });
+
+  it('says how many levels Phage Attack has', () => {
+    expect(html).toContain(`Eat nutrients through ${PHAGE.LEVELS.length} levels`);
   });
 
   it('says how many rivals a mixed culture race can have', () => {

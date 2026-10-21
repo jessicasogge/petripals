@@ -103,7 +103,10 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
 
   // Heterocysts (Ari's) get their own colors and a thicker wall.
   const heterocyst = species.heterocyst;
-  const paintOf = (c) => (c.het ? heterocyst : colors);
+  // An infected cell (Phage Attack) is drawn very dark in its own markup,
+  // not with a CSS filter, which Safari ignores inside an SVG.
+  const INFECTED = { fill: '#1c1917', stroke: '#3b0764', highlight: '#44403c' };
+  const paintOf = (c) => (c.infected ? INFECTED : c.het ? heterocyst : colors);
 
   function cellBody(c) {
     const { fill, stroke } = paintOf(c);
@@ -140,6 +143,13 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
         `<path d="M-2 3.8 Q0 6 2 3.8" stroke="${colors.dark}" stroke-width="1.2" fill="none" stroke-linecap="round" />` +
         (species.glasses ? glasses() : '') +
         '</g>';
+    }
+    // A cell a phage has landed on (Phage Attack): just this one goes dark
+    // and throbs (see .infected-cell in styles.css), not the whole chain.
+    if (c.infected) {
+      // A phage-purple glow ring around it, also in its own markup.
+      const glow = `<circle class="infected-glow" cx="${c.x}" cy="${c.y}" r="${R + 1.6}" fill="none" stroke="#a855f7" stroke-width="2.4" opacity="0.6" />`;
+      out = `<g class="infected-cell">${glow}${out}</g>`;
     }
     return out;
   }
@@ -189,6 +199,14 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
         if (t >= 1) group.moveFor = null;
         draw();
       }
+    },
+    // Mark the cell at this place in the list (the same order as body()) as
+    // infected by a phage, and return it.
+    infectCell(index) {
+      const cell = group.cells[index];
+      cell.infected = true;
+      draw();
+      return cell;
     },
     // Remove the cells at these places in the list (the same order as body()),
     // when they pop. The others stay exactly where they are.
