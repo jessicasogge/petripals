@@ -133,7 +133,7 @@ The tests use [Vitest](https://vitest.dev/). Most of the game logic runs in [jsd
 
 ## Deployment
 
-Every push to `main` runs the tests and the coverage check and, if they pass, publishes `public/` to GitHub Pages (see [`.github/workflows/pages.yml`](.github/workflows/pages.yml)).
+Every push to `main` runs the tests and the coverage check and, if they pass, publishes `public/` to GitHub Pages (see [`.github/workflows/pages.yml`](.github/workflows/pages.yml)). Every pull request runs the same tests and coverage check first, so a failure shows on the pull request before it's merged (see [`.github/workflows/test.yml`](.github/workflows/test.yml)).
 
 ## Contributing
 
