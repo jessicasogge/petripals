@@ -1,0 +1,28 @@
+# Run the tests on every pull request, so a change that breaks the game (or
+# leaves new code untested, see vitest.config.js) shows a red X on the pull
+# request before it's merged, not after, when it would stop the deploy.
+name: Tests
+
+on:
+  pull_request:
+  workflow_dispatch: # lets you rerun it by hand from the Actions tab
+
+permissions:
+  contents: read
+
+# A new push to the same pull request replaces a run still going.
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:coverage # the same check the deploy runs
