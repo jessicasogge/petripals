@@ -47,9 +47,8 @@ export function showFact(pal, species) {
   }
 }
 
-// Show how the antibiotic with disk code `code` stops bacteria, in place of
-// a fact about the pal (after touching that disk). Returns false, leaving
-// the line alone, if there's no fact for it.
+// After disk contact, replace the pal fact with `code`'s antibiotic action.
+// Return false and leave unchanged if unavailable.
 export function showDrugFact(code) {
   const line = document.querySelector('.fun-fact');
   const fact = DRUG_FACTS[code];
