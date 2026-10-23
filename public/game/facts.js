@@ -1,9 +1,11 @@
 // "Did you know?" facts on the end-of-level pop-up, win or lose: a random fact about your pal from
-// her `facts` in config.js, never the same one twice in a row.
+// her `facts` in config.js, never the same one twice in a row. Losing to an
+// antibiotic disk shows how that drug works instead (drug-facts.js).
 //
 // A fact can put words in italics between asterisks, for scientific names
 // of other bacteria: "Ceres's cousin *Bacillus thuringiensis* is ...".
 
+import { DRUG_FACTS } from './drug-facts.js';
 import { withItalics } from './italics.js';
 
 // Write `fact` into `element`, with the parts between asterisks in <i>.
@@ -43,6 +45,17 @@ export function showFact(pal, species) {
   } catch {
     // See above.
   }
+}
+
+// After disk contact, replace the pal fact with `code`'s antibiotic action.
+// Return false and leave unchanged if unavailable.
+export function showDrugFact(code) {
+  const line = document.querySelector('.fun-fact');
+  const fact = DRUG_FACTS[code];
+  if (!line || !fact) return false;
+  writeFact(line.querySelector('.fun-fact-text'), fact);
+  line.hidden = false;
+  return true;
 }
 
 // Hide the fact line (e.g. on a game over).

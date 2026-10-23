@@ -9,6 +9,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { GAME, LEVELS, SPECIES } from '../public/game/config.js';
+import { DRUG_FACTS } from '../public/game/drug-facts.js';
 
 // A stand-in colony whose cell count and division timing each test sets.
 const fake = vi.hoisted(() => ({ colony: null, hit: null }));
@@ -314,9 +315,17 @@ describe('the fun fact', () => {
     expect(SPECIES.goldie.facts).toContain(factShown());
   });
 
-  it("shows one of the pal's facts on a game over", () => {
+  it('shows how the drug she touched works on a game over, instead of a fact about her', () => {
     start({ level: 2, pal: 'vi' });
     fake.hit = disk(0.05);
+    frame();
+    vi.runAllTimers();
+    expect(factShown()).toBe(DRUG_FACTS.GM);
+  });
+
+  it("falls back to one of the pal's facts for a drug with no fact", () => {
+    start({ level: 2, pal: 'vi' });
+    fake.hit = { ...disk(0.05), antibiotic: { code: 'XYZ', name: 'Madeupmycin' } };
     frame();
     vi.runAllTimers();
     expect(SPECIES.vi.facts).toContain(factShown());
