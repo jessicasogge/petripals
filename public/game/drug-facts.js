@@ -1,7 +1,3 @@
-// How each antibiotic stops bacteria, by its disk code. A game over from
-// touching a disk shows the fact for that drug in place of a fun fact about
-// the pal (see showDrugFact in facts.js). Each starts with the drug's name,
-// fits the pop-up (90 characters at most) and has no dashes.
 export const DRUG_FACTS = {
   GM: "Gentamicin jams the ribosome, so the bacterium builds broken proteins.",
   CIP: "Ciprofloxacin traps enzymes that handle DNA, blocking DNA copying and causing breaks.",
