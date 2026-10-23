@@ -4,7 +4,7 @@ import { spreadZones, touchedDisk, touchMessage } from './antibiotic.js';
 import { makeColony, moveGroups } from './colony.js';
 import { GAME, LEVELS } from './config.js';
 import { coccusGroup } from './coccus.js';
-import { showFact } from './facts.js';
+import { showDrugFact, showFact } from './facts.js';
 import { arrowKeys } from './keyboard.js';
 import { goTo } from './loading.js';
 import { rodGroup } from './rod.js';
@@ -144,8 +144,9 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
   }
 
   function showGameOver(disk) {
-    showFact(palEl.dataset.pal, species);
     const { code, name } = disk.antibiotic;
+    // How the drug she touched works, rather than a fact about her.
+    if (!showDrugFact(code)) showFact(palEl.dataset.pal, species);
     track(`game-over/${palEl.dataset.pal}/level-${level}/${code}`,
       `${palEl.dataset.name} hit ${name} on level ${level}`);
     showBanner(
