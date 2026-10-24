@@ -287,6 +287,23 @@ describe('moving the groups in the dish', () => {
     expect(b.x - a.x).toBeGreaterThan(1);
   });
 
+  it('keeps everyone in the same place on the agar when the dish changes size', () => {
+    const leader = rod({ x: 40, y: -20, isPlayer: true });
+    const daughter = rod({ x: -60, y: 30 });
+    daughter.vx = 50;
+    moveGroups([leader, daughter], { agar, radius: RADIUS, seconds: 0 });
+    // The dish shrinks to half its size (say the phone is turned sideways):
+    // everyone moves in with it, so they stay put relative to the disks,
+    // zones and nutrients, which are fractions of the radius.
+    moveGroups([leader, daughter], { agar: { clientWidth: RADIUS }, radius: RADIUS / 2, seconds: 0 });
+    expect([leader.x, leader.y]).toEqual([20, -10]);
+    expect([daughter.x, daughter.y]).toEqual([-30, 15]);
+    expect(daughter.vx).toBe(25);
+    // And back again.
+    moveGroups([leader, daughter], { agar, radius: RADIUS, seconds: 0 });
+    expect([leader.x, leader.y]).toEqual([40, -20]);
+  });
+
   it('puts every group where it now is on the page', () => {
     const daughter = rod({ x: 30, y: -40 });
     moveGroups([daughter], { agar, radius: RADIUS, seconds: 0 });

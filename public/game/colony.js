@@ -160,6 +160,22 @@ export function showPop(dish, [x, y, r], color) {
 // over everything. (Offspring aren't kept out of the antibiotic zones: ones
 // that wander in pop, see popInZones.)
 export function moveGroups(groups, { agar, radius, seconds }) {
+  // The dish can change size mid-game (a phone turned sideways, a resized
+  // window). Groups are placed in px from its center, so scale them along
+  // with it; the disks, zones, nutrients and phages are kept as fractions of
+  // the radius, so without this the cells would drift relative to them.
+  if (radius > 0) {
+    for (const group of groups) {
+      const scale = group.dishRadius ? radius / group.dishRadius : 1;
+      if (scale !== 1) {
+        group.x *= scale;
+        group.y *= scale;
+        group.vx *= scale;
+        group.vy *= scale;
+      }
+      group.dishRadius = radius;
+    }
+  }
   for (const group of groups) {
     if (!group.isPlayer) group.coast(seconds);
     group.update(seconds);
