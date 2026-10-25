@@ -942,6 +942,16 @@ a.pal-card:focus-visible {
   animation: wobble 3s ease-in-out infinite;
 }
 
+/* For anyone who'd rather not have motion, the pals stay still. */
+@media (prefers-reduced-motion: reduce) {
+  .bob,
+  .squish,
+  .slither,
+  .wobble {
+    animation: none;
+  }
+}
+
 .species {
   font-size: 0.95rem;
 }
@@ -974,6 +984,12 @@ a.pal-card:focus-visible {
   border-radius: 20px;
   box-shadow: 0 16px 36px rgba(19, 78, 74, 0.2);
   animation: pop-in 0.35s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .win-banner {
+    animation: none;
+  }
 }
 
 .win-banner[hidden] {
@@ -1107,6 +1123,13 @@ a.pal-card:focus-visible {
 .pal-mover.tumbling .dish-pal {
   animation: tumble 0.35s linear;
   transform-origin: center;
+}
+
+/* Without motion, a tumble just turns her to face the new way. */
+@media (prefers-reduced-motion: reduce) {
+  .pal-mover.tumbling .dish-pal {
+    animation: none;
+  }
 }
 
 @keyframes tumble {
@@ -1589,9 +1612,14 @@ svg:has(.infected-cell) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .phage.landed,
+  .phage.landed {
+    animation-duration: 0.01s;
+  }
+
+  /* Infected cells still go dark, but don't throb: the throb loops forever,
+     so just speeding it up would make it flicker every frame. */
   .pal-mover.offspring.infected .dish-pal,
   .infected-cell {
-    animation-duration: 0.01s;
+    animation: none;
   }
 }
