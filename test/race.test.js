@@ -13,7 +13,9 @@ import { GAME, MIXED, SPECIES } from '../public/game/config.js';
 // makes them.
 const fake = vi.hoisted(() => ({ colonies: [] }));
 
-vi.mock('../public/game/colony.js', () => ({
+vi.mock('../public/game/colony.js', async (importActual) => ({
+  // The real one: frames stop a little while after the game is over.
+  untilSettled: (await importActual()).untilSettled,
   makeColony: vi.fn(() => fake.colonies.shift()),
   moveGroups: vi.fn(),
 }));

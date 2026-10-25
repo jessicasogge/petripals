@@ -12,7 +12,9 @@ import { GAME, PHAGE, SPECIES } from '../public/game/config.js';
 
 const fake = vi.hoisted(() => ({ colony: null }));
 
-vi.mock('../public/game/colony.js', () => ({
+vi.mock('../public/game/colony.js', async (importActual) => ({
+  // The real one: frames stop a little while after the game is over.
+  untilSettled: (await importActual()).untilSettled,
   // The real colony starts with your pal in it.
   makeColony: vi.fn(({ leader, target, onLeaderEat }) => {
     fake.colony.groups.push(leader);

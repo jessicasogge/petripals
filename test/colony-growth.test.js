@@ -6,7 +6,7 @@
 // exactly what was eaten and when. The moving tests use real pals in jsdom,
 // a simulated browser page.
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { makeColony, moveGroups, showPop } from '../public/game/colony.js';
+import { makeColony, moveGroups, showPop, untilSettled } from '../public/game/colony.js';
 import { GAME, SPECIES } from '../public/game/config.js';
 import { rodGroup } from '../public/game/rod.js';
 
@@ -347,5 +347,21 @@ describe('the pop ring', () => {
   it('does nothing if the cell had already left the dish', () => {
     expect(() => showPop(null, [0, 0, 5], 'red')).not.toThrow();
     expect(ring()).toBeNull();
+  });
+});
+
+describe('untilSettled', () => {
+  it('keeps frames going while the game is played, however long', () => {
+    const running = untilSettled();
+    for (let i = 0; i < 1000; i++) expect(running(false, 0.05)).toBe(true);
+  });
+
+  it('keeps them going a little after it ends, while the last cells settle, then stops', () => {
+    const running = untilSettled();
+    running(false, 0.05);
+    let frames = 0;
+    while (running(true, 0.05)) frames++;
+    // Every frame up to GAME.SETTLE_MS after the end, and none after.
+    expect(frames).toBe(Math.floor(GAME.SETTLE_MS / 50));
   });
 });

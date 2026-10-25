@@ -11,7 +11,9 @@ import { GAME, SPECIES, TUMBLE } from '../public/game/config.js';
 
 const fake = vi.hoisted(() => ({ colony: null }));
 
-vi.mock('../public/game/colony.js', () => ({
+vi.mock('../public/game/colony.js', async (importActual) => ({
+  // The real one: frames stop a little while after the game is over.
+  untilSettled: (await importActual()).untilSettled,
   makeColony: vi.fn(() => fake.colony),
   moveGroups: vi.fn(),
 }));
@@ -267,6 +269,11 @@ describe('winning', () => {
       .toBe(`Your colony reached ${TARGET} cells with 3 tumbles.`);
     expect(SPECIES.mona.facts).toContain(document.querySelector('.fun-fact-text').textContent);
     expect(track).toHaveBeenCalledWith('tumble/won/mona', `Mona grew ${TARGET} cells in 3 tumbles`);
+  });
+
+  it("doesn't block taps on the dish once she's won", () => {
+    won();
+    expect(pointerdown().defaultPrevented).toBe(false);
   });
 
   it('says "1 tumble"', () => {

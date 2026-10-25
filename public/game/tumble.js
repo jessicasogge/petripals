@@ -3,7 +3,7 @@
 // tumble: she spins on the spot and sets off a random new way. That's how
 // real swimming bacteria find food (chemotaxis): they keep running while the
 // sugar around them is getting stronger, and tumble sooner when it isn't.
-import { makeColony, moveGroups } from './colony.js';
+import { makeColony, moveGroups, untilSettled } from './colony.js';
 import { GAME, TUMBLE } from './config.js';
 import { coccusGroup } from './coccus.js';
 import { showFact } from './facts.js';
@@ -93,6 +93,7 @@ export function playTumble({ you, nutrients, target = TUMBLE.TARGET }) {
   let finished = false;
   let quiet = false; // ignoring the tumble keys, just after winning
   let lastTime = null;
+  const running = untilSettled(); // frames stop once it's over and settled
 
   function tumble() {
     if (finished || !swim.tumble()) return;
@@ -101,7 +102,7 @@ export function playTumble({ you, nutrients, target = TUMBLE.TARGET }) {
     updateCounter();
   }
   dish.addEventListener('pointerdown', (event) => {
-    if (!event.isPrimary) return;
+    if (!event.isPrimary || finished) return;
     event.preventDefault(); // no text selection or long-press menu
     tumble();
   });
@@ -143,7 +144,7 @@ export function playTumble({ you, nutrients, target = TUMBLE.TARGET }) {
       else colony.divideLeader();
     }
 
-    requestAnimationFrame(step);
+    if (running(finished, seconds)) requestAnimationFrame(step);
   }
 
   function finish() {

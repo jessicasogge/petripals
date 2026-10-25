@@ -6,17 +6,19 @@ const DIRECTIONS = {
   ArrowRight: [1, 0],
 };
 
-export function arrowKeys() {
+// `win` is the window to listen on (tests pass their own).
+export function arrowKeys(win = window) {
   const held = new Set();
   let enabled = true;
-  window.addEventListener('keydown', (event) => {
-    if (!(event.key in DIRECTIONS)) return;
+  win.addEventListener('keydown', (event) => {
+    // Once steering stops (the game is over), arrows scroll the page again.
+    if (!(event.key in DIRECTIONS) || !enabled) return;
     event.preventDefault(); // stop arrow keys from scrolling the page
-    if (enabled) held.add(event.key);
+    held.add(event.key);
   });
-  window.addEventListener('keyup', (event) => held.delete(event.key));
+  win.addEventListener('keyup', (event) => held.delete(event.key));
   // Don't keep moving if the window loses focus while a key is down.
-  window.addEventListener('blur', () => held.clear());
+  win.addEventListener('blur', () => held.clear());
 
   return {
     // [dx, dy], each -1, 0 or 1 ([0, 0] if no arrows are held).

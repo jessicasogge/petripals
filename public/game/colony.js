@@ -154,6 +154,20 @@ export function showPop(dish, [x, y, r], color) {
   setTimeout(remove, 1000); // in case the animation never runs
 }
 
+// Whether a game's frames still need to run: always while it's being
+// played, and for GAME.SETTLE_MS after it ends, so the last cells finish
+// sliding and settle (after that, nothing in the dish moves). Stopping then
+// saves the work of moving and checking every group on every frame while
+// the pop-up is open. Call it once a frame with whether the game is over.
+export function untilSettled() {
+  let sinceEnd = 0; // ms since the game ended
+  return (finished, seconds) => {
+    if (!finished) return true;
+    sinceEnd += seconds * 1000;
+    return sinceEnd <= GAME.SETTLE_MS;
+  };
+}
+
 // One frame of movement for every group in the dish (from every colony):
 // offspring slide and settle, nobody lands on top of anybody, offspring stay
 // inside the rim, and leaders stay inside the dish. Leaders (isPlayer) swim

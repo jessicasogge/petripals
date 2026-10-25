@@ -5,7 +5,7 @@
 // open (lysis) and lets out new phages, so the more cells they catch, the
 // more of them there are, with no limit. One landing on your pal is game over. No
 // antibiotic disks this time.
-import { makeColony, moveGroups, showPop } from './colony.js';
+import { makeColony, moveGroups, showPop, untilSettled } from './colony.js';
 import { GAME, PHAGE } from './config.js';
 import { coccusGroup } from './coccus.js';
 import { showFact } from './facts.js';
@@ -188,6 +188,7 @@ export function playPhage({ you, nutrients, level = 1, target = PHAGE.LEVELS[lev
   const touch = touchSteering(agar, agar.closest('.petri-dish') ?? agar);
   let finished = false;
   let lastTime = null;
+  const running = untilSettled(); // frames stop once it's over and settled
   let elapsed = 0; // ms since the start
   let lysed = 0; // cells the phages have burst
 
@@ -323,7 +324,7 @@ export function playPhage({ you, nutrients, level = 1, target = PHAGE.LEVELS[lev
       updateCounter();
     }
 
-    requestAnimationFrame(step);
+    if (running(finished, seconds)) requestAnimationFrame(step);
   }
 
   function stop() {

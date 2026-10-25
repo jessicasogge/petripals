@@ -14,7 +14,9 @@ import { DRUG_FACTS } from '../public/game/drug-facts.js';
 // A stand-in colony whose cell count and division timing each test sets.
 const fake = vi.hoisted(() => ({ colony: null, hit: null }));
 
-vi.mock('../public/game/colony.js', () => ({
+vi.mock('../public/game/colony.js', async (importActual) => ({
+  // The real one: frames stop a little while after the game is over.
+  untilSettled: (await importActual()).untilSettled,
   makeColony: vi.fn(() => fake.colony),
   moveGroups: vi.fn(),
 }));
@@ -224,6 +226,14 @@ describe('touching a disk', () => {
     expect(banner.querySelector('h2').textContent).toBe('Game over');
     expect(banner.querySelector('.win-message').textContent)
       .toBe('Mona swam into the Gentamicin zone of inhibition. Antibiotics kill bacteria!');
+  });
+
+  it("stops running frames once it's over and the last cells have settled", () => {
+    start({ level: 2 });
+    fake.hit = disk(0.05);
+    frame();
+    for (let i = 0; i <= Math.ceil(GAME.SETTLE_MS / 50); i++) frame(50);
+    expect(frames).toHaveLength(0); // nothing waiting: the dish is still
   });
 
   it('says the disk still counts when she is resistant (no zone)', () => {

@@ -1,7 +1,7 @@
 // The classic game loop: steer with the arrow keys or by touch, grow a colony past the
 // antibiotic disks, and the level-complete, win or game-over pop-up.
 import { spreadZones, touchedDisk, touchMessage } from './antibiotic.js';
-import { makeColony, moveGroups } from './colony.js';
+import { makeColony, moveGroups, untilSettled } from './colony.js';
 import { GAME, LEVELS } from './config.js';
 import { coccusGroup } from './coccus.js';
 import { showDrugFact, showFact } from './facts.js';
@@ -31,6 +31,7 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
 
   let finished = false;
   let lastTime = null;
+  const running = untilSettled(); // frames stop once it's over and settled
   // How long the level has been running, for how far the zones have spread.
   // Built from the same capped frame times as everything else, so the zones
   // don't jump ahead after the tab was hidden for a while.
@@ -112,7 +113,7 @@ export function playGame(palEl, species, nutrients, disks, { level = 1, target =
       }
     }
 
-    requestAnimationFrame(step);
+    if (running(finished, seconds)) requestAnimationFrame(step);
   }
 
   function showBanner(title, message, button, { startOver = false, modes = false } = {}) {

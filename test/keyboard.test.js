@@ -36,11 +36,14 @@ describe('arrowKeys', () => {
     expect(keys.direction()).toEqual([0, 0]);
   });
 
-  it('ignores the arrows once stopped', () => {
-    const keys = arrowKeys();
+  it('ignores the arrows once stopped, and lets them scroll the page again', () => {
+    // Its own window, so other tests' listeners don't block the key.
+    const win = new EventTarget();
+    const keys = arrowKeys(win);
     keys.stop();
-    press('ArrowLeft');
+    const arrow = new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true });
+    win.dispatchEvent(arrow);
+    expect(arrow.defaultPrevented).toBe(false);
     expect(keys.direction()).toEqual([0, 0]);
-    release('ArrowLeft');
   });
 });

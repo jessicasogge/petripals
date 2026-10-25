@@ -1,7 +1,7 @@
 // Mixed culture mode: you and one to three rival pals steered by the
 // computer race to grow a colony of the target size first. No antibiotic
 // disks, just a shared plate of nutrients.
-import { makeColony, moveGroups } from './colony.js';
+import { makeColony, moveGroups, untilSettled } from './colony.js';
 import { GAME } from './config.js';
 import { coccusGroup } from './coccus.js';
 import { arrowKeys } from './keyboard.js';
@@ -65,6 +65,7 @@ export function playRace({ you, rivals, nutrients, target }) {
   const touch = touchSteering(agar, agar.closest('.petri-dish') ?? agar);
   let finished = false;
   let lastTime = null;
+  const running = untilSettled(); // frames stop once it's over and settled
 
   // "Race again" goes back to picking rivals; "Choose a mode" goes back to the modes.
   document.querySelector('.play-again').addEventListener('click', () => {
@@ -107,7 +108,7 @@ export function playRace({ you, rivals, nutrients, target }) {
       else for (const colony of colonies) colony.divideLeader();
     }
 
-    requestAnimationFrame(step);
+    if (running(finished, seconds)) requestAnimationFrame(step);
   }
 
   // `beaten` is the rival who got there first, or null if you did.
