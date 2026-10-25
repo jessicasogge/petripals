@@ -154,11 +154,9 @@ export function showPop(dish, [x, y, r], color) {
   setTimeout(remove, 1000); // in case the animation never runs
 }
 
-// Whether a game's frames still need to run: always while it's being
-// played, and for GAME.SETTLE_MS after it ends, so the last cells finish
-// sliding and settle (after that, nothing in the dish moves). Stopping then
-// saves the work of moving and checking every group on every frame while
-// the pop-up is open. Call it once a frame with whether the game is over.
+// Run frames during play and for GAME.SETTLE_MS after game over, letting
+// the last cells settle. Then stop moving and checking groups while the
+// pop-up is open. Call once per frame with whether the game is over.
 export function untilSettled() {
   let sinceEnd = 0; // ms since the game ended
   return (finished, seconds) => {
@@ -168,16 +166,14 @@ export function untilSettled() {
   };
 }
 
-// One frame of movement for every group in the dish (from every colony):
-// offspring slide and settle, nobody lands on top of anybody, offspring stay
-// inside the rim, and leaders stay inside the dish. Leaders (isPlayer) swim
-// over everything. (Offspring aren't kept out of the antibiotic zones: ones
-// that wander in pop, see popInZones.)
+// Move all colonies' groups one frame: offspring slide, settle without
+// overlap, and stay inside the rim; leaders (isPlayer) stay in the dish
+// and swim over everything. Offspring can enter antibiotic zones and pop
+// (see popInZones).
 export function moveGroups(groups, { agar, radius, seconds }) {
-  // The dish can change size mid-game (a phone turned sideways, a resized
-  // window). Groups are placed in px from its center, so scale them along
-  // with it; the disks, zones, nutrients and phages are kept as fractions of
-  // the radius, so without this the cells would drift relative to them.
+  // Scale groups' pixel offsets from the dish center when it resizes.
+  // Disks, zones, nutrients, and phages use radius fractions, so this keeps
+  // cells aligned with them.
   if (radius > 0) {
     for (const group of groups) {
       const scale = group.dishRadius ? radius / group.dishRadius : 1;
