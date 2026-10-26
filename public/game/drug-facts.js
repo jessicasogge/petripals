@@ -4,6 +4,7 @@ export const DRUG_FACTS = {
   SXT: "Trimethoprim and sulfamethoxazole block folate making, so the bacterium can't build DNA.",
   CRO: "Ceftriaxone blocks cell wall building, so a growing bacterium can burst.",
   E: "Erythromycin plugs the ribosome's exit tunnel, slowing protein production.",
+  CLR: "Clarithromycin plugs the ribosome's exit tunnel, slowing protein production.",
   VA: "Vancomycin grabs the building blocks of the cell wall, so the bacterium can't build it.",
   MEM: "Meropenem blocks cell wall building, so a growing bacterium can burst.",
   DO: "Doxycycline blocks delivery of protein building blocks to the ribosome.",

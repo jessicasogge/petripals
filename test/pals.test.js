@@ -283,15 +283,16 @@ describe('the pages', () => {
     expect(caption.hidden).toBe(true);
   });
 
-  it("marks each pal's tile with her Gram stain, and Elia's as faint, with a note", async () => {
+  it("marks each pal's tile with her Gram stain, and faint ones (Elia, Marina) with a note", async () => {
     await open('pal-picker.html', 'game/pal-picker.js');
     for (const card of document.querySelectorAll('.pal-card')) {
       const tile = card.querySelector('.pal-icon');
       const id = IDS.find((pal) => tile.classList.contains(pal));
       expect(tile.classList.contains(`gram-${SPECIES[id].gram}`), id).toBe(true);
-      expect(tile.classList.contains('faint-stain'), id).toBe(id === 'elia');
+      const faint = Boolean(SPECIES[id].faintStain);
+      expect(tile.classList.contains('faint-stain'), id).toBe(faint);
       const note = card.querySelector('.stain-note');
-      expect(Boolean(note), id).toBe(id === 'elia');
+      expect(Boolean(note), id).toBe(faint);
     }
     expect(document.querySelector('.stain-note').textContent).toBe("Doesn't stain well");
   });
@@ -565,7 +566,7 @@ describe('wiggly flagella', () => {
     '%s swims with flagella, so she has wiggling tails (Astrid on her swarmers)',
     (id) => expect(SWIMMERS).toContain(id),
   );
-  it.each(['goldie', 'scarlett', 'penny', 'coco', 'ana', 'ivy', 'nova', 'pearl', 'frannie', 'electra', 'dina', 'ari', 'elia', 'ceres'])(
+  it.each(['goldie', 'scarlett', 'penny', 'coco', 'ana', 'ivy', 'nova', 'pearl', 'frannie', 'electra', 'dina', 'ari', 'marina', 'elia', 'ceres'])(
     "%s has no wiggling tails (Elia's flagella are inside her; the others can't swim, or Ceres's are left off)",
     (id) => expect(SWIMMERS).not.toContain(id),
   );

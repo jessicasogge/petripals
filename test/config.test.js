@@ -53,6 +53,21 @@ describe('pals', () => {
     for (const part of ['fill', 'stroke', 'highlight']) expect(heterocyst[part]).toMatch(/^#[0-9a-f]{6}$/i);
   });
 
+  it('makes Marina a Gram-positive rod traced along her curve, end to end', () => {
+    const { kind, layout, gram, body } = SPECIES.marina;
+    expect(kind).toBe('rod');
+    expect(layout).toBeUndefined();
+    expect(gram).toBe('positive');
+    // Her rod runs from x 44 to 156 in her 200-wide dish drawing, centered at 100,
+    // and is 34 thick (17 each side), dipping in the middle.
+    expect(Math.min(...body.map(([x]) => x))).toBeCloseTo(-56 / 200, 2);
+    expect(Math.max(...body.map(([x]) => x))).toBeCloseTo(56 / 200, 2);
+    for (const [, , r] of body) expect(r).toBeCloseTo(17 / 200, 3);
+    const ys = body.map(([, y]) => y);
+    expect(Math.max(...ys)).toBeGreaterThan(ys[0]);
+    expect(Math.max(...ys)).toBeGreaterThan(ys.at(-1));
+  });
+
   it('makes Dina a Deinococcus that grows in squares of four (tetrads)', () => {
     expect(SPECIES.dina.kind).toBe('coccus');
     expect(SPECIES.dina.layout).toBe('tetrad');
@@ -247,7 +262,7 @@ describe('Gram stains', () => {
 
   // Spot checks against the real bacteria, one pal at a time, so adding a pal
   // doesn't mean editing a list here (the test above checks every pal).
-  it.each(['ana', 'ceres', 'diffany', 'dina', 'goldie', 'ivy', 'lissie', 'nova', 'penny', 'scarlett', 'terra'])(
+  it.each(['ana', 'ceres', 'diffany', 'dina', 'goldie', 'ivy', 'lissie', 'marina', 'nova', 'penny', 'scarlett', 'terra'])(
     '%s is Gram-positive, like her real species',
     (name) => expect(SPECIES[name].gram).toBe('positive'),
   );
@@ -257,6 +272,6 @@ describe('Gram stains', () => {
   );
 
   it('marks only Elia as barely taking the stain', () => {
-    expect(Object.keys(SPECIES).filter((name) => SPECIES[name].faintStain)).toEqual(['elia']);
+    expect(Object.keys(SPECIES).filter((name) => SPECIES[name].faintStain).sort()).toEqual(['elia', 'marina']);
   });
 });

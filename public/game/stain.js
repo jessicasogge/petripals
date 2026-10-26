@@ -1,6 +1,7 @@
 // Microscope mode: every pal as she'd look after a Gram stain. Gram-positive
 // pals stay purple, Gram-negative ones turn pink, all in the same few shades
-// so they match, and Elia, who barely takes the stain, only a pale pink.
+// so they match. A pal who barely takes the stain shows only a pale version
+// of hers: Elia a pale pink, Marina (her waxy wall keeps it out) a pale purple.
 //
 // Turned on with the microscope button on the picker.
 
@@ -10,11 +11,13 @@ export const STAINS = {
   positive: { outline: '#5b21b6', body: '#a78bfa', light: '#ede9fe', eyes: '#2e1065' },
   negative: { outline: '#be185d', body: '#f9a8d4', light: '#fdf2f8', eyes: '#831843' },
   faint: { outline: '#f472b6', body: '#fce7f3', light: '#fff7fb', eyes: '#be185d' },
+  faintPositive: { outline: '#a78bfa', body: '#ede9fe', light: '#f8f6ff', eyes: '#5b21b6' },
 };
 
 // Which shades a pal gets.
 export function stainOf(species) {
-  return STAINS[species.faintStain ? 'faint' : species.gram];
+  if (species.faintStain) return species.gram === 'positive' ? STAINS.faintPositive : STAINS.faint;
+  return STAINS[species.gram];
 }
 
 // How light a color is, from 0 (black) to 1 (white).
@@ -33,6 +36,10 @@ function shadeFor(element, attribute, stain) {
   if (!isColor(color)) return null;
   const light = lightness(color);
   if (light > 0.99) return null; // white
+  // A part can say what it is (data-stain="body"), for a body too dark to
+  // be told from an outline by its lightness (Marina's persimmon).
+  const role = element.getAttribute('data-stain');
+  if (role && stain[role]) return stain[role];
   if (element.closest('.face')) {
     // Her eyes, smile and glasses frames: dark parts only, so her cheeks stay pink.
     return light < 0.45 ? stain.eyes : null;

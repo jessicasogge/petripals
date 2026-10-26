@@ -27,7 +27,7 @@
 //
 // `gram` is how she looks after a Gram stain: 'positive' cells stay purple,
 // 'negative' ones turn pink (the picker's microscope mode shows this).
-// `faintStain` marks a pal who barely takes the stain at all.
+// `faintStain` marks a pal who barely takes the stain at all (Elia, Marina).
 // Rod-style pals are drawn `size` percent of the dish wide (12 unless set).
 //
 // For rod-style pals, `body` traces the drawing's outline as circles
@@ -1119,6 +1119,50 @@ export const SPECIES = {
       { code: 'K', name: 'kanamycin', zone: 18 },
       { code: 'RA', name: 'rifampin', zone: 22 },
       { code: 'E', name: 'erythromycin', zone: 25 },
+    ],
+  },
+  marina: {
+    facts: [
+      "Marina's species name, marinum, means \"of the sea\" in Latin.",
+      "Marina was first described in 1926, from sick fish at the Philadelphia Aquarium.",
+      "Marina infects fish, frogs and other animals that live in water.",
+      "Marina causes \"fish tank granuloma,\" a skin infection often on people's hands.",
+      "Marina grows best around 30°C and usually infects skin, but can reach deeper tissues.",
+      "Marina's colonies turn yellow in light, making her a photochromogen.",
+      "Marina's waxy cell wall contains fatty molecules called mycolic acids.",
+      "Marina stains poorly with Gram stain.",
+      "Marina is a close cousin of *Mycobacterium tuberculosis*, which causes TB.",
+      "Marina helps scientists study TB granulomas, clusters of immune cells, in zebrafish.",
+      "Marina's colonies may appear in one to two weeks, but some cultures take longer.",
+      "Marina has no flagella and cannot swim.",
+      "Wearing waterproof gloves when cleaning fish tanks helps keep Marina out of cuts.",
+      "Marina infections usually need months of antibiotic treatment.",
+      "Marina is a slim rod that can be straight or slightly curved."
+    ],
+    scientific: 'Mycobacterium marinum',
+    color: '#8a2c0b', // for her name above the dish
+    tile: 'rgba(244, 128, 63, 0.24)',
+    kind: 'rod',
+    gram: 'positive',
+    faintStain: true,
+    size: 10.5,
+    // Her curved rod, end to end (her soft waxy glow doesn't count).
+    body: [
+      [-0.28, -0.015, 0.085],
+      [-0.2, 0.009, 0.085],
+      [-0.12, 0.025, 0.085],
+      [-0.04, 0.034, 0.085],
+      [0.04, 0.036, 0.085],
+      [0.12, 0.031, 0.085],
+      [0.2, 0.019, 0.085],
+      [0.28, 0.0, 0.085],
+    ],
+    antibiotics: [
+      { code: 'CLR', name: 'clarithromycin', zone: 30 },
+      { code: 'RA', name: 'rifampin', zone: 24 },
+      { code: 'DO', name: 'doxycycline', zone: 26 },
+      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 22 },
+      { code: 'CIP', name: 'ciprofloxacin', zone: 19 },
     ],
   },
 };
