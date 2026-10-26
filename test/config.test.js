@@ -272,6 +272,6 @@ describe('Gram stains', () => {
   );
 
   it('marks only Elia as barely taking the stain', () => {
-    expect(Object.keys(SPECIES).filter((name) => SPECIES[name].faintStain)).toEqual(['elia']);
+    expect(Object.keys(SPECIES).filter((name) => SPECIES[name].faintStain).sort()).toEqual(['elia', 'marina']);
   });
 });

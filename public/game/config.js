@@ -27,7 +27,7 @@
 //
 // `gram` is how she looks after a Gram stain: 'positive' cells stay purple,
 // 'negative' ones turn pink (the picker's microscope mode shows this).
-// `faintStain` marks a pal who barely takes the stain at all.
+// `faintStain` marks a pal who barely takes the stain at all (Elia, Marina).
 // Rod-style pals are drawn `size` percent of the dish wide (12 unless set).
 //
 // For rod-style pals, `body` traces the drawing's outline as circles
@@ -1148,6 +1148,7 @@ export const SPECIES = {
     tile: 'rgba(244, 128, 63, 0.24)',
     kind: 'rod',
     gram: 'positive',
+    faintStain: true, // her waxy wall keeps the Gram stain out
     size: 10.5,
     // Her curved rod, end to end (her soft waxy glow doesn't count).
     body: [

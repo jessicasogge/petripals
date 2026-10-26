@@ -33,6 +33,10 @@ describe('the stain shades', () => {
     expect(stainOf(SPECIES.elia)).toBe(STAINS.faint);
   });
 
+  it("gives a faint Gram-positive pal (Marina) a pale purple, not Elia's pale pink", () => {
+    expect(stainOf(SPECIES.marina)).toBe(STAINS.faintPositive);
+  });
+
   it.each(PALS.map((pal) => pal.id))('recolors %s in only her stain shades (besides white shines)', (id) => {
     const svg = dishPal(palById(id));
     stainPal(svg, SPECIES[id]);
@@ -124,7 +128,7 @@ describe('a part that says what it is (data-stain)', () => {
   it("stains Marina's persimmon body as a body, though it's dark enough to pass for an outline", () => {
     const svg = dishPal(palById('marina'));
     stainPal(svg, SPECIES.marina);
-    const purple = STAINS.positive;
+    const purple = STAINS.faintPositive;
     expect(svg.querySelector('[data-stain="body"]').style.stroke).toBe(rgb(purple.body));
     expect(svg.querySelector('path[stroke="#8a2c0b"]').style.stroke).toBe(rgb(purple.outline));
     unstainPal(svg);
