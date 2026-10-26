@@ -58,11 +58,11 @@ describe('pals', () => {
     expect(kind).toBe('rod');
     expect(layout).toBeUndefined();
     expect(gram).toBe('positive');
-    // Her rod runs from x 44 to 156 in her 160-wide dish drawing, centered at 100,
+    // Her rod runs from x 44 to 156 in her 200-wide dish drawing, centered at 100,
     // and is 34 thick (17 each side), dipping in the middle.
-    expect(Math.min(...body.map(([x]) => x))).toBeCloseTo(-56 / 160, 2);
-    expect(Math.max(...body.map(([x]) => x))).toBeCloseTo(56 / 160, 2);
-    for (const [, , r] of body) expect(r).toBeCloseTo(17 / 160, 3);
+    expect(Math.min(...body.map(([x]) => x))).toBeCloseTo(-56 / 200, 2);
+    expect(Math.max(...body.map(([x]) => x))).toBeCloseTo(56 / 200, 2);
+    for (const [, , r] of body) expect(r).toBeCloseTo(17 / 200, 3);
     const ys = body.map(([, y]) => y);
     expect(Math.max(...ys)).toBeGreaterThan(ys[0]);
     expect(Math.max(...ys)).toBeGreaterThan(ys.at(-1));

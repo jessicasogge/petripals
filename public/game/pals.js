@@ -1050,7 +1050,9 @@ export const PALS = [
     name: 'Marina',
     looks: 'a slim, gently curved persimmon Mycobacterium marinum rod in a soft, waxy coat',
     motion: 'bob',
-    frames: { home: '0 0 200 200', picker: '22 22 156 156', dish: '20 20 160 160' },
+    // Framed roomy, so her long, slim rod comes out about as long as Mona's
+    // and Colette's.
+    frames: { home: '0 0 200 200', picker: '0 0 200 200', dish: '0 0 200 200' },
     art: `
       <!-- her waxy coat: a soft, glossy glow around the rod (mycolic acids) -->
       <path d="M44 97 Q100 116 156 100" stroke="#fde7d6" stroke-width="50" stroke-opacity="0.75" fill="none" stroke-linecap="round" />
