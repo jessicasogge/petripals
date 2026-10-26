@@ -1121,34 +1121,30 @@ export const SPECIES = {
       { code: 'E', name: 'erythromycin', zone: 25 },
     ],
   },
-  // Mycobacterium marinum: a slim, slightly curved rod in a thick, waxy
-  // coat. Mycobacteria count as Gram-positive but barely take the stain (the
-  // wax keeps it out). Labs don't disk-test her, so zones are estimates, for
-  // drugs used against her infections.
   marina: {
     facts: [
       "Marina's species name, marinum, means \"of the sea\" in Latin.",
-      "Marina was first found in 1926, in sick fish at the Philadelphia Aquarium.",
+      "Marina was first described in 1926, from sick fish at the Philadelphia Aquarium.",
       "Marina infects fish, frogs and other animals that live in water.",
-      "In people, Marina causes \"fish tank granuloma,\" a skin infection often on the hands.",
-      "Marina likes it cool, around 30°C, so in people she stays in the skin, not deeper inside.",
-      "Marina's colonies turn yellow when exposed to light, so she's called a photochromogen.",
-      "Marina's thick, waxy cell wall is made with fatty molecules called mycolic acids.",
-      "Marina's wax keeps out the Gram stain, so labs use an acid-fast stain that turns her red.",
+      "Marina causes \"fish tank granuloma,\" a skin infection often on people's hands.",
+      "Marina grows best around 30°C and usually infects skin, but can reach deeper tissues.",
+      "Marina's colonies turn yellow in light, making her a photochromogen.",
+      "Marina's waxy cell wall contains fatty molecules called mycolic acids.",
+      "Marina stains poorly with Gram stain.",
       "Marina is a close cousin of *Mycobacterium tuberculosis*, which causes TB.",
-      "Scientists study Marina in zebrafish to learn how TB builds lumps called granulomas.",
-      "Marina grows slowly: her colonies can take one to two weeks to appear.",
-      "Marina has no flagella, so she can't swim.",
-      "Wearing gloves to clean a fish tank helps keep Marina out of cuts on your hands.",
-      "Infections with Marina are usually treated with antibiotics for months.",
-      "Marina is a slim rod that's often slightly curved.",
+      "Marina helps scientists study TB granulomas, clusters of immune cells, in zebrafish.",
+      "Marina's colonies may appear in one to two weeks, but some cultures take longer.",
+      "Marina has no flagella and cannot swim.",
+      "Wearing waterproof gloves when cleaning fish tanks helps keep Marina out of cuts.",
+      "Marina infections usually need months of antibiotic treatment.",
+      "Marina is a slim rod that can be straight or slightly curved."
     ],
     scientific: 'Mycobacterium marinum',
     color: '#8a2c0b', // for her name above the dish
     tile: 'rgba(244, 128, 63, 0.24)',
     kind: 'rod',
     gram: 'positive',
-    faintStain: true, // her waxy wall keeps the Gram stain out
+    faintStain: true,
     size: 10.5,
     // Her curved rod, end to end (her soft waxy glow doesn't count).
     body: [
