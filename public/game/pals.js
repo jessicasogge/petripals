@@ -1043,6 +1043,33 @@ export const PALS = [
       ${ARI_CELLS}
     `,
   },
+  // Marina: Mycobacterium marinum, a slim, gently curved persimmon rod in a
+  // soft, waxy glow
+  {
+    id: 'marina',
+    name: 'Marina',
+    looks: 'a slim, gently curved persimmon Mycobacterium marinum rod in a soft, waxy coat',
+    motion: 'bob',
+    frames: { home: '0 0 200 200', picker: '22 22 156 156', dish: '20 20 160 160' },
+    art: `
+      <!-- her waxy coat: a soft, glossy glow around the rod (mycolic acids) -->
+      <path d="M44 97 Q100 116 156 100" stroke="#fde7d6" stroke-width="50" stroke-opacity="0.75" fill="none" stroke-linecap="round" />
+      <!-- the slim, curved rod: outline, then her body (marked, since it's
+           darker than microscope mode would take for a body) -->
+      <path d="M44 97 Q100 116 156 100" stroke="#8a2c0b" stroke-width="34" fill="none" stroke-linecap="round" />
+      <path data-stain="body" d="M44 97 Q100 116 156 100" stroke="#f4803f" stroke-width="27" fill="none" stroke-linecap="round" />
+      <path d="M56 91 Q72 96 88 97" stroke="#fde7d6" stroke-width="4" fill="none" stroke-linecap="round" />
+      <g class="face">
+        <circle cx="94" cy="104.5" r="5" fill="#3f1406" />
+        <circle cx="114" cy="104.5" r="5" fill="#3f1406" />
+        <circle cx="95.6" cy="102.9" r="1.7" fill="white" />
+        <circle cx="115.6" cy="102.9" r="1.7" fill="white" />
+        <ellipse cx="84" cy="112.5" rx="4.5" ry="2.8" fill="#f9a8d4" opacity="0.95" />
+        <ellipse cx="124" cy="112.5" rx="4.5" ry="2.8" fill="#f9a8d4" opacity="0.95" />
+        <path d="M99.5 112.5 Q104 116.5 108.5 112.5" stroke="#3f1406" stroke-width="2.6" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
 ];
 
 // The pals in the home page's row, in PALS order. The row is full: pals

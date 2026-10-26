@@ -181,4 +181,11 @@ export const QUIZ_FACTS = {
     "Ari's heterocysts trade nitrogen to their neighbors for sugar the neighbors make.",
     "Ari's blue-green color comes from chlorophyll plus a blue pigment called phycocyanin.",
   ],
+  marina: [
+    "Marina was first found in 1926, in sick fish at the Philadelphia Aquarium.",
+    "In people, Marina causes \"fish tank granuloma,\" a skin infection often on the hands.",
+    "Marina's colonies turn yellow when exposed to light, so she's called a photochromogen.",
+    "Scientists study Marina in zebrafish to learn how TB builds lumps called granulomas.",
+    "Wearing gloves to clean a fish tank helps keep Marina out of cuts on your hands.",
+  ],
 };

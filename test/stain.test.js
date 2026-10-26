@@ -119,3 +119,15 @@ describe('Ari in microscope mode', () => {
     expect(het.style.stroke).toBe(rgb(pink.outline));
   });
 });
+
+describe('a part that says what it is (data-stain)', () => {
+  it("stains Marina's persimmon body as a body, though it's dark enough to pass for an outline", () => {
+    const svg = dishPal(palById('marina'));
+    stainPal(svg, SPECIES.marina);
+    const purple = STAINS.positive;
+    expect(svg.querySelector('[data-stain="body"]').style.stroke).toBe(rgb(purple.body));
+    expect(svg.querySelector('path[stroke="#8a2c0b"]').style.stroke).toBe(rgb(purple.outline));
+    unstainPal(svg);
+    expect(svg.querySelector('[data-stain="body"]').style.stroke).toBe('');
+  });
+});

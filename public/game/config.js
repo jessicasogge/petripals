@@ -1121,6 +1121,53 @@ export const SPECIES = {
       { code: 'E', name: 'erythromycin', zone: 25 },
     ],
   },
+  // Mycobacterium marinum: a slim, slightly curved rod in a thick, waxy
+  // coat. Mycobacteria count as Gram-positive but barely take the stain (the
+  // wax keeps it out). Labs don't disk-test her, so zones are estimates, for
+  // drugs used against her infections.
+  marina: {
+    facts: [
+      "Marina's species name, marinum, means \"of the sea\" in Latin.",
+      "Marina was first found in 1926, in sick fish at the Philadelphia Aquarium.",
+      "Marina infects fish, frogs and other animals that live in water.",
+      "In people, Marina causes \"fish tank granuloma,\" a skin infection often on the hands.",
+      "Marina likes it cool, around 30°C, so in people she stays in the skin, not deeper inside.",
+      "Marina's colonies turn yellow when exposed to light, so she's called a photochromogen.",
+      "Marina's thick, waxy cell wall is made with fatty molecules called mycolic acids.",
+      "Marina's wax keeps out the Gram stain, so labs use an acid-fast stain that turns her red.",
+      "Marina is a close cousin of *Mycobacterium tuberculosis*, which causes TB.",
+      "Scientists study Marina in zebrafish to learn how TB builds lumps called granulomas.",
+      "Marina grows slowly: her colonies can take one to two weeks to appear.",
+      "Marina has no flagella, so she can't swim.",
+      "Wearing gloves to clean a fish tank helps keep Marina out of cuts on your hands.",
+      "Infections with Marina are usually treated with antibiotics for months.",
+      "Marina is a slim rod that's often slightly curved.",
+    ],
+    scientific: 'Mycobacterium marinum',
+    color: '#8a2c0b', // for her name above the dish
+    tile: 'rgba(244, 128, 63, 0.24)',
+    kind: 'rod',
+    gram: 'positive',
+    size: 10.5,
+    // Her curved rod, end to end (her soft waxy glow doesn't count).
+    body: [
+      [-0.35, -0.019, 0.106],
+      [-0.25, 0.011, 0.106],
+      [-0.15, 0.031, 0.106],
+      [-0.05, 0.043, 0.106],
+      [0.05, 0.046, 0.106],
+      [0.15, 0.039, 0.106],
+      [0.25, 0.024, 0.106],
+      [0.35, 0.0, 0.106],
+    ],
+    antibiotics: [
+      { code: 'CLR', name: 'clarithromycin', zone: 30 },
+      { code: 'RA', name: 'rifampin', zone: 24 },
+      { code: 'DO', name: 'doxycycline', zone: 26 },
+      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 22 },
+      { code: 'CIP', name: 'ciprofloxacin', zone: 19 },
+    ],
+  },
 };
 
 // Mixed culture: no disks; race 1–3 AI rivals (chosen or one random) to TARGET cells.

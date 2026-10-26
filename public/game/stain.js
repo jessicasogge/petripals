@@ -33,6 +33,10 @@ function shadeFor(element, attribute, stain) {
   if (!isColor(color)) return null;
   const light = lightness(color);
   if (light > 0.99) return null; // white
+  // A part can say what it is (data-stain="body"), for a body too dark to
+  // be told from an outline by its lightness (Marina's persimmon).
+  const role = element.getAttribute('data-stain');
+  if (role && stain[role]) return stain[role];
   if (element.closest('.face')) {
     // Her eyes, smile and glasses frames: dark parts only, so her cheeks stay pink.
     return light < 0.45 ? stain.eyes : null;
