@@ -1072,6 +1072,31 @@ export const PALS = [
       </g>
     `,
   },
+  // Bree: Brucella melitensis, a tiny, plump butterscotch oval
+  {
+    id: 'bree',
+    name: 'Bree',
+    looks: 'a tiny, plump butterscotch oval of a Brucella melitensis',
+    motion: 'bob',
+    // Framed roomy, so she looks small: she's one of the tiniest pals.
+    frames: { home: '0 0 200 200', picker: '0 0 200 200', dish: '14 14 172 172' },
+    art: `
+      <!-- a rod so short she's nearly round (a coccobacillus), with no
+           flagella: she can't swim -->
+      <ellipse cx="100" cy="100" rx="48" ry="36" fill="#e9c48a" stroke="#6e4a17" stroke-width="4" />
+      <path d="M66 84 Q76 74 90 72" stroke="#fbf1df" stroke-width="4" fill="none" stroke-linecap="round" />
+      <circle cx="132" cy="116" r="2.8" fill="#fbf1df" />
+      <g class="face">
+        <circle cx="89" cy="98" r="5.5" fill="#3b270b" />
+        <circle cx="111" cy="98" r="5.5" fill="#3b270b" />
+        <circle cx="90.8" cy="96.2" r="1.9" fill="white" />
+        <circle cx="112.8" cy="96.2" r="1.9" fill="white" />
+        <ellipse cx="76" cy="109" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="124" cy="109" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <path d="M95 109 Q100 114 105 109" stroke="#3b270b" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
 ];
 
 // The pals in the home page's row, in PALS order. The row is full: pals

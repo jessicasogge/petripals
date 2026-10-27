@@ -187,4 +187,10 @@ export const QUIZ_FACTS = {
     "Scientists study Marina in zebrafish to learn how immune cells form granulomas in TB.",
     "Waterproof gloves help keep Marina out of cuts when you clean a fish tank."
   ],
+  bree: [
+    "Bree was first found in soldiers on Malta who were sick with Malta fever.",
+    "People can catch Bree by drinking raw milk or eating cheese made from it.",
+    "Bree hides and grows inside the immune cells that are meant to eat her.",
+    "Bree's fever can rise and fall in waves, so it's also called undulant fever."
+  ],
 };

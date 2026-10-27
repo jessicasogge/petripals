@@ -133,6 +133,18 @@ describe('pals', () => {
     expect(antibiotics[0].code).toBe('GM');
   });
 
+  it('makes Bree a tiny Gram-negative oval, traced with three circles', () => {
+    const { kind, layout, gram, size, body, antibiotics } = SPECIES.bree;
+    expect(kind).toBe('rod');
+    expect(layout).toBeUndefined();
+    expect(gram).toBe('negative');
+    expect(size).toBeLessThan(SPECIES.frannie.size);
+    // Her oval is 100 wide and 76 tall (outline and all) in her 172-wide dish drawing.
+    expect(Math.max(...body.map(([x, , r]) => x + r))).toBeCloseTo(50 / 172, 2);
+    expect(Math.max(...body.map(([, , r]) => r))).toBeCloseTo(38 / 172, 2);
+    expect(antibiotics[0].code).toBe('DO');
+  });
+
   it('makes Electra a Gram-negative rod that splits and slides apart, traced along her straight rod', () => {
     const { kind, layout, gram, body } = SPECIES.electra;
     expect(kind).toBe('rod');
@@ -266,7 +278,7 @@ describe('Gram stains', () => {
     '%s is Gram-positive, like her real species',
     (name) => expect(SPECIES[name].gram).toBe('positive'),
   );
-  it.each(['mona', 'vi', 'elia', 'coco', 'sallie', 'sara', 'astrid', 'kiki', 'electra', 'pearl', 'frannie', 'colette', 'ari'])(
+  it.each(['mona', 'vi', 'elia', 'coco', 'sallie', 'sara', 'astrid', 'kiki', 'electra', 'pearl', 'frannie', 'colette', 'ari', 'bree'])(
     '%s is Gram-negative, like her real species',
     (name) => expect(SPECIES[name].gram).toBe('negative'),
   );

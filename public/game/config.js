@@ -381,7 +381,7 @@ export const SPECIES = {
       { code: 'VA', name: 'vancomycin', zone: 17 },
       { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 31 },
       { code: 'CC', name: 'clindamycin', zone: 30 },
-      { code: 'DO', name: 'doxycycline', zone: 28 },
+      { code: 'DO', name: 'doxycycline', zone: 30 },
     ],
   },
   // Bacillus cereus: a big rod that grows in short chains, like train cars
@@ -1163,6 +1163,46 @@ export const SPECIES = {
       { code: 'DO', name: 'doxycycline', zone: 26 },
       { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 22 },
       { code: 'CIP', name: 'ciprofloxacin', zone: 19 },
+    ],
+  },
+  bree: {
+    facts: [
+      "Bree's genus, Brucella, honors David Bruce, who found her in 1887.",
+      "Bree's species name, melitensis, comes from Melita, the old Latin name for Malta.",
+      "Bree was first found in soldiers on Malta who were sick with Malta fever.",
+      "Bree mostly infects goats and sheep.",
+      "People can catch Bree by drinking raw milk or eating cheese made from it.",
+      "Pasteurizing milk heats it enough to kill Bree.",
+      "Bree's fever can rise and fall in waves, so it's also called undulant fever.",
+      "Bree hides and grows inside the immune cells that are meant to eat her.",
+      "Bree is tiny, only about half a micrometer wide.",
+      "Bree is a coccobacillus, a rod so short she looks almost round.",
+      "Bree grows slowly, so her colonies can take several days to appear.",
+      "Bree's tiny colonies are shiny and can look like little drops of honey.",
+      "Bree has no flagella and cannot swim.",
+      "Lab workers handle Bree with extra care, since she can spread through the air.",
+      "Doctors often treat Bree with two antibiotics together for about six weeks."
+    ],
+    scientific: 'Brucella melitensis',
+    color: '#6e4a17', // for her name above the dish
+    tile: 'rgba(233, 196, 138, 0.32)',
+    kind: 'rod',
+    gram: 'negative',
+    // Small on purpose: she's one of the tiniest pals, and her frame leaves
+    // room around her.
+    size: 9,
+    // Her oval, traced with three circles.
+    body: [
+      [-0.093, 0.0, 0.198],
+      [0.0, 0.0, 0.221],
+      [0.093, 0.0, 0.198],
+    ],
+    antibiotics: [
+      { code: 'DO', name: 'doxycycline', zone: 30 },
+      { code: 'RA', name: 'rifampin', zone: 22 },
+      { code: 'GM', name: 'gentamicin', zone: 24 },
+      { code: 'S', name: 'streptomycin', zone: 18 },
+      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 26 },
     ],
   },
 };
