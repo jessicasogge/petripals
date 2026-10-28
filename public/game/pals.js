@@ -1072,19 +1072,20 @@ export const PALS = [
       </g>
     `,
   },
-  // Bree: Brucella melitensis, a tiny, plump butterscotch oval
+  // Bree: Brucella melitensis, a plump butterscotch coccobacillus, a little
+  // bigger than Coco
   {
     id: 'bree',
     name: 'Bree',
-    looks: 'a tiny, plump butterscotch oval of a Brucella melitensis',
+    looks: 'a small, plump butterscotch Brucella melitensis',
     motion: 'bob',
-    // Framed roomy, so she looks small: she's one of the tiniest pals.
-    frames: { home: '0 0 200 200', picker: '0 0 200 200', dish: '14 14 172 172' },
+    // Framed like Coco, since they're the same shape.
+    frames: { home: '0 0 200 200', picker: '20 20 160 160', dish: '40 40 120 120' },
     art: `
-      <!-- a rod so short she's nearly round (a coccobacillus), with no
-           flagella: she can't swim -->
-      <ellipse cx="100" cy="100" rx="48" ry="36" fill="#e9c48a" stroke="#6e4a17" stroke-width="4" />
-      <path d="M66 84 Q76 74 90 72" stroke="#fbf1df" stroke-width="4" fill="none" stroke-linecap="round" />
+      <!-- coccobacillus: a short, plump rod, like Coco's but a little plumper
+           (no flagella: she can't swim) -->
+      <rect x="52" y="68" width="96" height="64" rx="32" fill="#e9c48a" stroke="#6e4a17" stroke-width="4" />
+      <path d="M68 84 Q76 77 90 76" stroke="#fbf1df" stroke-width="4" fill="none" stroke-linecap="round" />
       <circle cx="132" cy="116" r="2.8" fill="#fbf1df" />
       <g class="face">
         <circle cx="89" cy="98" r="5.5" fill="#3b270b" />

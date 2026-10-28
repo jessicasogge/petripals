@@ -133,15 +133,17 @@ describe('pals', () => {
     expect(antibiotics[0].code).toBe('GM');
   });
 
-  it('makes Bree a tiny Gram-negative oval, traced with three circles', () => {
-    const { kind, layout, gram, size, body, antibiotics } = SPECIES.bree;
+  it('makes Bree a Gram-negative coccobacillus shaped like Coco, a little bigger', () => {
+    const { kind, layout, gram, body, antibiotics } = SPECIES.bree;
     expect(kind).toBe('rod');
     expect(layout).toBeUndefined();
     expect(gram).toBe('negative');
-    expect(size).toBeLessThan(SPECIES.frannie.size);
-    // Her oval is 100 wide and 76 tall (outline and all) in her 172-wide dish drawing.
-    expect(Math.max(...body.map(([x, , r]) => x + r))).toBeCloseTo(50 / 172, 2);
-    expect(Math.max(...body.map(([, , r]) => r))).toBeCloseTo(38 / 172, 2);
+    // Her rod is 100 wide and 68 tall (outline and all) in her 120-wide dish drawing.
+    expect(Math.max(...body.map(([x, , r]) => x + r))).toBeCloseTo(50 / 120, 2);
+    expect(Math.max(...body.map(([, , r]) => r))).toBeCloseTo(34 / 120, 2);
+    // Drawn a little bigger than Coco in the dish.
+    const length = (id) => Math.max(...SPECIES[id].body.map(([x, , r]) => x + r)) * SPECIES[id].size;
+    expect(length('bree')).toBeGreaterThan(length('coco'));
     expect(antibiotics[0].code).toBe('DO');
   });
 

@@ -1188,14 +1188,13 @@ export const SPECIES = {
     tile: 'rgba(233, 196, 138, 0.32)',
     kind: 'rod',
     gram: 'negative',
-    // Small on purpose: she's one of the tiniest pals, and her frame leaves
-    // room around her.
+    // A little bigger than Coco, as she is in real life.
     size: 9,
-    // Her oval, traced with three circles.
+    // Her short, plump rod.
     body: [
-      [-0.093, 0.0, 0.198],
-      [0.0, 0.0, 0.221],
-      [0.093, 0.0, 0.198],
+      [-0.133, 0.0, 0.283],
+      [0.0, 0.0, 0.283],
+      [0.133, 0.0, 0.283],
     ],
     antibiotics: [
       { code: 'DO', name: 'doxycycline', zone: 30 },
