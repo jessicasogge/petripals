@@ -1167,21 +1167,21 @@ export const SPECIES = {
   },
   bree: {
     facts: [
-      "Bree's genus, Brucella, honors David Bruce, who found her in 1887.",
-      "Bree's species name, melitensis, comes from Melita, the old Latin name for Malta.",
-      "Bree was first found in soldiers on Malta who were sick with Malta fever.",
+      "Bree's genus, Brucella, honors David Bruce, who identified her in 1887.",
+      "Bree's species name, melitensis, comes from Melita, the Latin name for Malta.",
+      "Bree was first isolated from a soldier on Malta who died of Malta fever.",
       "Bree mostly infects goats and sheep.",
-      "People can catch Bree by drinking raw milk or eating cheese made from it.",
+      "People can catch Bree from contaminated raw milk or cheese made from it.",
       "Pasteurizing milk heats it enough to kill Bree.",
-      "Bree's fever can rise and fall in waves, so it's also called undulant fever.",
-      "Bree hides and grows inside the immune cells that are meant to eat her.",
+      "Bree can cause fever that rises and falls in waves, called undulant fever.",
+      "Bree survives and grows inside immune cells that are meant to destroy her.",
       "Bree is tiny, only about half a micrometer wide.",
       "Bree is a coccobacillus, a rod so short she looks almost round.",
       "Bree grows slowly, so her colonies can take several days to appear.",
-      "Bree's tiny colonies are shiny and can look like little drops of honey.",
+      "Bree's tiny, shiny colonies can look like pale drops of honey.",
       "Bree has no flagella and cannot swim.",
-      "Lab workers handle Bree with extra care, since she can spread through the air.",
-      "Doctors often treat Bree with two antibiotics together for about six weeks."
+      "Lab workers handle Bree with extra care because tiny airborne droplets can infect them.",
+      "Doctors often treat Bree infections with two antibiotics for at least six weeks."
     ],
     scientific: 'Brucella melitensis',
     color: '#6e4a17', // for her name above the dish
