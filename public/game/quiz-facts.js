@@ -187,4 +187,10 @@ export const QUIZ_FACTS = {
     "Scientists study Marina in zebrafish to learn how immune cells form granulomas in TB.",
     "Waterproof gloves help keep Marina out of cuts when you clean a fish tank."
   ],
+  bree: [
+    "Bree was first isolated in 1887 from a soldier on Malta who died of Malta fever.",
+    "Bree's species name, melitensis, comes from Melita, the Latin name for Malta.",
+    "Bree mainly infects goats and sheep and can reach people through their raw milk.",
+    "Bree causes brucellosis, also called undulant fever for its waves of fever."
+  ],
 };

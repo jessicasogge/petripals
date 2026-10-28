@@ -381,7 +381,7 @@ export const SPECIES = {
       { code: 'VA', name: 'vancomycin', zone: 17 },
       { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 31 },
       { code: 'CC', name: 'clindamycin', zone: 30 },
-      { code: 'DO', name: 'doxycycline', zone: 28 },
+      { code: 'DO', name: 'doxycycline', zone: 30 },
     ],
   },
   // Bacillus cereus: a big rod that grows in short chains, like train cars
@@ -1163,6 +1163,45 @@ export const SPECIES = {
       { code: 'DO', name: 'doxycycline', zone: 26 },
       { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 22 },
       { code: 'CIP', name: 'ciprofloxacin', zone: 19 },
+    ],
+  },
+  bree: {
+    facts: [
+      "Bree's genus, Brucella, honors David Bruce, who identified her in 1887.",
+      "Bree's species name, melitensis, comes from Melita, the Latin name for Malta.",
+      "Bree was first isolated from a soldier on Malta who died of Malta fever.",
+      "Bree mostly infects goats and sheep.",
+      "People can catch Bree from contaminated raw milk or cheese made from it.",
+      "Pasteurizing milk heats it enough to kill Bree.",
+      "Bree can cause fever that rises and falls in waves, called undulant fever.",
+      "Bree survives and grows inside immune cells that are meant to destroy her.",
+      "Bree is tiny, only about half a micrometer wide.",
+      "Bree is a coccobacillus, a rod so short she looks almost round.",
+      "Bree grows slowly, so her colonies can take several days to appear.",
+      "Bree's tiny, shiny colonies can look like pale drops of honey.",
+      "Bree has no flagella and cannot swim.",
+      "Lab workers handle Bree with extra care because tiny airborne droplets can infect them.",
+      "Doctors often treat Bree infections with two antibiotics for at least six weeks."
+    ],
+    scientific: 'Brucella melitensis',
+    color: '#9a5b00', // for her name above the dish
+    tile: 'rgba(255, 191, 60, 0.3)',
+    kind: 'rod',
+    gram: 'negative',
+    // A little bigger than Coco, as she is in real life.
+    size: 9,
+    // Her short, plump rod.
+    body: [
+      [-0.133, 0.0, 0.283],
+      [0.0, 0.0, 0.283],
+      [0.133, 0.0, 0.283],
+    ],
+    antibiotics: [
+      { code: 'DO', name: 'doxycycline', zone: 30 },
+      { code: 'RA', name: 'rifampin', zone: 22 },
+      { code: 'GM', name: 'gentamicin', zone: 24 },
+      { code: 'S', name: 'streptomycin', zone: 18 },
+      { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 26 },
     ],
   },
 };

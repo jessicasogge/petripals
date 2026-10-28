@@ -1072,6 +1072,35 @@ export const PALS = [
       </g>
     `,
   },
+  // Bree: Brucella melitensis, a plump marigold coccobacillus, a little
+  // bigger than Coco
+  {
+    id: 'bree',
+    name: 'Bree',
+    looks: 'a small, plump marigold Brucella melitensis',
+    motion: 'bob',
+    // Framed like Coco, since they're the same shape.
+    frames: { home: '0 0 200 200', picker: '20 20 160 160', dish: '40 40 120 120' },
+    art: `
+      <!-- coccobacillus: a short, plump rod, like Coco's but a little plumper
+           (no flagella: she can't swim) -->
+      <!-- her body (marked, since marigold is darker than microscope mode
+           would take for a body), then her outline on top -->
+      <rect data-stain="body" x="52" y="68" width="96" height="64" rx="32" fill="#ffbf3c" />
+      <rect x="52" y="68" width="96" height="64" rx="32" fill="none" stroke="#9a5b00" stroke-width="4" />
+      <path d="M68 84 Q76 77 90 76" stroke="#fff2d1" stroke-width="4" fill="none" stroke-linecap="round" />
+      <circle cx="132" cy="116" r="2.8" fill="#fff2d1" />
+      <g class="face">
+        <circle cx="89" cy="98" r="5.5" fill="#4a2c00" />
+        <circle cx="111" cy="98" r="5.5" fill="#4a2c00" />
+        <circle cx="90.8" cy="96.2" r="1.9" fill="white" />
+        <circle cx="112.8" cy="96.2" r="1.9" fill="white" />
+        <ellipse cx="76" cy="109" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="124" cy="109" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <path d="M95 109 Q100 114 105 109" stroke="#4a2c00" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
 ];
 
 // The pals in the home page's row, in PALS order. The row is full: pals
