@@ -1184,8 +1184,8 @@ export const SPECIES = {
       "Doctors often treat Bree infections with two antibiotics for at least six weeks."
     ],
     scientific: 'Brucella melitensis',
-    color: '#6e4a17', // for her name above the dish
-    tile: 'rgba(233, 196, 138, 0.32)',
+    color: '#9a5b00', // for her name above the dish
+    tile: 'rgba(255, 191, 60, 0.3)',
     kind: 'rod',
     gram: 'negative',
     // A little bigger than Coco, as she is in real life.
