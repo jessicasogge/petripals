@@ -11,8 +11,9 @@
 //   art     200 x 200 drawing; wrap the face in <g class="face"> so dish
 //           offspring can hide it
 //
-// To add a pal: append here and to SPECIES (with her `tile` color). New pals
-// are picker-only; don't add to HOME.
+// To add a pal: append here and to SPECIES (with her `tile` color), and give
+// her a spot in the family tree (tree.js). New pals are picker-only; don't
+// add to HOME.
 
 import { SPECIES } from './config.js';
 

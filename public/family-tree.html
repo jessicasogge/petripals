@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PetriPals | Family Tree</title>
+    <meta name="description" content="See how the PetriPals are related: tap through the bacterial family tree, from Gram-positive rods and cocci to the gut cousins." />
+    <link rel="canonical" href="https://jessicasogge.github.io/petripals/family-tree.html" />
+    <!-- How the link looks when it's shared (iMessage, Slack, Discord, social media) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PetriPals" />
+    <meta property="og:title" content="PetriPals | Family Tree" />
+    <meta property="og:description" content="See how the PetriPals are related: tap through the bacterial family tree, from Gram-positive rods and cocci to the gut cousins." />
+    <meta property="og:url" content="https://jessicasogge.github.io/petripals/family-tree.html" />
+    <meta property="og:image" content="https://jessicasogge.github.io/petripals/social-preview.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="The eight PetriPals, cartoon bacteria, above the words PetriPals: Grow your colony. Dodge antibiotics." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="./favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="PetriPals" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="picker-page">
+    <!-- "Growing the colony…" covers the page until game/family-tree.js has
+         filled it in (see game/loading.js). -->
+    <div class="loading-overlay arriving">
+      <div class="loading-card" role="status">
+        <span class="loading-cells" aria-hidden="true"><span></span><span></span></span>
+        <span class="loading-text">Growing the colony…</span>
+      </div>
+    </div>
+    <main class="picker-shell tree-shell">
+      <h1>The PetriPals Family Tree</h1>
+      <!-- Where you are in the tree, from game/family-tree.js. Tap a step to go back up. -->
+      <nav class="tree-trail" aria-label="Where you are in the tree"></nav>
+      <p class="tree-note"></p>
+      <!-- The branches (or pals) on this branch. -->
+      <div class="tree-view" aria-live="polite"></div>
+      <!-- The pal you tapped: her branches and all her fun facts. -->
+      <section class="tree-pal" hidden aria-live="polite"></section>
+      <!-- Back to home at the top of the tree; anywhere else, back up a branch. -->
+      <a class="back-link tree-home" href="./index.html">Back to home</a>
+      <button class="back-link tree-back" type="button" hidden>Back</button>
+    </main>
+    <footer class="signature">jsogge 2026</footer>
+    <script type="module" src="./game/family-tree.js"></script>
+    <script data-goatcounter="https://petripals.goatcounter.com/count"
+            async src="https://gc.zgo.at/count.js"></script>
+  </body>
+</html>

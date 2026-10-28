@@ -209,8 +209,9 @@ body {
   opacity: 0.8;
 }
 
-/* The home page's second button, under Start: Who’s That Pal?
-   (whos-that-pal.html). Outlined, so Start stays the main thing to press. */
+/* The home page's other buttons, under Start: Who’s That Pal?
+   (whos-that-pal.html) and Family Tree (family-tree.html). Outlined, so
+   Start stays the main thing to press. */
 .guess-link {
   display: inline-block;
   margin-top: 1rem;
@@ -1623,3 +1624,240 @@ svg:has(.infected-cell) {
     animation: none;
   }
 }
+
+/* The family tree (game/family-tree.js): one branch at a time, as cards
+   you tap through, with a trail of steps above to go back up. */
+.tree-shell {
+  width: min(620px, 100%);
+}
+
+.home-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 0.75rem;
+}
+
+.tree-trail {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.1rem 0.35rem;
+  font-weight: 700;
+}
+
+.tree-step {
+  font: inherit;
+  color: #0f766e;
+  background: none;
+  border: 0;
+  padding: 0.3rem 0.15rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.tree-step:focus-visible,
+.tree-branch:focus-visible,
+.tree-back:focus-visible {
+  outline: 3px solid #0f766e;
+  outline-offset: 2px;
+}
+
+.tree-here {
+  color: #134e4a;
+}
+
+.tree-sep {
+  color: #94a3b8;
+}
+
+.tree-note {
+  margin: 0.25rem 0 1rem;
+  color: #475569;
+}
+
+.tree-branches {
+  display: grid;
+  gap: 0.75rem;
+}
+
+/* A branch: its name, its note, and the faces of the pals on it. */
+.tree-branch {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.3rem 0.75rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px solid rgba(15, 118, 110, 0.2);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tree-branch:hover {
+  border-color: #14b8a6;
+}
+
+.tree-branch-name b {
+  font-family: Fredoka, system-ui, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #134e4a;
+}
+
+.tree-branch-name i {
+  font-size: 0.8rem;
+  color: #475569;
+}
+
+.tree-count {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #0f766e;
+  white-space: nowrap;
+}
+
+.tree-branch-note {
+  grid-column: 1 / -1;
+  font-size: 0.92rem;
+  line-height: 1.35;
+  color: #475569;
+}
+
+.tree-faces {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.tree-faces .pal-icon {
+  width: 38px;
+  height: 38px;
+  margin: 0;
+  border-radius: 10px;
+}
+
+.tree-faces .pal-icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+/* The pals at the tip of a branch: a little room on each side of her picture. */
+.tree-tips > .rival-btn .pal-icon {
+  width: 60px;
+  height: 60px;
+}
+
+.tree-tips > .rival-btn .pal-icon svg {
+  width: 50px;
+  height: 50px;
+}
+
+/* A new branch slides in from the side you're going. */
+.tree-slide {
+  animation: tree-in 0.25s ease-out;
+}
+
+.tree-slide.back {
+  animation-name: tree-back;
+}
+
+@keyframes tree-in {
+  from { opacity: 0; transform: translateX(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes tree-back {
+  from { opacity: 0; transform: translateX(-18px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Back up a branch: looks like the "Back to home" link. */
+.tree-back {
+  font: inherit;
+  font-weight: 700;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* The pal you tapped. */
+.tree-pal {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px solid #0f766e;
+  border-radius: 20px;
+}
+
+.tree-pal[hidden],
+.tree-trail[hidden],
+.tree-note[hidden],
+.tree-home[hidden],
+.tree-back[hidden] {
+  display: none;
+}
+
+.tree-pal-top {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.tree-pal-top .pal-icon {
+  width: 68px;
+  height: 68px;
+  margin: 0;
+  flex: none;
+  border-radius: 16px;
+}
+
+.tree-pal-top .pal-icon svg {
+  width: 58px;
+  height: 58px;
+}
+
+.tree-pal-name {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.tree-pal-species,
+.tree-pal-line {
+  margin: 0;
+}
+
+.tree-facts {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.35rem;
+  line-height: 1.4;
+}
+
+.tree-pal-species {
+  color: #475569;
+}
+
+.tree-pal-line {
+  font-weight: 700;
+  color: #134e4a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tree-slide,
+  .tree-slide.back {
+    animation: none;
+  }
