@@ -188,9 +188,9 @@ export const QUIZ_FACTS = {
     "Waterproof gloves help keep Marina out of cuts when you clean a fish tank."
   ],
   bree: [
-    "Bree was first found in soldiers on Malta who were sick with Malta fever.",
-    "People can catch Bree by drinking raw milk or eating cheese made from it.",
-    "Bree hides and grows inside the immune cells that are meant to eat her.",
-    "Bree's fever can rise and fall in waves, so it's also called undulant fever."
+    "Bree was first isolated in 1887 from a soldier on Malta who died of Malta fever.",
+    "Bree's species name, melitensis, comes from Melita, the Latin name for Malta.",
+    "Bree mainly infects goats and sheep and can reach people through their raw milk.",
+    "Bree causes brucellosis, also called undulant fever for its waves of fever."
   ],
 };
