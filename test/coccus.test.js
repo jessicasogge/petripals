@@ -418,6 +418,57 @@ describe('Penny (Streptococcus pneumoniae)', () => {
   });
 });
 
+describe('Nessa (Neisseria meningitidis)', () => {
+  // How a cell's bean shape is turned: "translate(x y) rotate(deg)".
+  const turn = (el) => Number(el.getAttribute('transform').match(/rotate\((-?[\d.]+)\)/)[1]);
+
+  it('grows in pairs, like Penny', () => {
+    const pair = makeGroup('nessa', { x: 30 });
+    const player = makeGroup('nessa', { isPlayer: true, x: 50 });
+    expect(player.divide([pair], DISH_RADIUS)).toBeNull();
+    pair.update(1);
+    expect(pair.cellCount()).toBe(2);
+    expect(player.divide([pair], DISH_RADIUS).cellCount()).toBe(1);
+  });
+
+  it('is round on her own, in her peacock colors', () => {
+    const cell = makeGroup('nessa', { isPlayer: true }).svg.querySelector('.cell-body');
+    // Real cells only flatten where they press against a partner.
+    expect(cell.tagName).toBe('circle');
+    expect(cell.getAttribute('fill')).toBe(SPECIES.nessa.colors.fill);
+  });
+
+  it('has kidney-bean cells in a pair, like her picture', () => {
+    const pair = makeGroup('nessa');
+    grow(pair, 2);
+    const bodies = [...pair.svg.querySelectorAll('.cell-body')];
+    expect(bodies.map((b) => b.tagName)).toEqual(['path', 'path']);
+    expect(bodies[0].getAttribute('d')).not.toBe(makeGroup('penny').svg.querySelector('.cell-body').getAttribute('d'));
+  });
+
+  it('turns the flatter sides of a pair to face each other', () => {
+    const pair = makeGroup('nessa');
+    grow(pair, 2);
+    const [a, b] = pair.cells;
+    const bodies = [...pair.svg.querySelectorAll('.cell-body')];
+    for (const [cell, other] of [[a, b], [b, a]]) {
+      const el = bodies.find((x) => x.getAttribute('transform').startsWith(`translate(${cell.x} ${cell.y})`));
+      const away = (Math.atan2(cell.y - other.y, cell.x - other.x) * 180) / Math.PI;
+      expect(((turn(el) - 180 - away) % 360 + 360) % 360).toBeCloseTo(0, 0);
+    }
+  });
+
+  it('keeps every bean cell inside her cell circle, so what she touches is unchanged', () => {
+    const pair = makeGroup('nessa');
+    grow(pair, 2);
+    const d = pair.svg.querySelector('.cell-body').getAttribute('d');
+    const points = [...d.matchAll(/(-?[\d.]+) (-?[\d.]+)/g)].map((m) => [Number(m[1]), Number(m[2])]);
+    const onOutline = points.filter((_, i) => i === 0 || i % 3 === 0);
+    expect(onOutline).toHaveLength(6);
+    for (const [x, y] of onOutline) expect(Math.hypot(x, y)).toBeLessThanOrEqual(R);
+  });
+});
+
 describe('Ceres (Bacillus cereus)', () => {
   // How a cell's rod is turned: "translate(x y) rotate(deg)".
   const turn = (el) => Number(el.getAttribute('transform').match(/rotate\((-?[\d.]+)\)/)[1]);

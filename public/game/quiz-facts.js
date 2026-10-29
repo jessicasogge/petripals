@@ -192,5 +192,10 @@ export const QUIZ_FACTS = {
     "Bree's species name, melitensis, comes from Melita, the Latin name for Malta.",
     "Bree mainly infects goats and sheep and can reach people through their raw milk.",
     "Bree causes brucellosis, also called undulant fever for its waves of fever."
+  ],  nessa: [
+    "Nessa's species name, meningitidis, refers to meningitis, an illness she can cause.",
+    "Nessa was isolated in 1887 by Anton Weichselbaum from patients with meningitis.",
+    "About one in ten people carry Nessa in their throat without getting sick.",
+    "Nessa is also called the meningococcus, a bacterium that can cause meningitis."
   ],
 };

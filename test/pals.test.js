@@ -566,7 +566,7 @@ describe('wiggly flagella', () => {
     '%s swims with flagella, so she has wiggling tails (Astrid on her swarmers)',
     (id) => expect(SWIMMERS).toContain(id),
   );
-  it.each(['goldie', 'scarlett', 'penny', 'coco', 'ana', 'ivy', 'nova', 'pearl', 'frannie', 'electra', 'dina', 'ari', 'marina', 'bree', 'elia', 'ceres'])(
+  it.each(['goldie', 'scarlett', 'penny', 'coco', 'ana', 'ivy', 'nova', 'pearl', 'frannie', 'electra', 'dina', 'ari', 'marina', 'bree', 'nessa', 'elia', 'ceres'])(
     "%s has no wiggling tails (Elia's flagella are inside her; the others can't swim, or Ceres's are left off)",
     (id) => expect(SWIMMERS).not.toContain(id),
   );

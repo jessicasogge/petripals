@@ -1101,6 +1101,45 @@ export const PALS = [
       </g>
     `,
   },
+  // Nessa: Neisseria meningitidis, a peacock pair of kidney-bean cells
+  {
+    id: 'nessa',
+    name: 'Nessa',
+    looks: 'a peacock blue-green pair of kidney-bean Neisseria meningitidis cells with short pili',
+    motion: 'bob',
+    frames: { home: '-12 -12 224 224', picker: '0 0 200 200', dish: '10 10 180 180' },
+    art: `
+      <!-- short, straight pili, the hairs she grabs onto cells and twitches with -->
+      <line x1="43" y1="72" x2="37.5" y2="65.4" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="33" y1="108" x2="25.3" y2="111.3" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="61" y1="134" x2="57.7" y2="141.7" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="73" y1="64" x2="70.8" y2="56.3" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="157" y1="72" x2="162.5" y2="65.4" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="167" y1="108" x2="174.7" y2="111.3" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="139" y1="134" x2="142.3" y2="141.7" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="127" y1="64" x2="129.2" y2="56.3" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
+      <!-- two kidney beans, flatter sides facing, with a thin slit between:
+           each body (marked, since peacock is darker than microscope mode
+           would take for a body), then its outline on top -->
+      <path data-stain="body" d="M91 70 C63 62 33 74 33 100 C33 126 63 138 91 130 C99 128 101 122 97 116 C95.5 108 95.5 92 97 84 C101 78 99 72 91 70 Z" fill="#3fb3cb" />
+      <path d="M91 70 C63 62 33 74 33 100 C33 126 63 138 91 130 C99 128 101 122 97 116 C95.5 108 95.5 92 97 84 C101 78 99 72 91 70 Z" fill="none" stroke="#0b4f5e" stroke-width="4" stroke-linejoin="round" />
+      <path d="M47 86 Q55 76 67 74" stroke="#d9f3f8" stroke-width="4" fill="none" stroke-linecap="round" />
+      <!-- right cell, with her face -->
+      <path data-stain="body" d="M109 70 C137 62 167 74 167 100 C167 126 137 138 109 130 C101 128 99 122 103 116 C104.5 108 104.5 92 103 84 C99 78 101 72 109 70 Z" fill="#3fb3cb" />
+      <path d="M109 70 C137 62 167 74 167 100 C167 126 137 138 109 130 C101 128 99 122 103 116 C104.5 108 104.5 92 103 84 C99 78 101 72 109 70 Z" fill="none" stroke="#0b4f5e" stroke-width="4" stroke-linejoin="round" />
+      <path d="M119 80 Q129 72 143 73" stroke="#d9f3f8" stroke-width="4" fill="none" stroke-linecap="round" />
+      <circle cx="157" cy="118" r="2.6" fill="#d9f3f8" />
+      <g class="face">
+        <circle cx="127" cy="98" r="5" fill="#062f38" />
+        <circle cx="147" cy="98" r="5" fill="#062f38" />
+        <circle cx="128.6" cy="96.4" r="1.7" fill="white" />
+        <circle cx="148.6" cy="96.4" r="1.7" fill="white" />
+        <ellipse cx="117" cy="108" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="157" cy="108" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
+        <path d="M132.5 108 Q137 112.5 141.5 108" stroke="#062f38" stroke-width="2.8" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
 ];
 
 // The pals in the home page's row, in PALS order. The row is full: pals

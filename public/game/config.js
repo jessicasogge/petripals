@@ -1204,6 +1204,42 @@ export const SPECIES = {
       { code: 'SXT', name: 'trimethoprim-sulfamethoxazole', zone: 26 },
     ],
   },
+  nessa: {
+    facts: [
+      "Nessa's genus, Neisseria, honors Albert Neisser, a German doctor.",
+      "Nessa's species name, meningitidis, refers to meningitis, an illness she can cause.",
+      "Nessa can inflame the protective layers around the brain and spinal cord.",
+      "Nessa was first identified in 1887 by Anton Weichselbaum, a doctor in Vienna.",
+      "About one in ten people carry Nessa in their throat without getting sick.",
+      "Vaccines help protect people against the main disease causing groups of Nessa.",
+      "Nessa's cells form kidney bean shaped pairs, with their flatter sides facing.",
+      "Nessa stains pink in a Gram stain.",
+      "Nessa grows on chocolate agar, made with heated blood, not chocolate.",
+      "Nessa grows better with extra carbon dioxide, a gas found in the air we breathe out.",
+      "Nessa uses tiny hairs called pili to attach to cells in the nose and throat.",
+      "Nessa can use her pili to twitch across surfaces without flagella.",
+      "Nessa can wear a sugary capsule that helps protect her from immune attacks.",
+      "Nessa has no flagella and cannot swim.",
+    ],
+    scientific: 'Neisseria meningitidis',
+    color: '#0b4f5e', // for her name above the dish
+    tile: 'rgba(47, 166, 191, 0.25)',
+    kind: 'coccus',
+    gram: 'negative',
+    layout: 'chain',
+    maxCells: 2, // pairs
+    // Her cells are kidney beans, like in her picture, with their flatter
+    // sides facing. (Meningococci are Gram-negative diplococci.)
+    shape: 'bean',
+    colors: { fill: '#3fb3cb', stroke: '#0b4f5e', highlight: '#d9f3f8', dark: '#062f38' },
+    antibiotics: [
+      { code: 'CRO', name: 'ceftriaxone', zone: 38 },
+      { code: 'MEM', name: 'meropenem', zone: 33 },
+      { code: 'CIP', name: 'ciprofloxacin', zone: 37 },
+      { code: 'RA', name: 'rifampin', zone: 27 },
+      { code: 'AZM', name: 'azithromycin', zone: 24 },
+    ],
+  },
 };
 
 // Mixed culture: no disks; race 1–3 AI rivals (chosen or one random) to TARGET cells.
