@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 1100" width="850" height="1100">
+  <defs>
+    <!-- outlined "tube" made from a thick black stroke under a slightly thinner white one -->
+    <g id="fish">
+      <path d="M-60,0 C-40,-38 30,-42 60,0 C30,42 -40,38 -60,0 Z" />
+      <path d="M58,0 L100,-32 L92,0 L100,32 Z" />
+      <path d="M-5,-34 C5,-55 30,-50 35,-28" />
+      <path d="M10,-30 C10,-10 10,10 10,30" fill="none"/>
+      <circle cx="-32" cy="-6" r="9" />
+      <circle cx="-32" cy="-6" r="3.5" fill="#000"/>
+      <path d="M-55,10 C-50,14 -45,14 -42,12" fill="none"/>
+    </g>
+    <g id="bubble">
+      <circle r="1" />
+    </g>
+  </defs>
+
+  <rect width="850" height="1100" fill="#fff"/>
+  <g fill="#fff" stroke="#000" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+    <!-- frame -->
+    <rect x="25" y="25" width="800" height="1050" rx="30"/>
+
+    <!-- title -->
+    <text x="425" y="120" text-anchor="middle" font-family="'Arial Rounded MT Bold','Trebuchet MS',Arial,sans-serif"
+          font-size="62" textLength="700" lengthAdjust="spacingAndGlyphs" font-weight="900" letter-spacing="4" stroke-width="3.5">QUEEN OF THE DEEP</text>
+
+    <!-- seaweed (left & right) -->
+    <g fill="none">
+      <path d="M95,1000 C60,900 135,830 95,730 C60,640 130,580 105,500" stroke-width="40"/>
+      <path d="M95,1000 C60,900 135,830 95,730 C60,640 130,580 105,500" stroke="#fff" stroke-width="32"/>
+      <path d="M165,1000 C190,920 140,870 170,790 C195,720 150,680 170,620" stroke-width="30"/>
+      <path d="M165,1000 C190,920 140,870 170,790 C195,720 150,680 170,620" stroke="#fff" stroke-width="22"/>
+      <path d="M755,1000 C790,910 715,840 755,740 C790,660 725,600 750,520" stroke-width="40"/>
+      <path d="M755,1000 C790,910 715,840 755,740 C790,660 725,600 750,520" stroke="#fff" stroke-width="32"/>
+      <path d="M690,1000 C665,930 715,880 685,810 C660,750 700,710 685,660" stroke-width="30"/>
+      <path d="M690,1000 C665,930 715,880 685,810 C660,750 700,710 685,660" stroke="#fff" stroke-width="22"/>
+    </g>
+
+    <!-- sea floor -->
+    <path d="M27,960 C120,930 200,975 300,950 C400,925 480,970 580,945 C680,920 760,960 823,940 L823,1048 Q823,1073 798,1073 L52,1073 Q27,1073 27,1048 Z"/>
+    <circle cx="120" cy="1010" r="6"/><circle cx="260" cy="1035" r="5"/><circle cx="470" cy="1020" r="7"/>
+    <circle cx="620" cy="1040" r="5"/><circle cx="350" cy="1050" r="4"/><circle cx="730" cy="1015" r="6"/>
+
+    <!-- rock throne -->
+    <path d="M250,960 C230,880 290,820 360,830 C400,800 470,800 510,830 C580,820 630,880 605,960 Z"/>
+    <path d="M330,880 C350,870 370,875 380,890" fill="none"/>
+    <path d="M500,870 C520,865 540,875 545,895" fill="none"/>
+
+    <!-- tentacles: black tube, white core, then suckers -->
+    <g fill="none">
+      <g stroke-width="50">
+        <path d="M330,560 C250,620 170,640 180,720 C190,790 270,770 255,730"/>
+        <path d="M360,590 C320,680 270,760 300,840 C320,890 380,870 365,830"/>
+        <path d="M405,600 C395,700 380,800 420,870 C440,905 490,890 475,850"/>
+        <path d="M450,600 C470,700 500,790 470,860"/>
+        <path d="M490,590 C540,670 600,720 590,800 C585,850 525,850 535,810"/>
+        <path d="M520,560 C600,610 680,630 670,710 C660,770 600,760 615,720"/>
+      </g>
+      <g stroke="#fff" stroke-width="42">
+        <path d="M330,560 C250,620 170,640 180,720 C190,790 270,770 255,730"/>
+        <path d="M360,590 C320,680 270,760 300,840 C320,890 380,870 365,830"/>
+        <path d="M405,600 C395,700 380,800 420,870 C440,905 490,890 475,850"/>
+        <path d="M450,600 C470,700 500,790 470,860"/>
+        <path d="M490,590 C540,670 600,720 590,800 C585,850 525,850 535,810"/>
+        <path d="M520,560 C600,610 680,630 670,710 C660,770 600,760 615,720"/>
+      </g>
+    </g>
+    <g stroke-width="3">
+      <circle cx="215" cy="650" r="7"/><circle cx="190" cy="690" r="7"/><circle cx="195" cy="735" r="6"/><circle cx="230" cy="760" r="5"/>
+      <circle cx="315" cy="720" r="7"/><circle cx="298" cy="770" r="7"/><circle cx="305" cy="820" r="6"/><circle cx="335" cy="860" r="5"/>
+      <circle cx="395" cy="720" r="7"/><circle cx="395" cy="775" r="7"/><circle cx="410" cy="830" r="6"/><circle cx="445" cy="875" r="5"/>
+      <circle cx="478" cy="720" r="7"/><circle cx="488" cy="770" r="7"/><circle cx="480" cy="825" r="6"/>
+      <circle cx="565" cy="690" r="7"/><circle cx="590" cy="740" r="7"/><circle cx="585" cy="790" r="6"/><circle cx="560" cy="830" r="5"/>
+      <circle cx="625" cy="640" r="7"/><circle cx="660" cy="670" r="7"/><circle cx="660" cy="715" r="6"/><circle cx="635" cy="745" r="5"/>
+    </g>
+
+    <!-- head -->
+    <path d="M425,250 C560,250 615,350 605,450 C598,530 540,600 425,605 C310,600 252,530 245,450 C235,350 290,250 425,250 Z"/>
+    <!-- spots -->
+    <circle cx="330" cy="350" r="16"/><circle cx="300" cy="400" r="9"/><circle cx="525" cy="340" r="13"/>
+    <circle cx="560" cy="395" r="8"/><circle cx="545" cy="300" r="7"/>
+
+    <!-- crown -->
+    <path d="M345,275 L330,185 L380,225 L425,160 L470,225 L520,185 L505,275 C455,255 395,255 345,275 Z"/>
+    <path d="M340,250 C395,232 455,232 510,250" fill="none"/>
+    <circle cx="330" cy="180" r="10"/><circle cx="425" cy="152" r="12"/><circle cx="520" cy="180" r="10"/>
+    <path d="M425,205 L437,222 L425,239 L413,222 Z"/>
+    <circle cx="377" cy="240" r="6"/><circle cx="473" cy="240" r="6"/>
+
+    <!-- eyes -->
+    <ellipse cx="365" cy="445" rx="45" ry="52"/>
+    <ellipse cx="485" cy="445" rx="45" ry="52"/>
+    <ellipse cx="372" cy="455" rx="25" ry="30" fill="#000"/>
+    <ellipse cx="478" cy="455" rx="25" ry="30" fill="#000"/>
+    <circle cx="382" cy="440" r="9" stroke="none"/><circle cx="488" cy="440" r="9" stroke="none"/>
+    <circle cx="365" cy="468" r="4" stroke="none"/><circle cx="471" cy="468" r="4" stroke="none"/>
+    <!-- lashes -->
+    <path d="M325,410 L310,398 M340,397 L330,380 M398,410 L413,398 M525,410 L540,398 M510,397 L520,380 M452,410 L437,398" fill="none"/>
+    <!-- cheeks & smile -->
+    <ellipse cx="315" cy="520" rx="22" ry="13"/><ellipse cx="535" cy="520" rx="22" ry="13"/>
+    <path d="M395,530 C410,560 440,560 455,530 C440,540 410,540 395,530 Z"/>
+
+    <!-- starfish -->
+    <path d="M205,925 L222,885 L235,925 L278,925 L243,948 L258,990 L222,965 L186,990 L201,948 L166,925 Z" stroke-width="4"/>
+    <circle cx="222" cy="930" r="3"/><circle cx="210" cy="948" r="3"/><circle cx="234" cy="948" r="3"/>
+
+    <!-- shell -->
+    <path d="M640,1000 C610,950 640,905 680,905 C720,905 750,950 720,1000 Z"/>
+    <path d="M680,1000 L680,910 M680,1000 L655,920 M680,1000 L705,920 M680,1000 L635,960 M680,1000 L725,960" fill="none"/>
+    <path d="M665,1000 L695,1000 L688,1015 L672,1015 Z"/>
+
+    <!-- fish -->
+    <use href="#fish" transform="translate(170,330) scale(0.9)"/>
+    <use href="#fish" transform="translate(690,300) scale(-0.8,0.8)"/>
+    <use href="#fish" transform="translate(680,450) scale(-0.55,0.55)"/>
+
+    <!-- bubbles -->
+    <circle cx="610" cy="200" r="22"/><path d="M598,192 C600,186 604,183 609,182" fill="none" stroke-width="3"/>
+    <circle cx="650" cy="160" r="12"/><circle cx="625" cy="140" r="7"/>
+    <circle cx="230" cy="210" r="18"/><path d="M220,203 C222,198 226,196 230,195" fill="none" stroke-width="3"/>
+    <circle cx="200" cy="175" r="9"/><circle cx="260" cy="470" r="0" />
+    <circle cx="120" cy="420" r="14"/><circle cx="740" cy="590" r="16"/><circle cx="770" cy="555" r="8"/>
+    <circle cx="600" cy="880" r="10"/><circle cx="615" cy="855" r="6"/>
+  </g>
+</svg>
