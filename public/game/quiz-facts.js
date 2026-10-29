@@ -193,9 +193,9 @@ export const QUIZ_FACTS = {
     "Bree mainly infects goats and sheep and can reach people through their raw milk.",
     "Bree causes brucellosis, also called undulant fever for its waves of fever."
   ],  nessa: [
-    "Nessa's genus, Neisseria, honors Albert Neisser, a German doctor.",
-    "About one in ten people carry Nessa in their nose and throat without getting sick.",
-    "Nessa's cells come in pairs shaped like kidney beans, with their flat sides facing.",
-    "Nessa's pili let her twitch across surfaces, even though she has no flagella."
+    "Nessa's species name, meningitidis, refers to meningitis, an illness she can cause.",
+    "Nessa was isolated in 1887 by Anton Weichselbaum from patients with meningitis.",
+    "About one in ten people carry Nessa in their throat without getting sick.",
+    "Nessa is also called the meningococcus, a bacterium that can cause meningitis."
   ],
 };
