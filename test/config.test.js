@@ -81,6 +81,14 @@ describe('pals', () => {
     expect(SPECIES.penny.maxCells).toBe(2);
   });
 
+  it('makes Nessa a Gram-negative coccus that grows in pairs of kidney beans (Neisseria meningitidis)', () => {
+    expect(SPECIES.nessa.kind).toBe('coccus');
+    expect(SPECIES.nessa.layout).toBe('chain');
+    expect(SPECIES.nessa.maxCells).toBe(2);
+    expect(SPECIES.nessa.shape).toBe('bean');
+    expect(SPECIES.nessa.gram).toBe('negative');
+  });
+
   it('makes Sallie a rod that swims apart after dividing, like Mona', () => {
     expect(SPECIES.sallie.kind).toBe('rod');
     expect(SPECIES.sallie.layout).toBeUndefined();
@@ -280,7 +288,7 @@ describe('Gram stains', () => {
     '%s is Gram-positive, like her real species',
     (name) => expect(SPECIES[name].gram).toBe('positive'),
   );
-  it.each(['mona', 'vi', 'elia', 'coco', 'sallie', 'sara', 'astrid', 'kiki', 'electra', 'pearl', 'frannie', 'colette', 'ari', 'bree'])(
+  it.each(['mona', 'vi', 'elia', 'coco', 'sallie', 'sara', 'astrid', 'kiki', 'electra', 'pearl', 'frannie', 'colette', 'ari', 'bree', 'nessa'])(
     '%s is Gram-negative, like her real species',
     (name) => expect(SPECIES[name].gram).toBe('negative'),
   );

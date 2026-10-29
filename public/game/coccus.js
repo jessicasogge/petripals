@@ -4,10 +4,10 @@ import { GAME } from './config.js';
 import { idlePose, newMover } from './mover.js';
 import { coaster } from './physics.js';
 
-// Cocci (Scarlett, Penny, Goldie, Dina, Ari) and chained rods (Ceres).
+// Cocci (Scarlett, Penny, Nessa, Goldie, Dina, Ari) and chained rods (Ceres).
 // The player stays one cell; daughters join chains or clusters up to
 // GROUP_CAP or the pal's maxCells. Chains grow from the nearer end;
-// clusters grow toward the player. Scarlett lines up, Penny pairs,
+// clusters grow toward the player. Scarlett lines up, Penny and Nessa pair,
 // Goldie bunches, Dina squares, and Ari strings beads with a heterocyst
 // every few cells.
 export function coccusGroup({ mover, svg, species, isPlayer }) {
@@ -73,6 +73,21 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       `C${p(26, 116)} ${p(41, 133)} ${p(64, 133)} C${p(84, 133)} ${p(98, 121)} ${p(98, 100)} Z`;
   })();
 
+  // A kidney-bean cell (Nessa's), traced from her picture's left cell: round
+  // at the outer end (-x), with the flatter side facing her partner (+x).
+  // End to end one cell across, so a pair's facing sides almost meet, and a
+  // little squatter than her picture, so it fits inside the cell's circle.
+  const BEAN = (() => {
+    const sx = R / 34;
+    const sy = R / 44;
+    const p = (x, y) => `${((x - 63.5) * sx).toFixed(2)} ${((y - 100) * sy).toFixed(2)}`;
+    return `M${p(88, 70)} C${p(60, 62)} ${p(30, 74)} ${p(30, 100)} C${p(30, 126)} ${p(60, 138)} ${p(88, 130)} ` +
+      `C${p(96, 128)} ${p(98, 122)} ${p(94, 116)} C${p(92.5, 108)} ${p(92.5, 92)} ${p(94, 84)} C${p(98, 78)} ${p(96, 72)} ${p(88, 70)} Z`;
+  })();
+
+  // The traced shapes, by the `shape` in a pal's SPECIES entry.
+  const TRACED = { lancet: LANCET, bean: BEAN };
+
   // A rod-shaped cell (Ceres's): half its length, half its height and its
   // corner radius, in SVG units. Its corners stay inside the cell's circle.
   const ROD = { half: R * 0.95, tall: R * 0.6, corner: R * 0.45 };
@@ -119,10 +134,10 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       return `<rect class="cell-body" x="${-ROD.half}" y="${-ROD.tall}" width="${2 * ROD.half}" height="${2 * ROD.tall}" ` +
         `rx="${ROD.corner}" transform="translate(${c.x} ${c.y}) rotate(${turn})" ${paint} />`;
     }
-    if (species.shape === 'lancet') {
-      // The traced shape's outer end points left, so turn it half around more.
+    if (TRACED[species.shape]) {
+      // A traced shape's outer end points left, so turn it half around more.
       const turn = (outward(c) + 180).toFixed(1);
-      return `<path class="cell-body" d="${LANCET}" transform="translate(${c.x} ${c.y}) rotate(${turn})" ${paint} stroke-linejoin="round" />`;
+      return `<path class="cell-body" d="${TRACED[species.shape]}" transform="translate(${c.x} ${c.y}) rotate(${turn})" ${paint} stroke-linejoin="round" />`;
     }
     return `<circle class="cell-body" cx="${c.x}" cy="${c.y}" r="${R}" ${paint} />`;
   }
