@@ -1110,14 +1110,14 @@ export const PALS = [
     frames: { home: '-12 -12 224 224', picker: '0 0 200 200', dish: '10 10 180 180' },
     art: `
       <!-- short, straight pili, the hairs she grabs onto cells and twitches with -->
-      <line x1="43" y1="72" x2="33" y2="60" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
-      <line x1="33" y1="108" x2="19" y2="114" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
-      <line x1="61" y1="134" x2="55" y2="148" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
-      <line x1="73" y1="64" x2="69" y2="50" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
-      <line x1="157" y1="72" x2="167" y2="60" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
-      <line x1="167" y1="108" x2="181" y2="114" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
-      <line x1="139" y1="134" x2="145" y2="148" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
-      <line x1="127" y1="64" x2="131" y2="50" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="43" y1="72" x2="37.5" y2="65.4" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="33" y1="108" x2="25.3" y2="111.3" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="61" y1="134" x2="57.7" y2="141.7" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="73" y1="64" x2="70.8" y2="56.3" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="157" y1="72" x2="162.5" y2="65.4" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="167" y1="108" x2="174.7" y2="111.3" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="139" y1="134" x2="142.3" y2="141.7" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="127" y1="64" x2="129.2" y2="56.3" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
       <!-- two kidney beans, flatter sides facing, with a thin slit between:
            each body (marked, since peacock is darker than microscope mode
            would take for a body), then its outline on top -->
