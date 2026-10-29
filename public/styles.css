@@ -651,6 +651,11 @@ a.pal-card:focus-visible {
   margin: 0.25rem 0 0.5rem;
 }
 
+/* Five modes: the last one gets a row of its own, across both columns. */
+.mode-card:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
 .mode-card p {
   margin: 0;
   line-height: 1.45;
@@ -1553,6 +1558,23 @@ body:not(.picker-page) .signature {
   display: block;
   width: 100%;
   height: auto;
+}
+
+/* Phage Pong's phage (game/pong.js) is the ball: a bit bigger, so it's easy
+   to follow. */
+.phage.pong-phage {
+  width: 4.5%;
+}
+
+/* The part of each pal that hits the phage in Phage Pong, in her color
+   (set by game/pong.js), lying along the rim under her. */
+.pong-bar {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 999px;
+  opacity: 0.25;
+  transform: translate(-50%, -50%) rotate(var(--turn, 0deg));
 }
 
 /* A phage that landed: it has injected its DNA, so its empty coat fades. */

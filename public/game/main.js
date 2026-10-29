@@ -5,14 +5,17 @@
 //                                       (or &rivals=vi,elia for up to three)
 //   petri-dish.html?pal=mona&mode=tumble Petri Picnic
 //   petri-dish.html?pal=mona&mode=phage  Phage Attack (&level=2 for level 2)
+//   petri-dish.html?pal=mona&mode=pong   Phage Pong against a random rival
+//                                        (or &rival=vi)
 import { antibioticsFor, placeAntibiotics } from './antibiotic.js';
-import { LEVELS, MIXED, PHAGE, raceTarget, SPECIES, TUMBLE } from './config.js';
+import { LEVELS, MIXED, PHAGE, PONG, raceTarget, SPECIES, TUMBLE } from './config.js';
 import { playGame } from './game.js';
 import { speciesName } from './italics.js';
 import { pageReady, watchLoading } from './loading.js';
 import { scatterNutrients } from './nutrients.js';
 import { dishPal, PALS } from './pals.js';
 import { playPhage } from './phage.js';
+import { playPong } from './pong.js';
 import { playRace } from './race.js';
 import { listOf, rivalsFor } from './rivals.js';
 import { watchInputMode } from './touch.js';
@@ -45,6 +48,7 @@ if (!pal) {
   if (params.get('mode') === 'mixed') startMixed();
   else if (params.get('mode') === 'tumble') startTumble();
   else if (params.get('mode') === 'phage') startPhage();
+  else if (params.get('mode') === 'pong') startPong();
   else startClassic();
   // The dish is set up: take the loading card away.
   pageReady();
@@ -151,6 +155,34 @@ function startPhage() {
 
   const nutrients = scatterNutrients({ count: PHAGE.NUTRIENTS });
   playPhage({ you: { svg: pal, species }, nutrients, level });
+}
+
+function startPong() {
+  pal.removeAttribute('hidden');
+  const species = SPECIES[pal.dataset.pal];
+  // The rival in the address, or one at random.
+  const [id] = rivalsFor(pal.dataset.pal, params.get('rival'));
+  const rival = { svg: drawingOf(id), species: SPECIES[id] };
+  const rivalName = rival.svg.dataset.name;
+  document.title = `PetriPals | ${pal.dataset.name} vs. ${rivalName} | Phage Pong`;
+  document.body.classList.add('pong-mode');
+
+  // "Mona vs. Vi" above the dish, each name in its pal's color, and both species.
+  document.querySelector('.pal-name').replaceChildren(
+    named(pal.dataset.name, species.color), ' vs. ', named(rivalName, rival.species.color));
+  document.querySelector('.species').replaceChildren(
+    ...speciesName(species.scientific), ' vs. ', ...speciesName(rival.species.scientific));
+
+  document.querySelector('.how-to-play').replaceChildren(
+    `Bat the phage back across the dish, and don't let it reach your side of the rim! `,
+    // Arrow-key or touch wording, whichever fits the device (see styles.css).
+    wording('for-keys', 'Use the up and down arrow keys to slide round the rim.'),
+    wording('for-touch', 'Touch the dish and slide your finger up and down to slide round the rim.'),
+    document.createElement('br'),
+    `Get it past ${rivalName} to score. First to ${PONG.TARGET} wins!`,
+  );
+
+  playPong({ you: { svg: pal, species }, rival });
 }
 
 // Lists of nodes joined like listOf: "A", "A and B", "A, B and C".

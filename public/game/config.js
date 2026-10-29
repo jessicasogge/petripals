@@ -1290,6 +1290,39 @@ export const PHAGE = {
   GRACE_MS: 700, // new phages drift out of the burst this long before they hunt
 };
 
+// Phage Pong (game/pong.js): Pong in a round dish. You and a rival pal each
+// slide along your own side of the rim and bat a phage back and forth.
+// Angles are in radians, and distances and speeds are fractions of the dish
+// radius (per second).
+export const PONG = {
+  TARGET: 5, // points to win
+  RING: 0.84, // how far from the center the pals slide
+  SPAN: 0.85, // how far a pal can slide either way from the middle of her side (about 50°)
+  // The rim this far either way from the middle of a side is that pal's to
+  // guard (about 60°): she can just reach the ends of it. The phage bounces
+  // off the rest, at the top and bottom.
+  GOAL: 1.05,
+  PADDLE: 16, // how wide each pal is drawn, as a percent of the dish
+  REACH: 0.15, // the part of a pal that hits the phage: this far either way from her middle...
+  THICK: 0.05, // ...and this far in and out
+  BALL: 0.035, // the phage's radius
+  RIM: 0.95, // where the agar ends
+  SPEED: 0.7, // the phage's speed when it's served...
+  SPEEDUP: 1.07, // ...times this each time a pal hits it...
+  MAX_SPEED: 1.7, // ...up to this
+  DEFLECT: 0.9, // hitting the phage with the very end of a pal sends it this far off straight across
+  TILT: 1.1, // the phage never heads further off straight across than this, so it can't bounce up and down for ages
+  SERVE_TILT: 0.8, // a serve heads up to half this off straight across
+  SERVE_MS: 1200, // the pause before each serve
+  YOUR_SPEED: 2.6, // how fast you slide round the rim, in radians per second
+  DRAG_SPEED: 6, // dragging with a finger, at most this fast
+  // The rival slides slower, only goes after the phage once it's past the
+  // middle, and aims up to RIVAL_MISS off either way (new each time you hit
+  // it), so a fast or steep shot can beat her.
+  RIVAL_SPEED: 1.3,
+  RIVAL_MISS: 0.28,
+};
+
 // How many cells win a race against `rivals` rival pals.
 export function raceTarget(rivals) {
   return rivals > 1 ? MIXED.CROWDED_TARGET : MIXED.TARGET;

@@ -6,13 +6,14 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { LEVELS, MIXED, PHAGE, SPECIES, TUMBLE } from '../public/game/config.js';
+import { LEVELS, MIXED, PHAGE, PONG, SPECIES, TUMBLE } from '../public/game/config.js';
 
 // Don't run the real game loop; just record how the game was started.
 vi.mock('../public/game/game.js', () => ({ playGame: vi.fn() }));
 vi.mock('../public/game/race.js', () => ({ playRace: vi.fn() }));
 vi.mock('../public/game/tumble.js', () => ({ playTumble: vi.fn() }));
 vi.mock('../public/game/phage.js', () => ({ playPhage: vi.fn() }));
+vi.mock('../public/game/pong.js', () => ({ playPong: vi.fn() }));
 // The real nutrients, watched so a test can see how many were asked for.
 vi.mock('../public/game/nutrients.js', async (original) => {
   const real = await original();
@@ -277,5 +278,43 @@ describe('Phage Attack', () => {
   it.each([['0', 1], ['9', PHAGE.LEVELS.length], ['nope', 1]])('turns level=%s into level %i', async (asked, level) => {
     const playPhage = await openPhage(`?pal=sara&mode=phage&level=${asked}`);
     expect(playPhage.mock.calls[0][0].level).toBe(level);
+  });
+});
+
+describe('Phage Pong', () => {
+  async function openPong(search) {
+    await open(search);
+    const { playPong } = await import('../public/game/pong.js');
+    return playPong;
+  }
+
+  it.each(Object.keys(SPECIES))('starts Phage Pong for %s against someone else', async (pal) => {
+    const playPong = await openPong(`?pal=${pal}&mode=pong`);
+    expect(playPong).toHaveBeenCalledTimes(1);
+    const [{ you, rival }] = playPong.mock.calls[0];
+    expect(you.svg.dataset.pal).toBe(pal);
+    expect(you.species).toEqual(SPECIES[pal]);
+    expect(rival.svg.dataset.pal).not.toBe(pal);
+    expect(rival.species).toEqual(SPECIES[rival.svg.dataset.pal]);
+    expect(document.body.classList).toContain('pong-mode');
+  });
+
+  it('plays the rival in the address, and says who it is and how to play', async () => {
+    const playPong = await openPong('?pal=mona&mode=pong&rival=vi');
+    expect(playPong.mock.calls[0][0].rival.svg.dataset.pal).toBe('vi');
+    expect(document.title).toBe('PetriPals | Mona vs. Vi | Phage Pong');
+    expect(document.querySelector('.pal-name').textContent).toBe('Mona vs. Vi');
+    expect(document.querySelector('.species').textContent).toBe('Pseudomonas aeruginosa vs. Vibrio cholerae');
+    const howTo = document.querySelector('.how-to-play');
+    expect(howTo.querySelector('.for-keys').textContent).toBe('Use the up and down arrow keys to slide round the rim.');
+    expect(howTo.querySelector('.for-touch').textContent).toBe('Touch the dish and slide your finger up and down to slide round the rim.');
+    expect(howTo.textContent).toContain(`Get it past Vi to score. First to ${PONG.TARGET} wins!`);
+  });
+
+  it('picks someone else when the address names her own pal or nobody real', async () => {
+    for (const rival of ['mona', 'nobody']) {
+      const playPong = await openPong(`?pal=mona&mode=pong&rival=${rival}`);
+      expect(playPong.mock.calls.at(-1)[0].rival.svg.dataset.pal).not.toBe('mona');
+    }
   });
 });
