@@ -431,13 +431,19 @@ describe('Nessa (Neisseria meningitidis)', () => {
     expect(player.divide([pair], DISH_RADIUS).cellCount()).toBe(1);
   });
 
-  it('has kidney-bean cells like her picture, in her peacock colors', () => {
+  it('is round on her own, in her peacock colors', () => {
     const cell = makeGroup('nessa', { isPlayer: true }).svg.querySelector('.cell-body');
-    expect(cell.tagName).toBe('path');
-    expect(cell.getAttribute('d')).not.toBe(makeGroup('penny').svg.querySelector('.cell-body').getAttribute('d'));
+    // Real cells only flatten where they press against a partner.
+    expect(cell.tagName).toBe('circle');
     expect(cell.getAttribute('fill')).toBe(SPECIES.nessa.colors.fill);
-    // On her own, her round end points right, like the cell with her face.
-    expect(turn(cell)).toBe(180);
+  });
+
+  it('has kidney-bean cells in a pair, like her picture', () => {
+    const pair = makeGroup('nessa');
+    grow(pair, 2);
+    const bodies = [...pair.svg.querySelectorAll('.cell-body')];
+    expect(bodies.map((b) => b.tagName)).toEqual(['path', 'path']);
+    expect(bodies[0].getAttribute('d')).not.toBe(makeGroup('penny').svg.querySelector('.cell-body').getAttribute('d'));
   });
 
   it('turns the flatter sides of a pair to face each other', () => {
@@ -453,7 +459,9 @@ describe('Nessa (Neisseria meningitidis)', () => {
   });
 
   it('keeps every bean cell inside her cell circle, so what she touches is unchanged', () => {
-    const d = makeGroup('nessa').svg.querySelector('.cell-body').getAttribute('d');
+    const pair = makeGroup('nessa');
+    grow(pair, 2);
+    const d = pair.svg.querySelector('.cell-body').getAttribute('d');
     const points = [...d.matchAll(/(-?[\d.]+) (-?[\d.]+)/g)].map((m) => [Number(m[1]), Number(m[2])]);
     const onOutline = points.filter((_, i) => i === 0 || i % 3 === 0);
     expect(onOutline).toHaveLength(6);

@@ -101,9 +101,16 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
   // a pair, or to the right for a cell on her own (like the one with the face
   // in her picture). Flipped with the group when she turns around.
   function outward(c) {
-    const other = group.cells.find((o) => o !== c);
-    if (!other || (other.x === c.x && other.y === c.y)) return 0;
+    const other = partnerOf(c);
+    if (!other) return 0;
     return (Math.atan2(c.y - other.y, c.x - other.x) * 180) / Math.PI;
+  }
+
+  // The other cell of her pair, or null for a cell on her own (or one that
+  // hasn't started sliding away from her partner yet).
+  function partnerOf(c) {
+    const other = group.cells.find((o) => o !== c);
+    return other && (other.x !== c.x || other.y !== c.y) ? other : null;
   }
 
   // Which way a rod-shaped cell (Ceres's) lies, in degrees: along the chain,
@@ -134,7 +141,9 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       return `<rect class="cell-body" x="${-ROD.half}" y="${-ROD.tall}" width="${2 * ROD.half}" height="${2 * ROD.tall}" ` +
         `rx="${ROD.corner}" transform="translate(${c.x} ${c.y}) rotate(${turn})" ${paint} />`;
     }
-    if (TRACED[species.shape]) {
+    // A bean cell (Nessa's) is round on her own: real cells only flatten
+    // where they press against a partner.
+    if (TRACED[species.shape] && !(species.shape === 'bean' && !partnerOf(c))) {
       // A traced shape's outer end points left, so turn it half around more.
       const turn = (outward(c) + 180).toFixed(1);
       return `<path class="cell-body" d="${TRACED[species.shape]}" transform="translate(${c.x} ${c.y}) rotate(${turn})" ${paint} stroke-linejoin="round" />`;
