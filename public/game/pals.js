@@ -13,7 +13,7 @@
 //
 // To add a pal: append here and to SPECIES (with her `tile` color and her
 // real length, `micrometers`), and give her a `bodyBox` around her body in
-// her art (for the picker's To scale mode). New pals are picker-only; don't
+// her art (for the picker's Compare sizes mode). New pals are picker-only; don't
 // add to HOME.
 
 import { SPECIES } from './config.js';
@@ -360,7 +360,7 @@ export const PALS = [
     looks: 'an olive drumstick-shaped Clostridium tetani rod with a round spore at one end',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '10 12 176 176', dish: '0 8 184 184' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [28, 71, 181, 129],
     // Drawn a little smaller than the others on the home page.
     homeWidth: 108,
@@ -391,7 +391,7 @@ export const PALS = [
     looks: 'a bluish-purple pair of round Streptococcus pneumoniae cells wearing round glasses',
     motion: 'bob',
     frames: { home: '-12 -12 224 224', picker: '0 0 200 200', dish: '10 10 180 180' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [24, 65, 176, 135],
     art: `
       <!-- left cell: a little narrower at the outside end, rounder where the pair meets -->
@@ -428,7 +428,7 @@ export const PALS = [
     looks: 'an orange comma-shaped Vibrio cholerae',
     motion: 'wobble',
     frames: { home: '0 0 200 200', picker: '2 15 180 180', dish: '2 15 180 180' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [29, 53, 179, 151],
     // Drawn a little smaller than the others on the home page.
     homeWidth: 108,
@@ -460,7 +460,7 @@ export const PALS = [
     looks: 'a golden grape-like cluster of Staphylococcus',
     motion: 'squish',
     frames: { home: '0 0 200 200', picker: '24 29 152 152', dish: '24 29 152 152' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [33, 33, 169, 176],
     art: `
       <!-- grape-like cluster of cocci (Staphylococcus) -->
@@ -501,7 +501,7 @@ export const PALS = [
     looks: 'a pink Y-shaped Bifidobacterium bifidum cheering with her arms up',
     motion: 'bob',
     frames: { home: '-14 2 228 228', picker: '0 16 200 200', dish: '18 34 164 164' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [49, 45, 151, 187],
     art: `
       <!-- outline: the stem and two branches, drawn thick in the darker pink -->
@@ -540,7 +540,7 @@ export const PALS = [
     looks: 'a short denim-blue rod-shaped Listeria monocytogenes with a few flagella around her',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '10 10 180 180', dish: '8 8 184 184' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [50, 74, 150, 126],
     art: `
       <!-- a few flagella around her short rod -->
@@ -566,7 +566,7 @@ export const PALS = [
     looks: 'a red chain of round Streptococcus pyogenes cells',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '6 10 188 188', dish: '6 10 188 188' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [6, 73, 194, 136],
     art: `
       <!-- chain of cocci (Streptococcus) -->
@@ -597,7 +597,7 @@ export const PALS = [
     looks: 'a small coffee-with-cream brown Haemophilus influenzae',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '20 20 160 160', dish: '40 40 120 120' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [50, 68, 150, 134],
     art: `
       <!-- coccobacillus: a short, plump oval between a coccus and a rod (no flagellum) -->
@@ -622,7 +622,7 @@ export const PALS = [
     looks: 'a green rod-shaped Pseudomonas with one flagellum',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '0 17 176 176', dish: '0 17 176 176' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [28, 73, 172, 137],
     art: `
       <!-- flagellum -->
@@ -650,7 +650,7 @@ export const PALS = [
     looks: 'a light purple corkscrew-shaped Borrelia burgdorferi',
     motion: 'slither',
     frames: { home: '8 0 200 200', picker: '12 4 192 192', dish: '12 4 192 192' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [24, 77, 192, 123],
     art: `
       <!-- corkscrew body: outline, then fill (her flagella are inside the cell) -->
@@ -679,7 +679,7 @@ export const PALS = [
     looks: 'a sky-blue chain of three Bacillus cereus rods',
     motion: 'wobble',
     frames: { home: '0 0 200 200', picker: '6 10 188 188', dish: '6 10 188 188' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [12, 78, 188, 133],
     art: `
       <!-- left rod, tipped down at its outer end -->
@@ -713,7 +713,7 @@ export const PALS = [
     looks: 'a grey rod-shaped Salmonella Typhi with flagella all around her',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '10 10 180 180', dish: '8 8 184 184' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [38, 72, 162, 128],
     // Drawn a little smaller than the others on the home page.
     homeWidth: 104,
@@ -741,7 +741,7 @@ export const PALS = [
     looks: 'a short, plump red rod-shaped Serratia marcescens with flagella all around her',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '10 10 180 180', dish: '8 8 184 184' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [50, 70, 150, 130],
     art: `
       <!-- flagella all over her body -->
@@ -767,7 +767,7 @@ export const PALS = [
     looks: 'a sage-green chain of Bacillus mycoides rods curling up at the end like a vine',
     motion: 'wobble',
     frames: { home: '0 12 204 204', picker: '2 22 194 194', dish: '2 22 194 194' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [4, 35, 195, 173],
     art: `
       <!-- five rods end to end, curling up at the front like a tendril (her colonies swirl as they spread) -->
@@ -794,7 +794,7 @@ export const PALS = [
     looks: 'an azure rod-shaped Asticcacaulis biprosthecum with two stalks near one end',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '18 18 164 164', dish: '20 20 160 160' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [30, 38, 168, 163],
     // She comes in two forms (see rod.js): this one, with stalks and a
     // holdfast, and the swimmer her divisions make, with a flagellum instead.
@@ -831,7 +831,7 @@ export const PALS = [
     looks: 'a short, plump yellow rod-shaped Cronobacter sakazakii with flagella all around her',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '10 10 180 180', dish: '8 8 184 184' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [48, 72, 152, 128],
     // A cooler, brighter lemon than Goldie's buttery gold, with an olive
     // outline rather than an orange one, so the two don't look alike.
@@ -859,7 +859,7 @@ export const PALS = [
     looks: 'a grape-purple Geobacter sulfurreducens rod covered in sparking nanowires',
     motion: 'bob',
     frames: { home: '-11 -9 222 222', picker: '-5 -3 210 210', dish: '-5 -3 210 210' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [26, 72, 174, 132],
     art: `
       <!-- nanowires all around her, with yellow bursts running out along them (no flagella: the usual lab strain doesn't make any) -->
@@ -886,7 +886,7 @@ export const PALS = [
     looks: 'a teal Nocardia nova, a thin, beaded filament branching every which way',
     motion: 'wobble',
     frames: { home: '-4 0 208 208', picker: '3 7 194 194', dish: '3 7 194 194' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [5, 19, 195, 189],
     art: `
       <!-- outline: every filament, drawn thick in dark teal, so the whole network shares one edge -->
@@ -921,7 +921,7 @@ export const PALS = [
     looks: 'a big, plump chestnut-brown Clostridioides difficile rod with flagella all around her and an oval spore near one end',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '12 12 176 176', dish: '4 4 192 192' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [38, 65, 162, 135],
     art: `
       <!-- flagella all over her body -->
@@ -961,7 +961,7 @@ export const PALS = [
     looks: 'a short, plump pink Klebsiella pneumoniae rod in a thick, glossy capsule, with tiny hairs all around her',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '26 26 148 148', dish: '22 22 156 156' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [28, 53, 172, 147],
     // A soft pearly pink with a slate outline, so she doesn't look like
     // Scarlett (red outline) or Ana and Sara (hot pink).
@@ -996,7 +996,7 @@ export const PALS = [
     motion: 'bob',
     // Framed roomy, so she looks small: she's one of the tiniest pals.
     frames: { home: '0 0 200 200', picker: '26 26 148 148', dish: '22 22 156 156' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [58, 51, 142, 124],
     art: `
       <!-- tiny bunny ears, a nod to "snuffles," the sniffles she gives pet
@@ -1035,7 +1035,7 @@ export const PALS = [
     looks: 'a long, slim green Escherichia coli rod with flagella all around her',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '10 10 180 180', dish: '4 4 192 192' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [32, 76, 168, 124],
     // A bright green apple with a deep green outline, so she doesn't look
     // like Terra (olive) or Mona (mint).
@@ -1063,7 +1063,7 @@ export const PALS = [
     looks: 'an orchid-pink square of four round Deinococcus radiodurans cells',
     motion: 'squish',
     frames: { home: '0 0 200 200', picker: '16 16 168 168', dish: '20 20 160 160' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [30, 30, 170, 170],
     art: `
       <!-- a tetrad: four cells in a square, pressed a little flat where they
@@ -1087,7 +1087,7 @@ export const PALS = [
     looks: 'a jade-green Anabaena variabilis, a string of round cells with one pale gold heterocyst',
     motion: 'wobble',
     frames: { home: '0 0 200 200', picker: '2 2 196 196', dish: '2 2 196 196' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [4, 69, 194, 131],
     art: `
       ${ARI_CELLS}
@@ -1103,7 +1103,7 @@ export const PALS = [
     // Framed roomy, so her long, slim rod comes out about as long as Mona's
     // and Colette's.
     frames: { home: '0 0 200 200', picker: '0 0 200 200', dish: '0 0 200 200' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [27, 80, 173, 124],
     art: `
       <!-- her waxy coat: a soft, glossy glow around the rod (mycolic acids) -->
@@ -1133,7 +1133,7 @@ export const PALS = [
     motion: 'bob',
     // Framed like Coco, since they're the same shape.
     frames: { home: '0 0 200 200', picker: '20 20 160 160', dish: '40 40 120 120' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [52, 68, 148, 132],
     art: `
       <!-- coccobacillus: a short, plump rod, like Coco's but a little plumper
@@ -1162,7 +1162,7 @@ export const PALS = [
     looks: 'a peacock blue-green pair of kidney-bean Neisseria meningitidis cells with short pili',
     motion: 'bob',
     frames: { home: '-12 -12 224 224', picker: '0 0 200 200', dish: '10 10 180 180' },
-    // Her body in her art (not flagella or hairs), for drawing her to scale.
+    // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [33, 68, 167, 132],
     art: `
       <!-- short, straight pili, the hairs she grabs onto cells and twitches with -->
@@ -1269,7 +1269,8 @@ export function palTile(pal) {
   return tile;
 }
 
-// The picker's To scale view: every tile shows TILE_MICROMETERS across, so
+// The picker's Compare sizes view: the pals' sizes relative to each other.
+// Every tile stands for TILE_MICROMETERS across, so
 // Ari (28 µm) nearly fills hers and every other pal shrinks to her real
 // length next to her (`micrometers` in config.js). Returns how much smaller
 // to draw her picture, and where her body's center is in her picker frame

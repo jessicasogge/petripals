@@ -305,7 +305,7 @@ describe('the pages', () => {
     expect(css).toMatch(/\n\.stained \.stain-note \{\s*display: block;/);
   });
 
-  it("the picker's To scale button shrinks every pal to her real size, and back", async () => {
+  it("the picker's Compare sizes button shrinks the pals to their sizes relative to each other, and back", async () => {
     await open('pal-picker.html', 'game/pal-picker.js');
     const shell = document.querySelector('.picker-shell');
     const button = document.querySelector('.scale-btn');
@@ -332,13 +332,13 @@ describe('the pages', () => {
     button.click();
     expect(shell.classList.contains('to-scale')).toBe(false);
     expect(shell.classList.contains('stained')).toBe(true);
-    expect(button.textContent).toContain('To scale');
+    expect(button.textContent).toContain('Compare sizes');
     expect(caption.hidden).toBe(true);
     expect(svg('frannie').style.transform).toBe('');
     expect(svg('frannie').style.transformOrigin).toBe('');
   });
 
-  it("shows the To scale sizes only in To scale mode, and moves smoothly unless you've asked for less motion", () => {
+  it("shows the sizes only in Compare sizes mode, and moves smoothly unless you've asked for less motion", () => {
     expect(css).toMatch(/\n\.size-note \{\s*display: none;/);
     expect(css).toMatch(/\n\.to-scale \.size-note \{\s*display: block;/);
     expect(css).toMatch(/\n\.pal-icon svg \{\s*transition: transform/);
@@ -599,7 +599,7 @@ describe('Frannie, with bunny ears', () => {
   });
 });
 
-describe('to scale', () => {
+describe('comparing sizes', () => {
   const length = (pal) => {
     const [x0, y0, x1, y1] = pal.bodyBox;
     return Math.max(x1 - x0, y1 - y0);

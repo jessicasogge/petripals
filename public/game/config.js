@@ -27,7 +27,7 @@
 //
 // `micrometers` is how long her picture is in real life, in µm: one cell,
 // or the pair, chain or cluster it shows (typical sizes for her species).
-// The picker's To scale button draws every pal at that size.
+// The picker's Compare sizes button shows the pals' sizes relative to each other.
 //
 // `gram` is how she looks after a Gram stain: 'positive' cells stay purple,
 // 'negative' ones turn pink (the picker's microscope mode shows this).
