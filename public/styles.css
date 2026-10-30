@@ -363,6 +363,11 @@ body {
   transition: transform 0.5s ease;
 }
 
+/* Ari, the longest, spills past her picture's square into her tile's margin. */
+.to-scale .pal-icon svg {
+  overflow: visible;
+}
+
 .size-note {
   display: none;
 }

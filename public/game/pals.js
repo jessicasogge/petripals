@@ -1270,12 +1270,12 @@ export function palTile(pal) {
 }
 
 // The picker's Compare sizes view: the pals' sizes relative to each other.
-// Every tile stands for TILE_MICROMETERS across, so
-// Ari (28 µm) nearly fills hers and every other pal shrinks to her real
-// length next to her (`micrometers` in config.js). Returns how much smaller
-// to draw her picture, and where her body's center is in her picker frame
-// (as fractions across and down), to shrink it around.
-export const TILE_MICROMETERS = 30;
+// Her picture's square on the tile stands for TILE_MICROMETERS across. Ari
+// (28 µm), the longest, spills a little past it into the tile's margin, so
+// she nearly fills her tile and everyone else comes out as big as they can.
+// Returns how much to scale her picture, and where her body's center is in
+// her picker frame (as fractions across and down), to scale it around.
+export const TILE_MICROMETERS = 24;
 
 export function toScale(pal) {
   const [x0, y0, x1, y1] = pal.bodyBox;

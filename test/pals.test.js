@@ -622,12 +622,16 @@ describe('comparing sizes', () => {
     }
   });
 
-  it('fits Ari, the longest pal, in her tile, and only shrinks, never grows', () => {
+  it('lets Ari, the longest pal, nearly fill her tile, and shrinks everyone else', () => {
     const longest = PALS.reduce((a, b) => (SPECIES[b.id].micrometers > SPECIES[a.id].micrometers ? b : a));
     expect(longest.id).toBe('ari');
-    expect(onTile(longest)).toBeGreaterThan(0.85);
-    expect(onTile(longest)).toBeLessThan(1);
-    for (const pal of PALS) expect(toScale(pal).scale, pal.id).toBeLessThanOrEqual(1);
+    // Her picture's square is 5/6 of her tile (80px of 96, 60 of 72 on a
+    // phone), so she spills past it into the margin but stays on her tile.
+    expect(onTile(longest) * (5 / 6)).toBeGreaterThan(0.9);
+    expect(onTile(longest) * (5 / 6)).toBeLessThan(1);
+    for (const pal of PALS) {
+      if (pal !== longest) expect(toScale(pal).scale, pal.id).toBeLessThanOrEqual(1);
+    }
   });
 
   it("shrinks her around her body's center", () => {
