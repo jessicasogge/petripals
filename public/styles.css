@@ -310,12 +310,85 @@ body {
   color: #db2777;
 }
 
-/* On a phone or small tablet, where the corner is too close to the heading,
-   the button sits under it instead. */
+/* To scale (game/pal-picker.js): the same kind of button in the opposite
+   corner, which shows every pal at her real size next to the others. */
+.scale-btn {
+  position: absolute;
+  top: 1.75rem;
+  left: 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.45em 0.85em;
+  border: 2px solid #99f6e4;
+  border-radius: 999px;
+  background: #f0fdfa;
+  color: #0f766e;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.scale-btn:hover {
+  background: #ccfbf1;
+}
+
+.scale-btn[aria-pressed='true'] {
+  background: #0f766e;
+  border-color: #0f766e;
+  color: #fff;
+}
+
+.scale-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+/* The two buttons sit in the picker's corners; on a phone they share a row. */
+.picker-tools {
+  display: contents;
+}
+
+.scale-caption {
+  margin: -0.5rem 0 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+/* Each pal's picture shrinks and grows smoothly between full size and to
+   scale. */
+.pal-icon svg {
+  transition: transform 0.5s ease;
+}
+
+.size-note {
+  display: none;
+}
+
+.to-scale .size-note {
+  display: block;
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0f766e;
+}
+
+/* On a phone or small tablet, where the corners are too close to the
+   heading, the buttons sit side by side under it instead. */
 @media (max-width: 760px) {
-  .scope-btn {
-    position: static;
+  .picker-tools {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
     margin: -0.5rem auto 1rem;
+  }
+
+  .scope-btn,
+  .scale-btn {
+    position: static;
   }
 }
 
@@ -342,6 +415,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .pal-icon svg,
   .pal-icon svg * {
     transition: none;
   }

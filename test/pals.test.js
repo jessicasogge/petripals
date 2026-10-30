@@ -7,7 +7,7 @@ import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SPECIES } from '../public/game/config.js';
 import { plainText } from '../public/game/italics.js';
-import { dishPal, HOME_PALS, homePal, inRandomOrder, PAGE_SIZE, palById, PALS, palTile, pickerPages } from '../public/game/pals.js';
+import { dishPal, HOME_PALS, homePal, inRandomOrder, PAGE_SIZE, palById, PALS, palTile, pickerPages, TILE_MICROMETERS, toScale } from '../public/game/pals.js';
 
 // (jsdom changes import.meta.url to a web address, so find files from the project folder.)
 const file = (name) => readFileSync(resolve(process.cwd(), 'public', name), 'utf8');
@@ -305,6 +305,46 @@ describe('the pages', () => {
     expect(css).toMatch(/\n\.stained \.stain-note \{\s*display: block;/);
   });
 
+  it("the picker's To scale button shrinks every pal to her real size, and back", async () => {
+    await open('pal-picker.html', 'game/pal-picker.js');
+    const shell = document.querySelector('.picker-shell');
+    const button = document.querySelector('.scale-btn');
+    const caption = document.querySelector('.scale-caption');
+    const svg = (id) => document.querySelector(`.pal-icon.${id} svg`);
+    expect(button.getAttribute('aria-pressed')).toBe('false');
+    expect(caption.hidden).toBe(true);
+    expect(svg('frannie').style.transform).toBe('');
+
+    button.click();
+    expect(shell.classList.contains('to-scale')).toBe(true);
+    expect(button.getAttribute('aria-pressed')).toBe('true');
+    expect(button.textContent).toContain('Full size');
+    expect(caption.hidden).toBe(false);
+    for (const pal of PALS) {
+      expect(svg(pal.id).style.transform, pal.id).toContain(`scale(${toScale(pal).scale})`);
+    }
+    // Her real length shows under her name.
+    const ari = svg('ari').closest('.pal-card');
+    expect(ari.querySelector('.size-note').textContent).toBe('28 µm');
+
+    // It works stained too, and turning it off leaves the stain alone.
+    document.querySelector('.scope-btn').click();
+    button.click();
+    expect(shell.classList.contains('to-scale')).toBe(false);
+    expect(shell.classList.contains('stained')).toBe(true);
+    expect(button.textContent).toContain('To scale');
+    expect(caption.hidden).toBe(true);
+    expect(svg('frannie').style.transform).toBe('');
+    expect(svg('frannie').style.transformOrigin).toBe('');
+  });
+
+  it("shows the To scale sizes only in To scale mode, and moves smoothly unless you've asked for less motion", () => {
+    expect(css).toMatch(/\n\.size-note \{\s*display: none;/);
+    expect(css).toMatch(/\n\.to-scale \.size-note \{\s*display: block;/);
+    expect(css).toMatch(/\n\.pal-icon svg \{\s*transition: transform/);
+    expect(css).toMatch(/prefers-reduced-motion: reduce\) \{\s*\.pal-icon svg,\s*\.pal-icon svg \* \{\s*transition: none;/);
+  });
+
   it('turning microscope mode on stains the pals, and off puts their colors back', async () => {
     await open('pal-picker.html', 'game/pal-picker.js');
     document.querySelector('.scope-btn').click();
@@ -556,6 +596,44 @@ describe('Frannie, with bunny ears', () => {
     const frannie = palById('frannie');
     expect(width(frannie.frames.dish)).toBeGreaterThan(width(palById('coco').frames.dish));
     expect(width(frannie.frames.picker)).toBeLessThan(200);
+  });
+});
+
+describe('to scale', () => {
+  const length = (pal) => {
+    const [x0, y0, x1, y1] = pal.bodyBox;
+    return Math.max(x1 - x0, y1 - y0);
+  };
+  // How long her body comes out on her tile, as a fraction of it.
+  const onTile = (pal) => (length(pal) * toScale(pal).scale) / Number(pal.frames.picker.split(' ')[2]);
+
+  it('gives every pal her body box, inside her drawing', () => {
+    for (const pal of PALS) {
+      const [x0, y0, x1, y1] = pal.bodyBox;
+      expect(x1, pal.id).toBeGreaterThan(x0);
+      expect(y1, pal.id).toBeGreaterThan(y0);
+      for (const v of pal.bodyBox) expect(Math.abs(v), pal.id).toBeLessThanOrEqual(210);
+    }
+  });
+
+  it('draws each pal at her real length on a tile TILE_MICROMETERS across', () => {
+    for (const pal of PALS) {
+      expect(onTile(pal), pal.id).toBeCloseTo(SPECIES[pal.id].micrometers / TILE_MICROMETERS, 5);
+    }
+  });
+
+  it('fits Ari, the longest pal, in her tile, and only shrinks, never grows', () => {
+    const longest = PALS.reduce((a, b) => (SPECIES[b.id].micrometers > SPECIES[a.id].micrometers ? b : a));
+    expect(longest.id).toBe('ari');
+    expect(onTile(longest)).toBeGreaterThan(0.85);
+    expect(onTile(longest)).toBeLessThan(1);
+    for (const pal of PALS) expect(toScale(pal).scale, pal.id).toBeLessThanOrEqual(1);
+  });
+
+  it("shrinks her around her body's center", () => {
+    const { x, y } = toScale(palById('penny'));
+    expect(x).toBeCloseTo(0.5, 2);
+    expect(y).toBeCloseTo(0.5, 2);
   });
 });
 

@@ -275,6 +275,19 @@ describe('game settings', () => {
   });
 });
 
+describe('real sizes', () => {
+  it('gives every pal the real length of her picture, in micrometers', () => {
+    for (const [pal, { micrometers }] of Object.entries(SPECIES)) {
+      expect(micrometers, pal).toBeGreaterThan(0);
+      expect(micrometers, pal).toBeLessThanOrEqual(30);
+    }
+    // Frannie is the tiniest and Ari, a string of cells, the longest.
+    const sizes = Object.entries(SPECIES).sort((a, b) => a[1].micrometers - b[1].micrometers).map(([pal]) => pal);
+    expect(sizes[0]).toBe('frannie');
+    expect(sizes.at(-1)).toBe('ari');
+  });
+});
+
 describe('Gram stains', () => {
   it('says whether each pal is Gram-positive or Gram-negative', () => {
     for (const [name, species] of Object.entries(SPECIES)) {

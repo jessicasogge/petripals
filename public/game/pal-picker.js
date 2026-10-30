@@ -3,11 +3,11 @@
 // order every visit, so no pal is always first or always on a later page,
 // then split into pages of eight (PAGE_SIZE in pals.js), shown one at a time
 // with Back and More pals buttons to move between them. The microscope button shows every pal as she'd look after a
-// Gram stain.
+// Gram stain, and the To scale button shows every pal at her real size.
 import { SPECIES } from './config.js';
 import { speciesName } from './italics.js';
 import { pageReady, watchLoading } from './loading.js';
-import { inRandomOrder, PALS, palTile, pickerPages } from './pals.js';
+import { inRandomOrder, PALS, palTile, pickerPages, toScale } from './pals.js';
 import { stainPal, unstainPal } from './stain.js';
 
 // "Growing the colony…" while the next screen loads.
@@ -76,7 +76,12 @@ function card(pal) {
   tile.classList.add(`gram-${gram}`);
   if (faintStain) tile.classList.add('faint-stain');
 
-  link.append(tile, name, species);
+  // In To scale mode, her real length.
+  const size = document.createElement('p');
+  size.className = 'size-note';
+  size.textContent = `${SPECIES[pal.id].micrometers} µm`;
+
+  link.append(tile, name, species, size);
   return link;
 }
 
@@ -98,6 +103,31 @@ function showStain(stained) {
 }
 
 scope?.addEventListener('click', () => showStain(!shell.classList.contains('stained')));
+
+// The To scale button: shrink every pal's picture around her body to her
+// real length, so the tiles compare like a ruler (see toScale in pals.js),
+// and back. It works in color or stained.
+const scale = document.querySelector('.scale-btn');
+
+function showScale(scaled) {
+  shell.classList.toggle('to-scale', scaled);
+  scale.setAttribute('aria-pressed', String(scaled));
+  scale.querySelector('.scale-label').textContent = scaled ? 'Full size' : 'To scale';
+  document.querySelector('.scale-caption').hidden = !scaled;
+  for (const pal of PALS) {
+    const svg = document.querySelector(`.pal-icon.${pal.id} svg`);
+    if (scaled) {
+      const { scale: by, x, y } = toScale(pal);
+      svg.style.transformOrigin = `${x * 100}% ${y * 100}%`;
+      svg.style.transform = `translate(${(0.5 - x) * 100}%, ${(0.5 - y) * 100}%) scale(${by})`;
+    } else {
+      svg.style.removeProperty('transform-origin');
+      svg.style.removeProperty('transform');
+    }
+  }
+}
+
+scale?.addEventListener('click', () => showScale(!shell.classList.contains('to-scale')));
 
 // All filled in: take the loading card away.
 pageReady();
