@@ -704,7 +704,6 @@ export const SPECIES = {
     scientific: 'Asticcacaulis biprosthecum',
     micrometers: 3, // her picture's real length: with her stalks
     cellMicrometers: 1.5, // her cell body, without her stalks
-    sizeNote: '1.5 µm cell, plus stalks',
     color: '#1a4f9c', // for her name above the dish
     tile: 'rgba(90, 169, 245, 0.3)',
     kind: 'rod',
@@ -968,7 +967,6 @@ export const SPECIES = {
     scientific: 'Klebsiella pneumoniae',
     micrometers: 2.5, // her picture's real length: in her capsule
     cellMicrometers: 2, // her cell body, without her capsule
-    sizeNote: '2 µm cell, plus capsule',
     color: '#6a5070', // for her name above the dish
     tile: 'rgba(232, 190, 206, 0.38)',
     kind: 'rod',

@@ -328,9 +328,9 @@ describe('the pages', () => {
     const note = (id) => svg(id).closest('.pal-card').querySelector('.size-note').textContent;
     expect(note('ari')).toBe('3.5 µm');
     expect(note('colette')).toBe('2.5 µm');
-    // Sized by her cell body, with what's around her said in words.
-    expect(note('astrid')).toBe('1.5 µm cell, plus stalks');
-    expect(note('pearl')).toBe('2 µm cell, plus capsule');
+    // Sized by her cell body, not her stalks or capsule.
+    expect(note('astrid')).toBe('1.5 µm');
+    expect(note('pearl')).toBe('2 µm');
     expect(note('nova')).toBe('15 µm filament');
     // A pal whose picture shows several cells shows just one, with her face.
     expect(svg('ari').querySelectorAll('circle[r="24"]')).toHaveLength(1);
