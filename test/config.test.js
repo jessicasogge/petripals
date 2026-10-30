@@ -287,9 +287,10 @@ describe('real sizes', () => {
     expect(sizes.at(-1)).toBe('ari');
   });
 
-  it("gives one cell's length for each pal whose picture shows several cells", () => {
+  it("gives one cell's length for each pal whose picture shows several cells, or more than her cell", () => {
     const groups = Object.keys(SPECIES).filter((pal) => SPECIES[pal].cellMicrometers).sort();
-    expect(groups).toEqual(['ari', 'ceres', 'dina', 'goldie', 'ivy', 'nessa', 'penny', 'scarlett']);
+    // Pairs, chains and clusters, plus Astrid (stalks) and Pearl (capsule).
+    expect(groups).toEqual(['ari', 'astrid', 'ceres', 'dina', 'goldie', 'ivy', 'nessa', 'pearl', 'penny', 'scarlett']);
     for (const pal of groups) {
       expect(SPECIES[pal].cellMicrometers, pal).toBeLessThan(SPECIES[pal].micrometers);
     }

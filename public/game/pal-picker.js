@@ -77,10 +77,10 @@ function card(pal) {
   tile.classList.add(`gram-${gram}`);
   if (faintStain) tile.classList.add('faint-stain');
 
-  // In Compare sizes mode, one cell's real length.
+  // In Compare sizes mode, one cell's real length (or a note that says more).
   const size = document.createElement('p');
   size.className = 'size-note';
-  size.textContent = `${cellLength(pal)} µm`;
+  size.textContent = SPECIES[pal.id].sizeNote ?? `${cellLength(pal)} µm`;
 
   link.append(tile, name, species, size);
   return link;

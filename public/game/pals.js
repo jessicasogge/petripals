@@ -884,6 +884,8 @@ export const PALS = [
     // She comes in two forms (see rod.js): this one, with stalks and a
     // holdfast, and the swimmer her divisions make, with a flagellum instead.
     // The swimmer's parts are hidden until then.
+    // Compare sizes measures her cell body: her rod, without her stalks.
+    cellBox: [42, 72, 168, 128],
     art: `
       <g class="stalked">
         <!-- two stalks (prosthecae) from her sides, near her back end -->
@@ -1050,6 +1052,8 @@ export const PALS = [
     bodyBox: [28, 53, 172, 147],
     // A soft pearly pink with a slate outline, so she doesn't look like
     // Scarlett (red outline) or Ana and Sara (hot pink).
+    // Compare sizes measures her cell body: her rod, without her capsule.
+    cellBox: [56, 74, 144, 126],
     art: `
       <!-- her capsule: a thick, slimy coat around her, glossy and see-through.
            Pure white, so a Gram stain leaves it clear, as on a real slide -->

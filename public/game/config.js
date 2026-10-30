@@ -28,7 +28,9 @@
 // `micrometers` is how long her picture is in real life, in µm: one cell,
 // or the pair, chain or cluster it shows (typical sizes for her species).
 // `cellMicrometers` is one cell's length, for a pal whose picture shows
-// several. The picker's Compare sizes button shows the pals' sizes relative
+// several, or her cell body alone, for one drawn with more around it
+// (Astrid's stalks, Pearl's capsule). `sizeNote` labels a size that needs
+// saying more (Nova's filament). The picker's Compare sizes button shows the pals' sizes relative
 // to each other, labeled with one cell's length.
 //
 // `gram` is how she looks after a Gram stain: 'positive' cells stay purple,
@@ -701,6 +703,8 @@ export const SPECIES = {
     ],
     scientific: 'Asticcacaulis biprosthecum',
     micrometers: 3, // her picture's real length: with her stalks
+    cellMicrometers: 1.5, // her cell body, without her stalks
+    sizeNote: '1.5 µm cell, plus stalks',
     color: '#1a4f9c', // for her name above the dish
     tile: 'rgba(90, 169, 245, 0.3)',
     kind: 'rod',
@@ -884,6 +888,7 @@ export const SPECIES = {
     ],
     scientific: 'Nocardia nova',
     micrometers: 15, // her picture's real length: a branching filament
+    sizeNote: '15 µm filament', // one branching filament, not one cell
     color: '#0f766e', // for her name above the dish
     tile: 'rgba(143, 227, 216, 0.4)',
     kind: 'rod',
@@ -962,6 +967,8 @@ export const SPECIES = {
     ],
     scientific: 'Klebsiella pneumoniae',
     micrometers: 2.5, // her picture's real length: in her capsule
+    cellMicrometers: 2, // her cell body, without her capsule
+    sizeNote: '2 µm cell, plus capsule',
     color: '#6a5070', // for her name above the dish
     tile: 'rgba(232, 190, 206, 0.38)',
     kind: 'rod',

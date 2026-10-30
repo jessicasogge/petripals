@@ -328,6 +328,10 @@ describe('the pages', () => {
     const note = (id) => svg(id).closest('.pal-card').querySelector('.size-note').textContent;
     expect(note('ari')).toBe('3.5 µm');
     expect(note('colette')).toBe('2.5 µm');
+    // Sized by her cell body, with what's around her said in words.
+    expect(note('astrid')).toBe('1.5 µm cell, plus stalks');
+    expect(note('pearl')).toBe('2 µm cell, plus capsule');
+    expect(note('nova')).toBe('15 µm filament');
     // A pal whose picture shows several cells shows just one, with her face.
     expect(svg('ari').querySelectorAll('circle[r="24"]')).toHaveLength(1);
     expect(svg('ari').querySelector('.face')).not.toBeNull();
@@ -637,7 +641,7 @@ describe('comparing sizes', () => {
 
   it('has a one-cell drawing for exactly the pals whose pictures show several cells', () => {
     const withCell = PALS.filter((pal) => pal.cellArt).map((pal) => pal.id).sort();
-    expect(withCell).toEqual(Object.keys(SPECIES).filter((id) => SPECIES[id].cellMicrometers).sort());
+    expect(withCell).toEqual(['ari', 'ceres', 'dina', 'goldie', 'ivy', 'nessa', 'penny', 'scarlett']);
     for (const pal of PALS.filter((p) => p.cellArt)) {
       expect(pal.cellBox, pal.id).toHaveLength(4);
       // Her face comes along, so she's still her.
@@ -662,6 +666,19 @@ describe('comparing sizes', () => {
     expect(onTile(longest) * (5 / 6)).toBeLessThan(1);
     for (const pal of PALS) {
       if (pal !== longest) expect(toScale(pal).scale, pal.id).toBeLessThanOrEqual(1);
+    }
+  });
+
+  it("sizes Astrid and Pearl by their cell bodies, inside their stalks and capsule", () => {
+    for (const id of ['astrid', 'pearl']) {
+      const pal = palById(id);
+      const [cx0, cy0, cx1, cy1] = pal.cellBox;
+      const [bx0, by0, bx1, by1] = pal.bodyBox;
+      expect(cx0, id).toBeGreaterThanOrEqual(bx0);
+      expect(cy0, id).toBeGreaterThanOrEqual(by0);
+      expect(cx1, id).toBeLessThanOrEqual(bx1);
+      expect(cy1, id).toBeLessThanOrEqual(by1);
+      expect(pal.cellArt, id).toBeUndefined(); // her whole picture still shows
     }
   });
 
