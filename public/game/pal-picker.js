@@ -8,7 +8,7 @@
 import { SPECIES } from './config.js';
 import { speciesName } from './italics.js';
 import { pageReady, watchLoading } from './loading.js';
-import { inRandomOrder, PALS, palTile, pickerPages, toScale } from './pals.js';
+import { cellLength, inRandomOrder, PALS, palTile, pickerPages, toScale } from './pals.js';
 import { stainPal, unstainPal } from './stain.js';
 
 // "Growing the colony…" while the next screen loads.
@@ -77,12 +77,10 @@ function card(pal) {
   tile.classList.add(`gram-${gram}`);
   if (faintStain) tile.classList.add('faint-stain');
 
-  // In Compare sizes mode, her real length: one cell's, if her picture
-  // shows a pair, chain or cluster.
-  const { micrometers, cellMicrometers } = SPECIES[pal.id];
+  // In Compare sizes mode, one cell's real length.
   const size = document.createElement('p');
   size.className = 'size-note';
-  size.textContent = cellMicrometers ? `${cellMicrometers} µm per cell` : `${micrometers} µm`;
+  size.textContent = `${cellLength(pal)} µm`;
 
   link.append(tile, name, species, size);
   return link;
@@ -107,9 +105,9 @@ function showStain(stained) {
 
 scope?.addEventListener('click', () => showStain(!shell.classList.contains('stained')));
 
-// The Compare sizes button: shrink every pal's picture around her body so
-// the pals' sizes compare relative to each other (see toScale in pals.js),
-// and back. It works in color or stained.
+// The Compare sizes button: show one cell of every pal, shrunk around her
+// body so the pals' sizes compare relative to each other (see toScale in
+// pals.js), and back. It works in color or stained.
 const scale = document.querySelector('.scale-btn');
 
 function showScale(scaled) {
@@ -117,8 +115,15 @@ function showScale(scaled) {
   scale.setAttribute('aria-pressed', String(scaled));
   scale.querySelector('.scale-label').textContent = scaled ? 'Full size' : 'Compare sizes';
   document.querySelector('.scale-caption').hidden = !scaled;
+  const stained = shell.classList.contains('stained');
   for (const pal of PALS) {
     const svg = document.querySelector(`.pal-icon.${pal.id} svg`);
+    // A pal whose picture shows several cells shows just one of them.
+    if (pal.cellArt) {
+      svg.innerHTML = scaled ? pal.cellArt : pal.art;
+      for (const wiggle of svg.querySelectorAll('animate')) wiggle.remove();
+      if (stained) stainPal(svg, SPECIES[pal.id]);
+    }
     if (scaled) {
       const { scale: by, x, y } = toScale(pal);
       svg.style.transformOrigin = `${x * 100}% ${y * 100}%`;

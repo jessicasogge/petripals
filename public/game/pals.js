@@ -13,7 +13,8 @@
 //
 // To add a pal: append here and to SPECIES (with her `tile` color and her
 // real length, `micrometers`), and give her a `bodyBox` around her body in
-// her art (for the picker's Compare sizes mode). New pals are picker-only; don't
+// her art, and for a picture of several cells a `cellArt` of one with its
+// `cellBox` (for the picker's Compare sizes mode). New pals are picker-only; don't
 // add to HOME.
 
 import { SPECIES } from './config.js';
@@ -420,6 +421,27 @@ export const PALS = [
         <path d="M133 113 Q139 119 145 113" stroke="#312e81" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
+    // Compare sizes shows just one cell of her, the one with her face,
+    // drawn at one cell's length (its body box is cellBox).
+    cellBox: [100, 65, 176, 135],
+    cellArt: `
+      <path d="M102 100 C102 79 116 67 136 67 C159 67 174 84 174 100 C174 116 159 133 136 133 C116 133 102 121 102 100 Z" fill="#a5b4fc" stroke="#4f46e5" stroke-width="4" stroke-linejoin="round" />
+      <circle cx="158" cy="83" r="3.5" fill="#e0e7ff" />
+      <g class="face">
+        <circle cx="127" cy="97" r="5.5" fill="#312e81" />
+        <circle cx="151" cy="97" r="5.5" fill="#312e81" />
+        <circle cx="128.8" cy="95.2" r="1.9" fill="white" />
+        <circle cx="152.8" cy="95.2" r="1.9" fill="white" />
+        <circle cx="127" cy="97" r="10.5" fill="#eef2ff" fill-opacity="0.35" stroke="#312e81" stroke-width="2.6" />
+        <circle cx="151" cy="97" r="10.5" fill="#eef2ff" fill-opacity="0.35" stroke="#312e81" stroke-width="2.6" />
+        <path d="M137.5 96 Q139 93.5 140.5 96" stroke="#312e81" stroke-width="2.6" fill="none" stroke-linecap="round" />
+        <path d="M116.5 95 L111 92" stroke="#312e81" stroke-width="2.6" stroke-linecap="round" />
+        <path d="M161.5 95 L166 92" stroke="#312e81" stroke-width="2.6" stroke-linecap="round" />
+        <ellipse cx="118" cy="114" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.85" />
+        <ellipse cx="160" cy="114" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.85" />
+        <path d="M133 113 Q139 119 145 113" stroke="#312e81" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
   },
   // Vi: Vibrio cholerae, an orange comma-shaped rod
   {
@@ -492,6 +514,22 @@ export const PALS = [
       <ellipse cx="81" cy="132" rx="5" ry="3" fill="#f9a8d4" opacity="0.8" />
       <ellipse cx="119" cy="132" rx="5" ry="3" fill="#f9a8d4" opacity="0.8" />
       <path d="M95 132 Q100 137 105 132" stroke="#78350f" stroke-width="3" fill="none" stroke-linecap="round" />
+    `,
+    // Compare sizes shows just one cell of her, the one with her face,
+    // drawn at one cell's length (its body box is cellBox).
+    cellBox: [68, 90, 132, 154],
+    cellArt: `
+      <circle cx="100" cy="122" r="30" fill="#fde68a" stroke="#b45309" stroke-width="4" />
+      <circle cx="88" cy="108" r="5" fill="#fef3c7" />
+      <g class="face">
+        <circle cx="90" cy="120" r="6" fill="#78350f" />
+        <circle cx="110" cy="120" r="6" fill="#78350f" />
+        <circle cx="92" cy="118" r="2" fill="white" />
+        <circle cx="112" cy="118" r="2" fill="white" />
+        <ellipse cx="81" cy="132" rx="5" ry="3" fill="#f9a8d4" opacity="0.8" />
+        <ellipse cx="119" cy="132" rx="5" ry="3" fill="#f9a8d4" opacity="0.8" />
+        <path d="M95 132 Q100 137 105 132" stroke="#78350f" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
     `,
   },
   // Ana: Bifidobacterium bifidum, a pink Y-shaped rod cheering with her arms up
@@ -588,6 +626,22 @@ export const PALS = [
       <ellipse cx="84" cy="110" rx="4.5" ry="3" fill="#f9a8d4" opacity="0.9" />
       <ellipse cx="116" cy="110" rx="4.5" ry="3" fill="#f9a8d4" opacity="0.9" />
       <path d="M95 110 Q100 115 105 110" stroke="#7f1d1d" stroke-width="3" fill="none" stroke-linecap="round" />
+    `,
+    // Compare sizes shows just one cell of her, the one with her face,
+    // drawn at one cell's length (its body box is cellBox).
+    cellBox: [73, 73, 127, 127],
+    cellArt: `
+      <circle cx="100" cy="100" r="25" fill="#fca5a5" stroke="#b91c1c" stroke-width="4" />
+      <circle cx="91" cy="89" r="4" fill="#fee2e2" />
+      <g class="face">
+        <circle cx="91" cy="100" r="5" fill="#7f1d1d" />
+        <circle cx="109" cy="100" r="5" fill="#7f1d1d" />
+        <circle cx="92.5" cy="98.5" r="1.8" fill="white" />
+        <circle cx="110.5" cy="98.5" r="1.8" fill="white" />
+        <ellipse cx="84" cy="110" rx="4.5" ry="3" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="116" cy="110" rx="4.5" ry="3" fill="#f9a8d4" opacity="0.9" />
+        <path d="M95 110 Q100 115 105 110" stroke="#7f1d1d" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
     `,
   },
   // Coco: Haemophilus influenzae, a small coffee-with-cream coccobacillus
@@ -705,6 +759,22 @@ export const PALS = [
         <path d="M94 112 Q100 118 106 112" stroke="#0c4a6e" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
+    // Compare sizes shows just one cell of her, the one with her face,
+    // drawn at one cell's length (its body box is cellBox).
+    cellBox: [65, 78, 135, 128],
+    cellArt: `
+      <rect x="67" y="80" width="66" height="46" rx="13" fill="#bae6fd" stroke="#0369a1" stroke-width="4" />
+      <circle cx="79" cy="90" r="4.5" fill="#f0f9ff" />
+      <g class="face">
+        <circle cx="90" cy="101" r="5.5" fill="#0c4a6e" />
+        <circle cx="110" cy="101" r="5.5" fill="#0c4a6e" />
+        <circle cx="91.8" cy="99.2" r="1.9" fill="white" />
+        <circle cx="111.8" cy="99.2" r="1.9" fill="white" />
+        <ellipse cx="80" cy="113" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="120" cy="113" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
+        <path d="M94 112 Q100 118 106 112" stroke="#0c4a6e" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
   },
   // Sallie: Salmonella Typhi, a grey rod with flagella all over
   {
@@ -776,6 +846,21 @@ export const PALS = [
       ${ivyRod(124, 132, -8, 62, 46)}
       ${ivyRod(170, 96, -62, 46, 32)}
       ${ivyRod(168, 50, -118, 38, 26)}
+      <g class="face">
+        <circle cx="113" cy="128" r="6" fill="#2f4224" />
+        <circle cx="135" cy="125" r="6" fill="#2f4224" />
+        <circle cx="115" cy="126" r="2" fill="white" />
+        <circle cx="137" cy="123" r="2" fill="white" />
+        <ellipse cx="102" cy="140" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="146" cy="136" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <path d="M118 139 Q124 145 131 138" stroke="#2f4224" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+    // Compare sizes shows just one cell of her, the one with her face,
+    // drawn at one cell's length (its body box is cellBox).
+    cellBox: [91, 107, 157, 157],
+    cellArt: `
+      ${ivyRod(124, 132, -8, 62, 46)}
       <g class="face">
         <circle cx="113" cy="128" r="6" fill="#2f4224" />
         <circle cx="135" cy="125" r="6" fill="#2f4224" />
@@ -1079,6 +1164,22 @@ export const PALS = [
         <path d="M62 143 Q67 148 72 143" stroke="#701a75" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
+    // Compare sizes shows just one cell of her, the one with her face,
+    // drawn at one cell's length (its body box is cellBox).
+    cellBox: [30, 98, 102, 170],
+    cellArt: `
+      <!-- on her own she's round, not pressed flat by her square -->
+      ${dinaCell(32, 100, [SIDE, SIDE, SIDE, SIDE])}
+      <g class="face">
+        <circle cx="56" cy="132" r="5.5" fill="#701a75" />
+        <circle cx="78" cy="132" r="5.5" fill="#701a75" />
+        <circle cx="57.8" cy="130.2" r="1.9" fill="white" />
+        <circle cx="79.8" cy="130.2" r="1.9" fill="white" />
+        <ellipse cx="46" cy="143" rx="5.5" ry="3.4" fill="#f9a8d4" opacity="0.95" />
+        <ellipse cx="88" cy="143" rx="5.5" ry="3.4" fill="#f9a8d4" opacity="0.95" />
+        <path d="M62 143 Q67 148 72 143" stroke="#701a75" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
   },
   // Ari: Anabaena variabilis, a jade string of beads with one gold heterocyst
   {
@@ -1091,6 +1192,22 @@ export const PALS = [
     bodyBox: [4, 69, 194, 131],
     art: `
       ${ARI_CELLS}
+    `,
+    // Compare sizes shows just one cell of her, the one with her face,
+    // drawn at one cell's length (its body box is cellBox).
+    cellBox: [46, 69, 97, 121],
+    cellArt: `
+      <circle cx="71.6" cy="94.8" r="24" fill="#7dd8b0" stroke="#0d5c43" stroke-width="3.5" />
+      <circle cx="62.5" cy="84.8" r="4.8" fill="#e2f8ee" />
+      <g class="face" transform="translate(71.6 94.8) scale(1.41)">
+        <circle cx="-6" cy="0" r="4.3" fill="#06321f" />
+        <circle cx="6" cy="0" r="4.3" fill="#06321f" />
+        <circle cx="-4.6" cy="-1.4" r="1.5" fill="white" />
+        <circle cx="7.4" cy="-1.4" r="1.5" fill="white" />
+        <ellipse cx="-10.5" cy="7" rx="3.4" ry="2.2" fill="#f9a8d4" opacity="0.95" />
+        <ellipse cx="10.5" cy="7" rx="3.4" ry="2.2" fill="#f9a8d4" opacity="0.95" />
+        <path d="M-3.5 6.5 Q0 10.5 3.5 6.5" stroke="#06321f" stroke-width="2.4" fill="none" stroke-linecap="round" />
+      </g>
     `,
   },
   // Marina: Mycobacterium marinum, a slim, gently curved persimmon rod in a
@@ -1195,6 +1312,25 @@ export const PALS = [
         <path d="M132.5 108 Q137 112.5 141.5 108" stroke="#062f38" stroke-width="2.8" fill="none" stroke-linecap="round" />
       </g>
     `,
+    // Compare sizes shows just one cell of her, the one with her face,
+    // drawn at one cell's length (its body box is cellBox).
+    cellBox: [105, 68, 169, 132],
+    cellArt: `
+      <!-- on her own she's round: cells only flatten where they meet -->
+      <circle data-stain="body" cx="137" cy="100" r="32" fill="#3fb3cb" />
+      <circle cx="137" cy="100" r="32" fill="none" stroke="#0b4f5e" stroke-width="4" />
+      <path d="M119 80 Q129 72 143 73" stroke="#d9f3f8" stroke-width="4" fill="none" stroke-linecap="round" />
+      <circle cx="157" cy="118" r="2.6" fill="#d9f3f8" />
+      <g class="face">
+        <circle cx="127" cy="98" r="5" fill="#062f38" />
+        <circle cx="147" cy="98" r="5" fill="#062f38" />
+        <circle cx="128.6" cy="96.4" r="1.7" fill="white" />
+        <circle cx="148.6" cy="96.4" r="1.7" fill="white" />
+        <ellipse cx="117" cy="108" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="157" cy="108" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
+        <path d="M132.5 108 Q137 112.5 141.5 108" stroke="#062f38" stroke-width="2.8" fill="none" stroke-linecap="round" />
+      </g>
+    `,
   },
 ];
 
@@ -1269,19 +1405,23 @@ export function palTile(pal) {
   return tile;
 }
 
-// The picker's Compare sizes view: the pals' sizes relative to each other.
-// Her picture's square on the tile stands for TILE_MICROMETERS across. Ari
-// (28 µm), the longest, spills a little past it into the tile's margin, so
+// The picker's Compare sizes view: one cell of every pal (her whole picture,
+// or her `cellArt` if it shows several), at her size relative to the others.
+// Her picture's square on the tile stands for TILE_MICROMETERS across. Elia
+// (20 µm), the longest, spills a little past it into the tile's margin, so
 // she nearly fills her tile and everyone else comes out as big as they can.
 // Returns how much to scale her picture, and where her body's center is in
 // her picker frame (as fractions across and down), to scale it around.
-export const TILE_MICROMETERS = 24;
+export const TILE_MICROMETERS = 17.5;
+
+// One cell's length in µm (what Compare sizes shows and labels).
+export const cellLength = (pal) => SPECIES[pal.id].cellMicrometers ?? SPECIES[pal.id].micrometers;
 
 export function toScale(pal) {
-  const [x0, y0, x1, y1] = pal.bodyBox;
+  const [x0, y0, x1, y1] = pal.cellBox ?? pal.bodyBox;
   const [fx, fy, size] = pal.frames.picker.split(' ').map(Number);
   const length = Math.max(x1 - x0, y1 - y0);
-  const tile = (length * TILE_MICROMETERS) / SPECIES[pal.id].micrometers;
+  const tile = (length * TILE_MICROMETERS) / cellLength(pal);
   return {
     scale: size / tile,
     x: ((x0 + x1) / 2 - fx) / size,
