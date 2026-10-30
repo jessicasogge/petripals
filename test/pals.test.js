@@ -657,15 +657,19 @@ describe('comparing sizes', () => {
     expect(cellLength(palById('colette'))).toBe(SPECIES.colette.micrometers);
   });
 
-  it('lets Elia, the longest cell, nearly fill her tile, and shrinks everyone else', () => {
-    const longest = PALS.reduce((a, b) => (cellLength(b) > cellLength(a) ? b : a));
-    expect(longest.id).toBe('elia');
-    // Her picture's square is 5/6 of her tile (80px of 96, 60 of 72 on a
-    // phone), so she spills past it into the margin but stays on her tile.
-    expect(onTile(longest) * (5 / 6)).toBeGreaterThan(0.9);
-    expect(onTile(longest) * (5 / 6)).toBeLessThan(1);
+  it('lets Elia and Nova, the longest, nearly fill their tiles, and shrinks everyone else', () => {
+    const most = Math.max(...PALS.map(cellLength));
+    const longest = PALS.filter((pal) => cellLength(pal) === most).map((pal) => pal.id).sort();
+    expect(longest).toEqual(['elia', 'nova']);
+    for (const id of longest) {
+      // A picture's square is 5/6 of her tile (80px of 96, 60 of 72 on a
+      // phone), so she spills past it into the margin but stays on her tile.
+      expect(onTile(palById(id)) * (5 / 6), id).toBeGreaterThan(0.9);
+      expect(onTile(palById(id)) * (5 / 6), id).toBeLessThan(1);
+    }
+    // Everyone else is shorter, so stays well inside her tile.
     for (const pal of PALS) {
-      if (pal !== longest) expect(toScale(pal).scale, pal.id).toBeLessThanOrEqual(1);
+      if (!longest.includes(pal.id)) expect(onTile(pal) * (5 / 6), pal.id).toBeLessThan(0.9);
     }
   });
 

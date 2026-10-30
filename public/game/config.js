@@ -158,7 +158,7 @@ export const SPECIES = {
       "Deer rarely infect ticks with Elia, but they feed adult ticks and keep tick numbers up.",
     ],
     scientific: 'Borrelia burgdorferi',
-    micrometers: 20, // her picture's real length: one cell
+    micrometers: 15, // her picture's real length: one cell (10 to 30 µm long)
     color: '#7e22ce', // for her name above the dish
     tile: 'rgba(216, 180, 254, 0.45)',
     kind: 'rod',

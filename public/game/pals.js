@@ -1412,11 +1412,12 @@ export function palTile(pal) {
 // The picker's Compare sizes view: one cell of every pal (her whole picture,
 // or her `cellArt` if it shows several), at her size relative to the others.
 // Her picture's square on the tile stands for TILE_MICROMETERS across. Elia
-// (20 µm), the longest, spills a little past it into the tile's margin, so
-// she nearly fills her tile and everyone else comes out as big as they can.
+// and Nova (15 µm), the longest, spill a little past it into the tile's
+// margin, so they nearly fill their tiles and everyone else comes out as big
+// as they can.
 // Returns how much to scale her picture, and where her body's center is in
 // her picker frame (as fractions across and down), to scale it around.
-export const TILE_MICROMETERS = 17.5;
+export const TILE_MICROMETERS = 13.125;
 
 // One cell's length in µm (what Compare sizes shows and labels).
 export const cellLength = (pal) => SPECIES[pal.id].cellMicrometers ?? SPECIES[pal.id].micrometers;
