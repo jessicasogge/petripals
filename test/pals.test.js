@@ -324,8 +324,10 @@ describe('the pages', () => {
       expect(svg(pal.id).style.transform, pal.id).toContain(`scale(${toScale(pal).scale})`);
     }
     // Her real length shows under her name.
-    const ari = svg('ari').closest('.pal-card');
-    expect(ari.querySelector('.size-note').textContent).toBe('28 µm');
+    // One cell's length: Ari's picture is a string of 8 cells.
+    const note = (id) => svg(id).closest('.pal-card').querySelector('.size-note').textContent;
+    expect(note('ari')).toBe('3.5 µm per cell');
+    expect(note('colette')).toBe('2.5 µm');
 
     // It works stained too, and turning it off leaves the stain alone.
     document.querySelector('.scope-btn').click();

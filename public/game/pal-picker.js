@@ -77,10 +77,12 @@ function card(pal) {
   tile.classList.add(`gram-${gram}`);
   if (faintStain) tile.classList.add('faint-stain');
 
-  // In Compare sizes mode, her real length.
+  // In Compare sizes mode, her real length: one cell's, if her picture
+  // shows a pair, chain or cluster.
+  const { micrometers, cellMicrometers } = SPECIES[pal.id];
   const size = document.createElement('p');
   size.className = 'size-note';
-  size.textContent = `${SPECIES[pal.id].micrometers} µm`;
+  size.textContent = cellMicrometers ? `${cellMicrometers} µm per cell` : `${micrometers} µm`;
 
   link.append(tile, name, species, size);
   return link;

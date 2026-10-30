@@ -27,7 +27,9 @@
 //
 // `micrometers` is how long her picture is in real life, in µm: one cell,
 // or the pair, chain or cluster it shows (typical sizes for her species).
-// The picker's Compare sizes button shows the pals' sizes relative to each other.
+// `cellMicrometers` is one cell's length, for a pal whose picture shows
+// several. The picker's Compare sizes button shows the pals' sizes relative
+// to each other, labeled with one cell's length.
 //
 // `gram` is how she looks after a Gram stain: 'positive' cells stay purple,
 // 'negative' ones turn pink (the picker's microscope mode shows this).
@@ -306,6 +308,7 @@ export const SPECIES = {
     ],
     scientific: 'Streptococcus pneumoniae',
     micrometers: 1.8, // her picture's real length: a pair
+    cellMicrometers: 0.9, // one of her cells
     color: '#4f46e5', // for her name above the dish: bluish purple, next to Elia's purple
     tile: 'rgba(165, 180, 252, 0.45)',
     kind: 'coccus',
@@ -347,6 +350,7 @@ export const SPECIES = {
     ],
     scientific: 'Streptococcus pyogenes',
     micrometers: 4, // her picture's real length: a chain of 5
+    cellMicrometers: 0.8, // one of her cells
     color: '#b91c1c', // for her name above the dish
     tile: 'rgba(252, 165, 165, 0.45)',
     kind: 'coccus',
@@ -382,6 +386,7 @@ export const SPECIES = {
     ],
     scientific: 'Staphylococcus aureus',
     micrometers: 3, // her picture's real length: a cluster
+    cellMicrometers: 1, // one of her cells
     color: '#b45309', // for her name above the dish
     tile: 'rgba(253, 230, 138, 0.45)',
     kind: 'coccus',
@@ -427,6 +432,7 @@ export const SPECIES = {
     ],
     scientific: 'Bacillus cereus',
     micrometers: 12, // her picture's real length: a chain of 3
+    cellMicrometers: 4, // one of her cells
     color: '#0369a1', // for her name above the dish
     tile: 'rgba(125, 211, 252, 0.2)',
     kind: 'coccus', // grows in chains (see above), though her cells are rods
@@ -654,6 +660,7 @@ export const SPECIES = {
     ],
     scientific: 'Bacillus mycoides',
     micrometers: 12, // her picture's real length: a chain of 4
+    cellMicrometers: 3, // one of her cells
     color: '#4d6b3c', // for her name above the dish
     tile: 'rgba(150, 190, 120, 0.3)',
     kind: 'coccus', // grows in chains with the chain code, like Ceres, though her cells are rods
@@ -1097,6 +1104,7 @@ export const SPECIES = {
     ],
     scientific: 'Anabaena variabilis',
     micrometers: 28, // her picture's real length: a string of 8
+    cellMicrometers: 3.5, // one of her cells
     color: '#0d6e50', // for her name above the dish
     tile: 'rgba(63, 185, 138, 0.28)',
     kind: 'coccus',
@@ -1134,6 +1142,7 @@ export const SPECIES = {
     ],
     scientific: 'Deinococcus radiodurans',
     micrometers: 5, // her picture's real length: a square of 4
+    cellMicrometers: 2.5, // one of her cells
     color: '#a21caf', // for her name above the dish
     tile: 'rgba(240, 171, 252, 0.4)',
     kind: 'coccus',
@@ -1253,6 +1262,7 @@ export const SPECIES = {
     ],
     scientific: 'Neisseria meningitidis',
     micrometers: 1.6, // her picture's real length: a pair
+    cellMicrometers: 0.8, // one of her cells
     color: '#0b4f5e', // for her name above the dish
     tile: 'rgba(47, 166, 191, 0.25)',
     kind: 'coccus',

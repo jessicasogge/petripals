@@ -286,6 +286,14 @@ describe('real sizes', () => {
     expect(sizes[0]).toBe('frannie');
     expect(sizes.at(-1)).toBe('ari');
   });
+
+  it("gives one cell's length for each pal whose picture shows several cells", () => {
+    const groups = Object.keys(SPECIES).filter((pal) => SPECIES[pal].cellMicrometers).sort();
+    expect(groups).toEqual(['ari', 'ceres', 'dina', 'goldie', 'ivy', 'nessa', 'penny', 'scarlett']);
+    for (const pal of groups) {
+      expect(SPECIES[pal].cellMicrometers, pal).toBeLessThan(SPECIES[pal].micrometers);
+    }
+  });
 });
 
 describe('Gram stains', () => {

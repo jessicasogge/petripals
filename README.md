@@ -69,7 +69,7 @@ Tap **Who’s That Pal?** on the home page for a quiz on the pals' fun facts. Ea
 
 The picker shuffles all the pals each visit and shows them eight to a page, with **More pals** for the rest, so any pal can turn up on any page.
 
-In the picker's corners, **Gram stain** shows every pal as she'd look under a microscope after a Gram stain, and **Compare sizes** shrinks the pals so their sizes compare relative to each other: Ari, a 28 µm string of cells and the longest pal, nearly fills her tile, and every other pal is drawn at her size relative to Ari, down to tiny Frannie (half a micrometer), who is just a speck. Each card also shows her real length. A pal's length is how long her picture is in real life (one cell, or the pair, chain or cluster it shows), from typical sizes for her species (`micrometers` in `config.js`). The two modes work together. Turning either one off leaves the other as it was.
+In the picker's corners, **Gram stain** shows every pal as she'd look under a microscope after a Gram stain, and **Compare sizes** shrinks the pals so their sizes compare relative to each other: Ari, a 28 µm string of cells and the longest pal, nearly fills her tile, and every other pal is drawn at her size relative to Ari, down to tiny Frannie (half a micrometer), who is just a speck. Each card also shows her real length: one cell's, for a pal whose picture shows a pair, chain or cluster (like Ari's 3.5 µm cells, in a string of 8). Her picture is drawn at the length of everything it shows (`micrometers` in `config.js`), and the label uses one cell's length where there's more than one (`cellMicrometers`), from typical sizes for her species. The two modes work together. Turning either one off leaves the other as it was.
 
 ## The real science
 
