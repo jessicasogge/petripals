@@ -7,7 +7,7 @@ import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SPECIES } from '../public/game/config.js';
 import { plainText } from '../public/game/italics.js';
-import { dishPal, HOME_PALS, homePal, inRandomOrder, PAGE_SIZE, palById, PALS, palTile, pickerPages } from '../public/game/pals.js';
+import { dishPal, HOME_PALS, homePal, inRandomOrder, PAGE_SIZE, palById, PALS, palTile, pickerPages, TILE_MICROMETERS, toScale, cellLength } from '../public/game/pals.js';
 
 // (jsdom changes import.meta.url to a web address, so find files from the project folder.)
 const file = (name) => readFileSync(resolve(process.cwd(), 'public', name), 'utf8');
@@ -305,6 +305,66 @@ describe('the pages', () => {
     expect(css).toMatch(/\n\.stained \.stain-note \{\s*display: block;/);
   });
 
+  it("the picker's Compare sizes button shrinks the pals to their sizes relative to each other, and back", async () => {
+    await open('pal-picker.html', 'game/pal-picker.js');
+    const shell = document.querySelector('.picker-shell');
+    const button = document.querySelector('.scale-btn');
+    const caption = document.querySelector('.scale-caption');
+    const svg = (id) => document.querySelector(`.pal-icon.${id} svg`);
+    expect(button.getAttribute('aria-pressed')).toBe('false');
+    expect(caption.hidden).toBe(true);
+    expect(svg('frannie').style.transform).toBe('');
+
+    button.click();
+    expect(shell.classList.contains('to-scale')).toBe(true);
+    expect(button.getAttribute('aria-pressed')).toBe('true');
+    expect(button.textContent).toContain('Full size');
+    expect(caption.hidden).toBe(false);
+    for (const pal of PALS) {
+      expect(svg(pal.id).style.transform, pal.id).toContain(`scale(${toScale(pal).scale})`);
+    }
+    // Her real length shows under her name.
+    // One cell's length: Ari's picture is a string of cells.
+    const note = (id) => svg(id).closest('.pal-card').querySelector('.size-note').textContent;
+    expect(note('ari')).toBe('~3.5 µm');
+    expect(note('colette')).toBe('~2.5 µm');
+    // Sized by her cell body, not her stalks or capsule.
+    expect(note('astrid')).toBe('~1.5 µm');
+    expect(note('pearl')).toBe('~2 µm');
+    expect(note('nova')).toBe('~15 µm filament');
+    // A pal whose picture shows several cells shows just one, with her face.
+    expect(svg('ari').querySelectorAll('circle[r="24"]')).toHaveLength(1);
+    expect(svg('ari').querySelector('.face')).not.toBeNull();
+    expect(svg('ari').querySelectorAll('circle[stroke-width="5"]')).toHaveLength(0); // no heterocyst
+
+    // It works stained too, and turning it off leaves the stain alone.
+    document.querySelector('.scope-btn').click();
+    button.click();
+    expect(shell.classList.contains('to-scale')).toBe(false);
+    expect(shell.classList.contains('stained')).toBe(true);
+    expect(button.textContent).toContain('Compare sizes');
+    expect(caption.hidden).toBe(true);
+    expect(svg('frannie').style.transform).toBe('');
+    expect(svg('frannie').style.transformOrigin).toBe('');
+    // Ari's whole string is back, still stained.
+    expect(svg('ari').querySelectorAll('circle[stroke-width="5"]')).toHaveLength(1);
+    expect(svg('ari').querySelector('[style*="fill"]')).not.toBeNull();
+  });
+
+  it('stains the one-cell drawings too, when Gram stain is on first', async () => {
+    await open('pal-picker.html', 'game/pal-picker.js');
+    document.querySelector('.scope-btn').click();
+    document.querySelector('.scale-btn').click();
+    expect(document.querySelector('.pal-icon.penny svg [style*="fill"]')).not.toBeNull();
+  });
+
+  it("shows the sizes only in Compare sizes mode, and moves smoothly unless you've asked for less motion", () => {
+    expect(css).toMatch(/\n\.size-note \{\s*display: none;/);
+    expect(css).toMatch(/\n\.to-scale \.size-note \{\s*display: block;/);
+    expect(css).toMatch(/\n\.pal-icon svg \{\s*transition: transform/);
+    expect(css).toMatch(/prefers-reduced-motion: reduce\) \{\s*\.pal-icon svg,\s*\.pal-icon svg \* \{\s*transition: none;/);
+  });
+
   it('turning microscope mode on stains the pals, and off puts their colors back', async () => {
     await open('pal-picker.html', 'game/pal-picker.js');
     document.querySelector('.scope-btn').click();
@@ -556,6 +616,80 @@ describe('Frannie, with bunny ears', () => {
     const frannie = palById('frannie');
     expect(width(frannie.frames.dish)).toBeGreaterThan(width(palById('coco').frames.dish));
     expect(width(frannie.frames.picker)).toBeLessThan(200);
+  });
+});
+
+describe('comparing sizes', () => {
+  // Her body in what Compare sizes shows: one cell, or her whole picture.
+  const length = (pal) => {
+    const [x0, y0, x1, y1] = pal.cellBox ?? pal.bodyBox;
+    return Math.max(x1 - x0, y1 - y0);
+  };
+  // How long that comes out on her tile, as a fraction of her picture's square.
+  const onTile = (pal) => (length(pal) * toScale(pal).scale) / Number(pal.frames.picker.split(' ')[2]);
+
+  it('gives every pal her body box, inside her drawing', () => {
+    for (const pal of PALS) {
+      for (const box of [pal.bodyBox, pal.cellBox].filter(Boolean)) {
+        const [x0, y0, x1, y1] = box;
+        expect(x1, pal.id).toBeGreaterThan(x0);
+        expect(y1, pal.id).toBeGreaterThan(y0);
+        for (const v of box) expect(Math.abs(v), pal.id).toBeLessThanOrEqual(210);
+      }
+    }
+  });
+
+  it('has a one-cell drawing for exactly the pals whose pictures show several cells', () => {
+    const withCell = PALS.filter((pal) => pal.cellArt).map((pal) => pal.id).sort();
+    expect(withCell).toEqual(['ari', 'ceres', 'dina', 'goldie', 'ivy', 'nessa', 'penny', 'scarlett']);
+    for (const pal of PALS.filter((p) => p.cellArt)) {
+      expect(pal.cellBox, pal.id).toHaveLength(4);
+      // Her face comes along, so she's still her.
+      expect(pal.cellArt, pal.id).toContain('class="face"');
+    }
+  });
+
+  it('draws one cell of each pal at its real length on a tile TILE_MICROMETERS across', () => {
+    for (const pal of PALS) {
+      expect(onTile(pal), pal.id).toBeCloseTo(cellLength(pal) / TILE_MICROMETERS, 5);
+    }
+    expect(cellLength(palById('ari'))).toBe(SPECIES.ari.cellMicrometers);
+    expect(cellLength(palById('colette'))).toBe(SPECIES.colette.micrometers);
+  });
+
+  it('lets Elia and Nova, the longest, nearly fill their tiles, and shrinks everyone else', () => {
+    const most = Math.max(...PALS.map(cellLength));
+    const longest = PALS.filter((pal) => cellLength(pal) === most).map((pal) => pal.id).sort();
+    expect(longest).toEqual(['elia', 'nova']);
+    for (const id of longest) {
+      // A picture's square is 5/6 of her tile (80px of 96, 60 of 72 on a
+      // phone), so she spills past it into the margin but stays on her tile.
+      expect(onTile(palById(id)) * (5 / 6), id).toBeGreaterThan(0.9);
+      expect(onTile(palById(id)) * (5 / 6), id).toBeLessThan(1);
+    }
+    // Everyone else is shorter, so stays well inside her tile.
+    for (const pal of PALS) {
+      if (!longest.includes(pal.id)) expect(onTile(pal) * (5 / 6), pal.id).toBeLessThan(0.9);
+    }
+  });
+
+  it("sizes Astrid and Pearl by their cell bodies, inside their stalks and capsule", () => {
+    for (const id of ['astrid', 'pearl']) {
+      const pal = palById(id);
+      const [cx0, cy0, cx1, cy1] = pal.cellBox;
+      const [bx0, by0, bx1, by1] = pal.bodyBox;
+      expect(cx0, id).toBeGreaterThanOrEqual(bx0);
+      expect(cy0, id).toBeGreaterThanOrEqual(by0);
+      expect(cx1, id).toBeLessThanOrEqual(bx1);
+      expect(cy1, id).toBeLessThanOrEqual(by1);
+      expect(pal.cellArt, id).toBeUndefined(); // her whole picture still shows
+    }
+  });
+
+  it("shrinks her around her body's center", () => {
+    const { x, y } = toScale(palById('colette'));
+    expect(x).toBeCloseTo(0.5, 2);
+    expect(y).toBeCloseTo(0.5, 2);
   });
 });
 

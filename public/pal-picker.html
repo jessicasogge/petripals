@@ -34,11 +34,22 @@
     </div>
     <main class="picker-shell picker-wide">
       <h1>Pick a Pal</h1>
-      <!-- Microscope mode: shows each pal as she'd look after a Gram stain. -->
-      <button class="scope-btn" type="button" aria-pressed="false">
-        <span class="scope-icon" aria-hidden="true">🔬</span>
-        <span class="scope-label">Gram stain</span>
-      </button>
+      <div class="picker-tools">
+        <!-- Compare sizes: shows the pals' sizes relative to each other. -->
+        <button class="scale-btn" type="button" aria-pressed="false">
+          <span class="scale-icon" aria-hidden="true">📏</span>
+          <span class="scale-label">Compare sizes</span>
+        </button>
+        <!-- Microscope mode: shows each pal as she'd look after a Gram stain. -->
+        <button class="scope-btn" type="button" aria-pressed="false">
+          <span class="scope-icon" aria-hidden="true">🔬</span>
+          <span class="scope-label">Gram stain</span>
+        </button>
+      </div>
+      <p class="scale-caption" hidden>
+        Sizes compared: each pal is one cell, sized relative to the others.
+        Elia nearly fills her tile, while tiny Frannie is just a speck.
+      </p>
       <p class="scope-caption" hidden>
         Under the microscope after a Gram stain:
         <b class="gram-positive">purple = Gram-positive</b>,

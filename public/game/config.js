@@ -25,6 +25,14 @@
 // between asterisks: Sallie's is *Salmonella* Typhi, since Typhi is a
 // serovar, which is never in italics.
 //
+// `micrometers` is how long her picture is in real life, in µm: one cell,
+// or the pair, chain or cluster it shows (typical sizes for her species).
+// `cellMicrometers` is one cell's length, for a pal whose picture shows
+// several, or her cell body alone, for one drawn with more around it
+// (Astrid's stalks, Pearl's capsule). `sizeNote` labels a size that needs
+// saying more (Nova's filament). The picker's Compare sizes button shows the pals' sizes relative
+// to each other, labeled with one cell's length.
+//
 // `gram` is how she looks after a Gram stain: 'positive' cells stay purple,
 // 'negative' ones turn pink (the picker's microscope mode shows this).
 // `faintStain` marks a pal who barely takes the stain at all (Elia, Marina).
@@ -58,6 +66,7 @@ export const SPECIES = {
       "Mona's colonies may have a metallic sheen and can make blue-green pigments.",
     ],
     scientific: 'Pseudomonas aeruginosa',
+    micrometers: 2, // her picture's real length: one cell
     color: '#15803d', // for her name above the dish
     tile: 'rgba(134, 239, 172, 0.45)',
     kind: 'rod',
@@ -101,6 +110,7 @@ export const SPECIES = {
       "Vi has 200+ serogroups, but only O1 and O139 are linked to epidemic cholera.",
     ],
     scientific: 'Vibrio cholerae',
+    micrometers: 2, // her picture's real length: one cell
     color: '#c2410c', // for her name above the dish
     tile: 'rgba(253, 186, 116, 0.45)',
     kind: 'rod',
@@ -148,6 +158,7 @@ export const SPECIES = {
       "Deer rarely infect ticks with Elia, but they feed adult ticks and keep tick numbers up.",
     ],
     scientific: 'Borrelia burgdorferi',
+    micrometers: 15, // her picture's real length: one cell (10 to 30 µm long)
     color: '#7e22ce', // for her name above the dish
     tile: 'rgba(216, 180, 254, 0.45)',
     kind: 'rod',
@@ -198,6 +209,7 @@ export const SPECIES = {
       "Nontypeable strains of Coco are a common cause of pink eye, especially in children.",
     ],
     scientific: 'Haemophilus influenzae',
+    micrometers: 1, // her picture's real length: one cell
     color: '#7c4a2d', // for her name above the dish
     tile: 'rgba(212, 176, 140, 0.45)',
     kind: 'rod',
@@ -243,6 +255,7 @@ export const SPECIES = {
       "Babies born by C-section often acquire bifidobacteria like Ana later than others.",
     ],
     scientific: 'Bifidobacterium bifidum',
+    micrometers: 3, // her picture's real length: one cell
     color: '#be185d', // for her name above the dish: strawberry-yogurt pink's deeper rose
     tile: 'rgba(249, 168, 212, 0.4)',
     kind: 'rod',
@@ -296,6 +309,8 @@ export const SPECIES = {
       "Besides pneumonia, Penny can cause meningitis and sinus infections.",
     ],
     scientific: 'Streptococcus pneumoniae',
+    micrometers: 1.8, // her picture's real length: a pair
+    cellMicrometers: 0.9, // one of her cells
     color: '#4f46e5', // for her name above the dish: bluish purple, next to Elia's purple
     tile: 'rgba(165, 180, 252, 0.45)',
     kind: 'coccus',
@@ -336,6 +351,8 @@ export const SPECIES = {
       "There are 200+ M protein types of Scarlett, one reason people can get strep throat again.",
     ],
     scientific: 'Streptococcus pyogenes',
+    micrometers: 4, // her picture's real length: a chain of 5
+    cellMicrometers: 0.8, // one of her cells
     color: '#b91c1c', // for her name above the dish
     tile: 'rgba(252, 165, 165, 0.45)',
     kind: 'coccus',
@@ -370,6 +387,8 @@ export const SPECIES = {
       "Goldie was named in 1884 by Friedrich Rosenbach after her golden colonies.",
     ],
     scientific: 'Staphylococcus aureus',
+    micrometers: 3, // her picture's real length: a cluster
+    cellMicrometers: 1, // one of her cells
     color: '#b45309', // for her name above the dish
     tile: 'rgba(253, 230, 138, 0.45)',
     kind: 'coccus',
@@ -414,6 +433,8 @@ export const SPECIES = {
       "Ceres often makes beta-lactamases, enzymes that break down penicillin and its relatives.",
     ],
     scientific: 'Bacillus cereus',
+    micrometers: 12, // her picture's real length: a chain of 3
+    cellMicrometers: 4, // one of her cells
     color: '#0369a1', // for her name above the dish
     tile: 'rgba(125, 211, 252, 0.2)',
     kind: 'coccus', // grows in chains (see above), though her cells are rods
@@ -458,6 +479,7 @@ export const SPECIES = {
       "In 2016, an extensively drug-resistant strain of Sallie began spreading in Pakistan.",
     ],
     scientific: '*Salmonella* Typhi',
+    micrometers: 2.5, // her picture's real length: one cell
     color: '#52525b', // for her name above the dish
     tile: 'rgba(161, 161, 170, 0.2)',
     kind: 'rod',
@@ -502,6 +524,7 @@ export const SPECIES = {
       "\"Clostridium,\" the first part of Terra's name, comes from a Greek word for spindle.",
     ],
     scientific: 'Clostridium tetani',
+    micrometers: 4, // her picture's real length: with her spore
     color: '#5f6f12', // for her name above the dish
     tile: 'rgba(217, 223, 160, 0.5)',
     kind: 'rod',
@@ -547,6 +570,7 @@ export const SPECIES = {
       "Cephalosporins aren't reliable on Lissie, so doctors often use ampicillin or amoxicillin.",
     ],
     scientific: 'Listeria monocytogenes',
+    micrometers: 1.5, // her picture's real length: one cell
     color: '#2c4f7c', // for her name above the dish
     tile: 'rgba(122, 156, 199, 0.42)',
     kind: 'rod',
@@ -591,6 +615,7 @@ export const SPECIES = {
       "Sara is usually resistant to ampicillin and colistin.",
     ],
     scientific: 'Serratia marcescens',
+    micrometers: 1.5, // her picture's real length: one cell
     color: '#c2003a', // for her name above the dish
     tile: 'rgba(255, 90, 110, 0.22)',
     kind: 'rod',
@@ -636,6 +661,8 @@ export const SPECIES = {
       "Scientists study Ivy's spiral colonies to learn how left- and right-handed shapes form.",
     ],
     scientific: 'Bacillus mycoides',
+    micrometers: 12, // her picture's real length: a chain of 4
+    cellMicrometers: 3, // one of her cells
     color: '#4d6b3c', // for her name above the dish
     tile: 'rgba(150, 190, 120, 0.3)',
     kind: 'coccus', // grows in chains with the chain code, like Ceres, though her cells are rods
@@ -675,6 +702,8 @@ export const SPECIES = {
       "Astrid isn't known to cause disease in people.",
     ],
     scientific: 'Asticcacaulis biprosthecum',
+    micrometers: 3, // her picture's real length: with her stalks
+    cellMicrometers: 1.5, // her cell body, without her stalks
     color: '#1a4f9c', // for her name above the dish
     tile: 'rgba(90, 169, 245, 0.3)',
     kind: 'rod',
@@ -719,6 +748,7 @@ export const SPECIES = {
       "Kiki is a cousin of our pals Sallie and Sara, in the same big order of gut-type bacteria.",
     ],
     scientific: 'Cronobacter sakazakii',
+    micrometers: 3, // her picture's real length: one cell
     color: '#7d7200', // for her name above the dish
     tile: 'rgba(255, 240, 60, 0.35)',
     kind: 'rod',
@@ -761,6 +791,7 @@ export const SPECIES = {
       "Electra can receive electrons directly from another microbe.",
     ],
     scientific: 'Geobacter sulfurreducens',
+    micrometers: 2, // her picture's real length: one cell
     color: '#4c1d95', // for her name above the dish: grape, darker than Elia's purple
     tile: 'rgba(178, 126, 224, 0.35)',
     kind: 'rod',
@@ -801,6 +832,7 @@ export const SPECIES = {
       "Diffany swims with flagella spread all over her body.",
     ],
     scientific: 'Clostridioides difficile',
+    micrometers: 4.5, // her picture's real length: one cell
     color: '#7a2e1a', // for her name above the dish
     tile: 'rgba(210, 146, 127, 0.3)',
     kind: 'rod',
@@ -854,6 +886,8 @@ export const SPECIES = {
       "Nova has no flagella.",
     ],
     scientific: 'Nocardia nova',
+    micrometers: 15, // her picture's real length: a branching filament
+    sizeNote: '15 µm filament', // one branching filament, not one cell
     color: '#0f766e', // for her name above the dish
     tile: 'rgba(143, 227, 216, 0.4)',
     kind: 'rod',
@@ -931,6 +965,8 @@ export const SPECIES = {
       "Pearl lives in soil, water and on plants, not just in people.",
     ],
     scientific: 'Klebsiella pneumoniae',
+    micrometers: 2.5, // her picture's real length: in her capsule
+    cellMicrometers: 2, // her cell body, without her capsule
     color: '#6a5070', // for her name above the dish
     tile: 'rgba(232, 190, 206, 0.38)',
     kind: 'rod',
@@ -974,6 +1010,7 @@ export const SPECIES = {
       "Frannie isn't known to spread from person to person.",
     ],
     scientific: 'Francisella tularensis',
+    micrometers: 0.5, // her picture's real length: one cell
     color: '#a8432e', // for her name above the dish
     tile: 'rgba(255, 201, 181, 0.45)',
     kind: 'rod',
@@ -1020,6 +1057,7 @@ export const SPECIES = {
       "Finding Colette in drinking water can signal fecal contamination.",
     ],
     scientific: 'Escherichia coli',
+    micrometers: 2.5, // her picture's real length: one cell
     color: '#2e6b0e', // for her name above the dish
     tile: 'rgba(168, 236, 94, 0.35)',
     kind: 'rod',
@@ -1070,6 +1108,8 @@ export const SPECIES = {
       "Ari has no flagella.",
     ],
     scientific: 'Anabaena variabilis',
+    micrometers: 28, // her picture's real length: a string of 8
+    cellMicrometers: 3.5, // one of her cells
     color: '#0d6e50', // for her name above the dish
     tile: 'rgba(63, 185, 138, 0.28)',
     kind: 'coccus',
@@ -1106,6 +1146,8 @@ export const SPECIES = {
       "Dina's reference strain R1 has two chromosomes, a megaplasmid and a smaller plasmid.",
     ],
     scientific: 'Deinococcus radiodurans',
+    micrometers: 5, // her picture's real length: a square of 4
+    cellMicrometers: 2.5, // one of her cells
     color: '#a21caf', // for her name above the dish
     tile: 'rgba(240, 171, 252, 0.4)',
     kind: 'coccus',
@@ -1140,6 +1182,7 @@ export const SPECIES = {
       "Marina is a slim rod that can be straight or slightly curved."
     ],
     scientific: 'Mycobacterium marinum',
+    micrometers: 3, // her picture's real length: one cell
     color: '#8a2c0b', // for her name above the dish
     tile: 'rgba(244, 128, 63, 0.24)',
     kind: 'rod',
@@ -1184,6 +1227,7 @@ export const SPECIES = {
       "Doctors often treat Bree infections with two antibiotics for at least six weeks."
     ],
     scientific: 'Brucella melitensis',
+    micrometers: 1, // her picture's real length: one cell
     color: '#9a5b00', // for her name above the dish
     tile: 'rgba(255, 191, 60, 0.3)',
     kind: 'rod',
@@ -1222,6 +1266,8 @@ export const SPECIES = {
       "Nessa has no flagella and cannot swim.",
     ],
     scientific: 'Neisseria meningitidis',
+    micrometers: 1.6, // her picture's real length: a pair
+    cellMicrometers: 0.8, // one of her cells
     color: '#0b4f5e', // for her name above the dish
     tile: 'rgba(47, 166, 191, 0.25)',
     kind: 'coccus',

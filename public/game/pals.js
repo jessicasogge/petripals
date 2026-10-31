@@ -11,8 +11,11 @@
 //   art     200 x 200 drawing; wrap the face in <g class="face"> so dish
 //           offspring can hide it
 //
-// To add a pal: append here and to SPECIES (with her `tile` color). New pals
-// are picker-only; don't add to HOME.
+// To add a pal: append here and to SPECIES (with her `tile` color and her
+// real length, `micrometers`), and give her a `bodyBox` around her body in
+// her art, and for a picture of several cells a `cellArt` of one with its
+// `cellBox` (for the picker's Compare sizes mode). New pals are picker-only; don't
+// add to HOME.
 
 import { SPECIES } from './config.js';
 
@@ -358,6 +361,8 @@ export const PALS = [
     looks: 'an olive drumstick-shaped Clostridium tetani rod with a round spore at one end',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '10 12 176 176', dish: '0 8 184 184' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [28, 71, 181, 129],
     // Drawn a little smaller than the others on the home page.
     homeWidth: 108,
     art: `
@@ -387,6 +392,8 @@ export const PALS = [
     looks: 'a bluish-purple pair of round Streptococcus pneumoniae cells wearing round glasses',
     motion: 'bob',
     frames: { home: '-12 -12 224 224', picker: '0 0 200 200', dish: '10 10 180 180' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [24, 65, 176, 135],
     art: `
       <!-- left cell: a little narrower at the outside end, rounder where the pair meets -->
       <path d="M98 100 C98 79 84 67 64 67 C41 67 26 84 26 100 C26 116 41 133 64 133 C84 133 98 121 98 100 Z" fill="#a5b4fc" stroke="#4f46e5" stroke-width="4" stroke-linejoin="round" />
@@ -414,6 +421,27 @@ export const PALS = [
         <path d="M133 113 Q139 119 145 113" stroke="#312e81" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
+    // Compare sizes shows just one cell of her, the one with her face,
+    // drawn at one cell's length (its body box is cellBox).
+    cellBox: [100, 65, 176, 135],
+    cellArt: `
+      <path d="M102 100 C102 79 116 67 136 67 C159 67 174 84 174 100 C174 116 159 133 136 133 C116 133 102 121 102 100 Z" fill="#a5b4fc" stroke="#4f46e5" stroke-width="4" stroke-linejoin="round" />
+      <circle cx="158" cy="83" r="3.5" fill="#e0e7ff" />
+      <g class="face">
+        <circle cx="127" cy="97" r="5.5" fill="#312e81" />
+        <circle cx="151" cy="97" r="5.5" fill="#312e81" />
+        <circle cx="128.8" cy="95.2" r="1.9" fill="white" />
+        <circle cx="152.8" cy="95.2" r="1.9" fill="white" />
+        <circle cx="127" cy="97" r="10.5" fill="#eef2ff" fill-opacity="0.35" stroke="#312e81" stroke-width="2.6" />
+        <circle cx="151" cy="97" r="10.5" fill="#eef2ff" fill-opacity="0.35" stroke="#312e81" stroke-width="2.6" />
+        <path d="M137.5 96 Q139 93.5 140.5 96" stroke="#312e81" stroke-width="2.6" fill="none" stroke-linecap="round" />
+        <path d="M116.5 95 L111 92" stroke="#312e81" stroke-width="2.6" stroke-linecap="round" />
+        <path d="M161.5 95 L166 92" stroke="#312e81" stroke-width="2.6" stroke-linecap="round" />
+        <ellipse cx="118" cy="114" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.85" />
+        <ellipse cx="160" cy="114" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.85" />
+        <path d="M133 113 Q139 119 145 113" stroke="#312e81" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
   },
   // Vi: Vibrio cholerae, an orange comma-shaped rod
   {
@@ -422,6 +450,8 @@ export const PALS = [
     looks: 'an orange comma-shaped Vibrio cholerae',
     motion: 'wobble',
     frames: { home: '0 0 200 200', picker: '2 15 180 180', dish: '2 15 180 180' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [29, 53, 179, 151],
     // Drawn a little smaller than the others on the home page.
     homeWidth: 108,
     art: `
@@ -452,6 +482,8 @@ export const PALS = [
     looks: 'a golden grape-like cluster of Staphylococcus',
     motion: 'squish',
     frames: { home: '0 0 200 200', picker: '24 29 152 152', dish: '24 29 152 152' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [33, 33, 169, 176],
     art: `
       <!-- grape-like cluster of cocci (Staphylococcus) -->
       <circle cx="84" cy="58" r="22" fill="#fde68a" stroke="#b45309" stroke-width="4" />
@@ -483,6 +515,22 @@ export const PALS = [
       <ellipse cx="119" cy="132" rx="5" ry="3" fill="#f9a8d4" opacity="0.8" />
       <path d="M95 132 Q100 137 105 132" stroke="#78350f" stroke-width="3" fill="none" stroke-linecap="round" />
     `,
+    // Compare sizes shows just one cell of her, the one with her face,
+    // drawn at one cell's length (its body box is cellBox).
+    cellBox: [68, 90, 132, 154],
+    cellArt: `
+      <circle cx="100" cy="122" r="30" fill="#fde68a" stroke="#b45309" stroke-width="4" />
+      <circle cx="88" cy="108" r="5" fill="#fef3c7" />
+      <g class="face">
+        <circle cx="90" cy="120" r="6" fill="#78350f" />
+        <circle cx="110" cy="120" r="6" fill="#78350f" />
+        <circle cx="92" cy="118" r="2" fill="white" />
+        <circle cx="112" cy="118" r="2" fill="white" />
+        <ellipse cx="81" cy="132" rx="5" ry="3" fill="#f9a8d4" opacity="0.8" />
+        <ellipse cx="119" cy="132" rx="5" ry="3" fill="#f9a8d4" opacity="0.8" />
+        <path d="M95 132 Q100 137 105 132" stroke="#78350f" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
   },
   // Ana: Bifidobacterium bifidum, a pink Y-shaped rod cheering with her arms up
   {
@@ -491,6 +539,8 @@ export const PALS = [
     looks: 'a pink Y-shaped Bifidobacterium bifidum cheering with her arms up',
     motion: 'bob',
     frames: { home: '-14 2 228 228', picker: '0 16 200 200', dish: '18 34 164 164' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [49, 45, 151, 187],
     art: `
       <!-- outline: the stem and two branches, drawn thick in the darker pink -->
       <g stroke="#be185d" stroke-width="42" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -528,6 +578,8 @@ export const PALS = [
     looks: 'a short denim-blue rod-shaped Listeria monocytogenes with a few flagella around her',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '10 10 180 180', dish: '8 8 184 184' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [50, 74, 150, 126],
     art: `
       <!-- a few flagella around her short rod -->
       ${LISSIE_FLAGELLA}
@@ -552,6 +604,8 @@ export const PALS = [
     looks: 'a red chain of round Streptococcus pyogenes cells',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '6 10 188 188', dish: '6 10 188 188' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [6, 73, 194, 136],
     art: `
       <!-- chain of cocci (Streptococcus) -->
       <circle cx="26" cy="116" r="18" fill="#fca5a5" stroke="#b91c1c" stroke-width="4" />
@@ -573,6 +627,22 @@ export const PALS = [
       <ellipse cx="116" cy="110" rx="4.5" ry="3" fill="#f9a8d4" opacity="0.9" />
       <path d="M95 110 Q100 115 105 110" stroke="#7f1d1d" stroke-width="3" fill="none" stroke-linecap="round" />
     `,
+    // Compare sizes shows just one cell of her, the one with her face,
+    // drawn at one cell's length (its body box is cellBox).
+    cellBox: [73, 73, 127, 127],
+    cellArt: `
+      <circle cx="100" cy="100" r="25" fill="#fca5a5" stroke="#b91c1c" stroke-width="4" />
+      <circle cx="91" cy="89" r="4" fill="#fee2e2" />
+      <g class="face">
+        <circle cx="91" cy="100" r="5" fill="#7f1d1d" />
+        <circle cx="109" cy="100" r="5" fill="#7f1d1d" />
+        <circle cx="92.5" cy="98.5" r="1.8" fill="white" />
+        <circle cx="110.5" cy="98.5" r="1.8" fill="white" />
+        <ellipse cx="84" cy="110" rx="4.5" ry="3" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="116" cy="110" rx="4.5" ry="3" fill="#f9a8d4" opacity="0.9" />
+        <path d="M95 110 Q100 115 105 110" stroke="#7f1d1d" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
   },
   // Coco: Haemophilus influenzae, a small coffee-with-cream coccobacillus
   {
@@ -581,6 +651,8 @@ export const PALS = [
     looks: 'a small coffee-with-cream brown Haemophilus influenzae',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '20 20 160 160', dish: '40 40 120 120' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [50, 68, 150, 134],
     art: `
       <!-- coccobacillus: a short, plump oval between a coccus and a rod (no flagellum) -->
       <rect x="52" y="70" width="96" height="62" rx="31" fill="#d4b08c" stroke="#7c4a2d" stroke-width="4" />
@@ -604,6 +676,8 @@ export const PALS = [
     looks: 'a green rod-shaped Pseudomonas with one flagellum',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '0 17 176 176', dish: '0 17 176 176' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [28, 73, 172, 137],
     art: `
       <!-- flagellum -->
       <path class="flagellum" d="M34 105 C24 88 16 122 6 105" stroke="#15803d" stroke-width="4" fill="none" stroke-linecap="round">
@@ -630,6 +704,8 @@ export const PALS = [
     looks: 'a light purple corkscrew-shaped Borrelia burgdorferi',
     motion: 'slither',
     frames: { home: '8 0 200 200', picker: '12 4 192 192', dish: '12 4 192 192' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [24, 77, 192, 123],
     art: `
       <!-- corkscrew body: outline, then fill (her flagella are inside the cell) -->
       <path class="wave" d="${eliaBody()}" stroke="#7e22ce" stroke-width="18" fill="none" stroke-linecap="round" stroke-linejoin="round">${eliaWave()}</path>
@@ -657,6 +733,8 @@ export const PALS = [
     looks: 'a sky-blue chain of three Bacillus cereus rods',
     motion: 'wobble',
     frames: { home: '0 0 200 200', picker: '6 10 188 188', dish: '6 10 188 188' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [12, 78, 188, 133],
     art: `
       <!-- left rod, tipped down at its outer end -->
       <g transform="rotate(14 42 112)">
@@ -681,6 +759,22 @@ export const PALS = [
         <path d="M94 112 Q100 118 106 112" stroke="#0c4a6e" stroke-width="3" fill="none" stroke-linecap="round" />
       </g>
     `,
+    // Compare sizes shows just one cell of her, the one with her face,
+    // drawn at one cell's length (its body box is cellBox).
+    cellBox: [65, 78, 135, 128],
+    cellArt: `
+      <rect x="67" y="80" width="66" height="46" rx="13" fill="#bae6fd" stroke="#0369a1" stroke-width="4" />
+      <circle cx="79" cy="90" r="4.5" fill="#f0f9ff" />
+      <g class="face">
+        <circle cx="90" cy="101" r="5.5" fill="#0c4a6e" />
+        <circle cx="110" cy="101" r="5.5" fill="#0c4a6e" />
+        <circle cx="91.8" cy="99.2" r="1.9" fill="white" />
+        <circle cx="111.8" cy="99.2" r="1.9" fill="white" />
+        <ellipse cx="80" cy="113" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="120" cy="113" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
+        <path d="M94 112 Q100 118 106 112" stroke="#0c4a6e" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
   },
   // Sallie: Salmonella Typhi, a grey rod with flagella all over
   {
@@ -689,6 +783,8 @@ export const PALS = [
     looks: 'a grey rod-shaped Salmonella Typhi with flagella all around her',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '10 10 180 180', dish: '8 8 184 184' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [38, 72, 162, 128],
     // Drawn a little smaller than the others on the home page.
     homeWidth: 104,
     art: `
@@ -715,6 +811,8 @@ export const PALS = [
     looks: 'a short, plump red rod-shaped Serratia marcescens with flagella all around her',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '10 10 180 180', dish: '8 8 184 184' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [50, 70, 150, 130],
     art: `
       <!-- flagella all over her body -->
       ${SERRA_FLAGELLA}
@@ -739,6 +837,8 @@ export const PALS = [
     looks: 'a sage-green chain of Bacillus mycoides rods curling up at the end like a vine',
     motion: 'wobble',
     frames: { home: '0 12 204 204', picker: '2 22 194 194', dish: '2 22 194 194' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [4, 35, 195, 173],
     art: `
       <!-- five rods end to end, curling up at the front like a tendril (her colonies swirl as they spread) -->
       ${ivyRod(28, 156, 16, 44, 30)}
@@ -746,6 +846,21 @@ export const PALS = [
       ${ivyRod(124, 132, -8, 62, 46)}
       ${ivyRod(170, 96, -62, 46, 32)}
       ${ivyRod(168, 50, -118, 38, 26)}
+      <g class="face">
+        <circle cx="113" cy="128" r="6" fill="#2f4224" />
+        <circle cx="135" cy="125" r="6" fill="#2f4224" />
+        <circle cx="115" cy="126" r="2" fill="white" />
+        <circle cx="137" cy="123" r="2" fill="white" />
+        <ellipse cx="102" cy="140" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="146" cy="136" rx="6" ry="3.6" fill="#f9a8d4" opacity="0.9" />
+        <path d="M118 139 Q124 145 131 138" stroke="#2f4224" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+    // Compare sizes shows just one cell of her, the one with her face,
+    // drawn at one cell's length (its body box is cellBox).
+    cellBox: [91, 107, 157, 157],
+    cellArt: `
+      ${ivyRod(124, 132, -8, 62, 46)}
       <g class="face">
         <circle cx="113" cy="128" r="6" fill="#2f4224" />
         <circle cx="135" cy="125" r="6" fill="#2f4224" />
@@ -764,9 +879,13 @@ export const PALS = [
     looks: 'an azure rod-shaped Asticcacaulis biprosthecum with two stalks near one end',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '18 18 164 164', dish: '20 20 160 160' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [30, 38, 168, 163],
     // She comes in two forms (see rod.js): this one, with stalks and a
     // holdfast, and the swimmer her divisions make, with a flagellum instead.
     // The swimmer's parts are hidden until then.
+    // Compare sizes measures her cell body: her rod, without her stalks.
+    cellBox: [42, 72, 168, 128],
     art: `
       <g class="stalked">
         <!-- two stalks (prosthecae) from her sides, near her back end -->
@@ -799,6 +918,8 @@ export const PALS = [
     looks: 'a short, plump yellow rod-shaped Cronobacter sakazakii with flagella all around her',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '10 10 180 180', dish: '8 8 184 184' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [48, 72, 152, 128],
     // A cooler, brighter lemon than Goldie's buttery gold, with an olive
     // outline rather than an orange one, so the two don't look alike.
     art: `
@@ -825,6 +946,8 @@ export const PALS = [
     looks: 'a grape-purple Geobacter sulfurreducens rod covered in sparking nanowires',
     motion: 'bob',
     frames: { home: '-11 -9 222 222', picker: '-5 -3 210 210', dish: '-5 -3 210 210' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [26, 72, 174, 132],
     art: `
       <!-- nanowires all around her, with yellow bursts running out along them (no flagella: the usual lab strain doesn't make any) -->
       ${ELECTRA_NANOWIRES}
@@ -850,6 +973,8 @@ export const PALS = [
     looks: 'a teal Nocardia nova, a thin, beaded filament branching every which way',
     motion: 'wobble',
     frames: { home: '-4 0 208 208', picker: '3 7 194 194', dish: '3 7 194 194' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [5, 19, 195, 189],
     art: `
       <!-- outline: every filament, drawn thick in dark teal, so the whole network shares one edge -->
       <g stroke="#0f766e" stroke-width="18" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -883,6 +1008,8 @@ export const PALS = [
     looks: 'a big, plump chestnut-brown Clostridioides difficile rod with flagella all around her and an oval spore near one end',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '12 12 176 176', dish: '4 4 192 192' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [38, 65, 162, 135],
     art: `
       <!-- flagella all over her body -->
       ${DIFFANY_FLAGELLA}
@@ -921,8 +1048,12 @@ export const PALS = [
     looks: 'a short, plump pink Klebsiella pneumoniae rod in a thick, glossy capsule, with tiny hairs all around her',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '26 26 148 148', dish: '22 22 156 156' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [28, 53, 172, 147],
     // A soft pearly pink with a slate outline, so she doesn't look like
     // Scarlett (red outline) or Ana and Sara (hot pink).
+    // Compare sizes measures her cell body: her rod, without her capsule.
+    cellBox: [56, 74, 144, 126],
     art: `
       <!-- her capsule: a thick, slimy coat around her, glossy and see-through.
            Pure white, so a Gram stain leaves it clear, as on a real slide -->
@@ -954,6 +1085,8 @@ export const PALS = [
     motion: 'bob',
     // Framed roomy, so she looks small: she's one of the tiniest pals.
     frames: { home: '0 0 200 200', picker: '26 26 148 148', dish: '22 22 156 156' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [58, 51, 142, 124],
     art: `
       <!-- tiny bunny ears, a nod to "snuffles," the sniffles she gives pet
            rabbits (real cells have no ears!). Drawn first so her rod covers
@@ -991,6 +1124,8 @@ export const PALS = [
     looks: 'a long, slim green Escherichia coli rod with flagella all around her',
     motion: 'bob',
     frames: { home: '0 0 200 200', picker: '10 10 180 180', dish: '4 4 192 192' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [32, 76, 168, 124],
     // A bright green apple with a deep green outline, so she doesn't look
     // like Terra (olive) or Mona (mint).
     art: `
@@ -1017,10 +1152,28 @@ export const PALS = [
     looks: 'an orchid-pink square of four round Deinococcus radiodurans cells',
     motion: 'squish',
     frames: { home: '0 0 200 200', picker: '16 16 168 168', dish: '20 20 160 160' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [30, 30, 170, 170],
     art: `
       <!-- a tetrad: four cells in a square, pressed a little flat where they
            touch, since each division splits a cell straight across -->
       ${DINA_CELLS}
+      <g class="face">
+        <circle cx="56" cy="132" r="5.5" fill="#701a75" />
+        <circle cx="78" cy="132" r="5.5" fill="#701a75" />
+        <circle cx="57.8" cy="130.2" r="1.9" fill="white" />
+        <circle cx="79.8" cy="130.2" r="1.9" fill="white" />
+        <ellipse cx="46" cy="143" rx="5.5" ry="3.4" fill="#f9a8d4" opacity="0.95" />
+        <ellipse cx="88" cy="143" rx="5.5" ry="3.4" fill="#f9a8d4" opacity="0.95" />
+        <path d="M62 143 Q67 148 72 143" stroke="#701a75" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+    // Compare sizes shows just one cell of her, the one with her face,
+    // drawn at one cell's length (its body box is cellBox).
+    cellBox: [30, 98, 102, 170],
+    cellArt: `
+      <!-- on her own she's round, not pressed flat by her square -->
+      ${dinaCell(32, 100, [SIDE, SIDE, SIDE, SIDE])}
       <g class="face">
         <circle cx="56" cy="132" r="5.5" fill="#701a75" />
         <circle cx="78" cy="132" r="5.5" fill="#701a75" />
@@ -1039,8 +1192,26 @@ export const PALS = [
     looks: 'a jade-green Anabaena variabilis, a string of round cells with one pale gold heterocyst',
     motion: 'wobble',
     frames: { home: '0 0 200 200', picker: '2 2 196 196', dish: '2 2 196 196' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [4, 69, 194, 131],
     art: `
       ${ARI_CELLS}
+    `,
+    // Compare sizes shows just one cell of her, the one with her face,
+    // drawn at one cell's length (its body box is cellBox).
+    cellBox: [46, 69, 97, 121],
+    cellArt: `
+      <circle cx="71.6" cy="94.8" r="24" fill="#7dd8b0" stroke="#0d5c43" stroke-width="3.5" />
+      <circle cx="62.5" cy="84.8" r="4.8" fill="#e2f8ee" />
+      <g class="face" transform="translate(71.6 94.8) scale(1.41)">
+        <circle cx="-6" cy="0" r="4.3" fill="#06321f" />
+        <circle cx="6" cy="0" r="4.3" fill="#06321f" />
+        <circle cx="-4.6" cy="-1.4" r="1.5" fill="white" />
+        <circle cx="7.4" cy="-1.4" r="1.5" fill="white" />
+        <ellipse cx="-10.5" cy="7" rx="3.4" ry="2.2" fill="#f9a8d4" opacity="0.95" />
+        <ellipse cx="10.5" cy="7" rx="3.4" ry="2.2" fill="#f9a8d4" opacity="0.95" />
+        <path d="M-3.5 6.5 Q0 10.5 3.5 6.5" stroke="#06321f" stroke-width="2.4" fill="none" stroke-linecap="round" />
+      </g>
     `,
   },
   // Marina: Mycobacterium marinum, a slim, gently curved persimmon rod in a
@@ -1053,6 +1224,8 @@ export const PALS = [
     // Framed roomy, so her long, slim rod comes out about as long as Mona's
     // and Colette's.
     frames: { home: '0 0 200 200', picker: '0 0 200 200', dish: '0 0 200 200' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [27, 80, 173, 124],
     art: `
       <!-- her waxy coat: a soft, glossy glow around the rod (mycolic acids) -->
       <path d="M44 97 Q100 116 156 100" stroke="#fde7d6" stroke-width="50" stroke-opacity="0.75" fill="none" stroke-linecap="round" />
@@ -1081,6 +1254,8 @@ export const PALS = [
     motion: 'bob',
     // Framed like Coco, since they're the same shape.
     frames: { home: '0 0 200 200', picker: '20 20 160 160', dish: '40 40 120 120' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [52, 68, 148, 132],
     art: `
       <!-- coccobacillus: a short, plump rod, like Coco's but a little plumper
            (no flagella: she can't swim) -->
@@ -1108,6 +1283,8 @@ export const PALS = [
     looks: 'a peacock blue-green pair of kidney-bean Neisseria meningitidis cells with short pili',
     motion: 'bob',
     frames: { home: '-12 -12 224 224', picker: '0 0 200 200', dish: '10 10 180 180' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [33, 68, 167, 132],
     art: `
       <!-- short, straight pili, the hairs she grabs onto cells and twitches with -->
       <line x1="43" y1="72" x2="37.5" y2="65.4" stroke="#0b4f5e" stroke-width="2.5" stroke-linecap="round" />
@@ -1127,6 +1304,25 @@ export const PALS = [
       <!-- right cell, with her face -->
       <path data-stain="body" d="M109 70 C137 62 167 74 167 100 C167 126 137 138 109 130 C101 128 99 122 103 116 C104.5 108 104.5 92 103 84 C99 78 101 72 109 70 Z" fill="#3fb3cb" />
       <path d="M109 70 C137 62 167 74 167 100 C167 126 137 138 109 130 C101 128 99 122 103 116 C104.5 108 104.5 92 103 84 C99 78 101 72 109 70 Z" fill="none" stroke="#0b4f5e" stroke-width="4" stroke-linejoin="round" />
+      <path d="M119 80 Q129 72 143 73" stroke="#d9f3f8" stroke-width="4" fill="none" stroke-linecap="round" />
+      <circle cx="157" cy="118" r="2.6" fill="#d9f3f8" />
+      <g class="face">
+        <circle cx="127" cy="98" r="5" fill="#062f38" />
+        <circle cx="147" cy="98" r="5" fill="#062f38" />
+        <circle cx="128.6" cy="96.4" r="1.7" fill="white" />
+        <circle cx="148.6" cy="96.4" r="1.7" fill="white" />
+        <ellipse cx="117" cy="108" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
+        <ellipse cx="157" cy="108" rx="5" ry="3.2" fill="#f9a8d4" opacity="0.9" />
+        <path d="M132.5 108 Q137 112.5 141.5 108" stroke="#062f38" stroke-width="2.8" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+    // Compare sizes shows just one cell of her, the one with her face,
+    // drawn at one cell's length (its body box is cellBox).
+    cellBox: [105, 68, 169, 132],
+    cellArt: `
+      <!-- on her own she's round: cells only flatten where they meet -->
+      <circle data-stain="body" cx="137" cy="100" r="32" fill="#3fb3cb" />
+      <circle cx="137" cy="100" r="32" fill="none" stroke="#0b4f5e" stroke-width="4" />
       <path d="M119 80 Q129 72 143 73" stroke="#d9f3f8" stroke-width="4" fill="none" stroke-linecap="round" />
       <circle cx="157" cy="118" r="2.6" fill="#d9f3f8" />
       <g class="face">
@@ -1211,6 +1407,31 @@ export function palTile(pal) {
   svg.setAttribute('aria-hidden', 'true');
   tile.append(svg);
   return tile;
+}
+
+// The picker's Compare sizes view: one cell of every pal (her whole picture,
+// or her `cellArt` if it shows several), at her size relative to the others.
+// Her picture's square on the tile stands for TILE_MICROMETERS across. Elia
+// and Nova (15 µm), the longest, spill a little past it into the tile's
+// margin, so they nearly fill their tiles and everyone else comes out as big
+// as they can.
+// Returns how much to scale her picture, and where her body's center is in
+// her picker frame (as fractions across and down), to scale it around.
+export const TILE_MICROMETERS = 13.125;
+
+// One cell's length in µm (what Compare sizes shows and labels).
+export const cellLength = (pal) => SPECIES[pal.id].cellMicrometers ?? SPECIES[pal.id].micrometers;
+
+export function toScale(pal) {
+  const [x0, y0, x1, y1] = pal.cellBox ?? pal.bodyBox;
+  const [fx, fy, size] = pal.frames.picker.split(' ').map(Number);
+  const length = Math.max(x1 - x0, y1 - y0);
+  const tile = (length * TILE_MICROMETERS) / cellLength(pal);
+  return {
+    scale: size / tile,
+    x: ((x0 + x1) / 2 - fx) / size,
+    y: ((y0 + y1) / 2 - fy) / size,
+  };
 }
 
 // For the petri dish, hidden until the game picks her (main.js).

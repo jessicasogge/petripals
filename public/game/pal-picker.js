@@ -3,11 +3,12 @@
 // order every visit, so no pal is always first or always on a later page,
 // then split into pages of eight (PAGE_SIZE in pals.js), shown one at a time
 // with Back and More pals buttons to move between them. The microscope button shows every pal as she'd look after a
-// Gram stain.
+// Gram stain, and the Compare sizes button shows the pals' sizes relative to
+// each other.
 import { SPECIES } from './config.js';
 import { speciesName } from './italics.js';
 import { pageReady, watchLoading } from './loading.js';
-import { inRandomOrder, PALS, palTile, pickerPages } from './pals.js';
+import { cellLength, inRandomOrder, PALS, palTile, pickerPages, toScale } from './pals.js';
 import { stainPal, unstainPal } from './stain.js';
 
 // "Growing the colony…" while the next screen loads.
@@ -76,7 +77,13 @@ function card(pal) {
   tile.classList.add(`gram-${gram}`);
   if (faintStain) tile.classList.add('faint-stain');
 
-  link.append(tile, name, species);
+  // In Compare sizes mode, about how long one cell really is (or a note that
+  // says more). The ~ means about: sizes vary, and these are typical ones.
+  const size = document.createElement('p');
+  size.className = 'size-note';
+  size.textContent = `~${SPECIES[pal.id].sizeNote ?? `${cellLength(pal)} µm`}`;
+
+  link.append(tile, name, species, size);
   return link;
 }
 
@@ -98,6 +105,38 @@ function showStain(stained) {
 }
 
 scope?.addEventListener('click', () => showStain(!shell.classList.contains('stained')));
+
+// The Compare sizes button: show one cell of every pal, shrunk around her
+// body so the pals' sizes compare relative to each other (see toScale in
+// pals.js), and back. It works in color or stained.
+const scale = document.querySelector('.scale-btn');
+
+function showScale(scaled) {
+  shell.classList.toggle('to-scale', scaled);
+  scale.setAttribute('aria-pressed', String(scaled));
+  scale.querySelector('.scale-label').textContent = scaled ? 'Full size' : 'Compare sizes';
+  document.querySelector('.scale-caption').hidden = !scaled;
+  const stained = shell.classList.contains('stained');
+  for (const pal of PALS) {
+    const svg = document.querySelector(`.pal-icon.${pal.id} svg`);
+    // A pal whose picture shows several cells shows just one of them.
+    if (pal.cellArt) {
+      svg.innerHTML = scaled ? pal.cellArt : pal.art;
+      for (const wiggle of svg.querySelectorAll('animate')) wiggle.remove();
+      if (stained) stainPal(svg, SPECIES[pal.id]);
+    }
+    if (scaled) {
+      const { scale: by, x, y } = toScale(pal);
+      svg.style.transformOrigin = `${x * 100}% ${y * 100}%`;
+      svg.style.transform = `translate(${(0.5 - x) * 100}%, ${(0.5 - y) * 100}%) scale(${by})`;
+    } else {
+      svg.style.removeProperty('transform-origin');
+      svg.style.removeProperty('transform');
+    }
+  }
+}
+
+scale?.addEventListener('click', () => showScale(!shell.classList.contains('to-scale')));
 
 // All filled in: take the loading card away.
 pageReady();
