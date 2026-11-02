@@ -1289,20 +1289,20 @@ export const SPECIES = {
   hallie: {
     facts: [
       "Hallie's genus name, Helicobacter, means \"spiral rod.\"",
-      "Hallie's species name, pylori, comes from the pylorus, where the stomach meets the gut.",
-      "Hallie lives in the stomach, one of the most acidic places in the body.",
-      "Hallie makes urease, which turns urea into ammonia to shield her from stomach acid.",
-      "Hallie uses a tuft of flagella at one end to drill into the stomach's mucus.",
-      "Hallie's spiral shape helps her corkscrew through thick stomach mucus.",
-      "About half of all people carry Hallie, and most never feel sick.",
+      "Hallie's name, pylori, refers to the stomach's outlet into the small intestine.",
+      "Hallie lives in the protective mucus lining the stomach.",
+      "Hallie's urease turns urea into ammonia, helping neutralize acid around her.",
+      "Hallie uses a tuft of flagella at one end to swim through stomach mucus.",
+      "Hallie's spiral shape helps her move through thick stomach mucus.",
+      "About half the world's people carry Hallie, often without symptoms.",
       "Hallie can cause stomach ulcers, sores in the lining of the stomach.",
-      "In 1984, Barry Marshall drank a cup of Hallie to prove she makes stomachs sick.",
-      "Barry Marshall and Robin Warren won a Nobel Prize in 2005 for discovering Hallie's role.",
-      "Hallie usually spreads within families, often in early childhood.",
-      "Hallie grows slowly on blood agar and likes a little oxygen, not a lot.",
-      "Hallie can curl into a round, resting form when life gets hard.",
+      "In 1984, Barry Marshall drank Hallie's culture and developed stomach inflammation.",
+      "Marshall and Warren won a Nobel Prize in 2005 for discovering Hallie and her role.",
+      "Hallie often spreads within families and is usually acquired in childhood.",
+      "Hallie grows slowly on enriched blood agar and needs less oxygen than is in air.",
+      "Hallie can change from a spiral into a round shape under stressful conditions.",
       "Hallie stains pink in a Gram stain.",
-      "Doctors often treat Hallie with two antibiotics plus a medicine that lowers stomach acid."
+      "Doctors treat Hallie with antibiotics and acid-lowering drugs, sometimes with bismuth."
     ],
     scientific: 'Helicobacter pylori',
     micrometers: 3, // her picture's real length: one cell
