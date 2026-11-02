@@ -1336,6 +1336,41 @@ export const PALS = [
       </g>
     `,
   },
+  // Hallie: Helicobacter pylori, a forest-green S-shaped spiral with a tuft
+  // of flagella at one end
+  {
+    id: 'hallie',
+    name: 'Hallie',
+    looks: 'a forest-green Helicobacter pylori, a short S-shaped spiral with a tuft of flagella at one end',
+    motion: 'wobble',
+    frames: { home: '12 2 196 196', picker: '12 2 196 196', dish: '12 2 196 196' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [26, 58, 168, 134],
+    art: `
+      <!-- a tuft of flagella at one end, for drilling through stomach mucus -->
+      ${flagellum('#1d4a26', 160, 96, -28, 34, '0.6s')}
+      ${flagellum('#1d4a26', 163, 100, -8, 34, '0.66s')}
+      ${flagellum('#1d4a26', 163, 105, 12, 34, '0.62s')}
+      ${flagellum('#1d4a26', 159, 110, 34, 34, '0.7s')}
+      <!-- her short spiral, a little more than one wave: outline, then her
+           body (marked, since forest is darker than microscope mode would
+           take for a body) -->
+      <path d="M44 92 C58 70 80 70 96 96 C112 122 134 122 150 100" stroke="#1d4a26" stroke-width="36" fill="none" stroke-linecap="round" />
+      <path data-stain="body" d="M44 92 C58 70 80 70 96 96 C112 122 134 122 150 100" stroke="#5fa86c" stroke-width="29" fill="none" stroke-linecap="round" />
+      <path d="M40 86 Q48 74 58 70" stroke="#dff0e2" stroke-width="4" fill="none" stroke-linecap="round" />
+      <circle cx="152" cy="95" r="2.6" fill="#dff0e2" />
+      <!-- her face sits in the middle of her lower curve, where she's thickest -->
+      <g class="face">
+        <circle cx="116" cy="110" r="5" fill="#0f2a15" />
+        <circle cx="135" cy="110" r="5" fill="#0f2a15" />
+        <circle cx="117.6" cy="108.4" r="1.7" fill="white" />
+        <circle cx="136.6" cy="108.4" r="1.7" fill="white" />
+        <ellipse cx="108" cy="119" rx="4.5" ry="2.8" fill="#f9a8d4" opacity="0.95" />
+        <ellipse cx="143" cy="119" rx="4.5" ry="2.8" fill="#f9a8d4" opacity="0.95" />
+        <path d="M121 118 Q125.5 122 130 118.5" stroke="#0f2a15" stroke-width="2.6" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
 ];
 
 // The pals in the home page's row, in PALS order. The row is full: pals

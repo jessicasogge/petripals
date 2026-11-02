@@ -89,6 +89,22 @@ describe('pals', () => {
     expect(SPECIES.nessa.gram).toBe('negative');
   });
 
+  it('makes Hallie a Gram-negative rod traced along her S-shaped spiral', () => {
+    const { kind, layout, gram, body } = SPECIES.hallie;
+    expect(kind).toBe('rod');
+    expect(layout).toBeUndefined();
+    expect(gram).toBe('negative');
+    // Her spiral runs from x 44 to 150 in her 196-wide dish drawing, centered
+    // at 110, and is 36 thick (18 each side).
+    expect(Math.min(...body.map(([x]) => x))).toBeCloseTo(-66 / 196, 2);
+    expect(Math.max(...body.map(([x]) => x))).toBeCloseTo(40 / 196, 2);
+    for (const [, , r] of body) expect(r).toBeCloseTo(18 / 196, 3);
+    // It waves: up at one end, down in the middle of her lower curve.
+    const ys = body.map(([, y]) => y);
+    expect(Math.min(...ys)).toBeLessThan(ys[0]);
+    expect(Math.max(...ys)).toBeGreaterThan(ys.at(-1));
+  });
+
   it('makes Sallie a rod that swims apart after dividing, like Mona', () => {
     expect(SPECIES.sallie.kind).toBe('rod');
     expect(SPECIES.sallie.layout).toBeUndefined();
@@ -310,7 +326,7 @@ describe('Gram stains', () => {
     '%s is Gram-positive, like her real species',
     (name) => expect(SPECIES[name].gram).toBe('positive'),
   );
-  it.each(['mona', 'vi', 'elia', 'coco', 'sallie', 'sara', 'astrid', 'kiki', 'electra', 'pearl', 'frannie', 'colette', 'ari', 'bree', 'nessa'])(
+  it.each(['mona', 'vi', 'elia', 'coco', 'sallie', 'sara', 'astrid', 'kiki', 'electra', 'pearl', 'frannie', 'colette', 'ari', 'bree', 'nessa', 'hallie'])(
     '%s is Gram-negative, like her real species',
     (name) => expect(SPECIES[name].gram).toBe('negative'),
   );
