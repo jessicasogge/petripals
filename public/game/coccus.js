@@ -101,6 +101,11 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       `L${at(fat, rw, 1)} A${rw} ${rw} 0 1 1 ${at(fat, rw, -1)} Z`;
   })();
 
+  // The middle of a club's fat end, and where her face goes, a little toward
+  // her narrow end, along the club (in the traced shape's units).
+  const CLUB_FAT = -R + R * 0.62;
+  const CLUB_FACE = CLUB_FAT + 1.2;
+
   // How far each of Cora's clubs tips (degrees) to bend her pair into a V.
   // More than her club's taper (about 15 degrees), so the back of the V bends
   // too, instead of lining up straight.
@@ -113,10 +118,10 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
   // corner radius, in SVG units. Its corners stay inside the cell's circle.
   const ROD = { half: R * 0.95, tall: R * 0.6, corner: R * 0.45 };
 
-  // How big the face is drawn: a rod (Ceres's) or a club (Cora's) is
-  // narrower than a round cell, so her eyes, cheeks and smile are drawn smaller to sit inside it
-  // with room to spare.
-  const FACE_SCALE = species.shape === 'rod' || species.shape === 'club' ? 0.75 : 1;
+  // How big the face is drawn: a rod (Ceres's) is shorter than a round
+  // cell, and a club (Cora's) narrower still, so her eyes, cheeks and smile
+  // are drawn smaller to sit inside it with room to spare.
+  const FACE_SCALE = { rod: 0.75, club: 0.55 }[species.shape] ?? 1;
 
   // Which way a cell's outer end points, in degrees: away from her partner in
   // a pair, or to the right for a cell on her own (like the one with the face
@@ -167,23 +172,48 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
     if (TRACED[species.shape] && !(species.shape === 'bean' && !partnerOf(c))) {
       // A traced shape's outer end points left, so turn it half around more.
       const turn = (outward(c) + 180).toFixed(1);
-      // Cora's pair bends into a shallow V: each club tips about the narrow
-      // end where it meets her partner, the two in opposite directions, so
-      // both fat ends lean the same way.
-      const bend = species.shape === 'club' && partnerOf(c)
-        ? ` rotate(${group.cells.indexOf(c) === 0 ? CLUB_BEND : -CLUB_BEND} ${R} 0)` : '';
+      const tip = clubTip(c);
+      const bend = tip ? ` rotate(${tip} ${R} 0)` : '';
       return `<path class="cell-body" d="${TRACED[species.shape]}" transform="translate(${c.x} ${c.y}) rotate(${turn})${bend}" ${paint} stroke-linejoin="round" />`;
     }
     return `<circle class="cell-body" cx="${c.x}" cy="${c.y}" r="${R}" ${paint} />`;
   }
 
+  // Cora's pair bends into a shallow V: each club tips (degrees) about the
+  // narrow end where it meets her partner, the two in opposite directions,
+  // so both fat ends lean the same way. 0 for a club on her own.
+  function clubTip(c) {
+    if (species.shape !== 'club' || !partnerOf(c)) return 0;
+    return group.cells.indexOf(c) === 0 ? CLUB_BEND : -CLUB_BEND;
+  }
+
+  // Where a point along a club's middle ends up (lx in the traced shape's
+  // units, before it's turned and tipped), so her shine and face can sit in
+  // her fat end instead of on her outline.
+  function onClub(c, lx) {
+    const tip = (clubTip(c) * Math.PI) / 180;
+    const [bx, by] = [R + (lx - R) * Math.cos(tip), (lx - R) * Math.sin(tip)];
+    const turn = ((outward(c) + 180) * Math.PI) / 180;
+    return [c.x + bx * Math.cos(turn) - by * Math.sin(turn), c.y + bx * Math.sin(turn) + by * Math.cos(turn)];
+  }
+
   function cellMarkup(c) {
+    const club = species.shape === 'club';
+    // Her shine sits up and to the left of her middle. On a club, it sits up
+    // and out toward the round tip of her fat end, clear of her face.
+    const [fx, fy] = club ? onClub(c, CLUB_FACE) : [c.x, c.y];
+    let shine = [c.x - 2.7, c.y - 3.2];
+    if (club) {
+      const [sx, sy] = onClub(c, CLUB_FAT);
+      const [ox, oy] = onClub(c, CLUB_FAT - 1); // a step toward her round tip
+      shine = [sx + (ox - sx) * 1.2, sy + (oy - sy) * 1.2 - 2.4];
+    }
     let out =
       cellBody(c) +
-      `<circle cx="${c.x - 2.7}" cy="${c.y - 3.2}" r="1.5" fill="${paintOf(c).highlight}" />`;
+      `<circle cx="${shine[0].toFixed(2)}" cy="${shine[1].toFixed(2)}" r="${club ? 1.3 : 1.5}" fill="${paintOf(c).highlight}" />`;
     if (c.face) {
       out +=
-        `<g transform="translate(${c.x} ${c.y})${FACE_SCALE === 1 ? '' : ` scale(${FACE_SCALE})`}">` +
+        `<g transform="translate(${club ? `${fx.toFixed(2)} ${fy.toFixed(2)}` : `${c.x} ${c.y}`})${FACE_SCALE === 1 ? '' : ` scale(${FACE_SCALE})`}">` +
         `<circle cx="-3.6" cy="0" r="2" fill="${colors.dark}" />` +
         `<circle cx="3.6" cy="0" r="2" fill="${colors.dark}" />` +
         '<circle cx="-3" cy="-0.6" r="0.75" fill="white" />' +

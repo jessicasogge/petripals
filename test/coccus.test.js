@@ -488,7 +488,24 @@ describe('Cora (Corynebacterium diphtheriae)', () => {
     expect(cell.getAttribute('d')).not.toBe(makeGroup('penny').svg.querySelector('.cell-body').getAttribute('d'));
     expect(cell.getAttribute('fill')).toBe(SPECIES.cora.colors.fill);
     expect(turn(cell)).toBe(180);
-    expect(group.svg.querySelector('g[transform*="scale(0.75)"]')).not.toBeNull();
+    expect(group.svg.querySelector('g[transform*="scale(0.55)"]')).not.toBeNull();
+  });
+
+  it('puts her shine and face in the fat end of her club, which points away from her partner', () => {
+    const lone = makeGroup('cora', { isPlayer: true });
+    // On her own, her fat end points right (+x), so her face sits right of center.
+    const at = lone.svg.querySelector('g[transform*="scale(0.55)"]').getAttribute('transform').match(/translate\((-?[\d.]+) (-?[\d.]+)\)/);
+    expect(Number(at[1])).toBeGreaterThan(0);
+    expect(Number(at[2])).toBeCloseTo(0, 5);
+    // In a pair, each cell's shine sits out toward her own fat end.
+    const pair = makeGroup('cora');
+    grow(pair, 2);
+    const shines = [...pair.svg.querySelectorAll('circle[r="1.3"]')];
+    expect(shines).toHaveLength(2);
+    for (const cell of pair.cells) {
+      const nearest = Math.min(...shines.map((el) => Math.hypot(el.getAttribute('cx') - cell.x, el.getAttribute('cy') - cell.y)));
+      expect(nearest).toBeLessThan(R * 1.25);
+    }
   });
 
   it('turns the narrow ends of a pair toward each other', () => {
