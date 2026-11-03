@@ -1378,7 +1378,7 @@ export const PALS = [
     name: 'Cora',
     looks: 'a wine-colored Corynebacterium diphtheriae, two club-shaped cells in a V',
     motion: 'bob',
-    frames: { home: '20 20 160 160', picker: '20 20 160 160', dish: '24 24 152 152' },
+    frames: { home: '20 20 160 160', picker: '14 14 172 172', dish: '24 24 152 152' },
     // Her body in her art (not flagella or hairs), for comparing sizes.
     bodyBox: [35, 43, 165, 154],
     art: `
