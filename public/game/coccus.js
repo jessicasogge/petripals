@@ -156,15 +156,20 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
   const INFECTED = { fill: '#1c1917', stroke: '#3b0764', highlight: '#44403c' };
   const paintOf = (c) => (c.infected ? INFECTED : c.het ? heterocyst : colors);
 
-  function cellBody(c) {
+  // A cell's body, in its own shape. With `glow`, the phage-purple glow
+  // around an infected cell instead: the same shape with a wide, soft
+  // outline, so it hugs the cell whatever its shape.
+  function cellBody(c, { glow = false } = {}) {
     const { fill, stroke } = paintOf(c);
-    const paint = `fill="${fill}" stroke="${stroke}" stroke-width="${c.het ? OUTLINE * 1.6 : OUTLINE}"`;
+    const paint = glow
+      ? `class="infected-glow" fill="none" stroke="#a855f7" stroke-width="${OUTLINE + 3.2}" opacity="0.6"`
+      : `class="cell-body" fill="${fill}" stroke="${stroke}" stroke-width="${c.het ? OUTLINE * 1.6 : OUTLINE}"`;
     if (species.shape === 'rod') {
       // A square-ended rod, like her picture, that fits inside the cell's
       // circle, so what she touches doesn't change. Rods next to each other
       // in a chain overlap a little, so they look joined end to end.
       const turn = along(c).toFixed(1);
-      return `<rect class="cell-body" x="${-ROD.half}" y="${-ROD.tall}" width="${2 * ROD.half}" height="${2 * ROD.tall}" ` +
+      return `<rect x="${-ROD.half}" y="${-ROD.tall}" width="${2 * ROD.half}" height="${2 * ROD.tall}" ` +
         `rx="${ROD.corner}" transform="translate(${c.x} ${c.y}) rotate(${turn})" ${paint} />`;
     }
     // A bean cell (Nessa's) is round on her own: real cells only flatten
@@ -174,9 +179,9 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       const turn = (outward(c) + 180).toFixed(1);
       const tip = clubTip(c);
       const bend = tip ? ` rotate(${tip} ${R} 0)` : '';
-      return `<path class="cell-body" d="${TRACED[species.shape]}" transform="translate(${c.x} ${c.y}) rotate(${turn})${bend}" ${paint} stroke-linejoin="round" />`;
+      return `<path d="${TRACED[species.shape]}" transform="translate(${c.x} ${c.y}) rotate(${turn})${bend}" ${paint} stroke-linejoin="round" />`;
     }
-    return `<circle class="cell-body" cx="${c.x}" cy="${c.y}" r="${R}" ${paint} />`;
+    return `<circle cx="${c.x}" cy="${c.y}" r="${R}" ${paint} />`;
   }
 
   // Cora's pair bends into a shallow V: each club tips (degrees) about the
@@ -227,9 +232,8 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
     // A cell a phage has landed on (Phage Attack): just this one goes dark
     // and throbs (see .infected-cell in styles.css), not the whole chain.
     if (c.infected) {
-      // A phage-purple glow ring around it, also in its own markup.
-      const glow = `<circle class="infected-glow" cx="${c.x}" cy="${c.y}" r="${R + 1.6}" fill="none" stroke="#a855f7" stroke-width="2.4" opacity="0.6" />`;
-      out = `<g class="infected-cell">${glow}${out}</g>`;
+      // A phage-purple glow around it, in its own shape, also in its own markup.
+      out = `<g class="infected-cell">${cellBody(c, { glow: true })}${out}</g>`;
     }
     return out;
   }

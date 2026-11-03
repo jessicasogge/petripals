@@ -532,6 +532,18 @@ describe('Cora (Corynebacterium diphtheriae)', () => {
     expect(makeGroup('cora').svg.querySelector('.cell-body').getAttribute('transform')).not.toMatch(/rotate\([^)]* /);
   });
 
+  it('glows in her own club shape when a phage infects her, not a circle', () => {
+    const pair = makeGroup('cora');
+    grow(pair, 2);
+    pair.infectCell(1);
+    const glow = pair.svg.querySelector('.infected-cell .infected-glow');
+    const body = pair.svg.querySelector('.infected-cell .cell-body');
+    expect(glow.tagName).toBe('path');
+    expect(glow.getAttribute('d')).toBe(body.getAttribute('d'));
+    expect(glow.getAttribute('transform')).toBe(body.getAttribute('transform'));
+    expect(glow.getAttribute('fill')).toBe('none');
+  });
+
   it('keeps her club inside her cell circle, so what she touches is unchanged', () => {
     const d = makeGroup('cora').svg.querySelector('.cell-body').getAttribute('d');
     // The points the outline passes through: after M, L, and the end of each arc.
