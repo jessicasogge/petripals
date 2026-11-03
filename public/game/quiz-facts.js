@@ -203,9 +203,9 @@ export const QUIZ_FACTS = {
     "Marshall and Warren won the 2005 Nobel Prize for discovering Hallie and her role.",
     "Hallie's species name, pylori, refers to the stomach's outlet into the small intestine."
   ],  cora: [
-    "In 1925, sled dog teams raced medicine 674 miles to Nome, Alaska, to stop Cora.",
-    "Cora only makes her toxin when a phage carrying the toxin gene lives inside her.",
-    "The D in the DTaP vaccine protects kids from Cora's toxin.",
-    "Cora's colonies turn black on tellurite agar, which helps labs spot her."
+    "In 1925, sled dog teams carried antitoxin 674 miles to Nome to fight Cora's disease.",
+    "Cora can make diphtheria toxin only if she carries a toxin gene supplied by a phage.",
+    "The D in the DTaP vaccine helps protect kids from Cora's toxin.",
+    "Emil von Behring won the first Nobel Prize in Medicine for serum therapy against Cora."
   ],
 };
