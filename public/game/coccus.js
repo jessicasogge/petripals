@@ -37,11 +37,14 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
 
   // Half the drawing's width and height in SVG units, centered on (0, 0).
   function extent() {
+    // Cora's clubs tip into a V, which swings their fat ends a little past
+    // the cell's circle, so leave room for them (or they're cut off flat).
+    const reach = species.shape === 'club' ? R * 1.25 : R;
     let mx = 0;
     let my = 0;
     for (const c of group.cells) {
-      mx = Math.max(mx, Math.abs(c.x) + R);
-      my = Math.max(my, Math.abs(c.y) + R);
+      mx = Math.max(mx, Math.abs(c.x) + reach);
+      my = Math.max(my, Math.abs(c.y) + reach);
     }
     return [mx + 2, my + 2];
   }
