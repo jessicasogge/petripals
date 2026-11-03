@@ -99,7 +99,9 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
   })();
 
   // How far each of Cora's clubs tips (degrees) to bend her pair into a V.
-  const CLUB_BEND = 16;
+  // More than her club's taper (about 15 degrees), so the back of the V bends
+  // too, instead of lining up straight.
+  const CLUB_BEND = 26;
 
   // The traced shapes, by the `shape` in a pal's SPECIES entry.
   const TRACED = { lancet: LANCET, bean: BEAN, club: CLUB };
