@@ -98,6 +98,9 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       `L${at(fat, rw, 1)} A${rw} ${rw} 0 1 1 ${at(fat, rw, -1)} Z`;
   })();
 
+  // How far each of Cora's clubs tips (degrees) to bend her pair into a V.
+  const CLUB_BEND = 16;
+
   // The traced shapes, by the `shape` in a pal's SPECIES entry.
   const TRACED = { lancet: LANCET, bean: BEAN, club: CLUB };
 
@@ -159,7 +162,12 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
     if (TRACED[species.shape] && !(species.shape === 'bean' && !partnerOf(c))) {
       // A traced shape's outer end points left, so turn it half around more.
       const turn = (outward(c) + 180).toFixed(1);
-      return `<path class="cell-body" d="${TRACED[species.shape]}" transform="translate(${c.x} ${c.y}) rotate(${turn})" ${paint} stroke-linejoin="round" />`;
+      // Cora's pair bends into a shallow V: each club tips about the narrow
+      // end where it meets her partner, the two in opposite directions, so
+      // both fat ends lean the same way.
+      const bend = species.shape === 'club' && partnerOf(c)
+        ? ` rotate(${group.cells.indexOf(c) === 0 ? CLUB_BEND : -CLUB_BEND} ${R} 0)` : '';
+      return `<path class="cell-body" d="${TRACED[species.shape]}" transform="translate(${c.x} ${c.y}) rotate(${turn})${bend}" ${paint} stroke-linejoin="round" />`;
     }
     return `<circle class="cell-body" cx="${c.x}" cy="${c.y}" r="${R}" ${paint} />`;
   }

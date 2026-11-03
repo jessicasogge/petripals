@@ -503,6 +503,18 @@ describe('Cora (Corynebacterium diphtheriae)', () => {
     }
   });
 
+  it('bends a pair into a shallow V, each club tipping the opposite way about where they meet', () => {
+    const pair = makeGroup('cora');
+    grow(pair, 2);
+    const bends = [...pair.svg.querySelectorAll('.cell-body')].map((el) =>
+      Number(el.getAttribute('transform').match(/rotate\((-?[\d.]+) [\d.]+ 0\)/)[1]));
+    expect(bends).toHaveLength(2);
+    expect(bends[0]).toBe(-bends[1]);
+    expect(Math.abs(bends[0])).toBeGreaterThan(0);
+    // On her own, she's straight.
+    expect(makeGroup('cora').svg.querySelector('.cell-body').getAttribute('transform')).not.toMatch(/rotate\([^)]* /);
+  });
+
   it('keeps her club inside her cell circle, so what she touches is unchanged', () => {
     const d = makeGroup('cora').svg.querySelector('.cell-body').getAttribute('d');
     // The points the outline passes through: after M, L, and the end of each arc.
