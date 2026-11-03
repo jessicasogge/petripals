@@ -1371,6 +1371,56 @@ export const PALS = [
       </g>
     `,
   },
+  // Cora: Corynebacterium diphtheriae, a wine-colored V of two club-shaped
+  // cells, hinged at their narrow ends
+  {
+    id: 'cora',
+    name: 'Cora',
+    looks: 'a wine-colored Corynebacterium diphtheriae, two club-shaped cells in a V',
+    motion: 'bob',
+    frames: { home: '20 20 160 160', picker: '14 14 172 172', dish: '24 24 152 152' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [35, 43, 165, 154],
+    art: `
+      <!-- two club-shaped cells in a V: they snap apart after dividing but
+           stay hinged at one end. Each body is marked, since wine is darker
+           than microscope mode would take for a body, with its outline on top. -->
+      <path data-stain="body" d="M103.8 134.6 L78.9 56.4 A23 23 0 1 0 37.1 75.6 L80.2 145.4 A13 13 0 1 0 103.8 134.6 Z" fill="#c08497" />
+      <path d="M103.8 134.6 L78.9 56.4 A23 23 0 1 0 37.1 75.6 L80.2 145.4 A13 13 0 1 0 103.8 134.6 Z" fill="none" stroke="#5c1a33" stroke-width="4" stroke-linejoin="round" />
+      <circle cx="52" cy="58" r="4" fill="#f6e6ec" />
+      <!-- right cell, with her face -->
+      <path data-stain="body" d="M119.8 145.4 L162.9 75.6 A23 23 0 1 0 121.1 56.4 L96.2 134.6 A13 13 0 1 0 119.8 145.4 Z" fill="#c08497" />
+      <path d="M119.8 145.4 L162.9 75.6 A23 23 0 1 0 121.1 56.4 L96.2 134.6 A13 13 0 1 0 119.8 145.4 Z" fill="none" stroke="#5c1a33" stroke-width="4" stroke-linejoin="round" />
+      <circle cx="150" cy="56" r="3.5" fill="#f6e6ec" />
+      <!-- her face sits along the middle of her club, so her cheeks stay inside -->
+      <g class="face">
+        <circle cx="123" cy="80" r="4.6" fill="#3a0d1f" />
+        <circle cx="139" cy="80" r="4.6" fill="#3a0d1f" />
+        <circle cx="124.5" cy="78.5" r="1.6" fill="white" />
+        <circle cx="140.5" cy="78.5" r="1.6" fill="white" />
+        <ellipse cx="119" cy="90" rx="3.6" ry="2.4" fill="#f9a8d4" opacity="0.95" />
+        <ellipse cx="143" cy="90" rx="3.6" ry="2.4" fill="#f9a8d4" opacity="0.95" />
+        <path d="M127 89 Q131 93 135 89" stroke="#3a0d1f" stroke-width="2.6" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+    // Compare sizes shows just one cell of her, the one with her face,
+    // drawn at one cell's length (its body box is cellBox).
+    cellBox: [95, 43, 165, 154],
+    cellArt: `
+      <path data-stain="body" d="M119.8 145.4 L162.9 75.6 A23 23 0 1 0 121.1 56.4 L96.2 134.6 A13 13 0 1 0 119.8 145.4 Z" fill="#c08497" />
+      <path d="M119.8 145.4 L162.9 75.6 A23 23 0 1 0 121.1 56.4 L96.2 134.6 A13 13 0 1 0 119.8 145.4 Z" fill="none" stroke="#5c1a33" stroke-width="4" stroke-linejoin="round" />
+      <circle cx="150" cy="56" r="3.5" fill="#f6e6ec" />
+      <g class="face">
+        <circle cx="123" cy="80" r="4.6" fill="#3a0d1f" />
+        <circle cx="139" cy="80" r="4.6" fill="#3a0d1f" />
+        <circle cx="124.5" cy="78.5" r="1.6" fill="white" />
+        <circle cx="140.5" cy="78.5" r="1.6" fill="white" />
+        <ellipse cx="119" cy="90" rx="3.6" ry="2.4" fill="#f9a8d4" opacity="0.95" />
+        <ellipse cx="143" cy="90" rx="3.6" ry="2.4" fill="#f9a8d4" opacity="0.95" />
+        <path d="M127 89 Q131 93 135 89" stroke="#3a0d1f" stroke-width="2.6" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
 ];
 
 // The pals in the home page's row, in PALS order. The row is full: pals

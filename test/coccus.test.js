@@ -469,6 +469,91 @@ describe('Nessa (Neisseria meningitidis)', () => {
   });
 });
 
+describe('Cora (Corynebacterium diphtheriae)', () => {
+  const turn = (el) => Number(el.getAttribute('transform').match(/rotate\((-?[\d.]+)\)/)[1]);
+
+  it('grows in pairs, like Penny', () => {
+    const pair = makeGroup('cora', { x: 30 });
+    const player = makeGroup('cora', { isPlayer: true, x: 50 });
+    expect(player.divide([pair], DISH_RADIUS)).toBeNull();
+    pair.update(1);
+    expect(pair.cellCount()).toBe(2);
+    expect(player.divide([pair], DISH_RADIUS).cellCount()).toBe(1);
+  });
+
+  it('has club-shaped cells in her wine colors, with a smaller face to fit', () => {
+    const group = makeGroup('cora', { isPlayer: true });
+    const cell = group.svg.querySelector('.cell-body');
+    expect(cell.tagName).toBe('path');
+    expect(cell.getAttribute('d')).not.toBe(makeGroup('penny').svg.querySelector('.cell-body').getAttribute('d'));
+    expect(cell.getAttribute('fill')).toBe(SPECIES.cora.colors.fill);
+    expect(turn(cell)).toBe(180);
+    expect(group.svg.querySelector('g[transform*="scale(0.55)"]')).not.toBeNull();
+  });
+
+  it('puts her shine and face in the fat end of her club, which points away from her partner', () => {
+    const lone = makeGroup('cora', { isPlayer: true });
+    // On her own, her fat end points right (+x), so her face sits right of center.
+    const at = lone.svg.querySelector('g[transform*="scale(0.55)"]').getAttribute('transform').match(/translate\((-?[\d.]+) (-?[\d.]+)\)/);
+    expect(Number(at[1])).toBeGreaterThan(0);
+    expect(Number(at[2])).toBeCloseTo(0, 5);
+    // In a pair, each cell's shine sits out toward her own fat end.
+    const pair = makeGroup('cora');
+    grow(pair, 2);
+    const shines = [...pair.svg.querySelectorAll('circle[r="1.3"]')];
+    expect(shines).toHaveLength(2);
+    for (const cell of pair.cells) {
+      const nearest = Math.min(...shines.map((el) => Math.hypot(el.getAttribute('cx') - cell.x, el.getAttribute('cy') - cell.y)));
+      expect(nearest).toBeLessThan(R * 1.25);
+    }
+  });
+
+  it('turns the narrow ends of a pair toward each other', () => {
+    const pair = makeGroup('cora');
+    grow(pair, 2);
+    const [a, b] = pair.cells;
+    const bodies = [...pair.svg.querySelectorAll('.cell-body')];
+    for (const [cell, other] of [[a, b], [b, a]]) {
+      const el = bodies.find((x) => x.getAttribute('transform').startsWith(`translate(${cell.x} ${cell.y})`));
+      const away = (Math.atan2(cell.y - other.y, cell.x - other.x) * 180) / Math.PI;
+      expect(((turn(el) - 180 - away) % 360 + 360) % 360).toBeCloseTo(0, 0);
+    }
+  });
+
+  it('bends a pair into a shallow V, each club tipping the opposite way about where they meet', () => {
+    const pair = makeGroup('cora');
+    grow(pair, 2);
+    const bends = [...pair.svg.querySelectorAll('.cell-body')].map((el) =>
+      Number(el.getAttribute('transform').match(/rotate\((-?[\d.]+) [\d.]+ 0\)/)[1]));
+    expect(bends).toHaveLength(2);
+    expect(bends[0]).toBe(-bends[1]);
+    expect(Math.abs(bends[0])).toBeGreaterThan(0);
+    // On her own, she's straight.
+    expect(makeGroup('cora').svg.querySelector('.cell-body').getAttribute('transform')).not.toMatch(/rotate\([^)]* /);
+  });
+
+  it('glows in her own club shape when a phage infects her, not a circle', () => {
+    const pair = makeGroup('cora');
+    grow(pair, 2);
+    pair.infectCell(1);
+    const glow = pair.svg.querySelector('.infected-cell .infected-glow');
+    const body = pair.svg.querySelector('.infected-cell .cell-body');
+    expect(glow.tagName).toBe('path');
+    expect(glow.getAttribute('d')).toBe(body.getAttribute('d'));
+    expect(glow.getAttribute('transform')).toBe(body.getAttribute('transform'));
+    expect(glow.getAttribute('fill')).toBe('none');
+  });
+
+  it('keeps her club inside her cell circle, so what she touches is unchanged', () => {
+    const d = makeGroup('cora').svg.querySelector('.cell-body').getAttribute('d');
+    // The points the outline passes through: after M, L, and the end of each arc.
+    const points = [...d.matchAll(/[ML](-?[\d.]+) (-?[\d.]+)|A[\d.]+ [\d.]+ 0 [01] [01] (-?[\d.]+) (-?[\d.]+)/g)]
+      .map((m) => (m[1] !== undefined ? [m[1], m[2]] : [m[3], m[4]]).map(Number));
+    expect(points).toHaveLength(5);
+    for (const [x, y] of points) expect(Math.hypot(x, y)).toBeLessThanOrEqual(R + 0.01);
+  });
+});
+
 describe('Ceres (Bacillus cereus)', () => {
   // How a cell's rod is turned: "translate(x y) rotate(deg)".
   const turn = (el) => Number(el.getAttribute('transform').match(/rotate\((-?[\d.]+)\)/)[1]);

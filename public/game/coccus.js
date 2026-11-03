@@ -4,12 +4,12 @@ import { GAME } from './config.js';
 import { idlePose, newMover } from './mover.js';
 import { coaster } from './physics.js';
 
-// Cocci (Scarlett, Penny, Nessa, Goldie, Dina, Ari) and chained rods (Ceres).
-// The player stays one cell; daughters join chains or clusters up to
-// GROUP_CAP or the pal's maxCells. Chains grow from the nearer end;
-// clusters grow toward the player. Scarlett lines up, Penny and Nessa pair,
-// Goldie bunches, Dina squares, and Ari strings beads with a heterocyst
-// every few cells.
+// Cocci (Scarlett, Penny, Nessa, Goldie, Dina, Ari), chained rods (Ceres)
+// and Cora's pairs of clubs. The player stays one cell; daughters join
+// chains or clusters up to GROUP_CAP or the pal's maxCells. Chains grow from
+// the nearer end; clusters grow toward the player. Scarlett lines up, Penny,
+// Nessa and Cora pair, Goldie bunches, Dina squares, and Ari strings beads
+// with a heterocyst every few cells.
 export function coccusGroup({ mover, svg, species, isPlayer }) {
   const CELL_SIZE = 5; // one cell's width, as a percent of the dish
   const OUTLINE = 1.7; // each cell's outline width, in SVG units
@@ -37,11 +37,14 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
 
   // Half the drawing's width and height in SVG units, centered on (0, 0).
   function extent() {
+    // Cora's clubs tip into a V, which swings their fat ends a little past
+    // the cell's circle, so leave room for them (or they're cut off flat).
+    const reach = species.shape === 'club' ? R * 1.25 : R;
     let mx = 0;
     let my = 0;
     for (const c of group.cells) {
-      mx = Math.max(mx, Math.abs(c.x) + R);
-      my = Math.max(my, Math.abs(c.y) + R);
+      mx = Math.max(mx, Math.abs(c.x) + reach);
+      my = Math.max(my, Math.abs(c.y) + reach);
     }
     return [mx + 2, my + 2];
   }
@@ -85,17 +88,40 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       `C${p(96, 128)} ${p(98, 122)} ${p(94, 116)} C${p(92.5, 108)} ${p(92.5, 92)} ${p(94, 84)} C${p(98, 78)} ${p(96, 72)} ${p(88, 70)} Z`;
   })();
 
+  // A club-shaped cell (Cora's): fat and round at the outer end (-x),
+  // narrowing toward the end that meets her partner (+x), like her picture.
+  // Both round ends touch the cell's circle, so what she touches doesn't change.
+  const CLUB = (() => {
+    const [rw, rn] = [R * 0.62, R * 0.36];
+    const [fat, narrow] = [-R + rw, R - rn];
+    // Where the straight sides touch each round end.
+    const a = Math.asin((rw - rn) / (narrow - fat));
+    const at = (cx, r, side) => `${(cx + r * Math.sin(a)).toFixed(2)} ${(side * r * Math.cos(a)).toFixed(2)}`;
+    return `M${at(fat, rw, -1)} L${at(narrow, rn, -1)} A${rn} ${rn} 0 0 1 ${at(narrow, rn, 1)} ` +
+      `L${at(fat, rw, 1)} A${rw} ${rw} 0 1 1 ${at(fat, rw, -1)} Z`;
+  })();
+
+  // The middle of a club's fat end, and where her face goes, a little toward
+  // her narrow end, along the club (in the traced shape's units).
+  const CLUB_FAT = -R + R * 0.62;
+  const CLUB_FACE = CLUB_FAT + 1.2;
+
+  // How far each of Cora's clubs tips (degrees) to bend her pair into a V.
+  // More than her club's taper (about 15 degrees), so the back of the V bends
+  // too, instead of lining up straight.
+  const CLUB_BEND = 26;
+
   // The traced shapes, by the `shape` in a pal's SPECIES entry.
-  const TRACED = { lancet: LANCET, bean: BEAN };
+  const TRACED = { lancet: LANCET, bean: BEAN, club: CLUB };
 
   // A rod-shaped cell (Ceres's): half its length, half its height and its
   // corner radius, in SVG units. Its corners stay inside the cell's circle.
   const ROD = { half: R * 0.95, tall: R * 0.6, corner: R * 0.45 };
 
   // How big the face is drawn: a rod (Ceres's) is shorter than a round
-  // cell, so her eyes, cheeks and smile are drawn smaller to sit inside it
-  // with room to spare.
-  const FACE_SCALE = species.shape === 'rod' ? 0.75 : 1;
+  // cell, and a club (Cora's) narrower still, so her eyes, cheeks and smile
+  // are drawn smaller to sit inside it with room to spare.
+  const FACE_SCALE = { rod: 0.75, club: 0.55 }[species.shape] ?? 1;
 
   // Which way a cell's outer end points, in degrees: away from her partner in
   // a pair, or to the right for a cell on her own (like the one with the face
@@ -130,15 +156,20 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
   const INFECTED = { fill: '#1c1917', stroke: '#3b0764', highlight: '#44403c' };
   const paintOf = (c) => (c.infected ? INFECTED : c.het ? heterocyst : colors);
 
-  function cellBody(c) {
+  // A cell's body, in its own shape. With `glow`, the phage-purple glow
+  // around an infected cell instead: the same shape with a wide, soft
+  // outline, so it hugs the cell whatever its shape.
+  function cellBody(c, { glow = false } = {}) {
     const { fill, stroke } = paintOf(c);
-    const paint = `fill="${fill}" stroke="${stroke}" stroke-width="${c.het ? OUTLINE * 1.6 : OUTLINE}"`;
+    const paint = glow
+      ? `class="infected-glow" fill="none" stroke="#a855f7" stroke-width="${OUTLINE + 3.2}" opacity="0.6"`
+      : `class="cell-body" fill="${fill}" stroke="${stroke}" stroke-width="${c.het ? OUTLINE * 1.6 : OUTLINE}"`;
     if (species.shape === 'rod') {
       // A square-ended rod, like her picture, that fits inside the cell's
       // circle, so what she touches doesn't change. Rods next to each other
       // in a chain overlap a little, so they look joined end to end.
       const turn = along(c).toFixed(1);
-      return `<rect class="cell-body" x="${-ROD.half}" y="${-ROD.tall}" width="${2 * ROD.half}" height="${2 * ROD.tall}" ` +
+      return `<rect x="${-ROD.half}" y="${-ROD.tall}" width="${2 * ROD.half}" height="${2 * ROD.tall}" ` +
         `rx="${ROD.corner}" transform="translate(${c.x} ${c.y}) rotate(${turn})" ${paint} />`;
     }
     // A bean cell (Nessa's) is round on her own: real cells only flatten
@@ -146,18 +177,48 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
     if (TRACED[species.shape] && !(species.shape === 'bean' && !partnerOf(c))) {
       // A traced shape's outer end points left, so turn it half around more.
       const turn = (outward(c) + 180).toFixed(1);
-      return `<path class="cell-body" d="${TRACED[species.shape]}" transform="translate(${c.x} ${c.y}) rotate(${turn})" ${paint} stroke-linejoin="round" />`;
+      const tip = clubTip(c);
+      const bend = tip ? ` rotate(${tip} ${R} 0)` : '';
+      return `<path d="${TRACED[species.shape]}" transform="translate(${c.x} ${c.y}) rotate(${turn})${bend}" ${paint} stroke-linejoin="round" />`;
     }
-    return `<circle class="cell-body" cx="${c.x}" cy="${c.y}" r="${R}" ${paint} />`;
+    return `<circle cx="${c.x}" cy="${c.y}" r="${R}" ${paint} />`;
+  }
+
+  // Cora's pair bends into a shallow V: each club tips (degrees) about the
+  // narrow end where it meets her partner, the two in opposite directions,
+  // so both fat ends lean the same way. 0 for a club on her own.
+  function clubTip(c) {
+    if (species.shape !== 'club' || !partnerOf(c)) return 0;
+    return group.cells.indexOf(c) === 0 ? CLUB_BEND : -CLUB_BEND;
+  }
+
+  // Where a point along a club's middle ends up (lx in the traced shape's
+  // units, before it's turned and tipped), so her shine and face can sit in
+  // her fat end instead of on her outline.
+  function onClub(c, lx) {
+    const tip = (clubTip(c) * Math.PI) / 180;
+    const [bx, by] = [R + (lx - R) * Math.cos(tip), (lx - R) * Math.sin(tip)];
+    const turn = ((outward(c) + 180) * Math.PI) / 180;
+    return [c.x + bx * Math.cos(turn) - by * Math.sin(turn), c.y + bx * Math.sin(turn) + by * Math.cos(turn)];
   }
 
   function cellMarkup(c) {
+    const club = species.shape === 'club';
+    // Her shine sits up and to the left of her middle. On a club, it sits up
+    // and out toward the round tip of her fat end, clear of her face.
+    const [fx, fy] = club ? onClub(c, CLUB_FACE) : [c.x, c.y];
+    let shine = [c.x - 2.7, c.y - 3.2];
+    if (club) {
+      const [sx, sy] = onClub(c, CLUB_FAT);
+      const [ox, oy] = onClub(c, CLUB_FAT - 1); // a step toward her round tip
+      shine = [sx + (ox - sx) * 1.2, sy + (oy - sy) * 1.2 - 2.4];
+    }
     let out =
       cellBody(c) +
-      `<circle cx="${c.x - 2.7}" cy="${c.y - 3.2}" r="1.5" fill="${paintOf(c).highlight}" />`;
+      `<circle cx="${shine[0].toFixed(2)}" cy="${shine[1].toFixed(2)}" r="${club ? 1.3 : 1.5}" fill="${paintOf(c).highlight}" />`;
     if (c.face) {
       out +=
-        `<g transform="translate(${c.x} ${c.y})${FACE_SCALE === 1 ? '' : ` scale(${FACE_SCALE})`}">` +
+        `<g transform="translate(${club ? `${fx.toFixed(2)} ${fy.toFixed(2)}` : `${c.x} ${c.y}`})${FACE_SCALE === 1 ? '' : ` scale(${FACE_SCALE})`}">` +
         `<circle cx="-3.6" cy="0" r="2" fill="${colors.dark}" />` +
         `<circle cx="3.6" cy="0" r="2" fill="${colors.dark}" />` +
         '<circle cx="-3" cy="-0.6" r="0.75" fill="white" />' +
@@ -171,9 +232,8 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
     // A cell a phage has landed on (Phage Attack): just this one goes dark
     // and throbs (see .infected-cell in styles.css), not the whole chain.
     if (c.infected) {
-      // A phage-purple glow ring around it, also in its own markup.
-      const glow = `<circle class="infected-glow" cx="${c.x}" cy="${c.y}" r="${R + 1.6}" fill="none" stroke="#a855f7" stroke-width="2.4" opacity="0.6" />`;
-      out = `<g class="infected-cell">${glow}${out}</g>`;
+      // A phage-purple glow around it, in its own shape, also in its own markup.
+      out = `<g class="infected-cell">${cellBody(c, { glow: true })}${out}</g>`;
     }
     return out;
   }
