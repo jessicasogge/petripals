@@ -89,6 +89,14 @@ describe('pals', () => {
     expect(SPECIES.nessa.gram).toBe('negative');
   });
 
+  it('makes Cora a Gram-positive Corynebacterium that grows in pairs of clubs', () => {
+    expect(SPECIES.cora.kind).toBe('coccus');
+    expect(SPECIES.cora.layout).toBe('chain');
+    expect(SPECIES.cora.maxCells).toBe(2);
+    expect(SPECIES.cora.shape).toBe('club');
+    expect(SPECIES.cora.gram).toBe('positive');
+  });
+
   it('makes Hallie a Gram-negative rod traced along her S-shaped spiral', () => {
     const { kind, layout, gram, body } = SPECIES.hallie;
     expect(kind).toBe('rod');
@@ -306,7 +314,7 @@ describe('real sizes', () => {
   it("gives one cell's length for each pal whose picture shows several cells, or more than her cell", () => {
     const groups = Object.keys(SPECIES).filter((pal) => SPECIES[pal].cellMicrometers).sort();
     // Pairs, chains and clusters, plus Astrid (stalks) and Pearl (capsule).
-    expect(groups).toEqual(['ari', 'astrid', 'ceres', 'dina', 'goldie', 'ivy', 'nessa', 'pearl', 'penny', 'scarlett']);
+    expect(groups).toEqual(['ari', 'astrid', 'ceres', 'cora', 'dina', 'goldie', 'ivy', 'nessa', 'pearl', 'penny', 'scarlett']);
     for (const pal of groups) {
       expect(SPECIES[pal].cellMicrometers, pal).toBeLessThan(SPECIES[pal].micrometers);
     }
@@ -322,7 +330,7 @@ describe('Gram stains', () => {
 
   // Spot checks against the real bacteria, one pal at a time, so adding a pal
   // doesn't mean editing a list here (the test above checks every pal).
-  it.each(['ana', 'ceres', 'diffany', 'dina', 'goldie', 'ivy', 'lissie', 'marina', 'nova', 'penny', 'scarlett', 'terra'])(
+  it.each(['ana', 'ceres', 'diffany', 'dina', 'goldie', 'ivy', 'lissie', 'marina', 'nova', 'penny', 'scarlett', 'terra', 'cora'])(
     '%s is Gram-positive, like her real species',
     (name) => expect(SPECIES[name].gram).toBe('positive'),
   );

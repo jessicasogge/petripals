@@ -1333,6 +1333,47 @@ export const SPECIES = {
       { code: 'LVX', name: 'levofloxacin', zone: 22 },
     ],
   },
+  cora: {
+    facts: [
+      "Cora's genus, Corynebacterium, comes from the Greek word for club.",
+      "Cora's cells are club-shaped, fatter at one end than the other.",
+      "Cora's cells snap apart when they divide but stay hinged, so they lie in V and L shapes.",
+      "Piles of Cora's cells look like scattered letters, which scientists call palisades.",
+      "Cora causes diphtheria, an illness that makes a thick coating in the throat.",
+      "Cora only makes her toxin when a phage carrying the toxin gene lives inside her.",
+      "The D in the DTaP vaccine protects kids from Cora's toxin.",
+      "In 1925, sled dog teams raced medicine 674 miles to Nome, Alaska, to stop Cora.",
+      "Balto and Togo were two of the sled dogs on the 1925 run against Cora.",
+      "Cora's colonies turn black on tellurite agar, which helps labs spot her.",
+      "Cora stores phosphate in little granules that stain darker than the rest of her.",
+      "Cora is Gram-positive, so she stains purple in a Gram stain.",
+      "Cora has no flagella and cannot swim.",
+      "Emil von Behring won the first Nobel Prize in Medicine for a treatment against Cora.",
+      "Cora was first grown in a lab by Friedrich Loeffler in 1884."
+    ],
+    scientific: 'Corynebacterium diphtheriae',
+    micrometers: 4, // her picture's real length: a V of two cells
+    cellMicrometers: 3, // one of her cells
+    color: '#5c1a33', // for her name above the dish
+    tile: 'rgba(176, 102, 128, 0.25)',
+    kind: 'coccus',
+    gram: 'positive',
+    layout: 'chain',
+    maxCells: 2, // pairs
+    // Her cells are clubs, like in her picture: fat at the outer end and
+    // narrow where the pair meets.
+    shape: 'club',
+    colors: { fill: '#c08497', stroke: '#5c1a33', highlight: '#f6e6ec', dark: '#3a0d1f' },
+    // Labs test her by MIC rather than disks, so these zones are estimates,
+    // for drugs used against diphtheria.
+    antibiotics: [
+      { code: 'E', name: 'erythromycin', zone: 30 },
+      { code: 'P', name: 'penicillin', zone: 28 },
+      { code: 'RA', name: 'rifampin', zone: 26 },
+      { code: 'CC', name: 'clindamycin', zone: 22 },
+      { code: 'VA', name: 'vancomycin', zone: 18 },
+    ],
+  },
 };
 
 // Mixed culture: no disks; race 1–3 AI rivals (chosen or one random) to TARGET cells.

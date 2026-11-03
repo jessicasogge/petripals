@@ -4,12 +4,12 @@ import { GAME } from './config.js';
 import { idlePose, newMover } from './mover.js';
 import { coaster } from './physics.js';
 
-// Cocci (Scarlett, Penny, Nessa, Goldie, Dina, Ari) and chained rods (Ceres).
-// The player stays one cell; daughters join chains or clusters up to
-// GROUP_CAP or the pal's maxCells. Chains grow from the nearer end;
-// clusters grow toward the player. Scarlett lines up, Penny and Nessa pair,
-// Goldie bunches, Dina squares, and Ari strings beads with a heterocyst
-// every few cells.
+// Cocci (Scarlett, Penny, Nessa, Goldie, Dina, Ari), chained rods (Ceres)
+// and Cora's pairs of clubs. The player stays one cell; daughters join
+// chains or clusters up to GROUP_CAP or the pal's maxCells. Chains grow from
+// the nearer end; clusters grow toward the player. Scarlett lines up, Penny,
+// Nessa and Cora pair, Goldie bunches, Dina squares, and Ari strings beads
+// with a heterocyst every few cells.
 export function coccusGroup({ mover, svg, species, isPlayer }) {
   const CELL_SIZE = 5; // one cell's width, as a percent of the dish
   const OUTLINE = 1.7; // each cell's outline width, in SVG units
@@ -85,17 +85,30 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       `C${p(96, 128)} ${p(98, 122)} ${p(94, 116)} C${p(92.5, 108)} ${p(92.5, 92)} ${p(94, 84)} C${p(98, 78)} ${p(96, 72)} ${p(88, 70)} Z`;
   })();
 
+  // A club-shaped cell (Cora's): fat and round at the outer end (-x),
+  // narrowing toward the end that meets her partner (+x), like her picture.
+  // Both round ends touch the cell's circle, so what she touches doesn't change.
+  const CLUB = (() => {
+    const [rw, rn] = [R * 0.62, R * 0.36];
+    const [fat, narrow] = [-R + rw, R - rn];
+    // Where the straight sides touch each round end.
+    const a = Math.asin((rw - rn) / (narrow - fat));
+    const at = (cx, r, side) => `${(cx + r * Math.sin(a)).toFixed(2)} ${(side * r * Math.cos(a)).toFixed(2)}`;
+    return `M${at(fat, rw, -1)} L${at(narrow, rn, -1)} A${rn} ${rn} 0 0 1 ${at(narrow, rn, 1)} ` +
+      `L${at(fat, rw, 1)} A${rw} ${rw} 0 1 1 ${at(fat, rw, -1)} Z`;
+  })();
+
   // The traced shapes, by the `shape` in a pal's SPECIES entry.
-  const TRACED = { lancet: LANCET, bean: BEAN };
+  const TRACED = { lancet: LANCET, bean: BEAN, club: CLUB };
 
   // A rod-shaped cell (Ceres's): half its length, half its height and its
   // corner radius, in SVG units. Its corners stay inside the cell's circle.
   const ROD = { half: R * 0.95, tall: R * 0.6, corner: R * 0.45 };
 
-  // How big the face is drawn: a rod (Ceres's) is shorter than a round
-  // cell, so her eyes, cheeks and smile are drawn smaller to sit inside it
+  // How big the face is drawn: a rod (Ceres's) or a club (Cora's) is
+  // narrower than a round cell, so her eyes, cheeks and smile are drawn smaller to sit inside it
   // with room to spare.
-  const FACE_SCALE = species.shape === 'rod' ? 0.75 : 1;
+  const FACE_SCALE = species.shape === 'rod' || species.shape === 'club' ? 0.75 : 1;
 
   // Which way a cell's outer end points, in degrees: away from her partner in
   // a pair, or to the right for a cell on her own (like the one with the face
