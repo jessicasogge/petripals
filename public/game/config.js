@@ -1286,6 +1286,53 @@ export const SPECIES = {
       { code: 'AZM', name: 'azithromycin', zone: 24 },
     ],
   },
+  hallie: {
+    facts: [
+      "Hallie's genus name, Helicobacter, means \"spiral rod.\"",
+      "Hallie's name, pylori, refers to the stomach's outlet into the small intestine.",
+      "Hallie lives in the protective mucus lining the stomach.",
+      "Hallie's urease turns urea into ammonia, helping neutralize acid around her.",
+      "Hallie uses a tuft of flagella at one end to swim through stomach mucus.",
+      "Hallie's spiral shape helps her move through thick stomach mucus.",
+      "About half the world's people carry Hallie, often without symptoms.",
+      "Hallie can cause stomach ulcers, sores in the lining of the stomach.",
+      "In 1984, Barry Marshall drank Hallie's culture and developed stomach inflammation.",
+      "Marshall and Warren won a Nobel Prize in 2005 for discovering Hallie and her role.",
+      "Hallie often spreads within families and is usually acquired in childhood.",
+      "Hallie grows slowly on enriched blood agar and needs less oxygen than is in air.",
+      "Hallie can change from a spiral into a round shape under stressful conditions.",
+      "Hallie stains pink in a Gram stain.",
+      "Doctors treat Hallie with antibiotics and acid-lowering drugs, sometimes with bismuth."
+    ],
+    scientific: 'Helicobacter pylori',
+    micrometers: 3, // her picture's real length: one cell
+    color: '#1d4a26', // for her name above the dish
+    tile: 'rgba(79, 154, 92, 0.25)',
+    kind: 'rod',
+    gram: 'negative',
+    size: 9.5,
+    // Her short S-shaped spiral, end to end (her flagella don't count).
+    body: [
+      [-0.337, -0.041, 0.092],
+      [-0.277, -0.104, 0.092],
+      [-0.208, -0.122, 0.092],
+      [-0.137, -0.095, 0.092],
+      [-0.071, -0.020, 0.092],
+      [-0.005, 0.055, 0.092],
+      [0.066, 0.082, 0.092],
+      [0.138, 0.063, 0.092],
+      [0.204, 0.000, 0.092],
+    ],
+    // Labs test her by MIC (Etest), not disks, so these zones are
+    // estimates, for drugs used against her infections.
+    antibiotics: [
+      { code: 'CLR', name: 'clarithromycin', zone: 30 },
+      { code: 'AMX', name: 'amoxicillin', zone: 28 },
+      { code: 'MTZ', name: 'metronidazole', zone: 18 },
+      { code: 'TE', name: 'tetracycline', zone: 24 },
+      { code: 'LVX', name: 'levofloxacin', zone: 22 },
+    ],
+  },
 };
 
 // Mixed culture: no disks; race 1–3 AI rivals (chosen or one random) to TARGET cells.

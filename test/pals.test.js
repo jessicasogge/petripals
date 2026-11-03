@@ -696,7 +696,7 @@ describe('comparing sizes', () => {
 describe('wiggly flagella', () => {
 
   // One pal at a time, so adding a pal doesn't mean editing a list here.
-  it.each(['astrid', 'colette', 'diffany', 'kiki', 'lissie', 'mona', 'sallie', 'sara', 'terra', 'vi'])(
+  it.each(['astrid', 'colette', 'diffany', 'hallie', 'kiki', 'lissie', 'mona', 'sallie', 'sara', 'terra', 'vi'])(
     '%s swims with flagella, so she has wiggling tails (Astrid on her swarmers)',
     (id) => expect(SWIMMERS).toContain(id),
   );

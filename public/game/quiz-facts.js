@@ -197,5 +197,10 @@ export const QUIZ_FACTS = {
     "Nessa was isolated in 1887 by Anton Weichselbaum from patients with meningitis.",
     "About one in ten people carry Nessa in their throat without getting sick.",
     "Nessa is also called the meningococcus, a bacterium that can cause meningitis."
+  ],  hallie: [
+    "In 1984, Barry Marshall drank a culture of Hallie and developed stomach inflammation.",
+    "Hallie's discovery helped show that bacteria, not just acid, can cause stomach ulcers.",
+    "Marshall and Warren won the 2005 Nobel Prize for discovering Hallie and her role.",
+    "Hallie's species name, pylori, refers to the stomach's outlet into the small intestine."
   ],
 };
