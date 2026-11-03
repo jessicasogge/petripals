@@ -1336,20 +1336,20 @@ export const SPECIES = {
   cora: {
     facts: [
       "Cora's genus, Corynebacterium, comes from the Greek word for club.",
-      "Cora's cells are club-shaped, fatter at one end than the other.",
-      "Cora's cells snap apart when they divide but stay hinged, so they lie in V and L shapes.",
-      "Piles of Cora's cells look like scattered letters, which scientists call palisades.",
-      "Cora causes diphtheria, an illness that makes a thick coating in the throat.",
-      "Cora only makes her toxin when a phage carrying the toxin gene lives inside her.",
-      "The D in the DTaP vaccine protects kids from Cora's toxin.",
-      "In 1925, sled dog teams raced medicine 674 miles to Nome, Alaska, to stop Cora.",
-      "Balto and Togo were two of the sled dogs on the 1925 run against Cora.",
-      "Cora's colonies turn black on tellurite agar, which helps labs spot her.",
-      "Cora stores phosphate in little granules that stain darker than the rest of her.",
+      "Cora's cells are often club-shaped, wider at one end than the other.",
+      "Cora's dividing cells snap into V and L shapes while staying attached at one end.",
+      "Cora's cells can line up like fence posts, an arrangement called palisades.",
+      "Toxin-making strains of Cora cause diphtheria, which can form a thick throat coating.",
+      "Cora can make diphtheria toxin only if she carries a toxin gene supplied by a phage.",
+      "The D in the DTaP vaccine helps protect kids from Cora's toxin.",
+      "In 1925, sled dog teams carried antitoxin 674 miles to Nome to fight Cora's disease.",
+      "Balto and Togo helped sled dog teams deliver antitoxin against Cora's disease in 1925.",
+      "Cora's colonies turn gray to black on tellurite agar, which helps labs spot her.",
+      "Cora stores phosphate in granules that show a different color with special stains.",
       "Cora is Gram-positive, so she stains purple in a Gram stain.",
       "Cora has no flagella and cannot swim.",
-      "Emil von Behring won the first Nobel Prize in Medicine for a treatment against Cora.",
-      "Cora was first grown in a lab by Friedrich Loeffler in 1884."
+      "Emil von Behring won the first Nobel Prize in Medicine for serum therapy against Cora.",
+      "Cora was first grown in pure culture by Friedrich Loeffler in 1884."
     ],
     scientific: 'Corynebacterium diphtheriae',
     micrometers: 4, // her picture's real length: a V of two cells
