@@ -718,6 +718,208 @@ a.pal-card:focus-visible {
   justify-content: center;
 }
 
+/* About her, under her picture on the mode screen: opens her profile
+   (pal-profile.html). Shaped like the picker's Gram stain button. */
+.about-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  width: max-content;
+  margin: 0.6rem auto 0;
+  padding: 0.45em 0.95em;
+  border: 2px solid #99f6e4;
+  border-radius: 999px;
+  background: #f0fdfa;
+  color: #0f766e;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.about-btn:hover {
+  background: #ccfbf1;
+}
+
+.about-icon {
+  width: 1.25em;
+  height: 1.25em;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  display: grid;
+  place-items: center;
+  font: italic 700 0.8em/1 Georgia, serif;
+}
+
+/* A pal's profile (game/pal-profile.js), like the box about an organism in
+   a textbook. Read top to bottom, so it's left-aligned. */
+.profile {
+  display: grid;
+  gap: 1.1rem;
+  text-align: left;
+}
+
+.profile h2 {
+  margin: 0.3rem 0 0;
+  font-size: 1.25rem;
+}
+
+.profile-top {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.profile-top .pal-icon {
+  width: 150px;
+  height: 150px;
+  margin: 0;
+}
+
+.profile-top .pal-icon svg {
+  width: 124px;
+  height: 124px;
+}
+
+.profile-name {
+  margin: 0;
+  font-size: 2.4rem;
+  line-height: 1.05;
+}
+
+.profile-species {
+  margin: 0.2rem 0 0;
+  font-size: 1.1rem;
+}
+
+.profile-box {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin: 0;
+}
+
+.profile-stat {
+  background: rgba(255, 255, 255, 0.55);
+  border: 2px solid rgba(15, 118, 110, 0.15);
+  border-radius: 16px;
+  padding: 0.6rem 0.75rem;
+}
+
+.profile-stat dt {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.profile-stat dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+.profile-stain {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+}
+
+.profile-stain .pal-icon {
+  width: 84px;
+  height: 84px;
+  margin: 0;
+  flex: none;
+  background: radial-gradient(circle, #fff 0 58%, #f1f5f9 72%, #e2e8f0 100%);
+  box-shadow: inset 0 0 0 2px #cbd5e1;
+}
+
+.profile-stain .pal-icon svg {
+  width: 68px;
+  height: 68px;
+}
+
+.profile-stain p,
+.profile-drugs p {
+  margin: 0;
+}
+
+.profile-note {
+  margin: -0.6rem 0 0;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.profile-drugs {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.profile-drugs li {
+  display: grid;
+  grid-template-columns: 3.2rem 1fr;
+  gap: 0.7rem;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 14px;
+  padding: 0.55rem 0.7rem;
+}
+
+/* An antibiotic disk, with its code, like the ones in the dish. */
+.profile-disk {
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #cbd5e1;
+  display: grid;
+  place-items: center;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #334155;
+}
+
+.profile-facts {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.35rem;
+  line-height: 1.4;
+}
+
+.profile-back {
+  justify-self: center;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 560px) {
+  .profile-top {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  /* All three quick facts still fit in a row, a little smaller. */
+  .profile-box {
+    gap: 0.4rem;
+  }
+
+  .profile-stat {
+    padding: 0.5rem 0.55rem;
+  }
+
+  .profile-stat dt {
+    font-size: 0.62rem;
+  }
+
+  .profile-stat dd {
+    font-size: 0.85rem;
+  }
+}
+
 .mode-grid {
   display: grid;
   /* Two by two, on a phone too. */
