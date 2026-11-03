@@ -1,9 +1,8 @@
 // A pal's profile (pal-profile.html?pal=mona), opened from About on the mode
-// screen: her picture, species, quick facts, her Gram stain, the drugs that
-// usually work on her and how, and all her fun facts. Everything comes from
+// screen: her picture, species, quick facts, her Gram stain and all her fun
+// facts. Everything comes from
 // her SPECIES entry and her picture, so every pal has one.
 import { SPECIES } from './config.js';
-import { DRUG_FACTS } from './drug-facts.js';
 import { speciesName, withItalics } from './italics.js';
 import { pageReady, watchLoading } from './loading.js';
 import { cellLength, palById, palTile } from './pals.js';
@@ -55,15 +54,6 @@ if (!pal || !Object.hasOwn(SPECIES, id)) {
   document.querySelector('.profile-stain-text').textContent = species.faintStain
     ? `${pal.name} barely takes a Gram stain, so she turns only a pale color.`
     : `After a Gram stain, ${pal.name} turns ${positive ? 'purple: her thick wall holds the dye' : 'pink: her thin wall lets the purple wash out'}.`;
-
-  // The drugs on her disks, each with how it works.
-  document.querySelector('.profile-drugs').append(...species.antibiotics.map(({ code }) => {
-    const item = element('li');
-    const fact = element('p');
-    fact.append(...withItalics(DRUG_FACTS[code]));
-    item.append(element('span', 'profile-disk', code), fact);
-    return item;
-  }));
 
   document.querySelector('.profile-facts-head').textContent = `All about ${pal.name}`;
   document.querySelector('.profile-facts').append(...species.facts.map((fact) => {

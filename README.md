@@ -33,7 +33,7 @@ No steering this time. Your pal swims in a straight line on her own, and all you
 
 ### About a pal
 
-On the mode screen, **About** under your pal's picture opens her profile, like the box about an organism in a textbook: her picture, her species, her Gram stain, size and whether she swims, how she looks after a Gram stain and why, the antibiotics that usually work on her and how each one works, and all her fun facts. It has no zone sizes, since strains can differ and doctors test which drugs work on each infection. Everything on it comes from her entry in `config.js` and her picture in `pals.js`, so every pal has one.
+On the mode screen, **About** under your pal's picture opens her profile, like the box about an organism in a textbook: her picture, her species, her Gram stain, size and whether she swims, how she looks after a Gram stain and why, and all her fun facts. Everything on it comes from her entry in `config.js` and her picture in `pals.js`, so every pal has one.
 
 ### Who’s That Pal?
 
@@ -139,7 +139,7 @@ The tests use [Vitest](https://vitest.dev/). Most of the game logic runs in [jsd
 | `public/index.html` | Home page |
 | `public/pal-picker.html` | Pick a pal |
 | `public/choose-mode.html` | Choose Classic, Mixed Culture, Petri Picnic or Phage Attack |
-| `public/pal-profile.html` | A pal's profile: her Gram stain, size, the drugs that usually work on her and her fun facts |
+| `public/pal-profile.html` | A pal's profile: her Gram stain, size and fun facts |
 | `public/choose-rivals.html` | Pick up to three rivals for Mixed Culture, or Surprise me |
 | `public/petri-dish.html` | The game, in any mode |
 | `public/whos-that-pal.html` | Who’s That Pal?, a quiz: which pal is this fact about? |

@@ -5,7 +5,6 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SPECIES } from '../public/game/config.js';
-import { DRUG_FACTS } from '../public/game/drug-facts.js';
 import { plainText } from '../public/game/italics.js';
 
 const file = (name) => readFileSync(resolve(process.cwd(), 'public', name), 'utf8');
@@ -62,15 +61,6 @@ describe("a pal's profile", () => {
     expect(text('.profile-stain-text')).toContain('barely takes a Gram stain');
   });
 
-  it('lists the drugs on her disks, each with how it works, and no zone sizes (strains differ)', async () => {
-    await open('pal-profile.html', 'game/pal-profile.js', '?pal=hallie');
-    const drugs = [...document.querySelectorAll('.profile-drugs li')];
-    expect(drugs.map((li) => li.querySelector('.profile-disk').textContent)).toEqual(SPECIES.hallie.antibiotics.map((a) => a.code));
-    expect(drugs[0].querySelector('p').textContent).toBe(plainText(DRUG_FACTS[SPECIES.hallie.antibiotics[0].code]));
-    expect(document.querySelector('.profile').textContent).not.toMatch(/\d+ mm/);
-    expect(text('.profile-note')).toContain('Strains can differ');
-  });
-
   it('lists all her fun facts, with science names in italics', async () => {
     await open('pal-profile.html', 'game/pal-profile.js', '?pal=marina');
     expect(text('.profile-facts-head')).toBe('All about Marina');
@@ -88,7 +78,7 @@ describe("a pal's profile", () => {
     for (const id of Object.keys(SPECIES)) {
       await open('pal-profile.html', 'game/pal-profile.js', `?pal=${id}`);
       expect(location.replace, id).not.toHaveBeenCalled();
-      expect(document.querySelectorAll('.profile-drugs li').length, id).toBe(SPECIES[id].antibiotics.length);
+      expect(document.querySelectorAll('.profile-facts li').length, id).toBe(SPECIES[id].facts.length);
     }
   });
 

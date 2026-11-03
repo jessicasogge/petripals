@@ -839,47 +839,8 @@ a.pal-card:focus-visible {
   height: 68px;
 }
 
-.profile-stain p,
-.profile-drugs p {
+.profile-stain p {
   margin: 0;
-}
-
-.profile-note {
-  margin: -0.6rem 0 0;
-  font-size: 0.9rem;
-  color: #64748b;
-}
-
-.profile-drugs {
-  display: grid;
-  gap: 0.5rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.profile-drugs li {
-  display: grid;
-  grid-template-columns: 3.2rem 1fr;
-  gap: 0.7rem;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.55);
-  border-radius: 14px;
-  padding: 0.55rem 0.7rem;
-}
-
-/* An antibiotic disk, with its code, like the ones in the dish. */
-.profile-disk {
-  width: 3.2rem;
-  height: 3.2rem;
-  border-radius: 50%;
-  background: #fff;
-  border: 2px solid #cbd5e1;
-  display: grid;
-  place-items: center;
-  font-size: 0.78rem;
-  font-weight: 800;
-  color: #334155;
 }
 
 .profile-facts {
