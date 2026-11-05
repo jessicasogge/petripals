@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-// A pal's profile (pal-profile.html?pal=mona), opened from About on the mode
-// screen.
+// A pal's profile (pal-profile.html?pal=mona) in the browser, and About on
+// the mode screen, which opens her ready-made page (see build-site.test.js).
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -87,7 +87,7 @@ describe('About on the mode screen', () => {
   it('opens her profile, named for her', async () => {
     await open('choose-mode.html', 'game/choose-mode.js', '?pal=coco');
     const about = document.querySelector('.about-btn');
-    expect(about.getAttribute('href')).toBe('./pal-profile.html?pal=coco');
+    expect(about.getAttribute('href')).toBe('./pals/coco.html');
     expect(about.textContent.trim()).toMatch(/About Coco$/);
     // Outside her picture, which screen readers skip, so they reach it.
     expect(about.closest('[aria-hidden]')).toBeNull();

@@ -10,6 +10,7 @@
     "test:watch": "vitest",
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
+    "build:site": "node scripts/build-site.js",
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit"
   },

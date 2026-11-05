@@ -1,6 +1,8 @@
 # Publish the game to GitHub Pages whenever something lands on main.
 # The game is just the files in public/ (HTML, CSS and JavaScript), so Pages
-# can serve it with no server. The tests run first; if they fail, or leave
+# can serve it with no server. Before publishing, npm run build:site copies
+# them into site/ and adds a ready-made page for each pal (pals/mona.html),
+# for search engines. The tests run first; if they fail, or leave
 # too much of the game untested (see vitest.config.js), nothing is published.
 name: Deploy to GitHub Pages
 
@@ -30,10 +32,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run test:coverage # the tests, plus a check that they cover the game
+      - run: npm run build:site # public/, plus a page for each pal
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: public
+          path: site
 
   deploy:
     needs: build
