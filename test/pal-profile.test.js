@@ -58,7 +58,7 @@ describe("a pal's profile", () => {
 
   it('lists all her fun facts, with science names in italics', async () => {
     await open('pal-profile.html', 'game/pal-profile.js', '?pal=marina');
-    expect(text('.profile-facts-head')).toBe('All about Marina');
+    expect([...document.querySelectorAll('.profile h2')].map((h) => h.textContent)).toContain('Fun Facts');
     const facts = [...document.querySelectorAll('.profile-facts li')].map((li) => li.textContent);
     expect(facts).toEqual(SPECIES.marina.facts.map(plainText));
     expect(document.querySelector('.profile-facts i')).not.toBeNull();

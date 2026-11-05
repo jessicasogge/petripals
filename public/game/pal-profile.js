@@ -45,7 +45,6 @@ if (!pal || !Object.hasOwn(SPECIES, id)) {
     ? `${pal.name} barely takes a Gram stain, so she turns only a pale color.`
     : `After a Gram stain, ${pal.name} turns ${positive ? 'purple: her thick wall holds the dye' : 'pink: her thin wall lets the purple wash out'}.`;
 
-  document.querySelector('.profile-facts-head').textContent = `All about ${pal.name}`;
   document.querySelector('.profile-facts').append(...species.facts.map((fact) => {
     const item = element('li');
     item.append(...withItalics(fact));
