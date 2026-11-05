@@ -128,6 +128,22 @@ describe('search engines and shared links', () => {
     expect(robots ?? null, page).toBe(GAME_ONLY.includes(page) ? 'noindex' : null);
   });
 
+  it('tells search engines on the home page what PetriPals is (structured data)', () => {
+    const html = readFileSync(file('index.html'), 'utf8');
+    const block = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+    expect(block).not.toBeNull();
+    const data = JSON.parse(block[1]);
+    expect(data['@context']).toBe('https://schema.org');
+    expect(data['@type']).toEqual(['VideoGame', 'LearningResource']);
+    expect(data.name).toBe('PetriPals');
+    expect(data.url).toBe(SITE);
+    // The same words as the page's description, and free.
+    expect(data.description).toBe(meta(html, 'name', 'description'));
+    expect(data.isAccessibleForFree).toBe(true);
+    expect(data.offers.price).toBe('0');
+    expect(existsSync(file(data.image.slice(SITE.length)))).toBe(true);
+  });
+
   it('lists real pages in the sitemap, and none that search engines should skip', () => {
     const sitemap = readFileSync(file('sitemap.xml'), 'utf8');
     const pages = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);

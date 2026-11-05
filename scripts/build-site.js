@@ -23,6 +23,24 @@ export function pageDescription(pal, plainScientific, factCount) {
     `her real size, and ${factCount} fun facts about the real bacterium.`;
 }
 
+// A pal page's structured data: a learning resource about her real
+// bacterium, part of the PetriPals game.
+export function structuredData(pal, plainScientific, url, description) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: `${pal.name}, a cartoon ${plainScientific}`,
+    url,
+    description,
+    inLanguage: 'en',
+    isAccessibleForFree: true,
+    learningResourceType: 'Fact sheet',
+    audience: { '@type': 'EducationalAudience', educationalRole: 'student' },
+    about: { '@type': 'Thing', name: plainScientific },
+    isPartOf: { '@type': 'VideoGame', name: 'PetriPals', url: SITE_URL },
+  };
+}
+
 // The profile page for one pal, as HTML.
 async function palPage(template, id, { SPECIES, palById, renderProfile, plainText }) {
   const dom = new JSDOM(template, { url: `${SITE_URL}pal-profile.html` });
@@ -46,6 +64,13 @@ async function palPage(template, id, { SPECIES, palById, renderProfile, plainTex
   doc.querySelector('link[rel="canonical"]').href = url;
   // This page is the one to index (the ?pal= page isn't).
   doc.querySelector('meta[name="robots"]')?.remove();
+
+  // What the page is about, for search engines (schema.org structured data):
+  // the real bacterium, so the page is matched to searches for her species.
+  const data = doc.createElement('script');
+  data.type = 'application/ld+json';
+  data.textContent = JSON.stringify(structuredData(pal, scientific, url, description), null, 2);
+  doc.head.append(data);
 
   // Ready-made, so no loading card and no script to fill it in.
   doc.querySelector('.loading-overlay')?.remove();

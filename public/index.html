@@ -23,6 +23,34 @@
     <meta name="apple-mobile-web-app-title" content="PetriPals" />
     <link rel="preload" href="./fonts/fredoka-700.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="./styles.css" />
+    <!-- What PetriPals is, for search engines (schema.org structured data):
+         a free educational game about microbiology, for kids. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": ["VideoGame", "LearningResource"],
+        "name": "PetriPals",
+        "url": "https://jessicasogge.github.io/petripals/",
+        "description": "A free microbiology game you play in your browser: pick a bacterium, grow your colony, dodge antibiotics, and race rival microbes.",
+        "image": "https://jessicasogge.github.io/petripals/social-preview.png",
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "genre": "Educational",
+        "gamePlatform": "Web browser",
+        "playMode": "SinglePlayer",
+        "learningResourceType": "Game",
+        "educationalUse": "Self-directed learning",
+        "audience": { "@type": "EducationalAudience", "educationalRole": "student" },
+        "about": [
+          { "@type": "Thing", "name": "Microbiology" },
+          { "@type": "Thing", "name": "Bacteria" },
+          { "@type": "Thing", "name": "Antibiotics" },
+          { "@type": "Thing", "name": "Gram stain" }
+        ],
+        "author": { "@type": "Person", "name": "Jessica Sogge" }
+      }
+    </script>
   </head>
   <body>
     <!-- The pals, drawn by script.js from game/pals.js -->
