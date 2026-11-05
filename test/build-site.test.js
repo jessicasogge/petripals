@@ -52,6 +52,21 @@ describe('the built site', () => {
     }
   });
 
+  it('tells search engines her page is about her real bacterium (structured data)', () => {
+    for (const { id, name } of PALS) {
+      const doc = page(id);
+      const data = JSON.parse(doc.querySelector('script[type="application/ld+json"]').textContent);
+      const scientific = plainText(SPECIES[id].scientific);
+      expect(data['@context'], id).toBe('https://schema.org');
+      expect(data['@type'], id).toBe('LearningResource');
+      expect(data.name, id).toBe(`${name}, a cartoon ${scientific}`);
+      expect(data.about.name, id).toBe(scientific);
+      expect(data.url, id).toBe(`${SITE_URL}pals/${id}.html`);
+      expect(data.description, id).toBe(meta(doc, 'meta[name="description"]'));
+      expect(data.isPartOf.url, id).toBe(SITE_URL);
+    }
+  });
+
   it('writes her profile into the page, so it reads without JavaScript', () => {
     const doc = page('hallie');
     expect(doc.querySelector('.profile-name').textContent).toBe('Hallie');
