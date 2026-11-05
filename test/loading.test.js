@@ -194,6 +194,7 @@ describe('every page', () => {
     ['script.js'],
     ['game/pal-picker.js'],
     ['game/choose-mode.js'],
+    ['game/pal-profile.js'],
     ['game/choose-rivals.js'],
     ['game/main.js'],
   ])('%s shows the card while the next screen loads', (file) => {
@@ -208,6 +209,7 @@ describe('every page', () => {
   it.each([
     ['game/pal-picker.js'],
     ['game/choose-mode.js'],
+    ['game/pal-profile.js'],
     ['game/choose-rivals.js'],
     ['game/main.js'],
   ])('%s takes the starting card away once the page is filled in', (file) => {

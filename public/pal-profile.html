@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PetriPals | About a Pal</title>
+    <meta name="description" content="Meet a PetriPal: her size, her Gram stain, and all her fun facts about the real bacterium." />
+    <link rel="canonical" href="https://jessicasogge.github.io/petripals/pal-profile.html" />
+    <!-- How the link looks when it's shared (iMessage, Slack, Discord, social media) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PetriPals" />
+    <meta property="og:title" content="PetriPals | About a Pal" />
+    <meta property="og:description" content="Meet a PetriPal: her size, her Gram stain, and all her fun facts about the real bacterium." />
+    <meta property="og:url" content="https://jessicasogge.github.io/petripals/pal-profile.html" />
+    <meta property="og:image" content="https://jessicasogge.github.io/petripals/social-preview.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="The eight PetriPals, cartoon bacteria, above the words PetriPals: Grow your colony. Dodge antibiotics." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="./favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="PetriPals" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="picker-page">
+    <!-- "Growing the colony…" covers the page until game/pal-profile.js has
+         filled it in (see game/loading.js). -->
+    <div class="loading-overlay arriving">
+      <div class="loading-card" role="status">
+        <span class="loading-cells" aria-hidden="true"><span></span><span></span></span>
+        <span class="loading-text">Growing the colony…</span>
+      </div>
+    </div>
+    <!-- A pal's profile (pal-profile.html?pal=mona), like the box about an
+         organism in a textbook. game/pal-profile.js fills it in from her
+         SPECIES entry and her picture in pals.js. -->
+    <main class="picker-shell profile">
+      <div class="profile-top">
+        <div class="profile-pal" aria-hidden="true"></div>
+        <div>
+          <h1 class="profile-name"></h1>
+          <p class="profile-species"></p>
+          <p class="profile-size"></p>
+        </div>
+      </div>
+      <h2>Under the microscope</h2>
+      <div class="profile-stain">
+        <div class="profile-stain-pal" aria-hidden="true"></div>
+        <p class="profile-stain-text"></p>
+      </div>
+      <h2>Fun Facts</h2>
+      <ul class="profile-facts"></ul>
+      <a class="pick-btn profile-back" href="./pal-picker.html">Back to modes</a>
+    </main>
+    <footer class="signature">jsogge 2026</footer>
+    <script type="module" src="./game/pal-profile.js"></script>
+    <script data-goatcounter="https://petripals.goatcounter.com/count"
+            async src="https://gc.zgo.at/count.js"></script>
+  </body>
+</html>
