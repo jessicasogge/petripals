@@ -19,7 +19,7 @@ if (!pal || !Object.hasOwn(SPECIES, id)) {
   document.querySelector('.mode-tumble').href = `./petri-dish.html?pal=${id}&mode=tumble`;
   document.querySelector('.mode-phage').href = `./petri-dish.html?pal=${id}&mode=phage`;
   const about = document.querySelector('.about-btn');
-  about.href = `./pal-profile.html?pal=${id}`;
+  about.href = `./pals/${id}.html`;
   about.querySelector('.about-label').textContent = `About ${pal.name}`;
 
   // Her picture on its tile, as on the picker, and her name in her color.

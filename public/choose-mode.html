@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>PetriPals | Choose a Mode</title>
     <meta name="description" content="Play PetriPals: dodge antibiotics in Classic, race rival pals in Mixed Culture, tumble to find food in Petri Picnic, or outgrow the phages in Phage Attack." />
+    <!-- Only works with a pal picked (?pal=mona), so search engines skip it. -->
+    <meta name="robots" content="noindex" />
     <link rel="canonical" href="https://jessicasogge.github.io/petripals/choose-mode.html" />
     <!-- How the link looks when it's shared (iMessage, Slack, Discord, social media) -->
     <meta property="og:type" content="website" />
@@ -35,7 +37,7 @@
     <main class="picker-shell mode-shell">
       <div class="mode-pal" aria-hidden="true"></div>
       <!-- Her profile: her Gram stain, size, drugs and fun facts. -->
-      <a class="about-btn" href="./pal-profile.html">
+      <a class="about-btn" href="./pal-picker.html">
         <span class="about-icon" aria-hidden="true">i</span>
         <span class="about-label">About your pal</span>
       </a>

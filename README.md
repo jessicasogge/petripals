@@ -150,7 +150,7 @@ The tests use [Vitest](https://vitest.dev/). Most of the game logic runs in [jsd
 
 ## Deployment
 
-Every push to `main` runs the tests and the coverage check and, if they pass, publishes `public/` to GitHub Pages (see [`.github/workflows/pages.yml`](.github/workflows/pages.yml)). Every pull request runs the same tests and coverage check first, so a failure shows on the pull request before it's merged (see [`.github/workflows/test.yml`](.github/workflows/test.yml)).
+Every push to `main` runs the tests and the coverage check and, if they pass, builds the site and publishes it to GitHub Pages. The build (`npm run build:site`, in [`scripts/build-site.js`](scripts/build-site.js)) copies `public/` into `site/` and adds a ready-made page for each pal at `pals/<id>.html`, with her facts written into the page, her own title and description, and a line in the sitemap, so search engines can find each pal. Those pages aren't committed; the build makes them fresh from `config.js` and `pals.js` each time. To see them locally, run `npm run build:site` before `npm run dev`. The pages that only work with a pal picked (the mode screen, rival picker, petri dish and the `?pal=` profile page) tell search engines not to index them. The deploy itself is in [`.github/workflows/pages.yml`](.github/workflows/pages.yml). Every pull request runs the same tests and coverage check first, so a failure shows on the pull request before it's merged (see [`.github/workflows/test.yml`](.github/workflows/test.yml)).
 
 ## Contributing
 

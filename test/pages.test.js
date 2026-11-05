@@ -120,13 +120,22 @@ describe('search engines and shared links', () => {
     expect(meta(html, 'name', 'twitter:card')).toBe('summary_large_image');
   });
 
-  it('lists real pages in the sitemap', () => {
+  // The pages that only work with a pal picked (?pal=mona) tell search
+  // engines to skip them; the rest are the ones to find.
+  const GAME_ONLY = ['choose-mode.html', 'choose-rivals.html', 'petri-dish.html', 'pal-profile.html'];
+  it.each(PAGES)('%s tells search engines whether to index it', (page) => {
+    const robots = meta(readFileSync(file(page), 'utf8'), 'name', 'robots');
+    expect(robots ?? null, page).toBe(GAME_ONLY.includes(page) ? 'noindex' : null);
+  });
+
+  it('lists real pages in the sitemap, and none that search engines should skip', () => {
     const sitemap = readFileSync(file('sitemap.xml'), 'utf8');
     const pages = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
     expect(pages).toContain(SITE);
     for (const address of pages) {
       expect(address.startsWith(SITE)).toBe(true);
       expect(existsSync(file(address.slice(SITE.length) || 'index.html')), address).toBe(true);
+      expect(GAME_ONLY, address).not.toContain(address.slice(SITE.length));
     }
   });
 });
