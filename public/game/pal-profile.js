@@ -35,7 +35,7 @@ if (!pal || !Object.hasOwn(SPECIES, id)) {
   document.querySelector('.profile-species').append(...speciesName(species.scientific));
 
   // About how long one of her cells is (or Nova's filament), as in Compare sizes.
-  document.querySelector('.profile-size').textContent = `About ${cellLength(pal)} µm long`;
+  document.querySelector('.profile-size').textContent = `~${cellLength(pal)} µm`;
 
   // Her picture after a Gram stain, and why she turns that color.
   const stained = palTile(pal);

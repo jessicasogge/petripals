@@ -37,13 +37,13 @@ describe("a pal's profile", () => {
 
   it('says about how long one of her cells is, like Compare sizes', async () => {
     await open('pal-profile.html', 'game/pal-profile.js', '?pal=hallie');
-    expect(text('.profile-size')).toBe('About 3 µm long');
+    expect(text('.profile-size')).toBe('~3 µm');
     // One cell, for a pal whose picture shows several.
     await open('pal-profile.html', 'game/pal-profile.js', '?pal=ari');
-    expect(text('.profile-size')).toBe('About 3.5 µm long');
-    // Nova is one filament, not a cell, but the line only says how long.
+    expect(text('.profile-size')).toBe('~3.5 µm');
+    // Nova is one filament, not a cell, but the line only gives her length.
     await open('pal-profile.html', 'game/pal-profile.js', '?pal=nova');
-    expect(text('.profile-size')).toBe('About 15 µm long');
+    expect(text('.profile-size')).toBe('~15 µm');
   });
 
   it('shows her after a Gram stain, and says why she turns that color', async () => {
