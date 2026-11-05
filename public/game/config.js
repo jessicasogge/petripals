@@ -159,9 +159,6 @@ export const SPECIES = {
     ],
     scientific: 'Borrelia burgdorferi',
     micrometers: 15, // her picture's real length: one cell (10 to 30 µm long)
-    // She swims by twisting, with her flagella inside her body, so her picture
-    // draws none (her profile says so).
-    swims: 'Yes, by twisting',
     color: '#7e22ce', // for her name above the dish
     tile: 'rgba(216, 180, 254, 0.45)',
     kind: 'rod',

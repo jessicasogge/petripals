@@ -1,5 +1,5 @@
 // A pal's profile (pal-profile.html?pal=mona), opened from About on the mode
-// screen: her picture, species, quick facts, her Gram stain and all her fun
+// screen: her picture, species and size, her Gram stain and all her fun
 // facts. Everything comes from
 // her SPECIES entry and her picture, so every pal has one.
 import { SPECIES } from './config.js';
@@ -34,18 +34,8 @@ if (!pal || !Object.hasOwn(SPECIES, id)) {
   name.style.color = species.color;
   document.querySelector('.profile-species').append(...speciesName(species.scientific));
 
-  // Her quick facts.
-  const facts = [
-    ['Gram stain', species.faintStain ? 'Barely stains' : positive ? 'Positive (purple)' : 'Negative (pink)'],
-    ['Size', `~${species.sizeNote ?? `${cellLength(pal)} µm`}`],
-    // Flagella in her picture, or a note for one who swims without them showing.
-    ['Swims?', species.swims ?? (pal.art.includes('class="flagellum"') ? 'Yes, with flagella' : 'No')],
-  ];
-  document.querySelector('.profile-box').append(...facts.map(([label, value]) => {
-    const box = element('div', 'profile-stat');
-    box.append(element('dt', '', label), element('dd', '', value));
-    return box;
-  }));
+  // About how long one of her cells is (or Nova's filament), as in Compare sizes.
+  document.querySelector('.profile-size').textContent = `About ${cellLength(pal)} µm long`;
 
   // Her picture after a Gram stain, and why she turns that color.
   const stained = palTile(pal);

@@ -792,31 +792,10 @@ a.pal-card:focus-visible {
   font-size: 1.1rem;
 }
 
-.profile-box {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.6rem;
-  margin: 0;
-}
-
-.profile-stat {
-  background: rgba(255, 255, 255, 0.55);
-  border: 2px solid rgba(15, 118, 110, 0.15);
-  border-radius: 16px;
-  padding: 0.6rem 0.75rem;
-}
-
-.profile-stat dt {
-  font-size: 0.72rem;
+.profile-size {
+  margin: 0.35rem 0 0;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #64748b;
-}
-
-.profile-stat dd {
-  margin: 0;
-  font-weight: 700;
+  color: #0f766e;
 }
 
 .profile-stain {
@@ -861,23 +840,6 @@ a.pal-card:focus-visible {
     grid-template-columns: 1fr;
     justify-items: center;
     text-align: center;
-  }
-
-  /* All three quick facts still fit in a row, a little smaller. */
-  .profile-box {
-    gap: 0.4rem;
-  }
-
-  .profile-stat {
-    padding: 0.5rem 0.55rem;
-  }
-
-  .profile-stat dt {
-    font-size: 0.62rem;
-  }
-
-  .profile-stat dd {
-    font-size: 0.85rem;
   }
 }
 

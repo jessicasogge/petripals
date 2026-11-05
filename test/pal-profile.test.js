@@ -18,8 +18,6 @@ async function open(page, script, search) {
 }
 
 const text = (selector) => document.querySelector(selector).textContent;
-const stats = () => Object.fromEntries([...document.querySelectorAll('.profile-stat')]
-  .map((stat) => [stat.querySelector('dt').textContent, stat.querySelector('dd').textContent]));
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -37,18 +35,15 @@ describe("a pal's profile", () => {
     expect(document.querySelector('.loading-overlay').hidden).toBe(true);
   });
 
-  it('gives her quick facts from what the game knows: Gram stain, size and whether she swims', async () => {
+  it('says about how long one of her cells is, like Compare sizes', async () => {
     await open('pal-profile.html', 'game/pal-profile.js', '?pal=hallie');
-    expect(stats()).toEqual({ 'Gram stain': 'Negative (pink)', Size: '~3 µm', 'Swims?': 'Yes, with flagella' });
-    await open('pal-profile.html', 'game/pal-profile.js', '?pal=cora');
-    expect(stats()).toEqual({ 'Gram stain': 'Positive (purple)', Size: '~3 µm', 'Swims?': 'No' });
-    // One cell's size, like Compare sizes, or a note that says more.
+    expect(text('.profile-size')).toBe('About 3 µm long');
+    // One cell, for a pal whose picture shows several.
+    await open('pal-profile.html', 'game/pal-profile.js', '?pal=ari');
+    expect(text('.profile-size')).toBe('About 3.5 µm long');
+    // Nova is one filament, not a cell, but the line only says how long.
     await open('pal-profile.html', 'game/pal-profile.js', '?pal=nova');
-    expect(stats().Size).toBe('~15 µm filament');
-    // Elia swims by twisting, with her flagella inside her, and barely stains.
-    await open('pal-profile.html', 'game/pal-profile.js', '?pal=elia');
-    expect(stats()['Swims?']).toBe('Yes, by twisting');
-    expect(stats()['Gram stain']).toBe('Barely stains');
+    expect(text('.profile-size')).toBe('About 15 µm long');
   });
 
   it('shows her after a Gram stain, and says why she turns that color', async () => {
