@@ -226,6 +226,27 @@ describe('sliding a new cell into place', () => {
     expect(group.moveFor).toBeNull();
   });
 
+  // Where the next cell would go, worked out mid-slide and once it's still.
+  const nextSpotMidSlide = (name) => {
+    const group = makeGroup(name);
+    const player = makeGroup(name, { isPlayer: true, x: 50 });
+    player.divide([group], DISH_RADIUS);
+    group.update(GAME.DIVIDE_MS / 4000); // a quarter of the way through the slide
+    const during = group.attachSpot(50, 20, [], DISH_RADIUS);
+    group.update(1); // finish the slide
+    const after = group.attachSpot(50, 20, [], DISH_RADIUS);
+    return { during, after };
+  };
+
+  it.each(['scarlett', 'goldie', 'dina'])(
+    "picks the next cell's spot for %s from where the cells will end up, not where one is mid-slide",
+    (name) => {
+      const { during, after } = nextSpotMidSlide(name);
+      expect(during.x).toBeCloseTo(after.x);
+      expect(during.y).toBeCloseTo(after.y);
+    },
+  );
+
   it("stops redrawing once everything is still, since that's slow with many cells", () => {
     const { group } = joining();
     group.update(1); // finish the slide
