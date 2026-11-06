@@ -328,13 +328,13 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
         return !disks.some((disk) =>
           touchesDisk(disk, [[sx, sy, cellRadius]], dishRadius));
       };
-      // A tetrad's corners are worked out from where its cells will end up,
-      // so a cell still sliding into place doesn't knock the square askew.
+
+      const cells = group.cells.map((c) => ({ x: c.toX, y: c.toY }));
       const spot = layout === 'chain'
-        ? chainSpot(group.cells, px, py, allowed)
+        ? chainSpot(cells, px, py, allowed)
         : layout === 'tetrad'
-          ? tetradSpot(group.cells.map((c) => ({ x: c.toX, y: c.toY })), px, py, allowed)
-          : clusterSpot(group.cells, group.twist, px, py, allowed);
+          ? tetradSpot(cells, px, py, allowed)
+          : clusterSpot(cells, group.twist, px, py, allowed);
       if (!spot) return null;
       spot.world = toWorld(spot.x, spot.y);
       return spot;
