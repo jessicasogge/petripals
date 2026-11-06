@@ -328,9 +328,7 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
         return !disks.some((disk) =>
           touchesDisk(disk, [[sx, sy, cellRadius]], dishRadius));
       };
-      // Worked out from where the cells will end up, not where they are, so
-      // a cell still sliding into place doesn't knock a chain crooked, pile a
-      // cluster's new cell onto it, or knock a tetrad's square askew.
+
       const cells = group.cells.map((c) => ({ x: c.toX, y: c.toY }));
       const spot = layout === 'chain'
         ? chainSpot(cells, px, py, allowed)
