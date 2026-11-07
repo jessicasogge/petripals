@@ -7,7 +7,7 @@ import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SPECIES } from '../public/game/config.js';
 import { plainText } from '../public/game/italics.js';
-import { dishPal, HOME_PALS, homePal, inRandomOrder, PAGE_SIZE, palById, PALS, palTile, pickerPages, TILE_MICROMETERS, toScale, cellLength } from '../public/game/pals.js';
+import { bySpecies, dishPal, HOME_PALS, homePal, inRandomOrder, PAGE_SIZE, palById, PALS, palTile, pickerPages, TILE_MICROMETERS, toScale, cellLength } from '../public/game/pals.js';
 
 // (jsdom changes import.meta.url to a web address, so find files from the project folder.)
 const file = (name) => readFileSync(resolve(process.cwd(), 'public', name), 'utf8');
@@ -194,21 +194,26 @@ describe('the pages', () => {
     expect(css.slice(phone, css.indexOf('\n}\n', phone))).toMatch(/flex-basis: calc\(\(100% - 0\.6rem\) \/ 2\)/);
   });
 
-  it('the picker shuffles all the pals together, then splits them into pages', async () => {
-    // With Math.random always 0, the shuffle moves the first pal to the end.
-    vi.spyOn(Math, 'random').mockReturnValue(0);
+  it('the picker puts the pals in alphabetical order by species, then splits them into pages', async () => {
     await open('pal-picker.html', 'game/pal-picker.js');
     const grids = [...document.querySelectorAll('.picker-grid')];
+    const species = grids.flatMap((grid) => [...grid.querySelectorAll('.pal-card .species')]
+      .map((p) => p.firstChild.textContent));
+    expect(species).toEqual([...species].sort((a, b) => a.localeCompare(b)));
     const names = grids.map((grid) => [...grid.querySelectorAll('.pal-card h2')].map((h) => h.textContent));
-    expect(names).toEqual(pickerPages(inRandomOrder(PALS, () => 0)).map((page) => page.map((pal) => pal.name)));
-    expect(names.flat().at(-1)).toBe(PALS[0].name);
-    vi.restoreAllMocks();
+    expect(names).toEqual(pickerPages(bySpecies(PALS)).map((page) => page.map((pal) => pal.name)));
+    // The same order every visit.
+    await open('pal-picker.html', 'game/pal-picker.js');
+    expect([...document.querySelectorAll('.pal-card h2')].map((h) => h.textContent)).toEqual(names.flat());
   });
 
-  it('can put any pal on the second page of the picker', () => {
-    const second = new Set();
-    for (let i = 0; i < 1000; i++) second.add(pickerPages(inRandomOrder(PALS))[1][0].id);
-    expect([...second].sort()).toEqual(PALS.map((pal) => pal.id).sort());
+  it('sorts by species, ignoring italics markers, without changing the list it was given', () => {
+    const order = bySpecies(PALS).map((pal) => SPECIES[pal.id].scientific.replaceAll('*', ''));
+    expect(order[0]).toBe('Anabaena variabilis');
+    expect(order).toContain('Salmonella Typhi');
+    expect(order.indexOf('Salmonella Typhi')).toBeGreaterThan(order.indexOf('Pseudomonas aeruginosa'));
+    expect(order.indexOf('Salmonella Typhi')).toBeLessThan(order.indexOf('Serratia marcescens'));
+    expect(PALS.map((pal) => pal.id)[0]).toBe('terra'); // PALS itself is untouched
   });
 
   it('the picker shows one page at a time, with More pals and Back buttons between them', async () => {

@@ -1450,6 +1450,14 @@ export function inRandomOrder(pals, random = Math.random) {
   return order;
 }
 
+// A copy of `pals` in alphabetical order by species (Anabaena, Asticcacaulis,
+// Bacillus...), so the picker's pages read like an index and a pal is easy
+// to find. Ignores the italics markers, so *Salmonella* Typhi sorts under S.
+export function bySpecies(pals) {
+  const species = (pal) => SPECIES[pal.id].scientific.replaceAll('*', '');
+  return [...pals].sort((a, b) => species(a).localeCompare(species(b)));
+}
+
 // The pal with this id, or undefined. Compares ids rather than looking one
 // up by name, so an address like ?pal=toString finds nothing.
 export function palById(id) {
