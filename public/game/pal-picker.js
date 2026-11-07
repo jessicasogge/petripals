@@ -1,14 +1,14 @@
 // The pal picker: a card for each pal, with her picture, name and species,
-// and a button to pick her. All the pals are shuffled into a new random
-// order every visit, so no pal is always first or always on a later page,
-// then split into pages of eight (PAGE_SIZE in pals.js), shown one at a time
+// and a button to pick her. The pals are in alphabetical order by species,
+// so it's easy to find the one you're looking for, then split into pages of
+// eight (PAGE_SIZE in pals.js), shown one at a time
 // with Back and More pals buttons to move between them. The microscope button shows every pal as she'd look after a
 // Gram stain, and the Compare sizes button shows the pals' sizes relative to
 // each other.
 import { SPECIES } from './config.js';
 import { speciesName } from './italics.js';
 import { pageReady, watchLoading } from './loading.js';
-import { cellLength, inRandomOrder, PALS, palTile, pickerPages, toScale } from './pals.js';
+import { bySpecies, cellLength, PALS, palTile, pickerPages, toScale } from './pals.js';
 import { stainPal, unstainPal } from './stain.js';
 
 // "Growing the colony…" while the next screen loads.
@@ -17,7 +17,7 @@ watchLoading();
 // Every page is made up front and the ones not showing are hidden, so the
 // microscope button can stain every pal, and a page you come back to looks
 // the same as when you left it.
-const pages = pickerPages(inRandomOrder(PALS)).map((pals, i) => {
+const pages = pickerPages(bySpecies(PALS)).map((pals, i) => {
   const grid = document.createElement('div');
   grid.className = 'picker-grid';
   grid.dataset.page = String(i + 1);
