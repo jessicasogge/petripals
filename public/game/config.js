@@ -1401,7 +1401,7 @@ export const SPECIES = {
     gram: 'negative',
     faintStain: true,
     // Small on purpose: she's one of the tiniest pals.
-    size: 9,
+    size: 8,
     // Her soft oval body, then her neck out to her tip.
     body: [
       [-0.231, 0.000, 0.194],
