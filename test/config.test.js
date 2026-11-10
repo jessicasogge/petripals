@@ -97,6 +97,21 @@ describe('pals', () => {
     expect(SPECIES.cora.gram).toBe('positive');
   });
 
+  it('makes Myra a tiny rod-style pal traced along her body and out to her tip', () => {
+    const { kind, layout, size, body, faintStain } = SPECIES.myra;
+    expect(kind).toBe('rod');
+    expect(layout).toBeUndefined();
+    expect(faintStain).toBe(true); // no cell wall, so she barely stains
+    expect(size).toBeLessThan(12);
+    // From the back of her body (x 26) to her tip (x 160) in her 160-wide
+    // drawing, centered at 94.
+    expect(Math.min(...body.map(([x, , r]) => x - r))).toBeCloseTo(-68 / 160, 2);
+    expect(Math.max(...body.map(([x, , r]) => x + r))).toBeCloseTo(64.5 / 160, 2);
+    // Her body is much wider than her neck.
+    const radii = body.map(([, , r]) => r);
+    expect(Math.max(...radii)).toBeGreaterThan(3 * Math.min(...radii));
+  });
+
   it('makes Hallie a Gram-negative rod traced along her S-shaped spiral', () => {
     const { kind, layout, gram, body } = SPECIES.hallie;
     expect(kind).toBe('rod');
@@ -339,7 +354,7 @@ describe('Gram stains', () => {
     (name) => expect(SPECIES[name].gram).toBe('negative'),
   );
 
-  it('marks only Elia as barely taking the stain', () => {
-    expect(Object.keys(SPECIES).filter((name) => SPECIES[name].faintStain).sort()).toEqual(['elia', 'marina']);
+  it('marks only Elia, Marina and Myra as barely taking the stain', () => {
+    expect(Object.keys(SPECIES).filter((name) => SPECIES[name].faintStain).sort()).toEqual(['elia', 'marina', 'myra']);
   });
 });

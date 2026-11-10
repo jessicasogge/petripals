@@ -1421,6 +1421,36 @@ export const PALS = [
       </g>
     `,
   },
+  // Myra: Mycoplasma pneumoniae, a soft slate flask with no cell wall and a
+  // tip she grabs and glides with
+  {
+    id: 'myra',
+    name: 'Myra',
+    looks: 'a slate Mycoplasma pneumoniae, a soft, flask-shaped cell with a little tip at one end',
+    motion: 'bob',
+    frames: { home: '14 20 160 160', picker: '14 20 160 160', dish: '14 20 160 160' },
+    // Her body in her art (not flagella or hairs), for comparing sizes.
+    bodyBox: [26, 68, 160, 132],
+    art: `
+      <!-- her soft, wall-less body: a lopsided oval that tapers into a short,
+           straight neck, with one outline all around -->
+      <path d="M154 94 C140 94 128 92 118 84 C100 68 70 66 52 70 C32 74 24 92 26 104 C28 120 46 132 72 132 C94 132 108 124 120 114 C130 107 142 106 154 106 C162 106 162 94 154 94 Z" fill="#9fb0c4" />
+      <!-- the inside of her tip, darker: her attachment organelle, which she
+           grabs onto airway cells and glides with -->
+      <rect x="138" y="96.5" width="20" height="7" rx="3.5" fill="#6f86a3" />
+      <path d="M154 94 C140 94 128 92 118 84 C100 68 70 66 52 70 C32 74 24 92 26 104 C28 120 46 132 72 132 C94 132 108 124 120 114 C130 107 142 106 154 106 C162 106 162 94 154 94 Z" fill="none" stroke="#2b3b4e" stroke-width="4" stroke-linejoin="round" />
+      <path d="M67.5 74.0 L62.9 74.3 L58.5 74.7 L54.5 75.4 L51.9 76.0 L48.4 77.0 L45.3 78.4 L42.5 80.1 L40.1 82.0 L38.0 84.1 L36.1 86.4 L34.6 88.8" stroke="#e6edf4" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+      <g class="face">
+        <circle cx="56" cy="98" r="5" fill="#16212e" />
+        <circle cx="76" cy="98" r="5" fill="#16212e" />
+        <circle cx="57.6" cy="96.4" r="1.7" fill="white" />
+        <circle cx="77.6" cy="96.4" r="1.7" fill="white" />
+        <ellipse cx="47" cy="108" rx="4.5" ry="2.8" fill="#f9a8d4" opacity="0.95" />
+        <ellipse cx="85" cy="108" rx="4.5" ry="2.8" fill="#f9a8d4" opacity="0.95" />
+        <path d="M61.5 108 Q66 112 70.5 108" stroke="#16212e" stroke-width="2.6" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
 ];
 
 // The pals in the home page's row, in PALS order. The row is full: pals

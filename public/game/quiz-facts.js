@@ -207,5 +207,10 @@ export const QUIZ_FACTS = {
     "Cora can make diphtheria toxin only if she carries a toxin gene supplied by a phage.",
     "The D in the DTaP vaccine helps protect kids from Cora's toxin.",
     "Emil von Behring won the first Nobel Prize in Medicine for serum therapy against Cora."
+  ],  myra: [
+    "Myra has no cell wall: a flexible membrane forms her outer boundary.",
+    "Penicillin blocks cell-wall building, so it can't stop Myra, who has no wall.",
+    "Myra uses the tip at one end to grab onto cells lining the airways.",
+    "Myra can cause walking pneumonia, a lung infection that is often mild."
   ],
 };
