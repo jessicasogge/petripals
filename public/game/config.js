@@ -1376,21 +1376,21 @@ export const SPECIES = {
   },
   myra: {
     facts: [
-      "Myra's genus, Mycoplasma, comes from Greek words meaning fungus and formed.",
-      "Myra has no cell wall at all, just a soft, bendy membrane around her.",
-      "Without a cell wall, Myra can squeeze and stretch into many shapes.",
-      "Penicillin works by breaking cell walls, so it can't stop Myra, who has none.",
-      "Myra is one of the smallest living things that can grow on its own.",
+      "Myra's genus, Mycoplasma, comes from Greek words meaning \"fungus\" and \"form.\"",
+      "Myra has no cell wall: a membrane forms her outer boundary.",
+      "Myra has no cell wall, but an internal protein framework helps support her shape.",
+      "Penicillin blocks cell-wall building, so it can't stop Myra, who has no wall.",
+      "Myra is among the smallest bacteria that can grow without living host cells.",
       "Myra uses the tip at one end to grab onto cells lining the airways.",
       "Myra glides slowly along surfaces, tip first.",
-      "Myra causes walking pneumonia, a lung infection that is often mild.",
-      "Myra's colonies are so tiny that labs often look at them under a microscope.",
+      "Myra can cause walking pneumonia, a lung infection that is often mild.",
+      "Myra's colonies are so tiny that labs often examine them with a microscope.",
       "Many of Myra's cousins grow colonies that look like tiny fried eggs.",
-      "Myra grows slowly, taking a week or more to form colonies.",
+      "Myra grows slowly and may take a week or more to form visible colonies.",
       "Myra needs cholesterol from her surroundings to build her membrane.",
-      "Myra has one of the smallest sets of genes of any free-living bacterium.",
-      "Myra barely stains in a Gram stain, since she has no wall to hold the dye.",
-      "Myra has no flagella and cannot swim; she gets around by gliding."
+      "Myra has a tiny genome and relies on her surroundings for many nutrients.",
+      "Myra doesn't show up well in a Gram stain because she lacks a cell wall.",
+      "Myra has no flagella; she moves across surfaces by gliding."
     ],
     scientific: 'Mycoplasma pneumoniae',
     micrometers: 1.5, // her picture's real length: one cell
