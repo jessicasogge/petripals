@@ -35,7 +35,7 @@
 //
 // `gram` is how she looks after a Gram stain: 'positive' cells stay purple,
 // 'negative' ones turn pink (the picker's microscope mode shows this).
-// `faintStain` marks a pal who barely takes the stain at all (Elia, Marina).
+// `faintStain` marks a pal who barely takes the stain at all (Elia, Marina, Myra).
 // Rod-style pals are drawn `size` percent of the dish wide (12 unless set).
 //
 // For rod-style pals, `body` traces the drawing's outline as circles
@@ -1372,6 +1372,53 @@ export const SPECIES = {
       { code: 'RA', name: 'rifampin', zone: 26 },
       { code: 'CC', name: 'clindamycin', zone: 22 },
       { code: 'VA', name: 'vancomycin', zone: 18 },
+    ],
+  },
+  myra: {
+    facts: [
+      "Myra's genus, Mycoplasma, comes from Greek words meaning fungus and formed.",
+      "Myra has no cell wall at all, just a soft, bendy membrane around her.",
+      "Without a cell wall, Myra can squeeze and stretch into many shapes.",
+      "Penicillin works by breaking cell walls, so it can't stop Myra, who has none.",
+      "Myra is one of the smallest living things that can grow on its own.",
+      "Myra uses the tip at one end to grab onto cells lining the airways.",
+      "Myra glides slowly along surfaces, tip first.",
+      "Myra causes walking pneumonia, a lung infection that is often mild.",
+      "Myra's colonies are so tiny that labs often look at them under a microscope.",
+      "Many of Myra's cousins grow colonies that look like tiny fried eggs.",
+      "Myra grows slowly, taking a week or more to form colonies.",
+      "Myra needs cholesterol from her surroundings to build her membrane.",
+      "Myra has one of the smallest sets of genes of any free-living bacterium.",
+      "Myra barely stains in a Gram stain, since she has no wall to hold the dye.",
+      "Myra has no flagella and cannot swim; she gets around by gliding."
+    ],
+    scientific: 'Mycoplasma pneumoniae',
+    micrometers: 1.5, // her picture's real length: one cell
+    color: '#2b3b4e', // for her name above the dish
+    tile: 'rgba(120, 144, 168, 0.3)',
+    kind: 'rod',
+    // With no cell wall, she barely takes a Gram stain: a faint pink.
+    gram: 'negative',
+    faintStain: true,
+    // Small on purpose: she's one of the tiniest pals.
+    size: 9,
+    // Her soft oval body, then her neck out to her tip.
+    body: [
+      [-0.231, 0.000, 0.194],
+      [-0.113, -0.006, 0.200],
+      [0.037, 0.006, 0.169],
+      [0.188, 0.000, 0.062],
+      [0.287, 0.000, 0.044],
+      [0.362, 0.000, 0.041],
+    ],
+    // Labs test her by MIC rather than disks, so these zones are estimates,
+    // for drugs used against walking pneumonia.
+    antibiotics: [
+      { code: 'AZM', name: 'azithromycin', zone: 30 },
+      { code: 'DO', name: 'doxycycline', zone: 24 },
+      { code: 'E', name: 'erythromycin', zone: 18 },
+      { code: 'LVX', name: 'levofloxacin', zone: 20 },
+      { code: 'CLR', name: 'clarithromycin', zone: 27 },
     ],
   },
 };
