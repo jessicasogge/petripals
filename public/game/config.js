@@ -1421,6 +1421,49 @@ export const SPECIES = {
       { code: 'CLR', name: 'clarithromycin', zone: 27 },
     ],
   },
+  cleo: {
+    facts: [
+      "Cleo's genus, Clostridium, comes from a Greek word meaning little spindle.",
+      "Cleo's species name, perfringens, is Latin for breaking through.",
+      "Cleo can divide about every ten minutes under ideal conditions.",
+      "Cleo is an anaerobe, so she grows best where there is no oxygen.",
+      "Cleo is a big, blunt rod with nearly squared ends, shaped a bit like a boxcar.",
+      "Cleo has no flagella, so she cannot swim.",
+      "Cleo can make tough spores, though they are rarely seen in routine cultures.",
+      "Cleo's spores can survive cooking, then wake up while food cools slowly.",
+      "Cleo can cause food poisoning when meat and gravy are kept warm for too long.",
+      "Cleo can cause gas gangrene, a serious infection that destroys muscle tissue.",
+      "Cleo makes gas as she grows, which can collect in infected tissue.",
+      "On blood agar, Cleo's colonies often have two zones of red blood cell breakdown.",
+      "Cleo's species can make over 20 toxins, but different strains make different sets.",
+      "Cleo lives in soil and in the guts of people and animals.",
+      "Cleo's gas can tear milk curds apart in a lab test called stormy fermentation.",
+    ],
+    scientific: 'Clostridium perfringens',
+    micrometers: 5, // her picture's real length: one cell
+    color: '#5a3f0f', // for her name above the dish
+    tile: 'rgba(201, 154, 46, 0.24)',
+    kind: 'rod',
+    gram: 'positive',
+    // A big rod: drawn between Diffany and Terra, like their real sizes.
+    size: 9.5,
+    // Her boxcar body, end to end.
+    body: [
+      [-0.2375, 0, 0.1875],
+      [-0.08, 0, 0.1875],
+      [0.08, 0, 0.1875],
+      [0.2375, 0, 0.1875],
+    ],
+    // Labs rarely disk-test anaerobes like her, so these zones are estimates,
+    // for drugs used against gas gangrene and her other infections.
+    antibiotics: [
+      { code: 'P', name: 'penicillin', zone: 28 },
+      { code: 'CC', name: 'clindamycin', zone: 20 },
+      { code: 'MTZ', name: 'metronidazole', zone: 26 },
+      { code: 'MEM', name: 'meropenem', zone: 34 },
+      { code: 'TZP', name: 'piperacillin-tazobactam', zone: 30 },
+    ],
+  },
 };
 
 // Mixed culture: no disks; race 1–3 AI rivals (chosen or one random) to TARGET cells.

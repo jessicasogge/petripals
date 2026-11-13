@@ -112,6 +112,19 @@ describe('pals', () => {
     expect(Math.max(...radii)).toBeGreaterThan(3 * Math.min(...radii));
   });
 
+  it('makes Cleo a big Gram-positive rod traced end to end along her boxcar body', () => {
+    const { kind, layout, gram, size, body } = SPECIES.cleo;
+    expect(kind).toBe('rod');
+    expect(layout).toBeUndefined();
+    expect(gram).toBe('positive');
+    expect(size).toBe(9.5); // drawn between Diffany and Terra
+    // From one end (x 32) to the other (x 168) in her 160-wide drawing,
+    // centered at 100, and 60 tall.
+    expect(Math.min(...body.map(([x, , r]) => x - r))).toBeCloseTo(-68 / 160, 2);
+    expect(Math.max(...body.map(([x, , r]) => x + r))).toBeCloseTo(68 / 160, 2);
+    for (const [, y, r] of body) expect(Math.abs(y) + r).toBeCloseTo(30 / 160, 2);
+  });
+
   it('makes Hallie a Gram-negative rod traced along her S-shaped spiral', () => {
     const { kind, layout, gram, body } = SPECIES.hallie;
     expect(kind).toBe('rod');
