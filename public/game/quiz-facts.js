@@ -214,9 +214,9 @@ export const QUIZ_FACTS = {
     "Myra can cause walking pneumonia, a lung infection that is often mild."
   ],
   cleo: [
-    "Cleo is one of the fastest growing bacteria, dividing about every ten minutes.",
-    "Cleo's spores can survive cooking, then wake up while food cools slowly.",
-    "Cleo can cause gas gangrene, a serious infection deep in a wound.",
-    "On blood agar, Cleo's colonies have two rings of broken red blood cells around them."
+    "Cleo's species name, perfringens, is Latin for breaking through.",
+    "Cleo's gas can tear milk curds apart in a lab test called stormy fermentation.",
+    "Cleo can cause gas gangrene, a serious infection that destroys muscle tissue.",
+    "On blood agar, Cleo's colonies often have two zones of red blood cell breakdown.",
   ],
 };
