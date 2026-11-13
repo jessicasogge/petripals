@@ -1445,8 +1445,8 @@ export const SPECIES = {
     tile: 'rgba(201, 154, 46, 0.24)',
     kind: 'rod',
     gram: 'positive',
-    // A big rod, about as long as Diffany.
-    size: 11,
+    // A big rod: drawn between Diffany and Terra, like their real sizes.
+    size: 9.5,
     // Her boxcar body, end to end.
     body: [
       [-0.2375, 0, 0.1875],

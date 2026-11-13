@@ -117,7 +117,7 @@ describe('pals', () => {
     expect(kind).toBe('rod');
     expect(layout).toBeUndefined();
     expect(gram).toBe('positive');
-    expect(size).toBeGreaterThan(10);
+    expect(size).toBe(9.5); // drawn between Diffany and Terra
     // From one end (x 32) to the other (x 168) in her 160-wide drawing,
     // centered at 100, and 60 tall.
     expect(Math.min(...body.map(([x, , r]) => x - r))).toBeCloseTo(-68 / 160, 2);
