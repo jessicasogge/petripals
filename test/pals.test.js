@@ -25,6 +25,7 @@ async function open(page, script, search = '') {
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  sessionStorage.clear();
 });
 
 describe('the pals', () => {
@@ -249,6 +250,40 @@ describe('the pages', () => {
     expect(showing()).toEqual(['1']);
     expect(back.hidden).toBe(true);
     expect(document.activeElement).toBe(more);
+  });
+
+  it('the picker remembers the page you were on, so coming back opens it there', async () => {
+    await open('pal-picker.html', 'game/pal-picker.js');
+    document.querySelector('.pager-more').click();
+    // Pick a pal on page 2, then come back.
+    await open('pal-picker.html', 'game/pal-picker.js');
+    const showing = () => [...document.querySelectorAll('.picker-grid')].filter((grid) => !grid.hidden).map((grid) => grid.dataset.page);
+    expect(showing()).toEqual(['2']);
+    expect(document.querySelector('.pager-back').hidden).toBe(false);
+    // Back to page 1, and it remembers that too.
+    document.querySelector('.pager-back').click();
+    await open('pal-picker.html', 'game/pal-picker.js');
+    expect(showing()).toEqual(['1']);
+  });
+
+  it.each([['a page that no longer exists', '99'], ['a garbled page', 'two'], ['a negative page', '-1']])(
+    'the picker opens page one for %s',
+    async (_, saved) => {
+      sessionStorage.setItem('petripals-picker-page', saved);
+      await open('pal-picker.html', 'game/pal-picker.js');
+      expect(document.querySelector('.picker-grid[data-page="1"]').hidden).toBe(false);
+    },
+  );
+
+  it('the picker still works with no storage, opening page one', async () => {
+    const broken = () => {
+      throw new Error('no storage');
+    };
+    vi.stubGlobal('sessionStorage', { getItem: broken, setItem: broken, clear() {} });
+    await open('pal-picker.html', 'game/pal-picker.js');
+    expect(document.querySelector('.picker-grid[data-page="1"]').hidden).toBe(false);
+    document.querySelector('.pager-more').click();
+    expect(document.querySelector('.picker-grid[data-page="2"]').hidden).toBe(false);
   });
 
   it("the picker's microscope button stains the pals on every page, and they stay stained across pages", async () => {

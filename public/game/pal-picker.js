@@ -2,7 +2,9 @@
 // and a button to pick her. The pals are in alphabetical order by species,
 // so it's easy to find the one you're looking for, then split into pages of
 // eight (PAGE_SIZE in pals.js), shown one at a time
-// with Back and More pals buttons to move between them. The microscope button shows every pal as she'd look after a
+// with Back and More pals buttons to move between them. It remembers the page
+// you were on, so coming back from a pal opens the picker where you left it.
+// The microscope button shows every pal as she'd look after a
 // Gram stain, and the Compare sizes button shows the pals' sizes relative to
 // each other.
 import { SPECIES } from './config.js';
@@ -30,8 +32,26 @@ const back = document.querySelector('.pager-back');
 const more = document.querySelector('.pager-more');
 let current = 0;
 
+// The page you were on, kept for this visit (this tab) only.
+const PAGE_KEY = 'petripals-picker-page';
+
+function savedPage() {
+  try {
+    const page = Number(sessionStorage.getItem(PAGE_KEY));
+    // A page that no longer exists (fewer pals than before) opens page one.
+    return Number.isInteger(page) && page > 0 && page < pages.length ? page : 0;
+  } catch {
+    return 0; // No storage (private browsing, etc.): page one, as before.
+  }
+}
+
 function showPage(index) {
   current = index;
+  try {
+    sessionStorage.setItem(PAGE_KEY, String(index));
+  } catch {
+    // See savedPage.
+  }
   pages.forEach((grid, i) => {
     grid.hidden = i !== index;
   });
@@ -50,7 +70,7 @@ more.addEventListener('click', () => {
   showPage(current + 1);
   if (more.hidden) back.focus();
 });
-showPage(0);
+showPage(savedPage());
 
 // Her card: the whole card is the link that picks her.
 function card(pal) {
