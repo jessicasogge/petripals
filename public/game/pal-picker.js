@@ -2,8 +2,7 @@
 // and a button to pick her. The pals are in alphabetical order by species,
 // so it's easy to find the one you're looking for, then split into pages of
 // eight (PAGE_SIZE in pals.js), shown one at a time
-// with Back and More pals buttons to move between them. It remembers the page
-// you were on, so coming back from a pal opens the picker where you left it.
+// with Back and More pals buttons to move between them.
 // The microscope button shows every pal as she'd look after a
 // Gram stain, and the Compare sizes button shows the pals' sizes relative to
 // each other.
@@ -13,12 +12,8 @@ import { pageReady, watchLoading } from './loading.js';
 import { bySpecies, cellLength, PALS, palTile, pickerPages, toScale } from './pals.js';
 import { stainPal, unstainPal } from './stain.js';
 
-// "Growing the colony…" while the next screen loads.
 watchLoading();
 
-// Every page is made up front and the ones not showing are hidden, so the
-// microscope button can stain every pal, and a page you come back to looks
-// the same as when you left it.
 const pages = pickerPages(bySpecies(PALS)).map((pals, i) => {
   const grid = document.createElement('div');
   grid.className = 'picker-grid';
@@ -32,7 +27,6 @@ const back = document.querySelector('.pager-back');
 const more = document.querySelector('.pager-more');
 let current = 0;
 
-// The page you were on, kept for this visit (this tab) only.
 const PAGE_KEY = 'petripals-picker-page';
 
 function savedPage() {
