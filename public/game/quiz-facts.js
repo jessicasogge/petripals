@@ -213,4 +213,10 @@ export const QUIZ_FACTS = {
     "Myra uses the tip at one end to grab onto cells lining the airways.",
     "Myra can cause walking pneumonia, a lung infection that is often mild."
   ],
+  cleo: [
+    "Cleo is one of the fastest growing bacteria, dividing about every ten minutes.",
+    "Cleo's spores can survive cooking, then wake up while food cools slowly.",
+    "Cleo can cause gas gangrene, a serious infection deep in a wound.",
+    "On blood agar, Cleo's colonies have two rings of broken red blood cells around them."
+  ],
 };

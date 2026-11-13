@@ -1451,6 +1451,33 @@ export const PALS = [
       </g>
     `,
   },
+  // Cleo: Clostridium perfringens, a big, blunt ochre boxcar rod
+  {
+    id: 'cleo',
+    name: 'Cleo',
+    looks: 'an ochre Clostridium perfringens, a big, blunt rod shaped like a boxcar',
+    motion: 'bob',
+    frames: { home: '20 20 160 160', picker: '20 20 160 160', dish: '20 20 160 160' },
+    // Her body in her art, for comparing sizes.
+    bodyBox: [32, 70, 168, 130],
+    art: `
+      <!-- her boxcar body: a softened rectangle, straight on top and bottom,
+           with softened corners and each end bowed out just a little -->
+      <path d="M44 70 L156 70 C162 70 165 73 166 78 Q170 100 166 122 C165 127 162 130 156 130 L44 130 C38 130 35 127 34 122 Q30 100 34 78 C35 73 38 70 44 70 Z" fill="#c99a2e" data-stain="body" />
+      <path d="M44 70 L156 70 C162 70 165 73 166 78 Q170 100 166 122 C165 127 162 130 156 130 L44 130 C38 130 35 127 34 122 Q30 100 34 78 C35 73 38 70 44 70 Z" fill="none" stroke="#5a3f0f" stroke-width="4" stroke-linejoin="round" />
+      <!-- a shine that follows her top left corner -->
+      <path d="M40 92 C40 82 42.5 77 51 76.5 L66 76.5" stroke="#f9ebc9" stroke-width="3.5" fill="none" stroke-linecap="round" opacity="0.85" />
+      <g class="face">
+        <circle cx="90" cy="98" r="5.5" fill="#2c1d05" />
+        <circle cx="110" cy="98" r="5.5" fill="#2c1d05" />
+        <circle cx="91.8" cy="96.2" r="1.9" fill="white" />
+        <circle cx="111.8" cy="96.2" r="1.9" fill="white" />
+        <ellipse cx="78" cy="109" rx="5.5" ry="3.3" fill="#f9a8d4" opacity="0.95" />
+        <ellipse cx="122" cy="109" rx="5.5" ry="3.3" fill="#f9a8d4" opacity="0.95" />
+        <path d="M95 109 Q100 114 105 109" stroke="#2c1d05" stroke-width="3" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
 ];
 
 // The pals in the home page's row, in PALS order. The row is full: pals
