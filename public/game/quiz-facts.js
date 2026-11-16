@@ -213,6 +213,12 @@ export const QUIZ_FACTS = {
     "Myra uses the tip at one end to grab onto cells lining the airways.",
     "Myra can cause walking pneumonia, a lung infection that is often mild."
   ],
+  cleo: [
+    "Cleo's species name, perfringens, is Latin for breaking through.",
+    "Cleo's gas can tear milk curds apart in a lab test called stormy fermentation.",
+    "Cleo can cause gas gangrene, a serious infection that destroys muscle tissue.",
+    "On blood agar, Cleo's colonies often have two zones of red blood cell breakdown.",
+  ],
   vera: [
     "Vera's name comes from VRE, short for vancomycin resistant Enterococcus.",
     "Vera can pass her resistance genes to other bacteria.",
