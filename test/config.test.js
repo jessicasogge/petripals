@@ -125,7 +125,7 @@ describe('pals', () => {
     for (const [, y, r] of body) expect(Math.abs(y) + r).toBeCloseTo(30 / 160, 2);
   });
 
-  it('makes Vera a Gram-positive chain of oval cocci, up to four, with no vancomycin disk', () => {
+  it('makes Vera a Gram-positive chain of oval cocci, up to four, with no vancomycin or gentamicin disk', () => {
     const { kind, layout, maxCells, shape, gram, antibiotics } = SPECIES.vera;
     expect(kind).toBe('coccus');
     expect(layout).toBe('chain');
@@ -134,6 +134,9 @@ describe('pals', () => {
     expect(gram).toBe('positive');
     // She's vancomycin-resistant (VRE), and the game has no resistant disks.
     expect(antibiotics.map((a) => a.code)).not.toContain('VA');
+    // Gentamicin only helps another drug against enterococci, so it isn't a
+    // disk that stops her on its own.
+    expect(antibiotics.map((a) => a.code)).not.toContain('GM');
   });
 
   it('makes Hallie a Gram-negative rod traced along her S-shaped spiral', () => {

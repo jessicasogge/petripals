@@ -1496,14 +1496,15 @@ export const SPECIES = {
     // are wide, lying end to end along the chain.
     shape: 'oval',
     colors: { fill: '#cf5f98', stroke: '#7a1f55', highlight: '#fde8f2', dark: '#3d0f2c' },
-    // She's resistant to vancomycin (her name), so it isn't one of her disks.
-    // Labs test her by MIC for most of these, so the zones are estimates;
-    // GM is the high-level gentamicin disk labs use for enterococci.
+    // She's resistant to vancomycin (her name), so it isn't one of her disks,
+    // and no gentamicin either: enterococci shrug off low levels of it, and
+    // labs test it only as a partner for another drug, not on its own.
+    // Labs test her by MIC for most of these, so the zones are estimates.
     antibiotics: [
       { code: 'LZD', name: 'linezolid', zone: 27 },
       { code: 'DO', name: 'doxycycline', zone: 21 },
       { code: 'C', name: 'chloramphenicol', zone: 23 },
-      { code: 'GM', name: 'gentamicin', zone: 19 },
+      { code: 'NIT', name: 'nitrofurantoin', zone: 20 },
       { code: 'TE', name: 'tetracycline', zone: 17 },
     ],
   },
