@@ -4,7 +4,7 @@ import { GAME } from './config.js';
 import { idlePose, newMover } from './mover.js';
 import { coaster } from './physics.js';
 
-// Cocci (Scarlett, Penny, Nessa, Goldie, Dina, Ari), chained rods (Ceres)
+// Cocci (Scarlett, Penny, Nessa, Goldie, Dina, Ari, Vera), chained rods (Ceres)
 // and Cora's pairs of clubs. The player stays one cell; daughters join
 // chains or clusters up to GROUP_CAP or the pal's maxCells. Chains grow from
 // the nearer end; clusters grow toward the player. Scarlett lines up, Penny,
@@ -118,10 +118,11 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
   // corner radius, in SVG units. Its corners stay inside the cell's circle.
   const ROD = { half: R * 0.95, tall: R * 0.6, corner: R * 0.45 };
 
-  // How big the face is drawn: a rod (Ceres's) is shorter than a round
-  // cell, and a club (Cora's) narrower still, so her eyes, cheeks and smile
-  // are drawn smaller to sit inside it with room to spare.
-  const FACE_SCALE = { rod: 0.75, club: 0.55 }[species.shape] ?? 1;
+  // Vera's oval cell: one cell long, slightly narrower, aligned with the
+  // chain like a rod. Fits inside the cell's circle, keeping contact unchanged.
+  const OVAL = { rx: R, ry: R * 0.8 };
+
+  const FACE_SCALE = { oval: 0.85, rod: 0.75, club: 0.55 }[species.shape] ?? 1;
 
   // Which way a cell's outer end points, in degrees: away from her partner in
   // a pair, or to the right for a cell on her own (like the one with the face
@@ -139,8 +140,9 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
     return other && (other.x !== c.x || other.y !== c.y) ? other : null;
   }
 
-  // Which way a rod-shaped cell (Ceres's) lies, in degrees: along the chain,
-  // from the cell before her to the cell after, or level on her own.
+  // Which way a rod-shaped or oval cell (Ceres's, Vera's) lies, in degrees:
+  // along the chain, from the cell before her to the cell after, or level on
+  // her own.
   function along(c) {
     const i = group.cells.indexOf(c);
     const a = group.cells[i - 1] ?? c;
@@ -171,6 +173,10 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       const turn = along(c).toFixed(1);
       return `<rect x="${-ROD.half}" y="${-ROD.tall}" width="${2 * ROD.half}" height="${2 * ROD.tall}" ` +
         `rx="${ROD.corner}" transform="translate(${c.x} ${c.y}) rotate(${turn})" ${paint} />`;
+    }
+    if (species.shape === 'oval') {
+      const turn = along(c).toFixed(1);
+      return `<ellipse cx="0" cy="0" rx="${OVAL.rx}" ry="${OVAL.ry}" transform="translate(${c.x} ${c.y}) rotate(${turn})" ${paint} />`;
     }
     // A bean cell (Nessa's) is round on her own: real cells only flatten
     // where they press against a partner.
@@ -355,11 +361,10 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       else group.cells.push(cell);
       group.moveFor = 0;
     },
-    // A cell divides: the daughter joins the nearest chain or cluster that
-    // has room and is close enough (and not onto an antibiotic disk), or else
-    // starts a new one. `from` is where the dividing cell is in the dish: the
-    // player's spot, or the cell in an offspring group that ate a nutrient.
-    // Returns the new group, or null if the daughter joined one.
+  
+    // Daughter joins the nearest group with room, in reach and off disks,
+    // or starts a new one. `from`: dividing cell's position.
+    // Returns the new group, or null if she joined one.
     divide(others, dishRadius, disks = [], from = [group.x, group.y]) {
       const [fx, fy] = from;
       let best = null;

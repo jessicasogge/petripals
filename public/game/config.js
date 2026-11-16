@@ -4,7 +4,8 @@
 // plane), grape-like clusters for Staphylococcus (divides in several), or
 // squares of four for Deinococcus (divides in two planes at right angles).
 // Ceres is a rod whose daughters stick together too, so she grows like a
-// coccus chain, with rod-shaped cells (`shape: 'rod'`).
+// coccus chain, with rod-shaped cells (`shape: 'rod'`). Vera's chain cells
+// are ovals (`shape: 'oval'`).
 //
 // Each antibiotic's `zone` is the zone of inhibition around its disk, as the
 // diameter in millimeters a lab would measure for a susceptible strain of
@@ -1462,6 +1463,49 @@ export const SPECIES = {
       { code: 'MTZ', name: 'metronidazole', zone: 26 },
       { code: 'MEM', name: 'meropenem', zone: 34 },
       { code: 'TZP', name: 'piperacillin-tazobactam', zone: 30 },
+    ],
+  },
+  vera: {
+    facts: [
+      "Vera's genus, Enterococcus, comes from Greek words meaning gut and grain.",
+      "Vera's species name, faecium, means \"of poop\" in Latin.",
+      "Vera's name in the game comes from VRE, short for vancomycin resistant enterococci.",
+      "Vera resists vancomycin, an antibiotic used to treat some serious infections.",
+      "Vera can pass her resistance genes to other bacteria.",
+      "Vera lives in the guts of people and animals.",
+      "Vera can survive for weeks on hospital bed rails and door handles.",
+      "Vera can grow in broth with 6.5% salt, which stops many other bacteria.",
+      "Vera can grow at temperatures from about 10°C to 45°C.",
+      "Vera's oval cells line up in pairs and short chains.",
+      "Vera turns bile esculin agar black, helping labs recognize enterococci.",
+      "Vera has no flagella, so she cannot swim.",
+      "Vera can cause urinary tract, blood, and wound infections in hospital patients.",
+      "Cleaning hands well helps stop Vera from spreading in hospitals.",
+      "Vera's species was called Streptococcus faecium until its transfer in 1984.",
+    ],
+    scientific: 'Enterococcus faecium',
+    micrometers: 2, // her picture's real length: a pair
+    cellMicrometers: 1, // one of her cells
+    color: '#7a1f55', // for her name above the dish
+    tile: 'rgba(200, 80, 140, 0.2)',
+    kind: 'coccus',
+    gram: 'positive',
+    layout: 'chain',
+    maxCells: 4, // pairs and short chains
+    // Her cells are ovals, like in her picture: a little longer than they
+    // are wide, lying end to end along the chain.
+    shape: 'oval',
+    colors: { fill: '#cf5f98', stroke: '#7a1f55', highlight: '#fde8f2', dark: '#3d0f2c' },
+    // She's resistant to vancomycin (her name), so it isn't one of her disks,
+    // and no gentamicin either: enterococci shrug off low levels of it, and
+    // labs test it only as a partner for another drug, not on its own.
+    // Labs test her by MIC for most of these, so the zones are estimates.
+    antibiotics: [
+      { code: 'LZD', name: 'linezolid', zone: 27 },
+      { code: 'DO', name: 'doxycycline', zone: 21 },
+      { code: 'C', name: 'chloramphenicol', zone: 23 },
+      { code: 'NIT', name: 'nitrofurantoin', zone: 20 },
+      { code: 'TE', name: 'tetracycline', zone: 17 },
     ],
   },
 };

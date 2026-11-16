@@ -28,6 +28,7 @@ export const DRUG_FACTS = {
   CTX: "Cefotaxime blocks cell wall building, so a growing bacterium can burst.",
   CXM: "Cefuroxime blocks cell wall building, so a growing bacterium can burst.",
   IPM: "Imipenem blocks cell wall building, so a growing bacterium can burst.",
+  NIT: "Nitrofurantoin is turned into reactive bits inside the bacterium that damage its DNA.",
   LZD: "Linezolid stops the ribosome from getting started, so the bacterium can't make proteins.",
   TZP: "Piperacillin blocks wall building; tazobactam blocks some enzymes that destroy it.",
 };

@@ -219,4 +219,10 @@ export const QUIZ_FACTS = {
     "Cleo can cause gas gangrene, a serious infection that destroys muscle tissue.",
     "On blood agar, Cleo's colonies often have two zones of red blood cell breakdown.",
   ],
+  vera: [
+    "Vera's name in the game comes from VRE, short for vancomycin resistant enterococci.",
+    "Vera's genus, Enterococcus, comes from Greek words meaning gut and grain.",
+    "Vera's species name, faecium, means \"of poop\" in Latin.",
+    "Vera's species was called Streptococcus faecium until its transfer in 1984.",
+  ],
 };

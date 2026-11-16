@@ -622,6 +622,63 @@ describe('Ceres (Bacillus cereus)', () => {
   });
 });
 
+describe('Vera (Enterococcus faecium)', () => {
+  const turn = (el) => Number(el.getAttribute('transform').match(/rotate\((-?[\d.]+)\)/)[1]);
+  const ovalAt = (group, cell) =>
+    [...group.svg.querySelectorAll('.cell-body')].find((el) =>
+      el.getAttribute('transform').startsWith(`translate(${cell.x} ${cell.y})`));
+
+  it('has oval cells like her picture, not circles, lying level on her own', () => {
+    const cell = makeGroup('vera', { isPlayer: true }).svg.querySelector('.cell-body');
+    expect(cell.tagName).toBe('ellipse');
+    expect(Number(cell.getAttribute('rx'))).toBeGreaterThan(Number(cell.getAttribute('ry')));
+    expect(turn(cell)).toBe(0);
+  });
+
+  it('grows pairs and short chains, of at most four cells', () => {
+    const chain = makeGroup('vera');
+    grow(chain, 4);
+    expect(chain.cellCount()).toBe(4);
+    expect(chain.attachSpot(0, 0)).toBeNull();
+  });
+
+  it('lines each oval up along the chain, end to end', () => {
+    const chain = makeGroup('vera');
+    grow(chain, 4);
+    const cells = chain.cells;
+    cells.forEach((cell, i) => {
+      const a = cells[i - 1] ?? cell;
+      const b = cells[i + 1] ?? cell;
+      const along = (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI;
+      const off = ((turn(ovalAt(chain, cell)) - along) % 360 + 360) % 360;
+      expect(Math.min(off, 360 - off)).toBeLessThan(0.1);
+    });
+  });
+
+  it('keeps every oval inside her cell circle, so what she touches is unchanged', () => {
+    const oval = makeGroup('vera').svg.querySelector('.cell-body');
+    expect(Number(oval.getAttribute('rx'))).toBeLessThanOrEqual(R);
+    expect(Number(oval.getAttribute('ry'))).toBeLessThanOrEqual(R);
+  });
+
+  it('draws in her berry colors, with a slightly smaller face to fit her oval', () => {
+    const group = makeGroup('vera', { isPlayer: true });
+    expect(group.svg.querySelector('.cell-body').getAttribute('fill')).toBe(SPECIES.vera.colors.fill);
+    const face = [...group.svg.querySelectorAll('g')].map((g) => g.getAttribute('transform') ?? '').find((t) => t.startsWith('translate('));
+    expect(face).toMatch(/scale\(0\.85\)$/);
+  });
+
+  it('glows in her own oval shape when a phage infects her, not a circle', () => {
+    const chain = makeGroup('vera');
+    grow(chain, 2);
+    chain.infectCell(1);
+    const glow = chain.svg.querySelector('.infected-cell .infected-glow');
+    const body = chain.svg.querySelector('.infected-cell .cell-body');
+    expect(glow.tagName).toBe('ellipse');
+    expect(glow.getAttribute('transform')).toBe(body.getAttribute('transform'));
+  });
+});
+
 describe("Ceres's face in the dish", () => {
   const faceTransform = (name) =>
     [...makeGroup(name, { isPlayer: true }).svg.querySelectorAll('g')]
