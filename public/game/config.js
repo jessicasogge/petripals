@@ -1479,7 +1479,7 @@ export const SPECIES = {
       "Vera's oval cells line up in pairs and short chains.",
       "Vera turns bile esculin agar black, helping labs recognize enterococci.",
       "Vera has no flagella, so she cannot swim.",
-      "Vera can cause urinary tract, blood and wound infections in hospital patients.",
+      "Vera can cause urinary tract, blood, and wound infections in hospital patients.",
       "Cleaning hands well helps stop Vera from spreading in hospitals.",
       "Vera's species was called Streptococcus faecium until its transfer in 1984.",
     ],

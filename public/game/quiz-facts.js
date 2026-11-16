@@ -220,9 +220,9 @@ export const QUIZ_FACTS = {
     "On blood agar, Cleo's colonies often have two zones of red blood cell breakdown.",
   ],
   vera: [
-    "Vera's name comes from VRE, short for vancomycin resistant Enterococcus.",
-    "Vera can pass her resistance genes to other bacteria.",
-    "Vera can survive for weeks on hospital bed rails and door handles.",
-    "Vera turns bile esculin agar black, a test labs use to spot her."
+    "Vera's name in the game comes from VRE, short for vancomycin resistant enterococci.",
+    "Vera's genus, Enterococcus, comes from Greek words meaning gut and grain.",
+    "Vera's species name, faecium, means \"of poop\" in Latin.",
+    "Vera's species was called Streptococcus faecium until its transfer in 1984.",
   ],
 };
