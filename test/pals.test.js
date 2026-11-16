@@ -646,7 +646,7 @@ describe('comparing sizes', () => {
 
   it('has a one-cell drawing for exactly the pals whose pictures show several cells', () => {
     const withCell = PALS.filter((pal) => pal.cellArt).map((pal) => pal.id).sort();
-    expect(withCell).toEqual(['ari', 'ceres', 'cora', 'dina', 'goldie', 'ivy', 'nessa', 'penny', 'scarlett']);
+    expect(withCell).toEqual(['ari', 'ceres', 'cora', 'dina', 'goldie', 'ivy', 'nessa', 'penny', 'scarlett', 'vera']);
     for (const pal of PALS.filter((p) => p.cellArt)) {
       expect(pal.cellBox, pal.id).toHaveLength(4);
       // Her face comes along, so she's still her.
@@ -705,7 +705,7 @@ describe('wiggly flagella', () => {
     '%s swims with flagella, so she has wiggling tails (Astrid on her swarmers)',
     (id) => expect(SWIMMERS).toContain(id),
   );
-  it.each(['goldie', 'scarlett', 'penny', 'coco', 'ana', 'ivy', 'nova', 'pearl', 'frannie', 'electra', 'dina', 'ari', 'marina', 'bree', 'nessa', 'cora', 'myra', 'elia', 'ceres'])(
+  it.each(['goldie', 'scarlett', 'penny', 'coco', 'ana', 'ivy', 'nova', 'pearl', 'frannie', 'electra', 'dina', 'ari', 'marina', 'bree', 'nessa', 'cora', 'myra', 'vera', 'elia', 'ceres'])(
     "%s has no wiggling tails (Elia's flagella are inside her; the others can't swim, or Ceres's are left off)",
     (id) => expect(SWIMMERS).not.toContain(id),
   );

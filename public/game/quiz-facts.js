@@ -213,4 +213,10 @@ export const QUIZ_FACTS = {
     "Myra uses the tip at one end to grab onto cells lining the airways.",
     "Myra can cause walking pneumonia, a lung infection that is often mild."
   ],
+  vera: [
+    "Vera's name comes from VRE, short for vancomycin resistant Enterococcus.",
+    "Vera can pass her resistance genes to other bacteria.",
+    "Vera can survive for weeks on hospital bed rails and door handles.",
+    "Vera turns bile esculin agar black, a test labs use to spot her."
+  ],
 };

@@ -1451,6 +1451,60 @@ export const PALS = [
       </g>
     `,
   },
+  // Vera: Enterococcus faecium (VRE), berry oval cocci in pairs and short chains
+  {
+    id: 'vera',
+    name: 'Vera',
+    looks: 'a berry Enterococcus faecium, oval cells in pairs, two pairs in a short chain',
+    motion: 'bob',
+    frames: { home: '4 4 192 192', picker: '4 4 192 192', dish: '4 4 192 192' },
+    // Her body in her art, for comparing sizes.
+    bodyBox: [10, 81, 190, 119],
+    art: `
+      <!-- two pairs of oval cells, end to end: each pair shares one outline,
+           with a line (septum) where it divided. Her bodies are marked, since
+           berry is darker than microscope mode would take for a body. -->
+      <ellipse cx="34" cy="100" rx="23.5" ry="19" fill="none" stroke="#7a1f55" stroke-width="4" />
+      <ellipse cx="74" cy="100" rx="23.5" ry="19" fill="none" stroke="#7a1f55" stroke-width="4" />
+      <ellipse data-stain="body" cx="34" cy="100" rx="21.5" ry="17" fill="#cf5f98" />
+      <ellipse data-stain="body" cx="74" cy="100" rx="21.5" ry="17" fill="#cf5f98" />
+      <path d="M54 91.0 L54 109.0" stroke="#7a1f55" stroke-width="3" stroke-linecap="round" />
+      <ellipse cx="126" cy="100" rx="23.5" ry="19" fill="none" stroke="#7a1f55" stroke-width="4" />
+      <ellipse cx="166" cy="100" rx="23.5" ry="19" fill="none" stroke="#7a1f55" stroke-width="4" />
+      <ellipse data-stain="body" cx="126" cy="100" rx="21.5" ry="17" fill="#cf5f98" />
+      <ellipse data-stain="body" cx="166" cy="100" rx="21.5" ry="17" fill="#cf5f98" />
+      <path d="M146 91.0 L146 109.0" stroke="#7a1f55" stroke-width="3" stroke-linecap="round" />
+      <path d="M19 95 Q22 86 31 84" stroke="#fde8f2" stroke-width="3.5" fill="none" stroke-linecap="round" />
+      <path d="M111 95 Q114 86 123 84" stroke="#fde8f2" stroke-width="3.5" fill="none" stroke-linecap="round" />
+      <circle cx="175" cy="91" r="2.4" fill="#fde8f2" />
+      <g class="face">
+        <circle cx="66.5" cy="98" r="5" fill="#3d0f2c" />
+        <circle cx="82.5" cy="98" r="5" fill="#3d0f2c" />
+        <circle cx="68.1" cy="96.4" r="1.7" fill="white" />
+        <circle cx="84.1" cy="96.4" r="1.7" fill="white" />
+        <ellipse cx="61" cy="107" rx="3.6" ry="2.3" fill="#f9a8d4" opacity="0.95" />
+        <ellipse cx="88" cy="107" rx="3.6" ry="2.3" fill="#f9a8d4" opacity="0.95" />
+        <path d="M71 106.5 Q74.5 110 78 106.5" stroke="#3d0f2c" stroke-width="2.5" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+    // Compare sizes shows just one cell of her, the one with her face,
+    // drawn at one cell's length (its body box is cellBox).
+    cellBox: [50, 81, 98, 119],
+    cellArt: `
+      <ellipse cx="74" cy="100" rx="23.5" ry="19" fill="none" stroke="#7a1f55" stroke-width="4" />
+      <ellipse data-stain="body" cx="74" cy="100" rx="21.5" ry="17" fill="#cf5f98" />
+      <path d="M59 95 Q62 86 71 84" stroke="#fde8f2" stroke-width="3.5" fill="none" stroke-linecap="round" />
+      <g class="face">
+        <circle cx="66.5" cy="98" r="5" fill="#3d0f2c" />
+        <circle cx="82.5" cy="98" r="5" fill="#3d0f2c" />
+        <circle cx="68.1" cy="96.4" r="1.7" fill="white" />
+        <circle cx="84.1" cy="96.4" r="1.7" fill="white" />
+        <ellipse cx="61" cy="107" rx="3.6" ry="2.3" fill="#f9a8d4" opacity="0.95" />
+        <ellipse cx="88" cy="107" rx="3.6" ry="2.3" fill="#f9a8d4" opacity="0.95" />
+        <path d="M71 106.5 Q74.5 110 78 106.5" stroke="#3d0f2c" stroke-width="2.5" fill="none" stroke-linecap="round" />
+      </g>
+    `,
+  },
 ];
 
 // The pals in the home page's row, in PALS order. The row is full: pals
