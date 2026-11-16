@@ -118,15 +118,10 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
   // corner radius, in SVG units. Its corners stay inside the cell's circle.
   const ROD = { half: R * 0.95, tall: R * 0.6, corner: R * 0.45 };
 
-  // An oval cell (Vera's): end to end one cell across, a little shorter
-  // than it is long, lying along the chain like a rod. It stays inside the
-  // cell's circle, so what she touches doesn't change.
+  // Vera's oval cell: one cell long, slightly narrower, aligned with the
+  // chain like a rod. Fits inside the cell's circle, keeping contact unchanged.
   const OVAL = { rx: R, ry: R * 0.8 };
 
-  // How big the face is drawn: an oval (Vera's) is a little shorter than a
-  // round cell, a rod (Ceres's) shorter still, and a club (Cora's) narrower
-  // still, so her eyes, cheeks and smile are drawn smaller to sit inside it
-  // with room to spare (and her cheeks clear of her outline).
   const FACE_SCALE = { oval: 0.85, rod: 0.75, club: 0.55 }[species.shape] ?? 1;
 
   // Which way a cell's outer end points, in degrees: away from her partner in
@@ -366,11 +361,10 @@ export function coccusGroup({ mover, svg, species, isPlayer }) {
       else group.cells.push(cell);
       group.moveFor = 0;
     },
-    // A cell divides: the daughter joins the nearest chain or cluster that
-    // has room and is close enough (and not onto an antibiotic disk), or else
-    // starts a new one. `from` is where the dividing cell is in the dish: the
-    // player's spot, or the cell in an offspring group that ate a nutrient.
-    // Returns the new group, or null if the daughter joined one.
+  
+    // Daughter joins the nearest group with room, in reach and off disks,
+    // or starts a new one. `from`: dividing cell's position.
+    // Returns the new group, or null if she joined one.
     divide(others, dishRadius, disks = [], from = [group.x, group.y]) {
       const [fx, fy] = from;
       let best = null;
