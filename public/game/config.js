@@ -1484,7 +1484,7 @@ export const SPECIES = {
       "Vera and her cousins were counted as streptococci until 1984.",
     ],
     scientific: 'Enterococcus faecium',
-    micrometers: 4, // her picture's real length: a chain of 4
+    micrometers: 2, // her picture's real length: a pair
     cellMicrometers: 1, // one of her cells
     color: '#7a1f55', // for her name above the dish
     tile: 'rgba(200, 80, 140, 0.2)',
