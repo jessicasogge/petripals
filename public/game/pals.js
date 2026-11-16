@@ -1497,8 +1497,8 @@ export const PALS = [
       <ellipse data-stain="body" cx="120" cy="100" rx="21.5" ry="17" fill="#cf5f98" />
       <path d="M100 91.0 L100 109.0" stroke="#7a1f55" stroke-width="3" stroke-linecap="round" />
       <!-- a shine dot on each cell, like Penny's -->
-      <circle cx="68" cy="89" r="3.5" fill="#fde8f2" />
-      <circle cx="133" cy="89" r="3" fill="#fde8f2" />
+      <circle cx="70" cy="91" r="3" fill="#fde8f2" />
+      <circle cx="131.5" cy="91" r="2.2" fill="#fde8f2" />
       <!-- her face, on the right cell -->
       <g class="face">
         <circle cx="112.5" cy="98" r="5" fill="#3d0f2c" />
@@ -1516,7 +1516,7 @@ export const PALS = [
     cellArt: `
       <ellipse cx="120" cy="100" rx="23.5" ry="19" fill="none" stroke="#7a1f55" stroke-width="4" />
       <ellipse data-stain="body" cx="120" cy="100" rx="21.5" ry="17" fill="#cf5f98" />
-      <circle cx="133" cy="89" r="3" fill="#fde8f2" />
+      <circle cx="131.5" cy="91" r="2.2" fill="#fde8f2" />
       <g class="face">
         <circle cx="112.5" cy="98" r="5" fill="#3d0f2c" />
         <circle cx="128.5" cy="98" r="5" fill="#3d0f2c" />
