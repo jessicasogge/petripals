@@ -24,13 +24,16 @@ const AGARS = {
   mona: ['#bfe3cf', '#7fc0a6'], // Mona's own blue-green pigment, soaked in
 };
 
-// The rings around colonies, by what they do to the agar: [color, opacity].
+// What colonies do to the agar around them: a color, how strongly, and
+// `spill` for a change that spreads out into the agar in irregular patches
+// (Vera's blackening) rather than a neat ring. Each kind is drawn as one
+// flat, soft-edged, see-through layer, so overlapping rings don't pile up.
 const RINGS = {
-  clear: ['#efc38f', 0.9], // red blood cells broken open: clear
-  partial: ['#c4474f', 0.6], // only partly broken: hazy
-  green: ['#6d7a35', 0.75], // blood turned greenish
-  black: ['#2a2118', 0.8], // the agar turns black
-  brown: ['#6b4423', 0.55], // a brown halo
+  clear: { color: '#f5c9a2', opacity: 0.72 }, // red blood cells broken open: clear
+  partial: { color: '#dc7270', opacity: 0.55 }, // only partly broken: hazy
+  green: { color: '#7d8a3c', opacity: 0.65 }, // blood turned greenish
+  black: { color: '#231b14', opacity: 0.78, spill: true }, // the agar turns black
+  brown: { color: '#6b4423', opacity: 0.5 }, // a brown halo
 };
 
 // Each pal's plate:
@@ -40,14 +43,14 @@ const RINGS = {
 //   plate), 'chalky' (dry and crumbly) or 'none' (doesn't grow on agar)
 // - size: [smallest, biggest] colony radius, in the plate's 200 units
 // - fill and edge: the colonies' colors
-// - ring: rings around each colony, inside out (RINGS), and how far each
-//   reaches, in colony radii
+// - ring: what she does to the agar around her (RINGS), outermost first,
+//   and how far each reaches, in colony radii
 // - center: a dot in the middle of each colony (Sallie's black centers)
 // - sheen: a metallic sheen across each colony (Colette, Mona)
 // - spread: a few big colonies spread out over the plate, not a streak
 // - caption: what to notice, shown next to her plate (no dashes)
 export const COLONIES = {
-  mona: { agar: 'mona', look: 'flat', size: [4.5, 7.5], fill: '#93ab98', edge: '#7a9482', sheen: '#b3c5b8',
+  mona: { agar: 'mona', look: 'flat', size: [6, 9.5], fill: '#97ae9c', sheen: '#adc0b2',
     caption: 'Flat, spreading colonies with a metallic sheen, and her blue green pigment soaks into the agar.' },
   vi: { agar: 'tcbs', look: 'round', size: [2.6, 4], fill: '#f2cf3c', edge: '#b38f12',
     caption: 'On TCBS, a green plate made for vibrios, her colonies turn yellow from the sugar she eats.' },
@@ -57,9 +60,9 @@ export const COLONIES = {
     caption: 'Small, gray, almost clear colonies on chocolate agar, made with heated blood that feeds her.' },
   ana: { agar: 'nutrient', look: 'round', size: [1.8, 2.8], fill: '#f4f1ea', edge: '#bdb6a5',
     caption: 'Small, smooth, white colonies, grown in a jar with no oxygen at all.' },
-  penny: { agar: 'blood', look: 'round', size: [1.6, 2.4], fill: '#d9d6cc', edge: '#8e897b', ring: [['green', 2.6]], center: '#b9b4a6',
+  penny: { agar: 'blood', look: 'round', size: [1.8, 2.6], fill: '#e6e3da', edge: '#9a9587', ring: [['green', 3]], center: '#c2bdaf',
     caption: 'Small colonies on blood agar in greenish rings, often with a dip in the middle like a checker piece.' },
-  scarlett: { agar: 'blood', look: 'round', size: [1.3, 2], fill: '#e4e0d6', edge: '#8f8878', ring: [['clear', 3.2]],
+  scarlett: { agar: 'blood', look: 'round', size: [1.3, 2], fill: '#f1eee7', edge: '#a39c8c', ring: [['clear', 3.3]],
     caption: 'Tiny colonies on blood agar, each in a clear ring where she broke open red blood cells.' },
   goldie: { agar: 'nutrient', look: 'round', size: [3.2, 5], fill: '#f2b71f', edge: '#b7790a',
     caption: 'Shiny, round, golden colonies. Her name comes from that gold.' },
@@ -69,7 +72,7 @@ export const COLONIES = {
     caption: 'On XLD agar her colonies are red, often with black centers from a smelly gas she makes.' },
   terra: { agar: 'blood', look: 'film', fill: '#e7dfd0', ring: [['clear', 1]],
     caption: 'She swarms across the plate in a thin, almost clear film, so single colonies are hard to find.' },
-  lissie: { agar: 'blood', look: 'round', size: [1.8, 2.6], fill: '#e2ded4', edge: '#8f8878', ring: [['clear', 1.7]],
+  lissie: { agar: 'blood', look: 'round', size: [1.8, 2.6], fill: '#efece4', edge: '#a39c8c', ring: [['clear', 2]],
     caption: 'Small, smooth colonies on blood agar, each with a narrow clear ring.' },
   sara: { agar: 'nutrient', look: 'round', size: [3, 4.6], fill: '#d8263a', edge: '#8f1022',
     caption: 'Bright red colonies: she makes a red pigment when she grows at room temperature.' },
@@ -107,9 +110,9 @@ export const COLONIES = {
     caption: 'On tellurite agar her colonies turn black, which helps labs spot her.' },
   myra: { agar: 'nutrient', look: 'round', size: [0.5, 0.8], fill: '#efe9da', edge: '#c4bba5', spread: true, many: true,
     caption: 'Her colonies are so tiny that labs look at them under a microscope.' },
-  cleo: { agar: 'blood', look: 'round', size: [2.2, 3.2], fill: '#d8d2c2', edge: '#7d755c', ring: [['partial', 3.4], ['clear', 2]],
+  cleo: { agar: 'blood', look: 'round', size: [2.2, 3.2], fill: '#ece7da', edge: '#9a9278', ring: [['partial', 3.8], ['clear', 2.3]],
     caption: 'On blood agar: a clear inner ring and a hazier outer ring, her double zone.' },
-  vera: { agar: 'esculin', look: 'round', size: [2, 3], fill: '#d9d3c3', edge: '#8a8270', ring: [['black', 2.6]],
+  vera: { agar: 'esculin', look: 'round', size: [2, 3], fill: '#ebe6d9', edge: '#b0a893', ring: [['black', 4]],
     caption: 'On bile esculin agar, the plate turns black around her colonies.' },
 };
 
@@ -128,12 +131,14 @@ function seeded(seed) {
 const n1 = (x) => x.toFixed(1);
 
 // The four streaks, a quadrant each, as zigzag lines: where each line runs,
-// and colonies scattered along it, thinning out from the first to the last.
+// the merged band of growth along the first, and colonies scattered along
+// the rest, thinning out from the second to the last.
 function streaks(random) {
   const lines = [];
   const spots = [];
+  const band = [];
   const QUADRANTS = [
-    { cx: 66, cy: 66, angle: -0.75, colonies: 0, jitter: 0 }, // merged growth, drawn as one band
+    { cx: 66, cy: 66, angle: -0.75, colonies: 0, jitter: 0 }, // merged growth (the band)
     { cx: 138, cy: 66, angle: 0.8, colonies: 70, jitter: 1.2 }, // crowded, touching colonies
     { cx: 138, cy: 136, angle: 2.35, colonies: 22, jitter: 4 },
     { cx: 64, cy: 136, angle: 3.9, colonies: 9, jitter: 14 }, // single colonies
@@ -151,12 +156,22 @@ function streaks(random) {
       d += `${k ? 'L' : 'M'}${n1(x)} ${n1(y)}`;
     }
     lines.push(d);
+    if (zone === 0) {
+      // Merged growth: overlapping blobs along the first streak, with uneven
+      // edges, breaking into separate colonies toward its end.
+      for (let k = 0; k <= 200; k++) {
+        const t = k / 200;
+        if (t > 0.72 && random() < (t - 0.72) * 3.2) continue;
+        const [x, y] = at(t);
+        band.push({ x: x + (random() - 0.5) * 1.6, y: y + (random() - 0.5) * 1.6, w: 0.75 + random() * 0.55 });
+      }
+    }
     for (let i = 0; i < q.colonies; i++) {
       const [x, y] = at(random());
       spots.push({ x: x + (random() - 0.5) * q.jitter * 2, y: y + (random() - 0.5) * q.jitter * 2, zone });
     }
   });
-  return { lines, spots };
+  return { lines, spots, band };
 }
 
 // Colonies spread over the whole plate, not along a streak: Myra's many
@@ -222,14 +237,22 @@ export function plate(id) {
   // A different but fixed pattern for each pal.
   const random = seeded([...id].reduce((sum, ch) => sum * 31 + ch.charCodeAt(0), 7) % 2147483646 + 1);
   const [middle, edge] = AGARS[c.agar];
-  let rings = '';
+  const rings = c.ring ?? [];
+  // What each ring kind covers, drawn solid here and made see-through as one
+  // layer below, so overlapping rings don't pile up into darker patches.
+  const ringShapes = rings.map(() => '');
+  const ringAround = (x, y, r) => rings.forEach(([kind, reach], k) => {
+    ringShapes[k] += RINGS[kind].spill
+      ? `<path d="${lumpy(x, y, r * reach, random, 1.4)}" />`
+      : `<circle cx="${n1(x)}" cy="${n1(y)}" r="${n1(r * reach)}" />`;
+  });
   let growth = '';
 
   if (c.look === 'film') {
     // A thin film over most of the plate, thicker where it started and
     // thinning out toward its wavy edge, with the agar it's changed around it.
     const r = AGAR_R - 10;
-    for (const [kind] of c.ring ?? []) rings += `<path d="${lumpy(100, 100, r + 4, random, 0.3)}" fill="${RINGS[kind][0]}" opacity="0.45" />`;
+    rings.forEach((_, k) => { ringShapes[k] += `<path d="${lumpy(100, 100, r + 4, random, 0.3)}" />`; });
     growth += `<path d="${lumpy(100, 100, r, random, 0.3)}" fill="${c.fill}" opacity="0.35" />` +
       `<path d="${lumpy(88, 86, r * 0.55, random, 0.5)}" fill="${c.fill}" opacity="0.3" />`;
   } else if (c.look !== 'none') {
@@ -239,33 +262,41 @@ export function plate(id) {
     } else {
       const streak = streaks(random);
       spots = streak.spots;
-      // The first streak: one merged band of growth, with its rings.
-      const band = (width, paint) => `<path d="${streak.lines[0]}" stroke-width="${width}" fill="none" stroke-linecap="round" stroke-linejoin="round" ${paint} />`;
-      const width = c.look === 'flat' ? 4.4 : 3.6;
-      for (const [kind, reach] of c.ring ?? []) {
-        rings += band(width + 2.6 * reach, `stroke="${RINGS[kind][0]}" opacity="${RINGS[kind][1]}"`);
+      // The first streak: overlapping blobs that merge into one uneven band,
+      // outlined all around (each blob's outline first, then all their
+      // fills over it), with the agar it's changed around it.
+      const half = c.look === 'flat' ? 2.4 : 2;
+      let outline = '';
+      let fill = '';
+      for (const b of streak.band) {
+        const r = half * b.w;
+        ringAround(b.x, b.y, r * 0.75);
+        if (c.edge) outline += `<circle cx="${n1(b.x)}" cy="${n1(b.y)}" r="${n1(r + 0.45)}" fill="${c.edge}" />`;
+        fill += `<circle cx="${n1(b.x)}" cy="${n1(b.y)}" r="${n1(r)}" fill="${c.fill}" />`;
       }
-      growth += band(width + 0.8, `stroke="${c.edge}"`) + band(width, `stroke="${c.fill}"`);
+      growth += `<g class="band"${c.look === 'flat' ? ' opacity="0.8"' : ''}>${outline}${fill}</g>`;
     }
     for (const s of spots) {
       const [small, big] = c.size;
       // Crowded colonies are smaller; single ones have room to grow.
       const r = (small + random() * (big - small)) * (s.zone === 1 ? 0.7 : 1);
       const [x, y] = [n1(s.x), n1(s.y)];
-      for (const [kind, reach] of c.ring ?? []) {
-        rings += `<circle cx="${x}" cy="${y}" r="${n1(r * reach)}" fill="${RINGS[kind][0]}" opacity="${RINGS[kind][1]}" />`;
-      }
+      ringAround(s.x, s.y, r);
+      const outline = c.edge ? ` stroke="${c.edge}" stroke-width="0.5"` : '';
       if (c.look === 'rhizoid') {
         growth += rhizoid(s.x, s.y, r, c.fill, random);
       } else if (c.look === 'flat') {
-        growth += `<path d="${lumpy(s.x, s.y, r, random)}" fill="url(#colony-${id})" stroke="${c.edge}" stroke-width="0.4" opacity="0.85" />`;
+        // Flat and spreading: broad, low and see-through at the edges.
+        growth += `<path d="${lumpy(s.x, s.y, r, random)}" fill="url(#colony-${id})"${outline} opacity="0.75" />`;
       } else if (c.look === 'chalky') {
         // Dry and crumbly: a rough, bumpy top.
-        growth += `<path d="${lumpy(s.x, s.y, r, random)}" fill="${c.fill}" stroke="${c.edge}" stroke-width="0.6" />` +
+        growth += `<path d="${lumpy(s.x, s.y, r, random)}" fill="${c.fill}"${outline} />` +
           `<circle cx="${n1(s.x - r * 0.3)}" cy="${n1(s.y - r * 0.2)}" r="${n1(r * 0.3)}" fill="${c.edge}" opacity="0.35" />` +
           `<circle cx="${n1(s.x + r * 0.3)}" cy="${n1(s.y + r * 0.25)}" r="${n1(r * 0.25)}" fill="${c.edge}" opacity="0.35" />`;
       } else {
-        growth += `<circle cx="${x}" cy="${y}" r="${n1(r)}" fill="url(#colony-${id})" stroke="${c.edge}" stroke-width="0.5"${c.see ? ' opacity="0.75"' : ''} />`;
+        // A domed colony: solid, so a ring around it reads as the agar, not
+        // as part of her.
+        growth += `<circle cx="${x}" cy="${y}" r="${n1(r)}" fill="url(#colony-${id})"${outline}${c.see ? ' opacity="0.75"' : ''} />`;
         if (c.center) growth += `<circle cx="${x}" cy="${y}" r="${n1(r * 0.4)}" fill="${c.center}" />`;
         // A shine, on colonies big enough to see one.
         if (r > 2 && !c.rough) growth += `<circle cx="${n1(s.x - r * 0.35)}" cy="${n1(s.y - r * 0.35)}" r="${n1(r * 0.25)}" fill="white" opacity="0.7" />`;
@@ -273,21 +304,30 @@ export function plate(id) {
     }
   }
 
+  // Each ring kind as one see-through layer with soft edges, outermost first.
+  const ringLayers = rings.map(([kind], k) => {
+    const { color, opacity, spill } = RINGS[kind];
+    return `<g class="ring-${kind}" fill="${color}" opacity="${opacity}" filter="url(#${spill ? 'spill' : 'soft'}-${id})">${ringShapes[k]}</g>`;
+  }).join('');
+
   // A sheen across each colony, or a gentle shading from the top left.
   const shade = c.sheen
     ? `<linearGradient id="colony-${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c.fill}" /><stop offset="0.45" stop-color="${c.sheen}" /><stop offset="0.6" stop-color="${c.fill}" /></linearGradient>`
-    : `<radialGradient id="colony-${id}" cx="40%" cy="38%" r="70%"><stop offset="0" stop-color="${c.fill}" stop-opacity="0.85" /><stop offset="1" stop-color="${c.fill}" /></radialGradient>`;
+    : `<radialGradient id="colony-${id}" cx="40%" cy="38%" r="70%"><stop offset="0.6" stop-color="${c.fill}" /><stop offset="1" stop-color="${c.edge ?? c.fill}" /></radialGradient>`;
 
   return `<svg class="plate" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">` +
     '<defs>' +
     `<radialGradient id="agar-${id}" cx="45%" cy="40%" r="65%"><stop offset="0" stop-color="${middle}" /><stop offset="1" stop-color="${edge}" /></radialGradient>` +
     shade +
     `<clipPath id="dish-${id}"><circle cx="100" cy="100" r="${AGAR_R}" /></clipPath>` +
+    // Soft edges for rings, softer still for changes that spill into the agar.
+    `<filter id="soft-${id}"><feGaussianBlur stdDeviation="0.9" /></filter>` +
+    `<filter id="spill-${id}" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.2" /></filter>` +
     '</defs>' +
     // The dish's rim, then the agar, then what grew on it, kept inside the agar.
     '<circle cx="100" cy="100" r="96" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2.5" />' +
     `<circle cx="100" cy="100" r="${AGAR_R}" fill="url(#agar-${id})" />` +
-    `<g clip-path="url(#dish-${id})">${rings}${growth}</g>` +
+    `<g clip-path="url(#dish-${id})">${ringLayers}${growth}</g>` +
     // A glint on the lid.
     '<path d="M40 46 Q60 22 96 16" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.55" />' +
     '</svg>';

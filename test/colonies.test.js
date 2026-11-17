@@ -35,11 +35,13 @@ describe('colonies', () => {
     expect(scatter('goldie')).not.toEqual(scatter('sara'));
   });
 
-  it('streaks most plates: one merged band of growth, then separate colonies', () => {
+  it('streaks most plates: a merged band of growth, then separate colonies', () => {
     const svg = svgOf('goldie');
-    const bands = [...svg.querySelectorAll('g[clip-path] path')].filter((p) => p.getAttribute('stroke-width'));
-    expect(bands.length).toBeGreaterThan(0);
-    expect(svg.querySelectorAll('g[clip-path] circle').length).toBeGreaterThan(50);
+    // The band: many overlapping blobs, outlined all around.
+    expect(svg.querySelectorAll('.band circle').length).toBeGreaterThan(150);
+    expect(svg.querySelectorAll('g[clip-path] > circle').length).toBeGreaterThan(50);
+    // Ivy's colonies are spread out instead, with no band.
+    expect(svgOf('ivy').querySelector('.band')).toBeNull();
   });
 
   it('puts the right agar under her: blood agar for Scarlett, chocolate for Coco', () => {
@@ -48,14 +50,26 @@ describe('colonies', () => {
     expect(agar('coco')).toBe('#8a5a3c');
   });
 
-  it('rings colonies that change the agar around them, inside out', () => {
-    const fills = (id) => new Set([...svgOf(id).querySelectorAll('g[clip-path] circle')].map((c) => c.getAttribute('fill')));
-    expect(fills('scarlett')).toContain('#efc38f'); // clear rings
-    // Cleo's double zone: a hazy outer ring and a clear inner one.
-    expect(fills('cleo')).toContain('#c4474f');
-    expect(fills('cleo')).toContain('#efc38f');
-    expect(fills('vera')).toContain('#2a2118'); // the agar turns black
-    expect(fills('goldie')).not.toContain('#efc38f');
+  it('draws what she does to the agar as soft, see-through layers that don\'t pile up', () => {
+    const layers = (id) => [...svgOf(id).querySelectorAll('g[class^="ring-"]')].map((g) => g.getAttribute('class'));
+    expect(layers('scarlett')).toEqual(['ring-clear']);
+    expect(layers('penny')).toEqual(['ring-green']);
+    // Cleo's double zone: the hazy outer ring under the clear inner one.
+    expect(layers('cleo')).toEqual(['ring-partial', 'ring-clear']);
+    expect(layers('goldie')).toEqual([]);
+    const clear = svgOf('scarlett').querySelector('.ring-clear');
+    expect(Number(clear.getAttribute('opacity'))).toBeLessThan(1);
+    expect(clear.getAttribute('filter')).toBe('url(#soft-scarlett)');
+    // The rings sit under her colonies, which are solid, so they read as agar.
+    const inside = svgOf('scarlett').querySelector('g[clip-path]');
+    expect(inside.firstElementChild.getAttribute('class')).toBe('ring-clear');
+  });
+
+  it("spills Vera's blackening into the agar in irregular patches, not neat rings", () => {
+    const black = svgOf('vera').querySelector('.ring-black');
+    expect(black.querySelector('circle')).toBeNull();
+    expect(black.querySelectorAll('path').length).toBeGreaterThan(50);
+    expect(black.getAttribute('filter')).toBe('url(#spill-vera)');
   });
 
   it("leaves Elia's plate empty: she doesn't grow on ordinary agar", () => {
@@ -69,7 +83,8 @@ describe('colonies', () => {
   });
 
   it('covers Terra\'s plate in a thin film, and gives Sallie black centers', () => {
-    expect(svgOf('terra').querySelector('g[clip-path] path[opacity="0.35"]')).not.toBeNull();
+    expect(svgOf('terra').querySelector('g[clip-path] > path[opacity="0.35"]')).not.toBeNull();
+    expect(svgOf('terra').querySelector('.ring-clear path')).not.toBeNull();
     expect([...svgOf('sallie').querySelectorAll('circle')].some((c) => c.getAttribute('fill') === '#1f1a1a')).toBe(true);
   });
 

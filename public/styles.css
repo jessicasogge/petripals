@@ -845,6 +845,13 @@ a.pal-card:focus-visible {
   margin: 0;
 }
 
+/* That the plate is a drawing of typical colonies, not a photo of hers. */
+.profile-plate .profile-plate-note {
+  margin-top: 0.3rem;
+  font-size: 0.85rem;
+  color: #5d7480;
+}
+
 .profile-facts {
   margin: 0;
   padding-left: 1.2rem;

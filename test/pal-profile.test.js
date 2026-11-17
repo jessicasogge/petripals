@@ -62,6 +62,8 @@ describe("a pal's profile", () => {
     expect([...document.querySelectorAll('.profile h2')].map((h) => h.textContent)).toContain('On the Plate');
     expect(document.querySelector('.profile-plate-pic svg.plate')).not.toBeNull();
     expect(text('.profile-plate-text')).toBe(COLONIES.sara.caption);
+    // And that it's a stylized plate, not a photo of every strain.
+    expect(text('.profile-plate-note')).toMatch(/stylized/);
   });
 
   it('lists all her fun facts, with science names in italics', async () => {
