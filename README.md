@@ -33,7 +33,9 @@ No steering this time. Your pal swims in a straight line on her own, and all you
 
 ### About a pal
 
-On the mode screen, **About** under your pal's picture opens her profile, like the box about an organism in a textbook: her picture, her species, about how long she is (like ~3 µm), how she looks after a Gram stain and why, and all her fun facts. Everything on it comes from her entry in `config.js` and her picture in `pals.js`, so every pal has one.
+On the mode screen, **About** under your pal's picture opens her profile, like the box about an organism in a textbook: her picture, her species, about how long she is (like ~3 µm), how she looks after a Gram stain and why, her colonies on a plate (**On the Plate**), and all her fun facts. Everything on it comes from her entry in `config.js`, her picture in `pals.js` and her colonies in `colonies.js`, so every pal has one.
+
+**On the Plate** shows her colonies on a streaked plate, the way a lab spreads bacteria to get single colonies: merged growth along the first streak, thinning out to separate colonies, on the agar she's best known on (plain, blood, chocolate, or a special plate like Colette's EMB or Vi's TCBS), with a line on what to notice: their color and shine, rings where she changes the agar, or how she spreads. Elia's plate is empty, since she doesn't grow on ordinary agar. The plates are drawn from a few settings per pal (`public/game/colonies.js`), the same on every visit.
 
 ### Who’s That Pal?
 

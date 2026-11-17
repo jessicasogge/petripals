@@ -56,6 +56,14 @@ describe("a pal's profile", () => {
     expect(text('.profile-stain-text')).toContain('barely takes a Gram stain');
   });
 
+  it('shows her colonies on a plate, and what to notice about them', async () => {
+    const { COLONIES } = await import('../public/game/colonies.js');
+    await open('pal-profile.html', 'game/pal-profile.js', '?pal=sara');
+    expect([...document.querySelectorAll('.profile h2')].map((h) => h.textContent)).toContain('On the Plate');
+    expect(document.querySelector('.profile-plate-pic svg.plate')).not.toBeNull();
+    expect(text('.profile-plate-text')).toBe(COLONIES.sara.caption);
+  });
+
   it('lists all her fun facts, with science names in italics', async () => {
     await open('pal-profile.html', 'game/pal-profile.js', '?pal=marina');
     expect([...document.querySelectorAll('.profile h2')].map((h) => h.textContent)).toContain('Fun Facts');
