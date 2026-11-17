@@ -54,11 +54,11 @@
       </div>
       <h2>On the Plate</h2>
       <div class="profile-plate">
-        <div class="profile-plate-pic" aria-hidden="true"></div>
-        <div>
-          <p class="profile-plate-text"></p>
-          <p class="profile-plate-note">A stylized plate on one kind of agar. Colonies can look different with other strains and growing conditions.</p>
+        <!-- Her plate, with a note that shows when you point at it or tap it. -->
+        <div class="profile-plate-pic" tabindex="0" role="img" aria-label="Her colonies on a plate" aria-describedby="plate-tip">
+          <span class="plate-tip" id="plate-tip" role="tooltip">A stylized plate on one kind of agar. Colonies can look different with other strains and growing conditions.</span>
         </div>
+        <p class="profile-plate-text"></p>
       </div>
       <h2>Fun Facts</h2>
       <ul class="profile-facts"></ul>

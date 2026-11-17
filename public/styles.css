@@ -830,9 +830,12 @@ a.pal-card:focus-visible {
 }
 
 .profile-plate-pic {
+  position: relative;
   flex: none;
   width: 104px;
   height: 104px;
+  border-radius: 50%;
+  cursor: help;
 }
 
 .profile-plate-pic svg {
@@ -841,15 +844,50 @@ a.pal-card:focus-visible {
   height: 100%;
 }
 
+.profile-plate-pic:focus-visible {
+  outline: 3px solid #0f766e;
+  outline-offset: 2px;
+}
+
 .profile-plate p {
   margin: 0;
 }
 
-/* That the plate is a drawing of typical colonies, not a photo of hers. */
-.profile-plate .profile-plate-note {
-  margin-top: 0.3rem;
+/* That the plate is a drawing of typical colonies, not a photo of hers:
+   shown when you point at her plate, tap it or tab to it. */
+.plate-tip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 2;
+  width: 230px;
+  padding: 0.5rem 0.65rem;
+  border-radius: 10px;
+  background: #163440;
+  color: #fff;
   font-size: 0.85rem;
-  color: #5d7480;
+  line-height: 1.35;
+  box-shadow: 0 6px 18px rgba(22, 52, 64, 0.25);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s, visibility 0.15s;
+  pointer-events: none;
+}
+
+/* A little point up toward the plate. */
+.plate-tip::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 44px;
+  border: 7px solid transparent;
+  border-bottom-color: #163440;
+}
+
+.profile-plate-pic:hover .plate-tip,
+.profile-plate-pic:focus .plate-tip {
+  opacity: 1;
+  visibility: visible;
 }
 
 .profile-facts {
