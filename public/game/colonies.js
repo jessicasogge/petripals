@@ -48,20 +48,21 @@ const RINGS = {
 // - center: a dot in the middle of each colony (Sallie's black centers)
 // - sheen: a metallic sheen across each colony (Colette, Mona)
 // - spread: a few big colonies spread out over the plate, not a streak
-// - caption: what to notice, shown next to her plate (no dashes)
+// - caption: what to notice, shown next to her plate (hyphenated words are
+//   fine, but no dashes between phrases, like her fun facts)
 export const COLONIES = {
   mona: { agar: 'mona', look: 'flat', size: [6, 9.5], fill: '#97ae9c', sheen: '#adc0b2',
-    caption: 'Flat, spreading colonies with a metallic sheen, and her blue green pigment soaks into the agar.' },
+    caption: 'Flat, spreading colonies with a metallic sheen; her blue-green pigment diffuses into the agar.' },
   vi: { agar: 'tcbs', look: 'round', size: [2.6, 4], fill: '#f2cf3c', edge: '#b38f12',
-    caption: 'On TCBS, a green plate made for vibrios, her colonies turn yellow from the sugar she eats.' },
+    caption: 'On TCBS, a green agar made for vibrios, her colonies turn yellow as she ferments sucrose.' },
   elia: { agar: 'nutrient', look: 'none',
     caption: "Elia won't grow on an ordinary plate. Labs grow her slowly in a special liquid broth instead." },
   coco: { agar: 'chocolate', look: 'round', size: [1.8, 2.8], fill: '#c9c4ba', edge: '#8f897d', see: true,
-    caption: 'Small, gray, almost clear colonies on chocolate agar, made with heated blood that feeds her.' },
+    caption: 'Small, gray, almost clear colonies on chocolate agar, made with heated blood that releases nutrients.' },
   ana: { agar: 'nutrient', look: 'round', size: [1.8, 2.8], fill: '#f4f1ea', edge: '#bdb6a5',
     caption: 'Small, smooth, white colonies, grown in a jar with no oxygen at all.' },
   penny: { agar: 'blood', look: 'round', size: [1.8, 2.6], fill: '#e6e3da', edge: '#9a9587', ring: [['green', 3]], center: '#c2bdaf',
-    caption: 'Small colonies on blood agar in greenish rings, often with a dip in the middle like a checker piece.' },
+    caption: 'Small colonies on blood agar, often with a greenish ring; older ones may dip in the middle.' },
   scarlett: { agar: 'blood', look: 'round', size: [1.3, 2], fill: '#f1eee7', edge: '#a39c8c', ring: [['clear', 3.3]],
     caption: 'Tiny colonies on blood agar, each in a clear ring where she broke open red blood cells.' },
   goldie: { agar: 'nutrient', look: 'round', size: [3.2, 5], fill: '#f2b71f', edge: '#b7790a',
@@ -69,7 +70,7 @@ export const COLONIES = {
   ceres: { agar: 'nutrient', look: 'flat', size: [6, 9], fill: '#e3ded0', edge: '#b4ad98', sheen: '#efebe0',
     caption: 'Big, flat, dull colonies with wavy edges that look like frosted glass.' },
   sallie: { agar: 'xld', look: 'round', size: [3, 4.4], fill: '#e78a8f', edge: '#8f2f39', center: '#1f1a1a',
-    caption: 'On XLD agar her colonies are red, often with black centers from a smelly gas she makes.' },
+    caption: 'On XLD agar, her colonies are red, often with black centers from hydrogen sulfide production.' },
   terra: { agar: 'blood', look: 'film', fill: '#e7dfd0', ring: [['clear', 1]],
     caption: 'She swarms across the plate in a thin, almost clear film, so single colonies are hard to find.' },
   lissie: { agar: 'blood', look: 'round', size: [1.8, 2.6], fill: '#efece4', edge: '#a39c8c', ring: [['clear', 2]],
@@ -83,9 +84,9 @@ export const COLONIES = {
   kiki: { agar: 'nutrient', look: 'round', size: [3, 4.4], fill: '#f5d90f', edge: '#a8930a',
     caption: 'Bright yellow colonies when she grows at room temperature.' },
   electra: { agar: 'nutrient', look: 'round', size: [1.8, 2.8], fill: '#c8543f', edge: '#8a2f22',
-    caption: 'Reddish colonies, colored by the iron holding proteins she passes electrons along.' },
+    caption: 'Reddish colonies, colored by cytochromes: iron-containing proteins that transfer electrons.' },
   diffany: { agar: 'nutrient', look: 'flat', size: [4, 6.5], fill: '#ddd5b5', edge: '#a99f7c', sheen: '#ece6cf',
-    caption: 'Flat colonies that look like ground glass, and glow yellow green under UV light.' },
+    caption: 'Flat colonies that look like ground glass, and glow yellow-green under UV light.' },
   nova: { agar: 'nutrient', look: 'chalky', size: [3, 4.6], fill: '#f3f1ec', edge: '#c3bdae',
     caption: 'Dry, chalky white colonies that stick to the agar and smell like soil.' },
   pearl: { agar: 'nutrient', look: 'round', size: [4.4, 6.4], fill: '#f5f2ea', edge: '#bfb8a6',
@@ -95,13 +96,13 @@ export const COLONIES = {
   colette: { agar: 'emb', look: 'round', size: [2.8, 4], fill: '#2e2433', edge: '#1a141d', sheen: '#7fd36b',
     caption: 'On EMB agar her colonies turn dark, with a green metallic sheen.' },
   ari: { agar: 'bg11', look: 'flat', size: [3, 5], fill: '#3f9e86', edge: '#2a6f5d',
-    caption: 'Blue green colonies on a plate with no sugar at all: she makes her own food from light.' },
+    caption: 'Blue-green colonies on a plate with no sugar at all: she makes her own food from light.' },
   dina: { agar: 'nutrient', look: 'round', size: [2.8, 4], fill: '#e9727e', edge: '#a8404d',
-    caption: 'Pinkish red colonies, colored by pigments that help protect her from radiation.' },
+    caption: 'Pinkish-red colonies, colored by pigments that help protect her from UV radiation.' },
   marina: { agar: 'nutrient', look: 'round', size: [2.2, 3.4], fill: '#f0c43a', edge: '#a8820f', rough: true,
     caption: 'Slow colonies that start out cream and turn yellow after time in the light.' },
   bree: { agar: 'nutrient', look: 'round', size: [1.6, 2.4], fill: '#e9c27a', edge: '#a8843d', see: true,
-    caption: 'Small, smooth, honey colored colonies that take a few days to appear.' },
+    caption: 'Small, smooth, honey-colored colonies that take a few days to appear.' },
   nessa: { agar: 'chocolate', look: 'round', size: [2.2, 3.2], fill: '#cfcbc3', edge: '#878175',
     caption: 'Gray, shiny colonies on chocolate agar, grown with a little extra carbon dioxide.' },
   hallie: { agar: 'blood', look: 'round', size: [1, 1.6], fill: '#dcd8cf', edge: '#8f8878', see: true,
@@ -109,11 +110,11 @@ export const COLONIES = {
   cora: { agar: 'tellurite', look: 'round', size: [2.2, 3.2], fill: '#2a2624', edge: '#100e0d', ring: [['brown', 2.2]],
     caption: 'On tellurite agar her colonies turn black, which helps labs spot her.' },
   myra: { agar: 'nutrient', look: 'round', size: [0.5, 0.8], fill: '#efe9da', edge: '#c4bba5', spread: true, many: true,
-    caption: 'Her colonies are so tiny that labs look at them under a microscope.' },
+    caption: 'Her colonies are so tiny that labs use magnification to spot them.' },
   cleo: { agar: 'blood', look: 'round', size: [2.2, 3.2], fill: '#ece7da', edge: '#9a9278', ring: [['partial', 3.8], ['clear', 2.3]],
     caption: 'On blood agar: a clear inner ring and a hazier outer ring, her double zone.' },
   vera: { agar: 'esculin', look: 'round', size: [2, 3], fill: '#ebe6d9', edge: '#b0a893', ring: [['black', 4]],
-    caption: 'On bile esculin agar, the plate turns black around her colonies.' },
+    caption: 'On bile esculin agar, the agar turns black around her colonies.' },
 };
 
 // The plate: 200 units across, agar out to AGAR_R from the middle.

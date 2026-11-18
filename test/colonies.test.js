@@ -19,7 +19,9 @@ describe('colonies', () => {
   it.each(IDS)("%s's caption fits beside her plate and has no dashes", (id) => {
     const { caption } = COLONIES[id];
     expect(caption.length).toBeLessThanOrEqual(110);
-    expect(caption).not.toMatch(/[-–—]/);
+    // Like her fun facts: hyphenated words (blue-green) are fine, dashes
+    // between phrases aren't.
+    expect(caption).not.toMatch(/[\u2013\u2014]|\s-\s|\d-\d/);
   });
 
   it.each(IDS)("draws %s's plate the same every time, with everything kept on the agar", (id) => {
