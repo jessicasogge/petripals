@@ -64,6 +64,30 @@ describe("a pal's profile", () => {
     expect(text('.profile-plate-text')).toBe(COLONIES.sara.caption);
   });
 
+  it('has buttons to try her on other plates, her own first and picked', async () => {
+    await open('pal-profile.html', 'game/pal-profile.js', '?pal=colette');
+    const labels = [...document.querySelectorAll('.plate-chips label')];
+    expect(labels.map((l) => l.textContent)).toEqual(['EMB', 'Blood agar', 'MacConkey', 'Chocolate agar']);
+    // Each button is a radio button's label, one group, her own plate picked.
+    const radios = [...document.querySelectorAll('.profile-plates input[type="radio"]')];
+    expect(radios.map((r) => r.id)).toEqual(labels.map((l) => l.htmlFor));
+    expect(new Set(radios.map((r) => r.name))).toEqual(new Set(['plate']));
+    expect(radios.filter((r) => r.checked).map((r) => r.id)).toEqual(['plate-home']);
+    // A plate and caption for each, in the same order.
+    const panels = [...document.querySelectorAll('.plate-panels .profile-plate')];
+    expect(panels.map((p) => p.className)).toEqual(radios.map((r) => `profile-plate ${r.id}`));
+    for (const panel of panels) expect(panel.querySelector('svg.plate')).not.toBeNull();
+    expect(panels[2].querySelector('.profile-plate-text').textContent).toMatch(/lactose/);
+    // Picking one is plain HTML, so it works without JavaScript too.
+    expect(document.querySelector('legend').textContent).toBe('Which plate to grow her on');
+  });
+
+  it('has no buttons for Elia, who only gets her own empty plate', async () => {
+    await open('pal-profile.html', 'game/pal-profile.js', '?pal=elia');
+    expect(document.querySelector('.plate-chips')).toBeNull();
+    expect(document.querySelectorAll('.plate-panels .profile-plate')).toHaveLength(1);
+  });
+
   it('lists all her fun facts, with science names in italics', async () => {
     await open('pal-profile.html', 'game/pal-profile.js', '?pal=marina');
     expect([...document.querySelectorAll('.profile h2')].map((h) => h.textContent)).toContain('Fun Facts');

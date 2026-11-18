@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 // On the Plate: each pal's colonies on a streaked plate (game/colonies.js).
 import { describe, expect, it } from 'vitest';
-import { COLONIES, plate } from '../public/game/colonies.js';
+import { AGAR_NAMES, COLONIES, COMPARE, plate, platesFor } from '../public/game/colonies.js';
 import { SPECIES } from '../public/game/config.js';
 
 const IDS = Object.keys(SPECIES);
@@ -95,3 +95,90 @@ describe('colonies', () => {
     expect(svgOf('goldie').querySelector('linearGradient')).toBeNull();
   });
 });
+
+describe('comparison plates', () => {
+  const COMPARED = ['blood', 'macconkey', 'chocolate'];
+  const grows = (id, kind) => svgOf2(id, kind).querySelector('g[clip-path]').children.length > 0;
+  const svgOf2 = (id, kind) => {
+    const box = document.createElement('div');
+    box.innerHTML = plate(id, kind);
+    return box.querySelector('svg');
+  };
+
+  it('tries every pal but Elia on blood, MacConkey and chocolate agar, after her own plate', () => {
+    for (const id of IDS) {
+      const kinds = platesFor(id).map((p) => p.kind);
+      expect(kinds[0], id).toBe('home');
+      if (id === 'elia') {
+        expect(kinds, id).toEqual(['home']);
+        continue;
+      }
+      // Each of the three, unless it's already her own plate.
+      const own = COLONIES[id].agar;
+      expect(kinds.slice(1).sort(), id).toEqual(COMPARED.filter((k) => k !== own).sort());
+    }
+  });
+
+  it('names every plate on its button', () => {
+    for (const id of IDS) {
+      for (const { name } of platesFor(id)) expect(typeof name, id).toBe('string');
+    }
+    expect(platesFor('colette').map((p) => p.name)).toEqual(['EMB', 'Blood agar', 'MacConkey', 'Chocolate agar']);
+    expect(platesFor('myra')[0].name).toBe('SP4 agar');
+    expect(Object.keys(AGAR_NAMES)).toEqual(expect.arrayContaining(Object.values(COLONIES).map((c) => c.agar)));
+  });
+
+  it.each(IDS.filter((id) => COMPARE[id]))("%s's comparison captions fit and have no dashes", (id) => {
+    for (const { caption } of platesFor(id)) {
+      expect(caption.length).toBeLessThanOrEqual(110);
+      expect(caption).not.toMatch(/[–—]|\s-\s|\d-\d/);
+    }
+  });
+
+  it("gives each of a pal's plates its own names inside, so they can share a page", () => {
+    for (const id of IDS) {
+      const ids = platesFor(id).flatMap(({ kind }) => [...svgOf2(id, kind).querySelectorAll('[id]')].map((el) => el.id));
+      expect(new Set(ids).size, id).toBe(ids.length);
+    }
+  });
+
+  it('stops every Gram-positive pal on MacConkey, except Vera, who grows there anyway', () => {
+    for (const id of IDS.filter((id) => SPECIES[id].gram === 'positive' && COMPARE[id]?.macconkey)) {
+      expect(grows(id, 'macconkey'), id).toBe(id === 'vera');
+    }
+    expect(platesFor('scarlett').find((p) => p.kind === 'macconkey').caption).toMatch(/Gram-positive/);
+  });
+
+  it('turns lactose fermenters pink on MacConkey, and leaves the rest pale', () => {
+    const pink = (id) => svgOf2(id, 'macconkey').querySelector('.ring-pink') !== null;
+    for (const id of ['colette', 'pearl', 'kiki']) expect(pink(id), id).toBe(true);
+    for (const id of ['sallie', 'vi', 'mona']) expect(pink(id), id).toBe(false);
+    expect(grows('sallie', 'macconkey')).toBe(true);
+  });
+
+  it("only grows Coco once the blood is heated, and hides Scarlett's rings on chocolate agar", () => {
+    expect(grows('coco', 'blood')).toBe(false);
+    expect(grows('coco', 'home')).toBe(true); // her own plate is chocolate agar
+    expect(svgOf2('scarlett', 'chocolate').querySelector('.ring-clear')).toBeNull();
+    expect(grows('scarlett', 'chocolate')).toBe(true);
+    // Goldie and Ceres break blood cells on blood agar, but not on their own plain agar.
+    expect(svgOf2('goldie', 'blood').querySelector('.ring-clear')).not.toBeNull();
+    expect(svgOf2('goldie').querySelector('.ring-clear')).toBeNull();
+  });
+
+  it('keeps her own look on other plates unless it changes there', () => {
+    // Ivy still branches, Terra still swarms.
+    expect(svgOf2('ivy', 'blood').querySelector('.band')).toBeNull();
+    expect(svgOf2('terra', 'chocolate').querySelector('g[clip-path] > path[opacity="0.35"]')).not.toBeNull();
+    // Sallie's black centers are her XLD plate's, not blood agar's.
+    expect([...svgOf2('sallie', 'blood').querySelectorAll('circle')].some((c) => c.getAttribute('fill') === '#1f1a1a')).toBe(false);
+  });
+
+  it('draws each plate on its own agar', () => {
+    const agar = (id, kind) => svgOf2(id, kind).querySelector('[id^="agar-"] stop').getAttribute('stop-color');
+    expect(agar('colette', 'macconkey')).toBe('#e98fae');
+    expect(agar('colette', 'blood')).toBe('#a3202a');
+    expect(agar('colette', 'chocolate')).toBe('#8a5a3c');
+  });
+});
+

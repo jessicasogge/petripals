@@ -823,6 +823,85 @@ a.pal-card:focus-visible {
 }
 
 /* Her colonies on a plate, laid out like the Gram stain row above it. */
+/* Her plates: buttons to pick one (radio buttons, hidden, with their labels
+   as the buttons), then the plate that's picked. */
+.profile-plates {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.plate-radio {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.plate-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.8rem;
+}
+
+.plate-chips label {
+  padding: 0.35rem 0.85rem;
+  border: 2px solid #0f766e;
+  border-radius: 999px;
+  background: #fff;
+  color: #0f766e;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* The picked plate's button, filled in. */
+#plate-home:checked ~ .plate-chips [for='plate-home'],
+#plate-blood:checked ~ .plate-chips [for='plate-blood'],
+#plate-macconkey:checked ~ .plate-chips [for='plate-macconkey'],
+#plate-chocolate:checked ~ .plate-chips [for='plate-chocolate'] {
+  background: #0f766e;
+  color: #fff;
+}
+
+/* A ring around the button the keyboard is on. */
+#plate-home:focus-visible ~ .plate-chips [for='plate-home'],
+#plate-blood:focus-visible ~ .plate-chips [for='plate-blood'],
+#plate-macconkey:focus-visible ~ .plate-chips [for='plate-macconkey'],
+#plate-chocolate:focus-visible ~ .plate-chips [for='plate-chocolate'] {
+  outline: 3px solid #f59e0b;
+  outline-offset: 2px;
+}
+
+/* Only the picked plate shows. */
+.plate-panels .profile-plate {
+  display: none;
+}
+
+#plate-home:checked ~ .plate-panels .plate-home,
+#plate-blood:checked ~ .plate-panels .plate-blood,
+#plate-macconkey:checked ~ .plate-panels .plate-macconkey,
+#plate-chocolate:checked ~ .plate-panels .plate-chocolate {
+  display: flex;
+}
+
+/* Hidden from sight, but read by screen readers. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .profile-plate {
   display: flex;
   gap: 0.9rem;
