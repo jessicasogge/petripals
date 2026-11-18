@@ -1,10 +1,12 @@
 // Fills in a pal's profile (pal-profile.html's markup) for the pal with this
-// id: her picture, species and size, her Gram stain and all her fun facts.
+// id: her picture, species and size, her Gram stain, her colonies on a plate
+// and all her fun facts.
 // Everything comes from her SPECIES entry and her picture, so every pal has
 // one. Used by the profile page in the browser (pal-profile.js), and by the
 // deploy, which writes a page for each pal ahead of time for search engines
 // (scripts/build-site.js). Returns false for a pal who doesn't exist.
 import { SPECIES } from './config.js';
+import { COLONIES, plate } from './colonies.js';
 import { speciesName, withItalics } from './italics.js';
 import { cellLength, palById, palTile } from './pals.js';
 import { stainPal } from './stain.js';
@@ -32,6 +34,10 @@ export function renderProfile(doc, id) {
   doc.querySelector('.profile-stain-text').textContent = species.faintStain
     ? `${pal.name} barely takes a Gram stain, so she turns only a pale color.`
     : `After a Gram stain, ${pal.name} turns ${positive ? 'purple: her thick wall holds the dye' : 'pink: her thin wall lets the purple wash out'}.`;
+
+  // Her colonies on a streaked plate, and what to notice about them.
+  doc.querySelector('.profile-plate-pic').innerHTML = plate(id);
+  doc.querySelector('.profile-plate-text').textContent = COLONIES[id].caption;
 
   doc.querySelector('.profile-facts').append(...species.facts.map((fact) => {
     const item = element('li');
