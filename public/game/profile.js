@@ -36,8 +36,7 @@ export function renderProfile(doc, id) {
     : `After a Gram stain, ${pal.name} turns ${positive ? 'purple: her thick wall holds the dye' : 'pink: her thin wall lets the purple wash out'}.`;
 
   // Her colonies on a streaked plate, and what to notice about them.
-  // (Before the note that pops up over it, which is already in the page.)
-  doc.querySelector('.profile-plate-pic').insertAdjacentHTML('afterbegin', plate(id));
+  doc.querySelector('.profile-plate-pic').innerHTML = plate(id);
   doc.querySelector('.profile-plate-text').textContent = COLONIES[id].caption;
 
   doc.querySelector('.profile-facts').append(...species.facts.map((fact) => {

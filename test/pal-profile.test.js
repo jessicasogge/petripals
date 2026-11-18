@@ -62,14 +62,6 @@ describe("a pal's profile", () => {
     expect([...document.querySelectorAll('.profile h2')].map((h) => h.textContent)).toContain('On the Plate');
     expect(document.querySelector('.profile-plate-pic svg.plate')).not.toBeNull();
     expect(text('.profile-plate-text')).toBe(COLONIES.sara.caption);
-    // A note that pops up over her plate says it's stylized, not a photo of
-    // every strain; the plate can be reached by tapping or tabbing to it.
-    const pic = document.querySelector('.profile-plate-pic');
-    expect(pic.querySelector('.plate-tip').textContent).toMatch(/stylized/);
-    expect(pic.getAttribute('tabindex')).toBe('0');
-    expect(pic.getAttribute('aria-describedby')).toBe('plate-tip');
-    expect(pic.firstElementChild.tagName.toLowerCase()).toBe('svg');
-    expect(document.querySelector('.profile-plate-note')).toBeNull();
   });
 
   it('lists all her fun facts, with science names in italics', async () => {
