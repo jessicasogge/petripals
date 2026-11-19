@@ -1,5 +1,6 @@
 // On the Plate: what each pal's colonies look like on agar, for her profile
-// (see profile.js). A colony is the pile of millions of cells that grows from
+// (see profile.js): first on the plate she's best known on, then on the
+// three plates every pal can be tried on, to compare. A colony is the pile of millions of cells that grows from
 // one cell on a plate, and labs often know a bacterium by its colonies before
 // ever looking at a cell: their color, shape and shine, and what they do to
 // the agar around them.
@@ -22,6 +23,26 @@ const AGARS = {
   esculin: ['#d8c39a', '#b39b6c'], // bile esculin agar, tan
   bg11: ['#eef2e6', '#d6dfc8'], // BG-11, clear agar with no sugar
   mona: ['#bfe3cf', '#7fc0a6'], // Mona's own blue-green pigment, soaked in
+  macconkey: ['#e98fae', '#c45d86'], // MacConkey, a pink plate
+  sp4: ['#f2d3a0', '#e0b06f'], // SP4, a rich agar made for mycoplasmas
+  iron: ['#e3c29a', '#c4955f'], // agar with iron for her to pass electrons to
+};
+
+// What each plate is called on her profile's buttons.
+export const AGAR_NAMES = {
+  nutrient: 'Plain agar',
+  mona: 'Plain agar',
+  blood: 'Blood agar',
+  chocolate: 'Chocolate agar',
+  macconkey: 'MacConkey',
+  tcbs: 'TCBS',
+  xld: 'XLD',
+  emb: 'EMB',
+  tellurite: 'Tellurite',
+  esculin: 'Bile esculin',
+  bg11: 'BG-11',
+  sp4: 'SP4 agar',
+  iron: 'Iron agar',
 };
 
 // What colonies do to the agar around them: a color, how strongly, and
@@ -34,6 +55,7 @@ const RINGS = {
   green: { color: '#7d8a3c', opacity: 0.65 }, // blood turned greenish
   black: { color: '#231b14', opacity: 0.78, spill: true }, // the agar turns black
   brown: { color: '#6b4423', opacity: 0.5 }, // a brown halo
+  pink: { color: '#b0124f', opacity: 0.35 }, // a pink haze, from fermenting lactose
 };
 
 // Each pal's plate:
@@ -41,10 +63,12 @@ const RINGS = {
 // - look: 'round' (domed and shiny), 'flat' (flat, spreading, wavy edged),
 //   'rhizoid' (curling, rootlike branches), 'film' (a thin film over the
 //   plate), 'chalky' (dry and crumbly) or 'none' (doesn't grow on agar)
-// - size: [smallest, biggest] colony radius, in the plate's 200 units
+// - size: [smallest, biggest] colony radius, in the drawing's own units
+//   (the plate is 200 across), not a real colony's size in millimeters
 // - fill and edge: the colonies' colors
 // - ring: what she does to the agar around her (RINGS), outermost first,
-//   and how far each reaches, in colony radii
+//   and how far each reaches, as a multiple of the colony's drawn radius:
+//   how it looks, not a measured zone
 // - center: a dot in the middle of each colony (Sallie's black centers)
 // - sheen: a metallic sheen across each colony (Colette, Mona)
 // - spread: a few big colonies spread out over the plate, not a streak
@@ -83,7 +107,7 @@ export const COLONIES = {
     caption: 'Tiny, pale colonies that take days to show up, on a plate with very little food.' },
   kiki: { agar: 'nutrient', look: 'round', size: [3, 4.4], fill: '#f5d90f', edge: '#a8930a',
     caption: 'Bright yellow colonies when she grows at room temperature.' },
-  electra: { agar: 'nutrient', look: 'round', size: [1.8, 2.8], fill: '#c8543f', edge: '#8a2f22',
+  electra: { agar: 'iron', look: 'round', size: [1.8, 2.8], fill: '#c8543f', edge: '#8a2f22',
     caption: 'Reddish colonies, colored by cytochromes: iron-containing proteins that transfer electrons.' },
   diffany: { agar: 'nutrient', look: 'flat', size: [4, 6.5], fill: '#ddd5b5', edge: '#a99f7c', sheen: '#ece6cf',
     caption: 'Flat colonies that look like ground glass, and glow yellow-green under UV light.' },
@@ -109,13 +133,210 @@ export const COLONIES = {
     caption: 'Tiny, almost clear colonies that take days to show up, in a jar with little oxygen.' },
   cora: { agar: 'tellurite', look: 'round', size: [2.2, 3.2], fill: '#2a2624', edge: '#100e0d', ring: [['brown', 2.2]],
     caption: 'On tellurite agar her colonies turn black, which helps labs spot her.' },
-  myra: { agar: 'nutrient', look: 'round', size: [0.5, 0.8], fill: '#efe9da', edge: '#c4bba5', spread: true, many: true,
+  myra: { agar: 'sp4', look: 'round', size: [0.5, 0.8], fill: '#efe9da', edge: '#c4bba5', spread: true, many: true,
     caption: 'Her colonies are so tiny that labs use magnification to spot them.' },
   cleo: { agar: 'blood', look: 'round', size: [2.2, 3.2], fill: '#ece7da', edge: '#9a9278', ring: [['partial', 3.8], ['clear', 2.3]],
     caption: 'On blood agar: a clear inner ring and a hazier outer ring, her double zone.' },
   vera: { agar: 'esculin', look: 'round', size: [2, 3], fill: '#ebe6d9', edge: '#b0a893', ring: [['black', 4]],
     caption: 'On bile esculin agar, the agar turns black around her colonies.' },
 };
+
+// The three plates every pal can be tried on, besides her own, to compare:
+// - blood agar: rich, and shows who breaks red blood cells
+// - MacConkey: selective, since its bile salts and crystal violet stop
+//   Gram-positive bacteria, and differential, since bacteria that ferment its
+//   lactose sugar turn pink while the rest stay pale
+// - chocolate agar: blood heated until it releases nutrients, so even the
+//   fussiest eaters grow
+// Each is her caption on that plate, or her look there too: anything not
+// given is the same as on her own plate (her look, size and colors), but
+// without her own plate's rings, centers or sheen. `look: 'none'` is an empty
+// plate. A pal without COMPARE (Elia) has only her own plate.
+// An empty plate because she doesn't grow there.
+const NO = (caption) => ({ look: 'none', caption });
+// An empty plate for a different reason: this isn't a plate labs grow her on,
+// so it's not that she can't grow, it's that this isn't how you'd meet her.
+// Drawn with a faint veil over the agar, so it doesn't read as "nothing grew".
+const NOT_SHOWN = (caption) => ({ look: 'none', veil: true, caption });
+const NO_GRAM_POSITIVE = NO('No growth: its bile salts and crystal violet stop most Gram-positive bacteria.');
+const NO_FUSSY = NO('No growth: she needs richer food than MacConkey has.');
+// A few small colonies: she grows poorly here, not not at all.
+const SCANT = { look: 'round', size: [0.8, 1.3], spread: true, many: false };
+const PINK = { fill: '#e2457e', edge: '#9c1f50', ring: [['pink', 1.8]] };
+const PALE = { fill: '#f4e7ea', edge: '#c7a3ad' };
+const GRAY = { fill: '#ddd9d0', edge: '#8f8878' };
+const WIDE_CLEAR = [['clear', 2.4]];
+
+export const COMPARE = {
+  mona: {
+    blood: { caption: 'Flat colonies, often in a clear ring, with her blue-green pigment.', ring: WIDE_CLEAR },
+    macconkey: { caption: "Pale colonies: she doesn't ferment lactose.", look: 'round', size: [2.6, 3.8], ...PALE },
+    chocolate: 'Grows well, flat and spreading.',
+  },
+  vi: {
+    blood: { caption: 'Gray, shiny colonies.', ...GRAY },
+    macconkey: { caption: 'Usually pale colonies: in lab tests she does not ferment lactose.', ...PALE },
+    chocolate: { caption: 'Grows well.', ...GRAY },
+  },
+  coco: {
+    blood: NO('No growth: what she needs is locked inside the red blood cells.'),
+    macconkey: NO_FUSSY,
+  },
+  ana: {
+    blood: 'Small white colonies, grown in a jar with no oxygen.',
+    macconkey: NO_GRAM_POSITIVE,
+    chocolate: 'Small white colonies, grown in a jar with no oxygen.',
+  },
+  penny: {
+    macconkey: NO_GRAM_POSITIVE,
+    chocolate: 'Grows, with a little extra carbon dioxide.',
+  },
+  scarlett: {
+    macconkey: NO_GRAM_POSITIVE,
+    chocolate: 'Grows, but no clear rings show: its blood cells were already broken by heating.',
+  },
+  goldie: {
+    blood: { caption: 'Creamy golden colonies, often in a clear ring of broken blood cells.', ring: [['clear', 1.8]] },
+    macconkey: NO_GRAM_POSITIVE,
+    chocolate: 'Grows well, golden and shiny.',
+  },
+  ceres: {
+    blood: { caption: 'Big, flat, frosted colonies, each in a wide clear ring.', ring: [['clear', 1.6]] },
+    macconkey: NO_GRAM_POSITIVE,
+    chocolate: 'Grows well, big and flat.',
+  },
+  sallie: {
+    blood: { caption: 'Gray colonies.', ...GRAY },
+    macconkey: { caption: "Pale colonies: she doesn't ferment lactose, so she stays colorless.", ...PALE },
+    chocolate: { caption: 'Grows well.', ...GRAY },
+  },
+  terra: {
+    macconkey: NO_GRAM_POSITIVE,
+    chocolate: 'Swarms across it in a thin film, grown in a jar with no oxygen.',
+  },
+  lissie: {
+    macconkey: NO_GRAM_POSITIVE,
+    chocolate: 'Small, smooth colonies, with no clear rings: its blood cells were already broken.',
+  },
+  sara: {
+    blood: 'Grows well; her red pigment may show at room temperature.',
+    macconkey: { caption: 'Pale colonies, though her red pigment can still show.', fill: '#e9a2a8', edge: '#b0525c' },
+    chocolate: 'Grows well; her red pigment may show at room temperature.',
+  },
+  ivy: {
+    blood: 'Still spreads in curling, rootlike branches.',
+    macconkey: NO_GRAM_POSITIVE,
+    chocolate: 'Still spreads in curling, rootlike branches.',
+  },
+  astrid: {
+    blood: NOT_SHOWN('Not shown: labs grow her on plates with very little food instead.'),
+    macconkey: NOT_SHOWN('Not shown: labs grow her on plates with very little food instead.'),
+    chocolate: NOT_SHOWN('Not shown: labs grow her on plates with very little food instead.'),
+  },
+  kiki: {
+    blood: { caption: 'Grows well, often a little yellow.', fill: '#efe2a0', edge: '#a8930a' },
+    macconkey: { caption: 'Pink or pale colonies: only some of her strains ferment lactose.', ...PINK },
+    chocolate: { caption: 'Grows well, often a little yellow.', fill: '#efe2a0', edge: '#a8930a' },
+  },
+  electra: {
+    blood: NOT_SHOWN('Not shown: she needs special food and no oxygen, which this plate is not set up for.'),
+    macconkey: NOT_SHOWN('Not shown: she needs special food and no oxygen, which this plate is not set up for.'),
+    chocolate: NOT_SHOWN('Not shown: she needs special food and no oxygen, which this plate is not set up for.'),
+  },
+  diffany: {
+    blood: 'Gray colonies, grown with no oxygen. Labs say she smells like a horse barn.',
+    macconkey: NO_GRAM_POSITIVE,
+    chocolate: 'Grows in a jar with no oxygen.',
+  },
+  nova: {
+    blood: 'Dry, chalky colonies, after a few days.',
+    macconkey: NO_GRAM_POSITIVE,
+    chocolate: 'Dry, chalky colonies, after a few days.',
+  },
+  pearl: {
+    blood: 'Big, wet, shiny colonies.',
+    macconkey: { caption: 'Big, wet, pink colonies: she ferments lactose.', ...PINK },
+    chocolate: 'Big, wet, shiny colonies.',
+  },
+  frannie: {
+    blood: { caption: 'Little or no growth: she needs a plate enriched with cysteine.', ...SCANT },
+    macconkey: NO_FUSSY,
+  },
+  colette: {
+    blood: { caption: 'Gray, shiny colonies.', ...GRAY },
+    // The haze around her is bile the plate drops out where she's most acid,
+    // not her own color spreading.
+    macconkey: { caption: 'Bright pink colonies with a cloudy halo: she ferments the lactose sugar in it.', ...PINK },
+    chocolate: { caption: 'Grows well.', ...GRAY },
+  },
+  ari: {
+    blood: NOT_SHOWN('Not shown: labs grow her on plain mineral agar in the light instead.'),
+    macconkey: NOT_SHOWN('Not shown: labs grow her on plain mineral agar in the light instead.'),
+    chocolate: NOT_SHOWN('Not shown: labs grow her on plain mineral agar in the light instead.'),
+  },
+  dina: {
+    blood: 'Pinkish-red colonies.',
+    macconkey: NO_GRAM_POSITIVE,
+    chocolate: 'Pinkish-red colonies.',
+  },
+  marina: {
+    blood: 'Slow colonies, after a week or more; she likes cooler temperatures.',
+    macconkey: NO('No growth: its bile salts and crystal violet stop her.'),
+    chocolate: 'Slow colonies, after a week or more; she likes cooler temperatures.',
+  },
+  bree: {
+    blood: 'Small, smooth colonies, after a few days.',
+    macconkey: NO_FUSSY,
+    chocolate: 'Small, smooth colonies, after a few days.',
+  },
+  nessa: {
+    blood: 'Gray, shiny colonies.',
+    macconkey: NO_FUSSY,
+  },
+  hallie: {
+    macconkey: NO_FUSSY,
+    chocolate: 'Tiny colonies after a few days, in a jar with little oxygen.',
+  },
+  cora: {
+    blood: { caption: 'Small gray colonies.', ...GRAY },
+    macconkey: NO_GRAM_POSITIVE,
+    chocolate: { caption: 'Small gray colonies.', ...GRAY },
+  },
+  myra: {
+    blood: NO('No growth: she needs a special agar with cholesterol and other extras.'),
+    macconkey: NO('No growth: she needs a special agar with cholesterol and other extras.'),
+    chocolate: NO('No growth: she needs a special agar with cholesterol and other extras.'),
+  },
+  cleo: {
+    macconkey: NO_GRAM_POSITIVE,
+    chocolate: 'Grows with no oxygen, but no rings show: its blood cells were already broken.',
+  },
+  vera: {
+    blood: 'Gray colonies, without clear rings.',
+    macconkey: NO('Usually no growth: standard MacConkey agar stops most Gram-positive bacteria.'),
+    chocolate: 'Grows well.',
+  },
+};
+
+// The plates she has on her profile, her own first: each with its kind
+// ('home', or the comparison plate's agar), its name and her caption there.
+export function platesFor(id) {
+  const home = COLONIES[id];
+  const plates = [{ kind: 'home', name: AGAR_NAMES[home.agar], caption: home.caption }];
+  for (const [agar, entry] of Object.entries(COMPARE[id] ?? {})) {
+    plates.push({ kind: agar, name: AGAR_NAMES[agar], caption: typeof entry === 'string' ? entry : entry.caption });
+  }
+  return plates;
+}
+
+// Her look on a plate: her own, or a comparison plate's, built on her own.
+function lookOn(id, kind) {
+  const home = COLONIES[id];
+  if (kind === 'home') return home;
+  const entry = COMPARE[id][kind];
+  const { look, size, fill, edge, see, rough, spread, many } = home;
+  return { look, size, fill, edge, see, rough, spread, many, ...(typeof entry === 'string' ? {} : entry), agar: kind };
+}
 
 // The plate: 200 units across, agar out to AGAR_R from the middle.
 const AGAR_R = 88;
@@ -232,9 +453,12 @@ function rhizoid(x, y, r, color, random) {
   return out;
 }
 
-// Her plate, as SVG markup, 200 units across.
-export function plate(id) {
-  const c = COLONIES[id];
+// Her plate, as SVG markup, 200 units across: her own (kind 'home'), or a
+// comparison plate ('blood', 'macconkey' or 'chocolate').
+export function plate(id, kind = 'home') {
+  const c = lookOn(id, kind);
+  // Names for the plate's gradients and filters, its own on a page with more.
+  const key = kind === 'home' ? id : `${id}-${kind}`;
   // A different but fixed pattern for each pal.
   const random = seeded([...id].reduce((sum, ch) => sum * 31 + ch.charCodeAt(0), 7) % 2147483646 + 1);
   const [middle, edge] = AGARS[c.agar];
@@ -288,7 +512,7 @@ export function plate(id) {
         growth += rhizoid(s.x, s.y, r, c.fill, random);
       } else if (c.look === 'flat') {
         // Flat and spreading: broad, low and see-through at the edges.
-        growth += `<path d="${lumpy(s.x, s.y, r, random)}" fill="url(#colony-${id})"${outline} opacity="0.75" />`;
+        growth += `<path d="${lumpy(s.x, s.y, r, random)}" fill="url(#colony-${key})"${outline} opacity="0.75" />`;
       } else if (c.look === 'chalky') {
         // Dry and crumbly: a rough, bumpy top.
         growth += `<path d="${lumpy(s.x, s.y, r, random)}" fill="${c.fill}"${outline} />` +
@@ -297,7 +521,7 @@ export function plate(id) {
       } else {
         // A domed colony: solid, so a ring around it reads as the agar, not
         // as part of her.
-        growth += `<circle cx="${x}" cy="${y}" r="${n1(r)}" fill="url(#colony-${id})"${outline}${c.see ? ' opacity="0.75"' : ''} />`;
+        growth += `<circle cx="${x}" cy="${y}" r="${n1(r)}" fill="url(#colony-${key})"${outline}${c.see ? ' opacity="0.75"' : ''} />`;
         if (c.center) growth += `<circle cx="${x}" cy="${y}" r="${n1(r * 0.4)}" fill="${c.center}" />`;
         // A shine, on colonies big enough to see one.
         if (r > 2 && !c.rough) growth += `<circle cx="${n1(s.x - r * 0.35)}" cy="${n1(s.y - r * 0.35)}" r="${n1(r * 0.25)}" fill="white" opacity="0.7" />`;
@@ -308,27 +532,30 @@ export function plate(id) {
   // Each ring kind as one see-through layer with soft edges, outermost first.
   const ringLayers = rings.map(([kind], k) => {
     const { color, opacity, spill } = RINGS[kind];
-    return `<g class="ring-${kind}" fill="${color}" opacity="${opacity}" filter="url(#${spill ? 'spill' : 'soft'}-${id})">${ringShapes[k]}</g>`;
+    return `<g class="ring-${kind}" fill="${color}" opacity="${opacity}" filter="url(#${spill ? 'spill' : 'soft'}-${key})">${ringShapes[k]}</g>`;
   }).join('');
 
   // A sheen across each colony, or a gentle shading from the top left.
   const shade = c.sheen
-    ? `<linearGradient id="colony-${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c.fill}" /><stop offset="0.45" stop-color="${c.sheen}" /><stop offset="0.6" stop-color="${c.fill}" /></linearGradient>`
-    : `<radialGradient id="colony-${id}" cx="40%" cy="38%" r="70%"><stop offset="0.6" stop-color="${c.fill}" /><stop offset="1" stop-color="${c.edge ?? c.fill}" /></radialGradient>`;
+    ? `<linearGradient id="colony-${key}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c.fill}" /><stop offset="0.45" stop-color="${c.sheen}" /><stop offset="0.6" stop-color="${c.fill}" /></linearGradient>`
+    : `<radialGradient id="colony-${key}" cx="40%" cy="38%" r="70%"><stop offset="0.6" stop-color="${c.fill}" /><stop offset="1" stop-color="${c.edge ?? c.fill}" /></radialGradient>`;
 
   return `<svg class="plate" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">` +
     '<defs>' +
-    `<radialGradient id="agar-${id}" cx="45%" cy="40%" r="65%"><stop offset="0" stop-color="${middle}" /><stop offset="1" stop-color="${edge}" /></radialGradient>` +
+    `<radialGradient id="agar-${key}" cx="45%" cy="40%" r="65%"><stop offset="0" stop-color="${middle}" /><stop offset="1" stop-color="${edge}" /></radialGradient>` +
     shade +
-    `<clipPath id="dish-${id}"><circle cx="100" cy="100" r="${AGAR_R}" /></clipPath>` +
+    `<clipPath id="dish-${key}"><circle cx="100" cy="100" r="${AGAR_R}" /></clipPath>` +
     // Soft edges for rings, softer still for changes that spill into the agar.
-    `<filter id="soft-${id}"><feGaussianBlur stdDeviation="0.9" /></filter>` +
-    `<filter id="spill-${id}" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.2" /></filter>` +
+    `<filter id="soft-${key}"><feGaussianBlur stdDeviation="0.9" /></filter>` +
+    `<filter id="spill-${key}" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.2" /></filter>` +
     '</defs>' +
     // The dish's rim, then the agar, then what grew on it, kept inside the agar.
     '<circle cx="100" cy="100" r="96" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2.5" />' +
-    `<circle cx="100" cy="100" r="${AGAR_R}" fill="url(#agar-${id})" />` +
-    `<g clip-path="url(#dish-${id})">${ringLayers}${growth}</g>` +
+    `<circle cx="100" cy="100" r="${AGAR_R}" fill="url(#agar-${key})" />` +
+    `<g clip-path="url(#dish-${key})">${ringLayers}${growth}</g>` +
+    // A plate labs don't grow her on: a faint veil, so an empty plate here
+    // doesn't read as "nothing grew".
+    (c.veil ? `<circle cx="100" cy="100" r="${AGAR_R}" fill="#f8fafc" opacity="0.55" />` : '') +
     // A glint on the lid.
     '<path d="M40 46 Q60 22 96 16" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.55" />' +
     '</svg>';

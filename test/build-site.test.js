@@ -77,6 +77,10 @@ describe('the built site', () => {
     expect(doc.querySelector('.profile-stain-pal svg [style*="fill"]')).not.toBeNull();
     const facts = [...doc.querySelectorAll('.profile-facts li')].map((li) => li.textContent);
     expect(facts).toEqual(SPECIES.hallie.facts.map(plainText));
+    // Her plates and the buttons to pick one, which need no script.
+    // (Her own plate is blood agar, so it isn't one of the three to compare.)
+    expect(doc.querySelectorAll('.plate-panels .profile-plate')).toHaveLength(3);
+    expect(doc.querySelector('#plate-home').hasAttribute('checked')).toBe(true);
     // Nothing left to fill in: no loading card and no profile script.
     expect(doc.querySelector('.loading-overlay')).toBeNull();
     expect(doc.querySelector('script[src*="pal-profile.js"]')).toBeNull();
