@@ -798,6 +798,13 @@ a.pal-card:focus-visible {
   color: #0f766e;
 }
 
+/* How fast she doubles, under her size: a quieter second quick fact. */
+.profile-doubling {
+  margin: 0.2rem 0 0;
+  color: #0f766e;
+  font-size: 0.95rem;
+}
+
 .profile-stain {
   display: flex;
   gap: 0.9rem;

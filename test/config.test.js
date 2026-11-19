@@ -363,6 +363,27 @@ describe('real sizes', () => {
   });
 });
 
+describe('doubling times', () => {
+  it('gives every pal one, in minutes, somewhere believable', () => {
+    for (const [pal, species] of Object.entries(SPECIES)) {
+      expect(Number.isFinite(species.doubling), pal).toBe(true);
+      // From Cleo, one of the fastest bacteria known, to Ari, who takes most
+      // of a day. Nothing doubles in under 5 minutes.
+      expect(species.doubling, pal).toBeGreaterThanOrEqual(5);
+      expect(species.doubling, pal).toBeLessThanOrEqual(2 * 24 * 60);
+    }
+  });
+
+  it('puts the fast growers ahead of the slow ones', () => {
+    const faster = (a, b) => expect(SPECIES[a].doubling, `${a} vs ${b}`).toBeLessThan(SPECIES[b].doubling);
+    faster('cleo', 'colette'); // Cleo is the fastest pal
+    faster('colette', 'hallie');
+    faster('hallie', 'myra');
+    faster('myra', 'elia');
+    expect(Math.min(...Object.values(SPECIES).map((s) => s.doubling))).toBe(SPECIES.cleo.doubling);
+  });
+});
+
 describe('Gram stains', () => {
   it('says whether each pal is Gram-positive or Gram-negative', () => {
     for (const [name, species] of Object.entries(SPECIES)) {

@@ -46,6 +46,29 @@ describe("a pal's profile", () => {
     expect(text('.profile-size')).toBe('~15 µm');
   });
 
+  it('says how fast she doubles, and that it takes perfect conditions', async () => {
+    await open('pal-profile.html', 'game/pal-profile.js', '?pal=cleo');
+    expect(text('.profile-doubling')).toBe('Doubles about every 10 minutes in perfect conditions');
+    // Hours for the slow ones, in words rather than minutes.
+    await open('pal-profile.html', 'game/pal-profile.js', '?pal=myra');
+    expect(text('.profile-doubling')).toBe('Doubles about every 6 hours in perfect conditions');
+    await open('pal-profile.html', 'game/pal-profile.js', '?pal=elia');
+    expect(text('.profile-doubling')).toBe('Doubles about every 18 hours in perfect conditions');
+  });
+
+  it('writes every doubling time in words a kid can read', async () => {
+    const { doublingText } = await import('../public/game/profile.js');
+    expect(doublingText(45)).toBe('45 minutes');
+    expect(doublingText(60)).toBe('hour');
+    expect(doublingText(90)).toBe('hour and a half');
+    expect(doublingText(150)).toBe('2 and a half hours');
+    expect(doublingText(240)).toBe('4 hours');
+    // Every pal's reads as a phrase, with no leftover decimals.
+    for (const species of Object.values(SPECIES)) {
+      expect(doublingText(species.doubling)).toMatch(/^(\d+ minutes|hour|hour and a half|\d+ hours|\d+ and a half hours)$/);
+    }
+  });
+
   it('shows her after a Gram stain, and says why she turns that color', async () => {
     await open('pal-profile.html', 'game/pal-profile.js', '?pal=cora');
     expect(document.querySelector('.profile-stain-pal svg [style*="fill"]')).not.toBeNull();

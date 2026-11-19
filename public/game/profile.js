@@ -1,6 +1,7 @@
 // Fills in a pal's profile (pal-profile.html's markup) for the pal with this
-// id: her picture, species and size, her Gram stain, her colonies on her own
-// plate and on plates to compare, and all her fun facts.
+// id: her picture, species, size and how fast she doubles, her Gram stain,
+// her colonies on her own plate and on plates to compare, and all her fun
+// facts.
 // Everything comes from her SPECIES entry and her picture, so every pal has
 // one. Used by the profile page in the browser (pal-profile.js), and by the
 // deploy, which writes a page for each pal ahead of time for search engines
@@ -10,6 +11,17 @@ import { plate, platesFor } from './colonies.js';
 import { speciesName, withItalics } from './italics.js';
 import { cellLength, palById, palTile } from './pals.js';
 import { stainPal } from './stain.js';
+
+// How often she doubles, in words: "20 minutes", "an hour and a half",
+// "3 hours". Round numbers, since these are typical figures, not exact ones.
+export function doublingText(minutes) {
+  if (minutes < 60) return `${minutes} minutes`;
+  const hours = minutes / 60;
+  if (hours === 1) return 'hour';
+  if (hours === 1.5) return 'hour and a half';
+  if (Number.isInteger(hours)) return `${hours} hours`;
+  return `${Math.floor(hours)} and a half hours`;
+}
 
 export function renderProfile(doc, id) {
   const pal = palById(id);
@@ -26,6 +38,11 @@ export function renderProfile(doc, id) {
 
   // About how long one of her cells is (or Nova's filament), as in Compare sizes.
   doc.querySelector('.profile-size').textContent = `~${cellLength(pal)} µm`;
+
+  // How fast one cell becomes two when nothing is holding her back. Real
+  // growth is slower, so the line says these are her best conditions.
+  doc.querySelector('.profile-doubling').textContent =
+    `Doubles about every ${doublingText(species.doubling)} in perfect conditions`;
 
   // Her picture after a Gram stain, and why she turns that color.
   const stained = palTile(pal);

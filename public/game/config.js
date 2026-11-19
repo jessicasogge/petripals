@@ -34,6 +34,11 @@
 // saying more (Nova's filament). The picker's Compare sizes button shows the pals' sizes relative
 // to each other, labeled with one cell's length.
 //
+// `doubling` is how many minutes one cell takes to become two when nothing
+// is holding her back: the right food, the right warmth and plenty of room.
+// Real growth is slower, since cells start slowly and crowd each other later.
+// Her profile says it in words (see game/profile.js).
+//
 // `gram` is how she looks after a Gram stain: 'positive' cells stay purple,
 // 'negative' ones turn pink (the picker's microscope mode shows this).
 // `faintStain` marks a pal who barely takes the stain at all (Elia, Marina, Myra).
@@ -68,6 +73,7 @@ export const SPECIES = {
     ],
     scientific: 'Pseudomonas aeruginosa',
     micrometers: 2, // her picture's real length: one cell
+    doubling: 30, // how often she doubles, in minutes, at her best
     color: '#15803d', // for her name above the dish
     tile: 'rgba(134, 239, 172, 0.45)',
     kind: 'rod',
@@ -112,6 +118,7 @@ export const SPECIES = {
     ],
     scientific: 'Vibrio cholerae',
     micrometers: 2, // her picture's real length: one cell
+    doubling: 30, // how often she doubles, in minutes, at her best
     color: '#c2410c', // for her name above the dish
     tile: 'rgba(253, 186, 116, 0.45)',
     kind: 'rod',
@@ -160,6 +167,7 @@ export const SPECIES = {
     ],
     scientific: 'Borrelia burgdorferi',
     micrometers: 15, // her picture's real length: one cell (10 to 30 µm long)
+    doubling: 1080, // how often she doubles, in minutes, at her best
     color: '#7e22ce', // for her name above the dish
     tile: 'rgba(216, 180, 254, 0.45)',
     kind: 'rod',
@@ -211,6 +219,7 @@ export const SPECIES = {
     ],
     scientific: 'Haemophilus influenzae',
     micrometers: 1, // her picture's real length: one cell
+    doubling: 30, // how often she doubles, in minutes, at her best
     color: '#7c4a2d', // for her name above the dish
     tile: 'rgba(212, 176, 140, 0.45)',
     kind: 'rod',
@@ -257,6 +266,7 @@ export const SPECIES = {
     ],
     scientific: 'Bifidobacterium bifidum',
     micrometers: 3, // her picture's real length: one cell
+    doubling: 90, // how often she doubles, in minutes, at her best
     color: '#be185d', // for her name above the dish: strawberry-yogurt pink's deeper rose
     tile: 'rgba(249, 168, 212, 0.4)',
     kind: 'rod',
@@ -312,6 +322,7 @@ export const SPECIES = {
     scientific: 'Streptococcus pneumoniae',
     micrometers: 1.8, // her picture's real length: a pair
     cellMicrometers: 0.9, // one of her cells
+    doubling: 35, // how often she doubles, in minutes, at her best
     color: '#4f46e5', // for her name above the dish: bluish purple, next to Elia's purple
     tile: 'rgba(165, 180, 252, 0.45)',
     kind: 'coccus',
@@ -354,6 +365,7 @@ export const SPECIES = {
     scientific: 'Streptococcus pyogenes',
     micrometers: 4, // her picture's real length: a chain of 5
     cellMicrometers: 0.8, // one of her cells
+    doubling: 40, // how often she doubles, in minutes, at her best
     color: '#b91c1c', // for her name above the dish
     tile: 'rgba(252, 165, 165, 0.45)',
     kind: 'coccus',
@@ -390,6 +402,7 @@ export const SPECIES = {
     scientific: 'Staphylococcus aureus',
     micrometers: 3, // her picture's real length: a cluster
     cellMicrometers: 1, // one of her cells
+    doubling: 30, // how often she doubles, in minutes, at her best
     color: '#b45309', // for her name above the dish
     tile: 'rgba(253, 230, 138, 0.45)',
     kind: 'coccus',
@@ -436,6 +449,7 @@ export const SPECIES = {
     scientific: 'Bacillus cereus',
     micrometers: 12, // her picture's real length: a chain of 3
     cellMicrometers: 4, // one of her cells
+    doubling: 20, // how often she doubles, in minutes, at her best
     color: '#0369a1', // for her name above the dish
     tile: 'rgba(125, 211, 252, 0.2)',
     kind: 'coccus', // grows in chains (see above), though her cells are rods
@@ -481,6 +495,7 @@ export const SPECIES = {
     ],
     scientific: '*Salmonella* Typhi',
     micrometers: 2.5, // her picture's real length: one cell
+    doubling: 25, // how often she doubles, in minutes, at her best
     color: '#52525b', // for her name above the dish
     tile: 'rgba(161, 161, 170, 0.2)',
     kind: 'rod',
@@ -526,6 +541,7 @@ export const SPECIES = {
     ],
     scientific: 'Clostridium tetani',
     micrometers: 4, // her picture's real length: with her spore
+    doubling: 30, // how often she doubles, in minutes, at her best
     color: '#5f6f12', // for her name above the dish
     tile: 'rgba(217, 223, 160, 0.5)',
     kind: 'rod',
@@ -572,6 +588,7 @@ export const SPECIES = {
     ],
     scientific: 'Listeria monocytogenes',
     micrometers: 1.5, // her picture's real length: one cell
+    doubling: 45, // how often she doubles, in minutes, at her best
     color: '#2c4f7c', // for her name above the dish
     tile: 'rgba(122, 156, 199, 0.42)',
     kind: 'rod',
@@ -617,6 +634,7 @@ export const SPECIES = {
     ],
     scientific: 'Serratia marcescens',
     micrometers: 1.5, // her picture's real length: one cell
+    doubling: 30, // how often she doubles, in minutes, at her best
     color: '#c2003a', // for her name above the dish
     tile: 'rgba(255, 90, 110, 0.22)',
     kind: 'rod',
@@ -664,6 +682,7 @@ export const SPECIES = {
     scientific: 'Bacillus mycoides',
     micrometers: 12, // her picture's real length: a chain of 4
     cellMicrometers: 3, // one of her cells
+    doubling: 30, // how often she doubles, in minutes, at her best
     color: '#4d6b3c', // for her name above the dish
     tile: 'rgba(150, 190, 120, 0.3)',
     kind: 'coccus', // grows in chains with the chain code, like Ceres, though her cells are rods
@@ -705,6 +724,7 @@ export const SPECIES = {
     scientific: 'Asticcacaulis biprosthecum',
     micrometers: 3, // her picture's real length: with her stalks
     cellMicrometers: 1.5, // her cell body, without her stalks
+    doubling: 150, // how often she doubles, in minutes, at her best
     color: '#1a4f9c', // for her name above the dish
     tile: 'rgba(90, 169, 245, 0.3)',
     kind: 'rod',
@@ -750,6 +770,7 @@ export const SPECIES = {
     ],
     scientific: 'Cronobacter sakazakii',
     micrometers: 3, // her picture's real length: one cell
+    doubling: 25, // how often she doubles, in minutes, at her best
     color: '#7d7200', // for her name above the dish
     tile: 'rgba(255, 240, 60, 0.35)',
     kind: 'rod',
@@ -793,6 +814,7 @@ export const SPECIES = {
     ],
     scientific: 'Geobacter sulfurreducens',
     micrometers: 2, // her picture's real length: one cell
+    doubling: 480, // how often she doubles, in minutes, at her best
     color: '#4c1d95', // for her name above the dish: grape, darker than Elia's purple
     tile: 'rgba(178, 126, 224, 0.35)',
     kind: 'rod',
@@ -834,6 +856,7 @@ export const SPECIES = {
     ],
     scientific: 'Clostridioides difficile',
     micrometers: 4.5, // her picture's real length: one cell
+    doubling: 90, // how often she doubles, in minutes, at her best
     color: '#7a2e1a', // for her name above the dish
     tile: 'rgba(210, 146, 127, 0.3)',
     kind: 'rod',
@@ -889,6 +912,7 @@ export const SPECIES = {
     scientific: 'Nocardia nova',
     micrometers: 15, // her picture's real length: a branching filament
     sizeNote: '15 µm filament', // one branching filament, not one cell
+    doubling: 240, // how often she doubles, in minutes, at her best
     color: '#0f766e', // for her name above the dish
     tile: 'rgba(143, 227, 216, 0.4)',
     kind: 'rod',
@@ -968,6 +992,7 @@ export const SPECIES = {
     scientific: 'Klebsiella pneumoniae',
     micrometers: 2.5, // her picture's real length: in her capsule
     cellMicrometers: 2, // her cell body, without her capsule
+    doubling: 25, // how often she doubles, in minutes, at her best
     color: '#6a5070', // for her name above the dish
     tile: 'rgba(232, 190, 206, 0.38)',
     kind: 'rod',
@@ -1012,6 +1037,7 @@ export const SPECIES = {
     ],
     scientific: 'Francisella tularensis',
     micrometers: 0.5, // her picture's real length: one cell
+    doubling: 180, // how often she doubles, in minutes, at her best
     color: '#a8432e', // for her name above the dish
     tile: 'rgba(255, 201, 181, 0.45)',
     kind: 'rod',
@@ -1059,6 +1085,7 @@ export const SPECIES = {
     ],
     scientific: 'Escherichia coli',
     micrometers: 2.5, // her picture's real length: one cell
+    doubling: 20, // how often she doubles, in minutes, at her best
     color: '#2e6b0e', // for her name above the dish
     tile: 'rgba(168, 236, 94, 0.35)',
     kind: 'rod',
@@ -1111,6 +1138,7 @@ export const SPECIES = {
     scientific: 'Anabaena variabilis',
     micrometers: 28, // her picture's real length: a string of 8
     cellMicrometers: 3.5, // one of her cells
+    doubling: 1200, // how often she doubles, in minutes, at her best
     color: '#0d6e50', // for her name above the dish
     tile: 'rgba(63, 185, 138, 0.28)',
     kind: 'coccus',
@@ -1149,6 +1177,7 @@ export const SPECIES = {
     scientific: 'Deinococcus radiodurans',
     micrometers: 5, // her picture's real length: a square of 4
     cellMicrometers: 2.5, // one of her cells
+    doubling: 90, // how often she doubles, in minutes, at her best
     color: '#a21caf', // for her name above the dish
     tile: 'rgba(240, 171, 252, 0.4)',
     kind: 'coccus',
@@ -1184,6 +1213,7 @@ export const SPECIES = {
     ],
     scientific: 'Mycobacterium marinum',
     micrometers: 3, // her picture's real length: one cell
+    doubling: 300, // how often she doubles, in minutes, at her best
     color: '#8a2c0b', // for her name above the dish
     tile: 'rgba(244, 128, 63, 0.24)',
     kind: 'rod',
@@ -1229,6 +1259,7 @@ export const SPECIES = {
     ],
     scientific: 'Brucella melitensis',
     micrometers: 1, // her picture's real length: one cell
+    doubling: 150, // how often she doubles, in minutes, at her best
     color: '#9a5b00', // for her name above the dish
     tile: 'rgba(255, 191, 60, 0.3)',
     kind: 'rod',
@@ -1269,6 +1300,7 @@ export const SPECIES = {
     scientific: 'Neisseria meningitidis',
     micrometers: 1.6, // her picture's real length: a pair
     cellMicrometers: 0.8, // one of her cells
+    doubling: 45, // how often she doubles, in minutes, at her best
     color: '#0b4f5e', // for her name above the dish
     tile: 'rgba(47, 166, 191, 0.25)',
     kind: 'coccus',
@@ -1307,6 +1339,7 @@ export const SPECIES = {
     ],
     scientific: 'Helicobacter pylori',
     micrometers: 3, // her picture's real length: one cell
+    doubling: 180, // how often she doubles, in minutes, at her best
     color: '#1d4a26', // for her name above the dish
     tile: 'rgba(79, 154, 92, 0.25)',
     kind: 'rod',
@@ -1355,6 +1388,7 @@ export const SPECIES = {
     scientific: 'Corynebacterium diphtheriae',
     micrometers: 4, // her picture's real length: a V of two cells
     cellMicrometers: 3, // one of her cells
+    doubling: 60, // how often she doubles, in minutes, at her best
     color: '#5c1a33', // for her name above the dish
     tile: 'rgba(176, 102, 128, 0.25)',
     kind: 'coccus',
@@ -1395,6 +1429,7 @@ export const SPECIES = {
     ],
     scientific: 'Mycoplasma pneumoniae',
     micrometers: 1.5, // her picture's real length: one cell
+    doubling: 360, // how often she doubles, in minutes, at her best
     color: '#2b3b4e', // for her name above the dish
     tile: 'rgba(120, 144, 168, 0.3)',
     kind: 'rod',
@@ -1442,6 +1477,7 @@ export const SPECIES = {
     ],
     scientific: 'Clostridium perfringens',
     micrometers: 5, // her picture's real length: one cell
+    doubling: 10, // how often she doubles, in minutes, at her best
     color: '#5a3f0f', // for her name above the dish
     tile: 'rgba(201, 154, 46, 0.24)',
     kind: 'rod',
@@ -1486,6 +1522,7 @@ export const SPECIES = {
     scientific: 'Enterococcus faecium',
     micrometers: 2, // her picture's real length: a pair
     cellMicrometers: 1, // one of her cells
+    doubling: 30, // how often she doubles, in minutes, at her best
     color: '#7a1f55', // for her name above the dish
     tile: 'rgba(200, 80, 140, 0.2)',
     kind: 'coccus',
