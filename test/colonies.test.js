@@ -142,16 +142,45 @@ describe('comparison plates', () => {
     }
   });
 
-  it('stops every Gram-positive pal on MacConkey, except Vera, who grows there anyway', () => {
+  it('stops the Gram-positive pals on MacConkey, without claiming it stops every one', () => {
     for (const id of IDS.filter((id) => SPECIES[id].gram === 'positive' && COMPARE[id]?.macconkey)) {
-      expect(grows(id, 'macconkey'), id).toBe(id === 'vera');
+      expect(grows(id, 'macconkey'), id).toBe(false);
     }
-    expect(platesFor('scarlett').find((p) => p.kind === 'macconkey').caption).toMatch(/Gram-positive/);
+    // What it says is "most", since a few Gram-positive bacteria get through.
+    const caption = platesFor('scarlett').find((p) => p.kind === 'macconkey').caption;
+    expect(caption).toMatch(/most Gram-positive/);
+  });
+
+  it("says a plate labs don't use for her isn't the same as nothing growing", () => {
+    // Astrid, Ari and Electra: labs grow them elsewhere, so their plates are
+    // marked "not shown" (a veil over the agar), not "no growth".
+    for (const id of ['astrid', 'ari', 'electra']) {
+      for (const { kind, caption } of platesFor(id).slice(1)) {
+        expect(caption, `${id} ${kind}`).toMatch(/^Not shown:/);
+        expect(svgOf2(id, kind).querySelector('circle[opacity="0.55"]'), `${id} ${kind}`).not.toBeNull();
+        expect(grows(id, kind), `${id} ${kind}`).toBe(false);
+      }
+    }
+    // A pal who really doesn't grow says so, with no veil.
+    const coco = platesFor('coco').find((p) => p.kind === 'blood');
+    expect(coco.caption).toMatch(/^No growth:/);
+    expect(svgOf2('coco', 'blood').querySelector('circle[opacity="0.55"]')).toBeNull();
+  });
+
+  it('grows Frannie poorly on blood agar, rather than not at all', () => {
+    expect(grows('frannie', 'blood')).toBe(true);
+    const caption = platesFor('frannie').find((p) => p.kind === 'blood').caption;
+    expect(caption).toMatch(/Little or no growth/);
+    // A few small colonies, far fewer than on the plate she's grown on.
+    const colonies = (kind) => svgOf2('frannie', kind).querySelectorAll('g[clip-path] circle').length;
+    expect(colonies('blood')).toBeLessThan(colonies('home') / 2);
   });
 
   it('turns lactose fermenters pink on MacConkey, and leaves the rest pale', () => {
     const pink = (id) => svgOf2(id, 'macconkey').querySelector('.ring-pink') !== null;
     for (const id of ['colette', 'pearl', 'kiki']) expect(pink(id), id).toBe(true);
+    // Kiki's strains differ, so her caption doesn't promise pink.
+    expect(platesFor('kiki').find((p) => p.kind === 'macconkey').caption).toMatch(/some of her strains/);
     for (const id of ['sallie', 'vi', 'mona']) expect(pink(id), id).toBe(false);
     expect(grows('sallie', 'macconkey')).toBe(true);
   });

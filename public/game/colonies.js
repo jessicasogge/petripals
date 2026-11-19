@@ -63,10 +63,12 @@ const RINGS = {
 // - look: 'round' (domed and shiny), 'flat' (flat, spreading, wavy edged),
 //   'rhizoid' (curling, rootlike branches), 'film' (a thin film over the
 //   plate), 'chalky' (dry and crumbly) or 'none' (doesn't grow on agar)
-// - size: [smallest, biggest] colony radius, in the plate's 200 units
+// - size: [smallest, biggest] colony radius, in the drawing's own units
+//   (the plate is 200 across), not a real colony's size in millimeters
 // - fill and edge: the colonies' colors
 // - ring: what she does to the agar around her (RINGS), outermost first,
-//   and how far each reaches, in colony radii
+//   and how far each reaches, as a multiple of the colony's drawn radius:
+//   how it looks, not a measured zone
 // - center: a dot in the middle of each colony (Sallie's black centers)
 // - sheen: a metallic sheen across each colony (Colette, Mona)
 // - spread: a few big colonies spread out over the plate, not a streak
@@ -150,9 +152,16 @@ export const COLONIES = {
 // given is the same as on her own plate (her look, size and colors), but
 // without her own plate's rings, centers or sheen. `look: 'none'` is an empty
 // plate. A pal without COMPARE (Elia) has only her own plate.
+// An empty plate because she doesn't grow there.
 const NO = (caption) => ({ look: 'none', caption });
-const NO_GRAM_POSITIVE = NO('No growth: its bile salts and crystal violet stop Gram-positive bacteria.');
+// An empty plate for a different reason: this isn't a plate labs grow her on,
+// so it's not that she can't grow, it's that this isn't how you'd meet her.
+// Drawn with a faint veil over the agar, so it doesn't read as "nothing grew".
+const NOT_SHOWN = (caption) => ({ look: 'none', veil: true, caption });
+const NO_GRAM_POSITIVE = NO('No growth: its bile salts and crystal violet stop most Gram-positive bacteria.');
 const NO_FUSSY = NO('No growth: she needs richer food than MacConkey has.');
+// A few small colonies: she grows poorly here, not not at all.
+const SCANT = { look: 'round', size: [0.8, 1.3], spread: true, many: false };
 const PINK = { fill: '#e2457e', edge: '#9c1f50', ring: [['pink', 1.8]] };
 const PALE = { fill: '#f4e7ea', edge: '#c7a3ad' };
 const GRAY = { fill: '#ddd9d0', edge: '#8f8878' };
@@ -166,7 +175,7 @@ export const COMPARE = {
   },
   vi: {
     blood: { caption: 'Gray, shiny colonies.', ...GRAY },
-    macconkey: { caption: 'Pale colonies: she ferments lactose too slowly to turn pink.', ...PALE },
+    macconkey: { caption: 'Usually pale colonies: in lab tests she does not ferment lactose.', ...PALE },
     chocolate: { caption: 'Grows well.', ...GRAY },
   },
   coco: {
@@ -184,7 +193,7 @@ export const COMPARE = {
   },
   scarlett: {
     macconkey: NO_GRAM_POSITIVE,
-    chocolate: 'Grows, but no clear rings: its blood cells were already broken by heating.',
+    chocolate: 'Grows, but no clear rings show: its blood cells were already broken by heating.',
   },
   goldie: {
     blood: { caption: 'Creamy golden colonies, often in a clear ring of broken blood cells.', ring: [['clear', 1.8]] },
@@ -207,12 +216,12 @@ export const COMPARE = {
   },
   lissie: {
     macconkey: NO_GRAM_POSITIVE,
-    chocolate: 'Small, smooth colonies, with no rings: its blood cells were already broken.',
+    chocolate: 'Small, smooth colonies, with no clear rings: its blood cells were already broken.',
   },
   sara: {
-    blood: 'Grows well, often still red.',
+    blood: 'Grows well; her red pigment may show at room temperature.',
     macconkey: { caption: 'Pale colonies, though her red pigment can still show.', fill: '#e9a2a8', edge: '#b0525c' },
-    chocolate: 'Grows well, often still red.',
+    chocolate: 'Grows well; her red pigment may show at room temperature.',
   },
   ivy: {
     blood: 'Still spreads in curling, rootlike branches.',
@@ -220,19 +229,19 @@ export const COMPARE = {
     chocolate: 'Still spreads in curling, rootlike branches.',
   },
   astrid: {
-    blood: NO('Labs grow her on plates with very little food, not rich plates like this one.'),
-    macconkey: NO('Labs grow her on plates with very little food, not on this one.'),
-    chocolate: NO('Labs grow her on plates with very little food, not rich plates like this one.'),
+    blood: NOT_SHOWN('Not shown: labs grow her on plates with very little food instead.'),
+    macconkey: NOT_SHOWN('Not shown: labs grow her on plates with very little food instead.'),
+    chocolate: NOT_SHOWN('Not shown: labs grow her on plates with very little food instead.'),
   },
   kiki: {
     blood: { caption: 'Grows well, often a little yellow.', fill: '#efe2a0', edge: '#a8930a' },
-    macconkey: { caption: 'Pink colonies: she ferments lactose.', ...PINK },
+    macconkey: { caption: 'Pink or pale colonies: only some of her strains ferment lactose.', ...PINK },
     chocolate: { caption: 'Grows well, often a little yellow.', fill: '#efe2a0', edge: '#a8930a' },
   },
   electra: {
-    blood: NO('Labs grow her with no oxygen, on plates with iron she can pass electrons to, not this one.'),
-    macconkey: NO('Labs grow her with no oxygen, on plates with iron she can pass electrons to, not this one.'),
-    chocolate: NO('Labs grow her with no oxygen, on plates with iron she can pass electrons to, not this one.'),
+    blood: NOT_SHOWN('Not shown: she needs special food and no oxygen, which this plate is not set up for.'),
+    macconkey: NOT_SHOWN('Not shown: she needs special food and no oxygen, which this plate is not set up for.'),
+    chocolate: NOT_SHOWN('Not shown: she needs special food and no oxygen, which this plate is not set up for.'),
   },
   diffany: {
     blood: 'Gray colonies, grown with no oxygen. Labs say she smells like a horse barn.',
@@ -250,18 +259,20 @@ export const COMPARE = {
     chocolate: 'Big, wet, shiny colonies.',
   },
   frannie: {
-    blood: NO("No growth: she needs extra cysteine that blood agar doesn't have."),
+    blood: { caption: 'Little or no growth: she needs a plate enriched with cysteine.', ...SCANT },
     macconkey: NO_FUSSY,
   },
   colette: {
     blood: { caption: 'Gray, shiny colonies.', ...GRAY },
-    macconkey: { caption: 'Pink colonies with a pink haze: she ferments the lactose sugar in it.', ...PINK },
+    // The haze around her is bile the plate drops out where she's most acid,
+    // not her own color spreading.
+    macconkey: { caption: 'Bright pink colonies with a cloudy halo: she ferments the lactose sugar in it.', ...PINK },
     chocolate: { caption: 'Grows well.', ...GRAY },
   },
   ari: {
-    blood: NO('Labs grow her on plain mineral agar in the light, not on rich plates like this one.'),
-    macconkey: NO('Labs grow her on plain mineral agar in the light, not on this one.'),
-    chocolate: NO('Labs grow her on plain mineral agar in the light, not on rich plates like this one.'),
+    blood: NOT_SHOWN('Not shown: labs grow her on plain mineral agar in the light instead.'),
+    macconkey: NOT_SHOWN('Not shown: labs grow her on plain mineral agar in the light instead.'),
+    chocolate: NOT_SHOWN('Not shown: labs grow her on plain mineral agar in the light instead.'),
   },
   dina: {
     blood: 'Pinkish-red colonies.',
@@ -269,9 +280,9 @@ export const COMPARE = {
     chocolate: 'Pinkish-red colonies.',
   },
   marina: {
-    blood: 'Slow colonies, after a week or more.',
+    blood: 'Slow colonies, after a week or more; she likes cooler temperatures.',
     macconkey: NO('No growth: its bile salts and crystal violet stop her.'),
-    chocolate: 'Slow colonies, after a week or more.',
+    chocolate: 'Slow colonies, after a week or more; she likes cooler temperatures.',
   },
   bree: {
     blood: 'Small, smooth colonies, after a few days.',
@@ -298,11 +309,11 @@ export const COMPARE = {
   },
   cleo: {
     macconkey: NO_GRAM_POSITIVE,
-    chocolate: 'Grows with no oxygen, but no double zone: its blood cells were already broken.',
+    chocolate: 'Grows with no oxygen, but no rings show: its blood cells were already broken.',
   },
   vera: {
     blood: 'Gray colonies, without clear rings.',
-    macconkey: { caption: 'Tiny pink colonies: unlike most Gram-positive bacteria, she can grow here.', ...PINK, size: [1.2, 1.8], ring: [] },
+    macconkey: NO('Usually no growth: standard MacConkey agar stops most Gram-positive bacteria.'),
     chocolate: 'Grows well.',
   },
 };
@@ -542,6 +553,9 @@ export function plate(id, kind = 'home') {
     '<circle cx="100" cy="100" r="96" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2.5" />' +
     `<circle cx="100" cy="100" r="${AGAR_R}" fill="url(#agar-${key})" />` +
     `<g clip-path="url(#dish-${key})">${ringLayers}${growth}</g>` +
+    // A plate labs don't grow her on: a faint veil, so an empty plate here
+    // doesn't read as "nothing grew".
+    (c.veil ? `<circle cx="100" cy="100" r="${AGAR_R}" fill="#f8fafc" opacity="0.55" />` : '') +
     // A glint on the lid.
     '<path d="M40 46 Q60 22 96 16" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.55" />' +
     '</svg>';
