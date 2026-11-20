@@ -792,15 +792,22 @@ a.pal-card:focus-visible {
   font-size: 1.1rem;
 }
 
-.profile-size {
-  margin: 0.35rem 0 0;
-  font-weight: 700;
-  color: #0f766e;
+/* Her quick facts, labeled: Size, Doubling time. */
+.profile-quick {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.2rem 0.5rem;
+  margin: 0.5rem 0 0;
 }
 
-/* How fast she doubles, under her size: a quieter second quick fact. */
-.profile-doubling {
-  margin: 0.2rem 0 0;
+.profile-quick dt {
+  color: #5d7480;
+  font-size: 0.95rem;
+}
+
+.profile-quick dd {
+  margin: 0;
+  font-weight: 700;
   color: #0f766e;
   font-size: 0.95rem;
 }
@@ -949,6 +956,12 @@ a.pal-card:focus-visible {
     grid-template-columns: 1fr;
     justify-items: center;
     text-align: center;
+  }
+
+  /* Label and value stay side by side, as one centered block. */
+  .profile-quick {
+    justify-content: center;
+    text-align: left;
   }
 }
 

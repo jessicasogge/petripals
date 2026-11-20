@@ -42,7 +42,7 @@ export function renderProfile(doc, id) {
   // How fast one cell becomes two when nothing is holding her back. Real
   // growth is slower, so the line says these are her best conditions.
   doc.querySelector('.profile-doubling').textContent =
-    `Doubles about every ${doublingText(species.doubling)} in perfect conditions`;
+    `about ${doublingText(species.doubling)} in ideal conditions`;
 
   // Her picture after a Gram stain, and why she turns that color.
   const stained = palTile(pal);

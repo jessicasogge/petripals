@@ -72,7 +72,7 @@ describe('the built site', () => {
     expect(doc.querySelector('.profile-name').textContent).toBe('Hallie');
     expect(doc.querySelector('.profile-species').textContent).toBe('Helicobacter pylori');
     expect(doc.querySelector('.profile-size').textContent).toBe('~3 µm');
-    expect(doc.querySelector('.profile-doubling').textContent).toBe('Doubles about every 3 hours in perfect conditions');
+    expect(doc.querySelector('.profile-doubling').textContent).toBe('about 3 hours in ideal conditions');
     expect(doc.querySelector('.profile-pal svg')).not.toBeNull();
     // Her stained picture keeps its stain colors.
     expect(doc.querySelector('.profile-stain-pal svg [style*="fill"]')).not.toBeNull();
