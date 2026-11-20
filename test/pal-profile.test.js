@@ -48,12 +48,12 @@ describe("a pal's profile", () => {
 
   it('says how fast she doubles, labeled, and the conditions behind it', async () => {
     await open('pal-profile.html', 'game/pal-profile.js', '?pal=cleo');
-    expect(text('.profile-doubling')).toBe('10 minutes in favorable lab conditions');
+    expect(text('.profile-doubling')).toBe('10 minutes in favorable conditions');
     // Hours for the slow ones, in words rather than minutes.
     await open('pal-profile.html', 'game/pal-profile.js', '?pal=myra');
-    expect(text('.profile-doubling')).toBe('6 hours in favorable lab conditions');
+    expect(text('.profile-doubling')).toBe('6 hours in favorable conditions');
     await open('pal-profile.html', 'game/pal-profile.js', '?pal=elia');
-    expect(text('.profile-doubling')).toBe('18 hours in favorable lab conditions');
+    expect(text('.profile-doubling')).toBe('18 hours in favorable conditions');
   });
 
   it('writes every doubling time in words a kid can read', async () => {
