@@ -536,7 +536,7 @@ export const SPECIES = {
     ],
     scientific: 'Clostridium tetani',
     micrometers: 4, // her picture's real length: with her spore
-    doubling: 30,
+    doubling: 35,
     color: '#5f6f12', // for her name above the dish
     tile: 'rgba(217, 223, 160, 0.5)',
     kind: 'rod',
