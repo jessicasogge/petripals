@@ -39,10 +39,10 @@ export function renderProfile(doc, id) {
   // About how long one of her cells is (or Nova's filament), as in Compare sizes.
   doc.querySelector('.profile-size').textContent = `~${cellLength(pal)} µm`;
 
-  // How fast one cell becomes two when nothing is holding her back. Real
-  // growth is slower, so the line says these are her best conditions.
+  // How fast one cell becomes two with nothing holding her back. Real growth
+  // is slower, so the line says the conditions these figures come from.
   doc.querySelector('.profile-doubling').textContent =
-    `about ${doublingText(species.doubling)} in ideal conditions`;
+    `${doublingText(species.doubling)} in favorable lab conditions`;
 
   // Her picture after a Gram stain, and why she turns that color.
   const stained = palTile(pal);
