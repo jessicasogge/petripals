@@ -34,11 +34,6 @@
 // saying more (Nova's filament). The picker's Compare sizes button shows the pals' sizes relative
 // to each other, labeled with one cell's length.
 //
-// `doubling` is how many minutes one cell takes to become two when nothing
-// is holding her back: the right food, the right warmth and plenty of room.
-// Real growth is slower, since cells start slowly and crowd each other later.
-// Her profile says it in words (see game/profile.js).
-//
 // `gram` is how she looks after a Gram stain: 'positive' cells stay purple,
 // 'negative' ones turn pink (the picker's microscope mode shows this).
 // `faintStain` marks a pal who barely takes the stain at all (Elia, Marina, Myra).
