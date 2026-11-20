@@ -29,7 +29,7 @@ export const GRAM_STEPS = [
     name: 'Iodine',
     dye: '#b45309',
     shades: purpleFor,
-    says: 'Nothing looks different yet. The iodine locks the purple inside, so it cannot simply rinse away.',
+    says: 'Nothing looks different yet. The iodine locks the purple inside.',
   },
   {
     name: 'Alcohol',
