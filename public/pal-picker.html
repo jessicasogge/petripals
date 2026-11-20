@@ -55,12 +55,13 @@
         <b class="gram-positive">purple = Gram-positive</b>,
         <b class="gram-negative">pink = Gram-negative</b>
       </p>
-      <!-- Through to the mini-game, where you do the stain step by step. -->
+      <!-- Do the stain step by step, on these same pals (game/gram-steps.js). -->
       <p class="stain-cta" hidden>
-        <a class="stain-btn" href="./gram-stain.html">
-          <span aria-hidden="true">🧪</span> Do the stain yourself
-        </a>
+        <button class="stain-btn" type="button">Do the stain yourself</button>
       </p>
+      <!-- A button per dye, in order, made by game/pal-picker.js. -->
+      <ol class="stain-steps" hidden></ol>
+      <p class="stain-caption" aria-live="polite" hidden></p>
 
       <!-- A page of cards for each page of pals, made by game/pal-picker.js
            from game/pals.js. One page shows at a time. -->
