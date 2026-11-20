@@ -102,7 +102,7 @@ function card(pal) {
 }
 
 // The microscope button: switch every pal between her colors and her Gram
-// stain colors.
+// stain colors, with a way through to the stain mini-game (gram-stain.html).
 const shell = document.querySelector('.picker-shell');
 const scope = document.querySelector('.scope-btn');
 
@@ -111,6 +111,8 @@ function showStain(stained) {
   scope.setAttribute('aria-pressed', String(stained));
   scope.querySelector('.scope-label').textContent = stained ? 'Back to color' : 'Gram stain';
   document.querySelector('.scope-caption').hidden = !stained;
+  // The way through to the stain mini-game, beside the caption it explains.
+  document.querySelector('.stain-cta').hidden = !stained;
   for (const pal of PALS) {
     const svg = document.querySelector(`.pal-icon.${pal.id} svg`);
     if (stained) stainPal(svg, SPECIES[pal.id]);

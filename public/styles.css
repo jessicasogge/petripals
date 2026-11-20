@@ -310,6 +310,134 @@ body {
   color: #db2777;
 }
 
+/* Through to the stain mini-game, under the Gram stain caption. */
+.stain-cta {
+  margin: -0.6rem 0 1rem;
+  text-align: center;
+}
+
+.stain-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.95rem;
+  border: 2px solid #0f766e;
+  border-radius: 999px;
+  background: #fff;
+  color: #0f766e;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+/* The Gram stain mini-game (game/gram-stain.js). */
+.stain-shell {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+}
+
+.stain-intro {
+  margin: -0.4rem 0 0;
+  color: #475569;
+}
+
+.stain-steps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stain-step {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid #cbe7e0;
+  border-radius: 999px;
+  background: #fff;
+  color: #0f766e;
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+/* The drop of dye on each button, in that dye's color. */
+.stain-drop {
+  width: 13px;
+  height: 13px;
+  flex: none;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  background: var(--dye);
+}
+
+/* The step you can take next. */
+.stain-step.next {
+  border-color: var(--dye);
+}
+
+/* The steps already done, and the ones still to come. */
+.stain-step:disabled {
+  cursor: default;
+  color: #7d9b96;
+  background: #eef7f5;
+  border-color: #dcebe7;
+}
+
+.stain-step.done .stain-drop {
+  opacity: 0.45;
+}
+
+.stain-slide {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid #d8e6ee;
+  border-radius: 14px;
+  background: linear-gradient(#fbfdff, #eef4f8);
+}
+
+.stain-cell {
+  margin: 0;
+  text-align: center;
+}
+
+/* On the slide she sits on glass, not on her own tile color. */
+.stain-slide .pal-icon {
+  width: 104px;
+  height: 104px;
+  margin: 0;
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: inset 0 0 0 1px #e2ecf2;
+}
+
+.stain-slide .pal-icon svg {
+  width: 86px;
+  height: 86px;
+  transition: filter 0.2s;
+}
+
+.stain-cell figcaption {
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+.stain-caption {
+  margin: 0;
+  max-width: 34rem;
+  text-align: center;
+  line-height: 1.45;
+}
+
 /* Compare sizes (game/pal-picker.js): the same kind of button in the opposite
    corner, which shows the pals' sizes relative to each other. */
 .scale-btn {
