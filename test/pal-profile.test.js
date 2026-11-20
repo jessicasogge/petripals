@@ -51,21 +51,31 @@ describe("a pal's profile", () => {
     expect(text('.profile-doubling')).toBe('10 minutes in favorable conditions');
     // Hours for the slow ones, in words rather than minutes.
     await open('pal-profile.html', 'game/pal-profile.js', '?pal=myra');
-    expect(text('.profile-doubling')).toBe('6 hours in favorable conditions');
+    expect(text('.profile-doubling')).toBe('12 hours in favorable conditions');
     await open('pal-profile.html', 'game/pal-profile.js', '?pal=elia');
     expect(text('.profile-doubling')).toBe('18 hours in favorable conditions');
   });
 
-  it('writes every doubling time in words a kid can read', async () => {
+  it('writes every doubling time so it reads after her label', async () => {
     const { doublingText } = await import('../public/game/profile.js');
     expect(doublingText(45)).toBe('45 minutes');
-    expect(doublingText(60)).toBe('hour');
-    expect(doublingText(90)).toBe('hour and a half');
-    expect(doublingText(150)).toBe('2 and a half hours');
-    expect(doublingText(240)).toBe('4 hours');
-    // Every pal's reads as a phrase, with no leftover decimals.
-    for (const species of Object.values(SPECIES)) {
-      expect(doublingText(species.doubling)).toMatch(/^(\d+ minutes|hour|hour and a half|\d+ hours|\d+ and a half hours)$/);
+    expect(doublingText(60)).toBe('1 hour');
+    expect(doublingText(90)).toBe('1.5 hours');
+    expect(doublingText(150)).toBe('2.5 hours');
+    expect(doublingText(720)).toBe('12 hours');
+    // Every pal's reads as a counted phrase ("1 hour", never a bare "hour"),
+    // since it follows "Approximate doubling time:".
+    for (const [pal, species] of Object.entries(SPECIES)) {
+      expect(doublingText(species.doubling), pal).toMatch(/^\d+(\.5)? (minutes|hours?)$/);
+    }
+  });
+
+  it('reads as a whole sentence on every pal, with nothing left over', async () => {
+    for (const id of Object.keys(SPECIES)) {
+      await open('pal-profile.html', 'game/pal-profile.js', `?pal=${id}`);
+      const label = [...document.querySelectorAll('.profile-quick dt')].at(-1).textContent;
+      expect(`${label} ${text('.profile-doubling')}`, id)
+        .toMatch(/^Approximate doubling time: \d+(\.5)? (minutes|hours?) in favorable conditions$/);
     }
   });
 

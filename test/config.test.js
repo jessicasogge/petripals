@@ -374,6 +374,14 @@ describe('doubling times', () => {
     }
   });
 
+  it('keeps every one a round figure, since they are representative numbers', () => {
+    for (const [pal, species] of Object.entries(SPECIES)) {
+      const { doubling } = species;
+      // Minutes land on 5s; anything an hour or longer lands on a half hour.
+      expect(doubling % (doubling < 60 ? 5 : 30), pal).toBe(0);
+    }
+  });
+
   it('puts the fast growers ahead of the slow ones', () => {
     const faster = (a, b) => expect(SPECIES[a].doubling, `${a} vs ${b}`).toBeLessThan(SPECIES[b].doubling);
     faster('cleo', 'colette'); // Cleo is the fastest pal

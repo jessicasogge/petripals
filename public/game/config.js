@@ -851,7 +851,7 @@ export const SPECIES = {
     ],
     scientific: 'Clostridioides difficile',
     micrometers: 4.5, // her picture's real length: one cell
-    doubling: 90,
+    doubling: 60,
     color: '#7a2e1a', // for her name above the dish
     tile: 'rgba(210, 146, 127, 0.3)',
     kind: 'rod',
@@ -1424,7 +1424,7 @@ export const SPECIES = {
     ],
     scientific: 'Mycoplasma pneumoniae',
     micrometers: 1.5, // her picture's real length: one cell
-    doubling: 360,
+    doubling: 720,
     color: '#2b3b4e', // for her name above the dish
     tile: 'rgba(120, 144, 168, 0.3)',
     kind: 'rod',

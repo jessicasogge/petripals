@@ -12,15 +12,13 @@ import { speciesName, withItalics } from './italics.js';
 import { cellLength, palById, palTile } from './pals.js';
 import { stainPal } from './stain.js';
 
-// How often she doubles, in words: "20 minutes", "an hour and a half",
-// "3 hours". Round numbers, since these are typical figures, not exact ones.
+// How long she takes to double, in words: "20 minutes", "1 hour",
+// "1.5 hours", "12 hours". Round figures, since these are representative
+// numbers rather than exact ones.
 export function doublingText(minutes) {
   if (minutes < 60) return `${minutes} minutes`;
   const hours = minutes / 60;
-  if (hours === 1) return 'hour';
-  if (hours === 1.5) return 'hour and a half';
-  if (Number.isInteger(hours)) return `${hours} hours`;
-  return `${Math.floor(hours)} and a half hours`;
+  return `${hours} ${hours === 1 ? 'hour' : 'hours'}`;
 }
 
 export function renderProfile(doc, id) {
