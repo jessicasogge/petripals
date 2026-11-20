@@ -792,24 +792,28 @@ a.pal-card:focus-visible {
   font-size: 1.1rem;
 }
 
-/* Her quick facts, labeled: Size, Doubling time. */
+/* Her quick facts, labeled: Size, Doubling time. Each label sits right
+   beside its own value, rather than lining the values up in a column. */
 .profile-quick {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 0.2rem 0.5rem;
   margin: 0.5rem 0 0;
+  font-size: 0.95rem;
+}
+
+.profile-quick > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.35rem;
+  margin-top: 0.2rem;
 }
 
 .profile-quick dt {
   color: #5d7480;
-  font-size: 0.95rem;
 }
 
 .profile-quick dd {
   margin: 0;
   font-weight: 700;
   color: #0f766e;
-  font-size: 0.95rem;
 }
 
 .profile-stain {
@@ -958,10 +962,9 @@ a.pal-card:focus-visible {
     text-align: center;
   }
 
-  /* Label and value stay side by side, as one centered block. */
-  .profile-quick {
+  /* Label and value stay side by side, centered under her name. */
+  .profile-quick > div {
     justify-content: center;
-    text-align: left;
   }
 }
 
