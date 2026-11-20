@@ -68,7 +68,7 @@ describe('doing the stain yourself', () => {
     expect(dyes().map((b) => b.textContent.trim()))
       .toEqual(['Crystal violet', 'Iodine', 'Alcohol', 'Safranin']);
     expect(dyes().map((b) => b.disabled)).toEqual([false, true, true, true]);
-    expect(stepCaption()).toMatch(/Tap the first one/);
+    expect(stepCaption()).toBe('Tap crystal violet to begin.');
     // The usual caption steps aside while the steps are running.
     expect(document.querySelector('.scope-caption').hidden).toBe(true);
   });
@@ -142,7 +142,7 @@ describe('doing the stain yourself', () => {
     expect(document.querySelector('.stain-steps').hidden).toBe(true);
     expect(readFileSync(resolve(process.cwd(), 'public', 'styles.css'), 'utf8'))
       .toMatch(/\n\.stain-steps\[hidden\] \{\s*display: none;/);
-    expect(stepCaption()).toMatch(/finished Gram stain/);
+    expect(stepCaption()).toMatch(/only shows on the cells that lost their purple/);
     // The pals look the way the button leaves them, so its caption fits again.
     expect(document.querySelector('.scope-caption').hidden).toBe(false);
     expect(document.querySelector('.stain-btn').textContent).toBe('Do the stain again');

@@ -196,7 +196,7 @@ scope?.addEventListener('click', () => showStain(!shell.classList.contains('stai
 ctaBtn.addEventListener('click', () => {
   step = 0;
   paintAll(null);
-  stepCaption.textContent = 'Four dyes, in order. Tap the first one to begin.';
+  stepCaption.textContent = `Tap ${GRAM_STEPS[0].name.toLowerCase()} to begin.`;
   showSteps();
 });
 

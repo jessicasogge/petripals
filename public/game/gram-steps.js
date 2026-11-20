@@ -36,12 +36,12 @@ export const GRAM_STEPS = [
     dye: '#38bdf8',
     // A thick wall keeps what it has; a thin one is rinsed colorless.
     shades: (species) => (species.gram === 'positive' ? purpleFor(species) : WASHED),
-    says: 'The step that tells them apart. A thick wall holds the purple in. A thin wall lets it wash out, leaving the cell colorless.',
+    says: 'A thick wall holds the purple in. A thin wall lets it wash out, leaving the cell colorless.',
   },
   {
     name: 'Safranin',
     dye: '#db2777',
     shades: stainOf,
-    says: 'A pink dye, which only shows on the cells that lost their purple. That is a finished Gram stain.',
+    says: 'A pink dye, which only shows on the cells that lost their purple.',
   },
 ];
