@@ -1517,7 +1517,7 @@ export const SPECIES = {
     scientific: 'Enterococcus faecium',
     micrometers: 2, // her picture's real length: a pair
     cellMicrometers: 1, // one of her cells
-    doubling: 30,
+    doubling: 60,
     color: '#7a1f55', // for her name above the dish
     tile: 'rgba(200, 80, 140, 0.2)',
     kind: 'coccus',
