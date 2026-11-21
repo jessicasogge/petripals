@@ -9,6 +9,10 @@ import { factDeck, quizPals, ROUND_SIZE } from '../public/game/guess.js';
 import { PALS } from '../public/game/pals.js';
 import { QUIZ_FACTS } from '../public/game/quiz-facts.js';
 
+// Count the events the quiz sends to GoatCounter (see game/track.js).
+vi.mock('../public/game/track.js', () => ({ track: vi.fn() }));
+const { track } = await import('../public/game/track.js');
+
 const page = readFileSync(resolve(process.cwd(), 'public/whos-that-pal.html'), 'utf8');
 
 // The same 12 pals and deck the page picks, with Math.random pinned to 0
@@ -141,5 +145,57 @@ describe('Who’s That Pal?', () => {
     expect(fact().textContent).toMatch(/\b[Tt]his pal\b/);
     button(pal.id).click();
     expect(next().hidden).toBe(false);
+  });
+});
+
+describe('counting which facts are hard', () => {
+  const paths = () => track.mock.calls.map(([path]) => path);
+
+  it('counts every fact it asks, against the pal it is about', async () => {
+    track.mockClear();
+    await open();
+    expect(paths()).toEqual([`quiz/asked/${dealt(0).pal.id}`]);
+    expect(track.mock.calls[0][1]).toBe(`${dealt(0).pal.name}'s fact was asked`);
+    // Getting her right and moving on asks the next one.
+    button(dealt(0).pal.id).click();
+    next().click();
+    expect(paths()).toEqual([`quiz/asked/${dealt(0).pal.id}`, `quiz/asked/${dealt(1).pal.id}`]);
+  });
+
+  it('counts a miss against the pal the fact is about, not the one tapped', async () => {
+    track.mockClear();
+    await open();
+    const answer = dealt(0).pal;
+    button(wrong(answer).id).click();
+    expect(paths()).toEqual([`quiz/asked/${answer.id}`, `quiz/missed/${answer.id}`]);
+    expect(track.mock.calls[1][1]).toBe(`${answer.name}'s fact was missed`);
+  });
+
+  it('counts one miss a fact, however many wrong guesses it takes', async () => {
+    track.mockClear();
+    await open();
+    const answer = dealt(0).pal;
+    for (const other of round.filter((pal) => pal.id !== answer.id).slice(0, 3)) button(other.id).click();
+    expect(paths().filter((path) => path.startsWith('quiz/missed'))).toHaveLength(1);
+  });
+
+  it('counts nothing for a right answer, so asked and missed give a miss rate', async () => {
+    track.mockClear();
+    await open();
+    button(dealt(0).pal.id).click();
+    expect(paths()).toEqual([`quiz/asked/${dealt(0).pal.id}`]);
+  });
+
+  it('starts each fact fresh, so a miss on one is not held against the next', async () => {
+    track.mockClear();
+    await open();
+    button(wrong(dealt(0).pal).id).click(); // missed
+    button(dealt(0).pal.id).click();
+    next().click();
+    button(wrong(dealt(1).pal).id).click(); // missed again, a different fact
+    expect(paths().filter((path) => path.startsWith('quiz/missed'))).toEqual([
+      `quiz/missed/${dealt(0).pal.id}`,
+      `quiz/missed/${dealt(1).pal.id}`,
+    ]);
   });
 });
