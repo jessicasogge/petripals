@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { GAME, MIXED } from '../public/game/config.js';
-import { chooseTarget, rivalBrain } from '../public/game/rival.js';
+import { GAME, MIXED, SPECIES } from '../public/game/config.js';
+import { chooseTarget, rivalBrain, rivalSpeed } from '../public/game/rival.js';
 
 const flecks = [{ fx: 0.5, fy: 0 }, { fx: 0.1, fy: 0 }, { fx: -0.3, fy: 0 }];
 
@@ -46,18 +46,38 @@ describe('rivalBrain', () => {
     expect(MIXED.RIVAL_START_MS).toBe(1000);
   });
 
-  it('swims toward the nutrient it picked, at the rival\'s speed', () => {
+  it('swims toward the nutrient it picked, at the speed it was given', () => {
+    const speed = MIXED.RIVAL_SPEEDS['all-over'];
     const leader = { x: 0, y: 0, facing: 1 };
-    const brain = rivalBrain(leader, plate([{ fx: -0.5, fy: 0 }]), steady);
+    const brain = rivalBrain(leader, plate([{ fx: -0.5, fy: 0 }]), steady, speed);
     ready(brain);
     brain.step(0.1, radius);
-    expect(leader.x).toBeCloseTo(-MIXED.RIVAL_SPEED * radius * 0.1);
+    expect(leader.x).toBeCloseTo(-speed * radius * 0.1);
     expect(leader.y).toBeCloseTo(0);
     expect(leader.facing).toBe(-1); // turned to face it
   });
 
-  it('is slower than you', () => {
-    expect(MIXED.RIVAL_SPEED).toBeLessThan(GAME.SPEED);
+  it('swims at her own speed, by how she really gets around', () => {
+    // Colette's flagella all over carry her further than Goldie, who has none.
+    const swim = (species) => {
+      const leader = { x: 0, y: 0, facing: 1 };
+      const brain = rivalBrain(leader, plate([{ fx: -0.5, fy: 0 }]), steady, rivalSpeed(species));
+      ready(brain);
+      brain.step(0.1, radius);
+      return Math.abs(leader.x);
+    };
+    expect(swim(SPECIES.colette)).toBeGreaterThan(swim(SPECIES.goldie));
+    expect(rivalSpeed(SPECIES.colette)).toBe(MIXED.RIVAL_SPEEDS['all-over']);
+    expect(rivalSpeed(SPECIES.goldie)).toBe(MIXED.RIVAL_SPEEDS.still);
+  });
+
+  it('is slower than you, whoever she is, so every race is winnable', () => {
+    for (const [how, speed] of Object.entries(MIXED.RIVAL_SPEEDS)) {
+      expect(speed, how).toBeLessThan(GAME.SPEED);
+      expect(speed, how).toBeGreaterThan(0);
+    }
+    // A pal who really swims is quicker than one who doesn't.
+    expect(MIXED.RIVAL_SPEEDS['all-over']).toBeGreaterThan(MIXED.RIVAL_SPEEDS.still);
   });
 
   it('stays put when there\'s nothing to eat', () => {

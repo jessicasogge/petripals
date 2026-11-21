@@ -1,7 +1,8 @@
 // Checks that the game's settings in config.js are complete and sensible.
 // (The pals' names and drawings are checked in pals.test.js.)
 import { describe, expect, it } from 'vitest';
-import { GAME, LEVELS, SPECIES } from '../public/game/config.js';
+import { GAME, LEVELS, MIXED, SPECIES } from '../public/game/config.js';
+import { PALS as DRAWINGS } from '../public/game/pals.js';
 
 const PALS = Object.keys(SPECIES);
 
@@ -360,6 +361,44 @@ describe('real sizes', () => {
     for (const pal of groups) {
       expect(SPECIES[pal].cellMicrometers, pal).toBeLessThan(SPECIES[pal].micrometers);
     }
+  });
+});
+
+describe('how each pal gets around', () => {
+  const WAYS = ['all-over', 'one-end', 'twisting', 'crawls', 'still'];
+
+  it('gives every pal one way, and every way a rival speed and a note', () => {
+    for (const [pal, species] of Object.entries(SPECIES)) {
+      expect(WAYS, pal).toContain(species.swims);
+    }
+    expect(Object.keys(MIXED.RIVAL_SPEEDS).sort()).toEqual([...WAYS].sort());
+    expect(Object.keys(MIXED.RIVAL_NOTES).sort()).toEqual([...WAYS].sort());
+    // Every way is really used by somebody.
+    const used = new Set(Object.values(SPECIES).map((s) => s.swims));
+    expect([...used].sort()).toEqual([...WAYS].sort());
+  });
+
+  it('matches how she is drawn: a pal with flagella is never still', () => {
+    // Her drawing is the other record of this, so the two can't drift apart.
+    for (const pal of DRAWINGS) {
+      const drawnSwimming = pal.art.includes('class="flagellum"');
+      if (drawnSwimming) expect(SPECIES[pal.id].swims, pal.id).not.toBe('still');
+    }
+    // The ones drawn without them, because their flagella are inside her
+    // (Elia) or left off (Ceres), still say how they really move.
+    expect(SPECIES.elia.swims).toBe('twisting');
+    expect(SPECIES.ceres.swims).toBe('all-over');
+  });
+
+  it('agrees with her facts about flagella', () => {
+    // A pal whose facts say she has no flagella doesn't swim as a rival.
+    for (const [pal, species] of Object.entries(SPECIES)) {
+      const saysNone = species.facts.some((fact) => /\bno flagell(a|um)\b/.test(fact));
+      if (saysNone) expect(['still', 'crawls'], pal).toContain(species.swims);
+    }
+    // And the two who have none but still get about say so.
+    expect(SPECIES.myra.swims).toBe('crawls'); // glides
+    expect(SPECIES.nessa.swims).toBe('crawls'); // twitches on her pili
   });
 });
 

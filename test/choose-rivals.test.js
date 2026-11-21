@@ -32,6 +32,20 @@ afterEach(() => {
 });
 
 describe('picking rivals', () => {
+  it('says how each rival gets around, so picking is a real choice', async () => {
+    await open('?pal=mona');
+    const cards = [...document.querySelectorAll('.rival-btn')];
+    expect(cards.length).toBeGreaterThan(0);
+    for (const card of cards) {
+      expect(card.querySelector('.rival-note').textContent, card.dataset.pal)
+        .toBe(MIXED.RIVAL_NOTES[SPECIES[card.dataset.pal].swims]);
+    }
+    // The notes say fast or slow, so a kid can tell before tapping.
+    const notes = cards.map((card) => card.querySelector('.rival-note').textContent);
+    expect(notes.some((note) => note.startsWith('Fast') || note.startsWith('Quick'))).toBe(true);
+    expect(notes.some((note) => note.startsWith('Slow'))).toBe(true);
+  });
+
   it('offers the other pals, as many as fit, each once and never yours', async () => {
     await open('?pal=mona');
     const offered = [...document.querySelectorAll('.rival-btn')].map((b) => b.dataset.pal);
