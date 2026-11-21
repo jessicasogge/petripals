@@ -218,6 +218,22 @@ describe('counting how far people get', () => {
     expect(paths()).toEqual(['gram-stain/on']);
   });
 
+  it('counts turning Compare sizes on, but not turning it off', async () => {
+    await open();
+    document.querySelector('.scale-btn').click();
+    expect(paths()).toEqual(['compare-sizes/on']);
+    expect(track.mock.calls[0][1]).toBe('Turned on Compare sizes');
+    document.querySelector('.scale-btn').click(); // back to full size
+    expect(paths()).toEqual(['compare-sizes/on']);
+  });
+
+  it('counts the two buttons apart from each other', async () => {
+    await open();
+    document.querySelector('.scale-btn').click();
+    document.querySelector('.scope-btn').click();
+    expect(paths()).toEqual(['compare-sizes/on', 'gram-stain/on']);
+  });
+
   it('counts the whole run: starting, each dye, and finishing', async () => {
     await open();
     document.querySelector('.scope-btn').click();
@@ -251,12 +267,17 @@ describe('counting how far people get', () => {
   it('counts each one once a visit, so one kid is not a crowd', async () => {
     await open();
     const scope = document.querySelector('.scope-btn');
+    const scaleBtn = document.querySelector('.scale-btn');
     for (let i = 0; i < 3; i++) {
       scope.click(); // on
       document.querySelector('.stain-btn').click();
       takeAll('Crystal violet');
       scope.click(); // off
+      scaleBtn.click();
+      scaleBtn.click();
     }
-    expect(paths()).toEqual(['gram-stain/on', 'gram-stain/started', 'gram-stain/dye/crystal-violet']);
+    expect(paths()).toEqual([
+      'gram-stain/on', 'gram-stain/started', 'gram-stain/dye/crystal-violet', 'compare-sizes/on',
+    ]);
   });
 });
