@@ -31,7 +31,11 @@ if (!pal || !Object.hasOwn(SPECIES, id)) {
     name.className = 'rival-name';
     name.textContent = other.name;
     name.style.color = SPECIES[other.id].color;
-    button.append(palTile(other), name);
+    // How she gets around, so picking rivals is a real choice.
+    const note = document.createElement('span');
+    note.className = 'rival-note';
+    note.textContent = MIXED.RIVAL_NOTES[SPECIES[other.id].swims];
+    button.append(palTile(other), name, note);
     button.addEventListener('click', () => toggle(other.id));
     return button;
   });
