@@ -5,6 +5,7 @@ import { shortSpeciesName, speciesName } from './italics.js';
 import { pageReady, watchLoading } from './loading.js';
 import { PALS, palTile } from './pals.js';
 import { QUIZ_FACTS } from './quiz-facts.js';
+import { track } from './track.js';
 
 // "Growing the colony…" while the next screen loads.
 watchLoading();
@@ -50,11 +51,19 @@ function startRound() {
   total = deck.length;
 }
 
+// Whether this fact has already been missed, so one fact counts once
+// however many wrong guesses it takes.
+let missed = false;
+
 function showNext() {
   // Through every fact about this round's pals once, then a new round
   // picked at random again, counting from 1.
   if (deck.length === 0) startRound();
   current = deck.pop();
+  missed = false;
+  // Counted against the pal the fact is about, so asked and missed together
+  // show which facts don't point clearly to one pal (see game/track.js).
+  track(`quiz/asked/${current.pal.id}`, `${current.pal.name}'s fact was asked`);
   // How far through the facts you are (2 / 88), not a score.
   counter.textContent = `Fact ${total - deck.length} of ${total}`;
   factEl.replaceChildren(...withBlanks(current.fact, current.pal.name));
@@ -70,6 +79,10 @@ function guess(pal, button) {
   if (pal.id !== current.pal.id) {
     status.textContent = `Not ${pal.name}. Try again!`;
     button.disabled = true;
+    if (!missed) {
+      missed = true;
+      track(`quiz/missed/${current.pal.id}`, `${current.pal.name}'s fact was missed`);
+    }
     return;
   }
   

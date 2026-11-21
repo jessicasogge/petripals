@@ -151,16 +151,16 @@ const dyes = GRAM_STEPS.map((dye, i) => {
   return button;
 });
 
-// Counting how far people get with the stain (see game/track.js), each of
-// these once a visit, so one kid flipping back and forth doesn't look like
-// a crowd. That gives the whole run on the dashboard: how many turned the
-// Gram stain on, how many went on to do it themselves, which dye they
-// stopped at, and how many saw it through.
+// Counting what the picker's buttons get used for (see game/track.js), each
+// once a visit, so one kid flipping back and forth doesn't look like a
+// crowd. For the Gram stain that gives the whole run on the dashboard: how
+// many turned it on, how many went on to do the stain themselves, which dye
+// they stopped at, and how many saw it through.
 const counted = new Set();
 function countOnce(name, title) {
   if (counted.has(name)) return;
   counted.add(name);
-  track(`gram-stain/${name}`, title);
+  track(name, title);
 }
 
 function takeStep(next) {
@@ -170,8 +170,8 @@ function takeStep(next) {
   stepCaption.textContent = dye.says;
   showSteps();
   const dyeName = dye.name.toLowerCase().replace(/ /g, '-');
-  countOnce(`dye/${dyeName}`, `Added ${dye.name.toLowerCase()} to the slide`);
-  if (next === GRAM_STEPS.length) countOnce('finished', 'Finished the whole Gram stain');
+  countOnce(`gram-stain/dye/${dyeName}`, `Added ${dye.name.toLowerCase()} to the slide`);
+  if (next === GRAM_STEPS.length) countOnce('gram-stain/finished', 'Finished the whole Gram stain');
 }
 
 // What the step row and the captions show. Once the last dye is on, the
@@ -209,7 +209,7 @@ function showStain(stained) {
 scope?.addEventListener('click', () => {
   const stained = !shell.classList.contains('stained');
   showStain(stained);
-  if (stained) countOnce('on', 'Turned on the Gram stain');
+  if (stained) countOnce('gram-stain/on', 'Turned on the Gram stain');
 });
 
 // Start the steps: back to her own colors, with the first dye to tap.
@@ -218,7 +218,7 @@ ctaBtn.addEventListener('click', () => {
   paintAll(null);
   stepCaption.textContent = `Tap ${GRAM_STEPS[0].name.toLowerCase()} to begin.`;
   showSteps();
-  countOnce('started', 'Started doing the stain themselves');
+  countOnce('gram-stain/started', 'Started doing the stain themselves');
 });
 
 showSteps();
@@ -253,7 +253,11 @@ function showScale(scaled) {
   }
 }
 
-scale?.addEventListener('click', () => showScale(!shell.classList.contains('to-scale')));
+scale?.addEventListener('click', () => {
+  const scaled = !shell.classList.contains('to-scale');
+  showScale(scaled);
+  if (scaled) countOnce('compare-sizes/on', 'Turned on Compare sizes');
+});
 
 // All filled in: take the loading card away.
 pageReady();
