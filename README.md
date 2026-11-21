@@ -92,6 +92,7 @@ In the picker's corners, **Gram stain** shows every pal as she'd look under a mi
 
 Under that caption, **Do the stain yourself** walks the four steps that get there, on the same pals. They go back to their own colors, and four dyes appear to tap in order. **Crystal violet** stains every cell purple, or only palely for the three who barely stain. **Iodine** locks that dye inside, and is the one step you can't see happen, which the caption says out loud. **Alcohol** is where they part: a thick wall holds the purple in (Marina's waxy one keeps her pale), and a thin wall lets it wash out, leaving the cell colorless. **Safranin** is a pink dye that only shows on the cells that lost their purple, and lands every pal on exactly the shades microscope mode gives her (`stainOf`), so the last step leaves the picker as the Gram stain button would. The steps reach every page of the picker, not just the one showing (`public/game/gram-steps.js`).
 
+GoatCounter counts how far people get: `gram-stain/on` when the Gram stain button goes on, `gram-stain/started` when someone taps **Do the stain yourself**, a `gram-stain/dye/...` for each dye, and `gram-stain/finished` at the end. Each counts once a visit, so one kid flipping back and forth doesn't look like a crowd, and the dye events show which step people stop at (`countOnce` in `game/pal-picker.js`).
 
 ## The real science
 

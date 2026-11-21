@@ -9,6 +9,10 @@ import { SPECIES } from '../public/game/config.js';
 import { GRAM_STEPS, WASHED } from '../public/game/gram-steps.js';
 import { STAINS, stainOf } from '../public/game/stain.js';
 
+// Count the events the picker sends to GoatCounter (see game/track.js).
+vi.mock('../public/game/track.js', () => ({ track: vi.fn() }));
+const { track } = await import('../public/game/track.js');
+
 const file = (name) => readFileSync(resolve(process.cwd(), 'public', name), 'utf8');
 
 async function openPicker() {
@@ -195,5 +199,64 @@ describe('the steps themselves', () => {
     for (const species of Object.values(SPECIES)) {
       expect(last.shades(species)).toEqual(stainOf(species));
     }
+  });
+});
+
+describe('counting how far people get', () => {
+  const paths = () => track.mock.calls.map(([path]) => path);
+  const open = async () => {
+    track.mockClear();
+    await openPicker();
+  };
+
+  it('counts turning the Gram stain on, but not turning it off', async () => {
+    await open();
+    expect(paths()).toEqual([]);
+    document.querySelector('.scope-btn').click();
+    expect(paths()).toEqual(['gram-stain/on']);
+    document.querySelector('.scope-btn').click(); // back to color
+    expect(paths()).toEqual(['gram-stain/on']);
+  });
+
+  it('counts the whole run: starting, each dye, and finishing', async () => {
+    await open();
+    document.querySelector('.scope-btn').click();
+    document.querySelector('.stain-btn').click();
+    takeAll('Crystal violet', 'Iodine', 'Alcohol', 'Safranin');
+    expect(paths()).toEqual([
+      'gram-stain/on',
+      'gram-stain/started',
+      'gram-stain/dye/crystal-violet',
+      'gram-stain/dye/iodine',
+      'gram-stain/dye/alcohol',
+      'gram-stain/dye/safranin',
+      'gram-stain/finished',
+    ]);
+    // Each one says in words what it was, for the dashboard.
+    const titles = track.mock.calls.map(([, title]) => title);
+    expect(titles[0]).toBe('Turned on the Gram stain');
+    expect(titles.at(-1)).toBe('Finished the whole Gram stain');
+  });
+
+  it('shows where someone stopped, without counting the rest', async () => {
+    await open();
+    document.querySelector('.scope-btn').click();
+    document.querySelector('.stain-btn').click();
+    takeAll('Crystal violet', 'Iodine');
+    expect(paths()).toContain('gram-stain/dye/iodine');
+    expect(paths()).not.toContain('gram-stain/dye/alcohol');
+    expect(paths()).not.toContain('gram-stain/finished');
+  });
+
+  it('counts each one once a visit, so one kid is not a crowd', async () => {
+    await open();
+    const scope = document.querySelector('.scope-btn');
+    for (let i = 0; i < 3; i++) {
+      scope.click(); // on
+      document.querySelector('.stain-btn').click();
+      takeAll('Crystal violet');
+      scope.click(); // off
+    }
+    expect(paths()).toEqual(['gram-stain/on', 'gram-stain/started', 'gram-stain/dye/crystal-violet']);
   });
 });
