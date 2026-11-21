@@ -1601,13 +1601,15 @@ export const MIXED = {
     crawls: 0.42,
     still: 0.36,
   },
-  // What her card says on the rival screen, so picking is a real choice.
+  // What her card says on the rival screen, so picking is a real choice: how
+  // fast she'll be, then why. The words rank in the same order as the speeds
+  // above, so a glance tells you who's the harder race.
   RIVAL_NOTES: {
-    'all-over': 'Fast: flagella all over',
-    'one-end': 'Quick: flagella at one end',
-    twisting: 'Quick: swims by twisting',
+    'all-over': 'Fastest: flagella all over',
+    'one-end': 'Fast: flagella at one end',
+    twisting: 'Medium: swims by twisting',
     crawls: 'Slow: crawls, no flagella',
-    still: 'Slow: no flagella',
+    still: 'Slowest: no flagella',
   },
   RIVAL_REACT_MS: 500, // how often the rival looks around for a new nutrient
   RIVAL_WANDER: 0.5, // how much the rival weaves off course, in radians

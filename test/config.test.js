@@ -373,9 +373,23 @@ describe('how each pal gets around', () => {
     }
     expect(Object.keys(MIXED.RIVAL_SPEEDS).sort()).toEqual([...WAYS].sort());
     expect(Object.keys(MIXED.RIVAL_NOTES).sort()).toEqual([...WAYS].sort());
+    // Each note starts with how fast she is, then why.
+    for (const note of Object.values(MIXED.RIVAL_NOTES)) expect(note).toMatch(/^[A-Z][a-z]+: .+/);
     // Every way is really used by somebody.
     const used = new Set(Object.values(SPECIES).map((s) => s.swims));
     expect([...used].sort()).toEqual([...WAYS].sort());
+  });
+
+  it('ranks the notes in the same order as the speeds, so no two words tie', () => {
+    // "Fastest" really is faster than "Fast", and so on down.
+    const ranked = ['Fastest', 'Fast', 'Medium', 'Slow', 'Slowest'];
+    const byWord = Object.entries(MIXED.RIVAL_NOTES)
+      .map(([how, note]) => [note.split(':')[0], MIXED.RIVAL_SPEEDS[how]]);
+    // Every word is used once, and they're all from the ranked list.
+    expect(byWord.map(([word]) => word).sort()).toEqual([...ranked].sort());
+    // Sorted fastest first, the words come out in rank order.
+    const order = [...byWord].sort((a, b) => b[1] - a[1]).map(([word]) => word);
+    expect(order).toEqual(ranked);
   });
 
   it('matches how she is drawn: a pal with flagella is never still', () => {

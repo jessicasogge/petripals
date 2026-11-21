@@ -42,8 +42,8 @@ describe('picking rivals', () => {
     }
     // The notes say fast or slow, so a kid can tell before tapping.
     const notes = cards.map((card) => card.querySelector('.rival-note').textContent);
-    expect(notes.some((note) => note.startsWith('Fast') || note.startsWith('Quick'))).toBe(true);
-    expect(notes.some((note) => note.startsWith('Slow'))).toBe(true);
+    expect(notes.some((note) => note.startsWith('Fastest:'))).toBe(true);
+    expect(notes.some((note) => note.startsWith('Slowest:'))).toBe(true);
   });
 
   it('offers the other pals, as many as fit, each once and never yours', async () => {
