@@ -53,16 +53,23 @@ function shadeFor(element, attribute, stain) {
   return light < 0.87 ? stain.body : stain.light;
 }
 
-// Stain `svg`, one of her drawings from pals.js. Her own colors stay in the
-// drawing underneath, so unstainPal puts them back.
-export function stainPal(svg, species) {
-  const stain = stainOf(species);
+// Paint `svg`, one of her drawings from pals.js, in one set of shades (the
+// shape of a STAINS entry). Her own colors stay in the drawing underneath,
+// so unstainPal puts them back. The Gram stain mini-game (game/gram-stain.js)
+// uses this for the steps along the way, like the washed out cells after the
+// alcohol rinse.
+export function paintPal(svg, shades) {
   for (const element of svg.querySelectorAll('[fill], [stroke]')) {
     for (const attribute of ['fill', 'stroke']) {
-      const shade = shadeFor(element, attribute, stain);
+      const shade = shadeFor(element, attribute, shades);
       if (shade) element.style.setProperty(attribute, shade);
     }
   }
+}
+
+// Stain her the way microscope mode does: the shades her species gets.
+export function stainPal(svg, species) {
+  paintPal(svg, stainOf(species));
 }
 
 export function unstainPal(svg) {

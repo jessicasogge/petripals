@@ -90,6 +90,11 @@ The picker lists the pals in alphabetical order by species (*Anabaena*, *Asticca
 
 In the picker's corners, **Gram stain** shows every pal as she'd look under a microscope after a Gram stain, and **Compare sizes** shows one cell of every pal, at her size relative to the others. Pals whose pictures show a pair, chain or cluster (Penny, Nessa, Scarlett, Goldie, Dina, Ceres, Ivy, Ari) show just the cell with their face (`cellArt` in `pals.js`). Elia, a 15 µm corkscrew, and Nova, a 15 µm filament, are the longest and nearly fill their tiles, and every other pal is drawn at her size relative to them, down to tiny Frannie (half a micrometer), who is just a speck. Ordinary rods and cocci are compared by the length of the cell body (not flagella or hairs). Astrid and Pearl are compared by their cell bodies too, with their stalks and capsule still drawn around them. Nova is one branching filament, labeled as a 15 µm filament. Each card shows about how long she really is, with a ~ for "about," since sizes vary, from typical sizes for her species (`cellMicrometers`, or `micrometers` for a pal whose picture is one cell, and `sizeNote` for a label that says more, in `config.js`). The two modes work together. Turning either one off leaves the other as it was.
 
+### Doing the stain yourself
+
+Under that caption, **Do the stain yourself** walks the four steps that get there, on the same pals. They go back to their own colors, and four dyes appear to tap in order. **Crystal violet** stains every cell purple, or only palely for the three who barely stain. **Iodine** locks that dye inside, and is the one step you can't see happen, which the caption says out loud. **Alcohol** is where they part: a thick wall holds the purple in (Marina's waxy one keeps her pale), and a thin wall lets it wash out, leaving the cell colorless. **Safranin** is a pink dye that only shows on the cells that lost their purple, and lands every pal on exactly the shades microscope mode gives her (`stainOf`), so the last step leaves the picker as the Gram stain button would. The steps reach every page of the picker, not just the one showing (`public/game/gram-steps.js`).
+
+
 ## The real science
 
 The game is loosely based on real lab microbiology:

@@ -310,6 +310,92 @@ body {
   color: #db2777;
 }
 
+/* Doing the Gram stain step by step, under the caption that explains it
+   (game/pal-picker.js). */
+.stain-cta {
+  margin: -0.6rem 0 1rem;
+  text-align: center;
+}
+
+.stain-btn {
+  padding: 0.35rem 0.95rem;
+  border: 2px solid #0f766e;
+  border-radius: 999px;
+  background: #fff;
+  color: #0f766e;
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* The four dyes, in order. */
+.stain-steps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: -0.5rem 0 0.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+/* `display: flex` would otherwise beat the browser's own [hidden] rule. */
+.stain-steps[hidden] {
+  display: none;
+}
+
+.stain-step {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.9rem;
+  border: 2px solid #cbe7e0;
+  border-radius: 999px;
+  background: #fff;
+  color: #0f766e;
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* A drop of that dye on its button. */
+.stain-drop {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  background: var(--dye);
+}
+
+/* The dye you can add next, and the ones you can't yet or already have. */
+.stain-step:not(:disabled) {
+  border-color: var(--dye);
+}
+
+.stain-step:disabled {
+  cursor: default;
+  color: #7d9b96;
+  background: #eef7f5;
+  border-color: #dcebe7;
+}
+
+.stain-step.done .stain-drop {
+  opacity: 0.45;
+}
+
+/* What the dye you just added did. */
+.stain-caption {
+  margin: -0.25rem auto 1rem;
+  max-width: 34rem;
+  text-align: center;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: #475569;
+}
+
 /* Compare sizes (game/pal-picker.js): the same kind of button in the opposite
    corner, which shows the pals' sizes relative to each other. */
 .scale-btn {
