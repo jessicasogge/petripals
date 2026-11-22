@@ -151,10 +151,10 @@ describe('the rival', () => {
 describe("each rival's speed", () => {
   it('is how she really gets around, so a swimmer is a harder race', () => {
     rivalBrain.mockClear();
-    // Colette has flagella all over; Goldie has none.
+    // Colette has flagella; Goldie has none.
     race({ them: ['colette', 'goldie'] });
     const speeds = rivalBrain.mock.calls.map((call) => call[3]);
-    expect(speeds).toEqual([MIXED.RIVAL_SPEEDS['all-over'], MIXED.RIVAL_SPEEDS.still]);
+    expect(speeds).toEqual([MIXED.RIVAL_SPEEDS.flagella, MIXED.RIVAL_SPEEDS.still]);
     expect(speeds[0]).toBeGreaterThan(speeds[1]);
     // Both are beatable: you swim faster than either.
     for (const speed of speeds) expect(speed).toBeLessThan(GAME.SPEED);

@@ -36,11 +36,11 @@
 //
 // `swims` is how she really gets around, which sets how fast she is as a
 // rival in a mixed culture race (see MIXED.RIVAL_SPEEDS and game/rival.js):
-// 'all-over' for flagella spread over her body, 'one-end' for a flagellum or
-// a tuft at one end, 'twisting' for Elia's flagella inside her, 'crawls' for
-// a pal who has no flagella but still moves along a surface, and 'still' for
-// one who doesn't move on her own at all. In the dish every pal swims, so a
-// still pal is the slowest rather than motionless.
+// 'flagella' for a pal who swims with them, wherever they are on her;
+// 'twisting' for Elia, whose flagella are inside her, so she corkscrews
+// along instead; 'crawls' for a pal with no flagella who still moves along a
+// surface; and 'still' for one who doesn't move on her own at all. In the
+// dish every pal swims, so a still pal is the slowest rather than motionless.
 //
 // `gram` is how she looks after a Gram stain: 'positive' cells stay purple,
 // 'negative' ones turn pink (the picker's microscope mode shows this).
@@ -77,7 +77,7 @@ export const SPECIES = {
     scientific: 'Pseudomonas aeruginosa',
     micrometers: 2, // her picture's real length: one cell
     doubling: 30,
-    swims: 'one-end',
+    swims: 'flagella',
     color: '#15803d', // for her name above the dish
     tile: 'rgba(134, 239, 172, 0.45)',
     kind: 'rod',
@@ -123,7 +123,7 @@ export const SPECIES = {
     scientific: 'Vibrio cholerae',
     micrometers: 2, // her picture's real length: one cell
     doubling: 30,
-    swims: 'one-end',
+    swims: 'flagella',
     color: '#c2410c', // for her name above the dish
     tile: 'rgba(253, 186, 116, 0.45)',
     kind: 'rod',
@@ -461,7 +461,7 @@ export const SPECIES = {
     micrometers: 12, // her picture's real length: a chain of 3
     cellMicrometers: 4, // one of her cells
     doubling: 20,
-    swims: 'all-over',
+    swims: 'flagella',
     color: '#0369a1', // for her name above the dish
     tile: 'rgba(125, 211, 252, 0.2)',
     kind: 'coccus', // grows in chains (see above), though her cells are rods
@@ -508,7 +508,7 @@ export const SPECIES = {
     scientific: '*Salmonella* Typhi',
     micrometers: 2.5, // her picture's real length: one cell
     doubling: 25,
-    swims: 'all-over',
+    swims: 'flagella',
     color: '#52525b', // for her name above the dish
     tile: 'rgba(161, 161, 170, 0.2)',
     kind: 'rod',
@@ -555,7 +555,7 @@ export const SPECIES = {
     scientific: 'Clostridium tetani',
     micrometers: 4, // her picture's real length: with her spore
     doubling: 35,
-    swims: 'all-over',
+    swims: 'flagella',
     color: '#5f6f12', // for her name above the dish
     tile: 'rgba(217, 223, 160, 0.5)',
     kind: 'rod',
@@ -603,7 +603,7 @@ export const SPECIES = {
     scientific: 'Listeria monocytogenes',
     micrometers: 1.5, // her picture's real length: one cell
     doubling: 45,
-    swims: 'all-over',
+    swims: 'flagella',
     color: '#2c4f7c', // for her name above the dish
     tile: 'rgba(122, 156, 199, 0.42)',
     kind: 'rod',
@@ -650,7 +650,7 @@ export const SPECIES = {
     scientific: 'Serratia marcescens',
     micrometers: 1.5, // her picture's real length: one cell
     doubling: 30,
-    swims: 'all-over',
+    swims: 'flagella',
     color: '#c2003a', // for her name above the dish
     tile: 'rgba(255, 90, 110, 0.22)',
     kind: 'rod',
@@ -742,7 +742,7 @@ export const SPECIES = {
     micrometers: 3, // her picture's real length: with her stalks
     cellMicrometers: 1.5, // her cell body, without her stalks
     doubling: 150,
-    swims: 'one-end',
+    swims: 'flagella',
     color: '#1a4f9c', // for her name above the dish
     tile: 'rgba(90, 169, 245, 0.3)',
     kind: 'rod',
@@ -789,7 +789,7 @@ export const SPECIES = {
     scientific: 'Cronobacter sakazakii',
     micrometers: 3, // her picture's real length: one cell
     doubling: 25,
-    swims: 'all-over',
+    swims: 'flagella',
     color: '#7d7200', // for her name above the dish
     tile: 'rgba(255, 240, 60, 0.35)',
     kind: 'rod',
@@ -877,7 +877,7 @@ export const SPECIES = {
     scientific: 'Clostridioides difficile',
     micrometers: 4.5, // her picture's real length: one cell
     doubling: 60,
-    swims: 'all-over',
+    swims: 'flagella',
     color: '#7a2e1a', // for her name above the dish
     tile: 'rgba(210, 146, 127, 0.3)',
     kind: 'rod',
@@ -1110,7 +1110,7 @@ export const SPECIES = {
     scientific: 'Escherichia coli',
     micrometers: 2.5, // her picture's real length: one cell
     doubling: 20,
-    swims: 'all-over',
+    swims: 'flagella',
     color: '#2e6b0e', // for her name above the dish
     tile: 'rgba(168, 236, 94, 0.35)',
     kind: 'rod',
@@ -1370,7 +1370,7 @@ export const SPECIES = {
     scientific: 'Helicobacter pylori',
     micrometers: 3, // her picture's real length: one cell
     doubling: 180,
-    swims: 'one-end',
+    swims: 'flagella',
     color: '#1d4a26', // for her name above the dish
     tile: 'rgba(79, 154, 92, 0.25)',
     kind: 'rod',
@@ -1595,8 +1595,7 @@ export const MIXED = {
   // so every rival is beatable, but a pal with flagella all over is a real
   // race and one with none is a gentle one.
   RIVAL_SPEEDS: {
-    'all-over': 0.66,
-    'one-end': 0.6,
+    flagella: 0.64,
     twisting: 0.5,
     crawls: 0.42,
     still: 0.36,
@@ -1605,8 +1604,7 @@ export const MIXED = {
   // fast she'll be, then why. The words rank in the same order as the speeds
   // above, so a glance tells you who's the harder race.
   RIVAL_NOTES: {
-    'all-over': 'Fastest: flagella all over',
-    'one-end': 'Fast: flagella at one end',
+    flagella: 'Fast: has flagella',
     twisting: 'Medium: swims by twisting',
     crawls: 'Slow: crawls, no flagella',
     still: 'Slowest: no flagella',

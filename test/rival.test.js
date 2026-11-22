@@ -47,7 +47,7 @@ describe('rivalBrain', () => {
   });
 
   it('swims toward the nutrient it picked, at the speed it was given', () => {
-    const speed = MIXED.RIVAL_SPEEDS['all-over'];
+    const speed = MIXED.RIVAL_SPEEDS.flagella;
     const leader = { x: 0, y: 0, facing: 1 };
     const brain = rivalBrain(leader, plate([{ fx: -0.5, fy: 0 }]), steady, speed);
     ready(brain);
@@ -58,7 +58,7 @@ describe('rivalBrain', () => {
   });
 
   it('swims at her own speed, by how she really gets around', () => {
-    // Colette's flagella all over carry her further than Goldie, who has none.
+    // Colette's flagella carry her further than Goldie, who has none.
     const swim = (species) => {
       const leader = { x: 0, y: 0, facing: 1 };
       const brain = rivalBrain(leader, plate([{ fx: -0.5, fy: 0 }]), steady, rivalSpeed(species));
@@ -67,7 +67,7 @@ describe('rivalBrain', () => {
       return Math.abs(leader.x);
     };
     expect(swim(SPECIES.colette)).toBeGreaterThan(swim(SPECIES.goldie));
-    expect(rivalSpeed(SPECIES.colette)).toBe(MIXED.RIVAL_SPEEDS['all-over']);
+    expect(rivalSpeed(SPECIES.colette)).toBe(MIXED.RIVAL_SPEEDS.flagella);
     expect(rivalSpeed(SPECIES.goldie)).toBe(MIXED.RIVAL_SPEEDS.still);
   });
 
@@ -77,7 +77,7 @@ describe('rivalBrain', () => {
       expect(speed, how).toBeGreaterThan(0);
     }
     // A pal who really swims is quicker than one who doesn't.
-    expect(MIXED.RIVAL_SPEEDS['all-over']).toBeGreaterThan(MIXED.RIVAL_SPEEDS.still);
+    expect(MIXED.RIVAL_SPEEDS.flagella).toBeGreaterThan(MIXED.RIVAL_SPEEDS.still);
   });
 
   it('stays put when there\'s nothing to eat', () => {

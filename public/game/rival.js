@@ -2,7 +2,7 @@
 // picks a nutrient to go after (usually the nearest one, sometimes the next
 // nearest), and swims toward it, weaving a little and slower than you, so
 // it's beatable. How much slower is how she really gets around: a pal with
-// flagella all over keeps up a real chase, one with none falls behind (see
+// flagella keeps up a real chase, one with none falls behind (see
 // `swims` and MIXED.RIVAL_SPEEDS in config.js).
 import { MIXED } from './config.js';
 

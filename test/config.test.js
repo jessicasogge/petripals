@@ -365,7 +365,7 @@ describe('real sizes', () => {
 });
 
 describe('how each pal gets around', () => {
-  const WAYS = ['all-over', 'one-end', 'twisting', 'crawls', 'still'];
+  const WAYS = ['flagella', 'twisting', 'crawls', 'still'];
 
   it('gives every pal one way, and every way a rival speed and a note', () => {
     for (const [pal, species] of Object.entries(SPECIES)) {
@@ -381,8 +381,8 @@ describe('how each pal gets around', () => {
   });
 
   it('ranks the notes in the same order as the speeds, so no two words tie', () => {
-    // "Fastest" really is faster than "Fast", and so on down.
-    const ranked = ['Fastest', 'Fast', 'Medium', 'Slow', 'Slowest'];
+    // "Fast" really is faster than "Medium", and so on down.
+    const ranked = ['Fast', 'Medium', 'Slow', 'Slowest'];
     const byWord = Object.entries(MIXED.RIVAL_NOTES)
       .map(([how, note]) => [note.split(':')[0], MIXED.RIVAL_SPEEDS[how]]);
     // Every word is used once, and they're all from the ranked list.
@@ -401,7 +401,7 @@ describe('how each pal gets around', () => {
     // The ones drawn without them, because their flagella are inside her
     // (Elia) or left off (Ceres), still say how they really move.
     expect(SPECIES.elia.swims).toBe('twisting');
-    expect(SPECIES.ceres.swims).toBe('all-over');
+    expect(SPECIES.ceres.swims).toBe('flagella');
   });
 
   it('agrees with her facts about flagella', () => {
