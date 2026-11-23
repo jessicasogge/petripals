@@ -34,6 +34,14 @@
 // saying more (Nova's filament). The picker's Compare sizes button shows the pals' sizes relative
 // to each other, labeled with one cell's length.
 //
+// `swims` is how she really gets around, which sets how fast she is as a
+// rival in a mixed culture race (see MIXED.RIVAL_SPEEDS and game/rival.js):
+// 'flagella' for a pal who swims with them, wherever they are on her;
+// 'twisting' for Elia, whose flagella are inside her, so she corkscrews
+// along instead; 'crawls' for a pal with no flagella who still moves along a
+// surface; and 'still' for one who doesn't move on her own at all. In the
+// dish every pal swims, so a still pal is the slowest rather than motionless.
+//
 // `gram` is how she looks after a Gram stain: 'positive' cells stay purple,
 // 'negative' ones turn pink (the picker's microscope mode shows this).
 // `faintStain` marks a pal who barely takes the stain at all (Elia, Marina, Myra).
@@ -69,6 +77,7 @@ export const SPECIES = {
     scientific: 'Pseudomonas aeruginosa',
     micrometers: 2, // her picture's real length: one cell
     doubling: 30,
+    swims: 'flagella',
     color: '#15803d', // for her name above the dish
     tile: 'rgba(134, 239, 172, 0.45)',
     kind: 'rod',
@@ -114,6 +123,7 @@ export const SPECIES = {
     scientific: 'Vibrio cholerae',
     micrometers: 2, // her picture's real length: one cell
     doubling: 30,
+    swims: 'flagella',
     color: '#c2410c', // for her name above the dish
     tile: 'rgba(253, 186, 116, 0.45)',
     kind: 'rod',
@@ -163,6 +173,7 @@ export const SPECIES = {
     scientific: 'Borrelia burgdorferi',
     micrometers: 15, // her picture's real length: one cell (10 to 30 µm long)
     doubling: 1080,
+    swims: 'twisting',
     color: '#7e22ce', // for her name above the dish
     tile: 'rgba(216, 180, 254, 0.45)',
     kind: 'rod',
@@ -215,6 +226,7 @@ export const SPECIES = {
     scientific: 'Haemophilus influenzae',
     micrometers: 1, // her picture's real length: one cell
     doubling: 30,
+    swims: 'still',
     color: '#7c4a2d', // for her name above the dish
     tile: 'rgba(212, 176, 140, 0.45)',
     kind: 'rod',
@@ -262,6 +274,7 @@ export const SPECIES = {
     scientific: 'Bifidobacterium bifidum',
     micrometers: 3, // her picture's real length: one cell
     doubling: 90,
+    swims: 'still',
     color: '#be185d', // for her name above the dish: strawberry-yogurt pink's deeper rose
     tile: 'rgba(249, 168, 212, 0.4)',
     kind: 'rod',
@@ -318,6 +331,7 @@ export const SPECIES = {
     micrometers: 1.8, // her picture's real length: a pair
     cellMicrometers: 0.9, // one of her cells
     doubling: 35,
+    swims: 'still',
     color: '#4f46e5', // for her name above the dish: bluish purple, next to Elia's purple
     tile: 'rgba(165, 180, 252, 0.45)',
     kind: 'coccus',
@@ -361,6 +375,7 @@ export const SPECIES = {
     micrometers: 4, // her picture's real length: a chain of 5
     cellMicrometers: 0.8, // one of her cells
     doubling: 40,
+    swims: 'still',
     color: '#b91c1c', // for her name above the dish
     tile: 'rgba(252, 165, 165, 0.45)',
     kind: 'coccus',
@@ -398,6 +413,7 @@ export const SPECIES = {
     micrometers: 3, // her picture's real length: a cluster
     cellMicrometers: 1, // one of her cells
     doubling: 30,
+    swims: 'still',
     color: '#b45309', // for her name above the dish
     tile: 'rgba(253, 230, 138, 0.45)',
     kind: 'coccus',
@@ -445,6 +461,7 @@ export const SPECIES = {
     micrometers: 12, // her picture's real length: a chain of 3
     cellMicrometers: 4, // one of her cells
     doubling: 20,
+    swims: 'flagella',
     color: '#0369a1', // for her name above the dish
     tile: 'rgba(125, 211, 252, 0.2)',
     kind: 'coccus', // grows in chains (see above), though her cells are rods
@@ -491,6 +508,7 @@ export const SPECIES = {
     scientific: '*Salmonella* Typhi',
     micrometers: 2.5, // her picture's real length: one cell
     doubling: 25,
+    swims: 'flagella',
     color: '#52525b', // for her name above the dish
     tile: 'rgba(161, 161, 170, 0.2)',
     kind: 'rod',
@@ -537,6 +555,7 @@ export const SPECIES = {
     scientific: 'Clostridium tetani',
     micrometers: 4, // her picture's real length: with her spore
     doubling: 35,
+    swims: 'flagella',
     color: '#5f6f12', // for her name above the dish
     tile: 'rgba(217, 223, 160, 0.5)',
     kind: 'rod',
@@ -584,6 +603,7 @@ export const SPECIES = {
     scientific: 'Listeria monocytogenes',
     micrometers: 1.5, // her picture's real length: one cell
     doubling: 45,
+    swims: 'flagella',
     color: '#2c4f7c', // for her name above the dish
     tile: 'rgba(122, 156, 199, 0.42)',
     kind: 'rod',
@@ -630,6 +650,7 @@ export const SPECIES = {
     scientific: 'Serratia marcescens',
     micrometers: 1.5, // her picture's real length: one cell
     doubling: 30,
+    swims: 'flagella',
     color: '#c2003a', // for her name above the dish
     tile: 'rgba(255, 90, 110, 0.22)',
     kind: 'rod',
@@ -678,6 +699,7 @@ export const SPECIES = {
     micrometers: 12, // her picture's real length: a chain of 4
     cellMicrometers: 3, // one of her cells
     doubling: 30,
+    swims: 'still',
     color: '#4d6b3c', // for her name above the dish
     tile: 'rgba(150, 190, 120, 0.3)',
     kind: 'coccus', // grows in chains with the chain code, like Ceres, though her cells are rods
@@ -720,6 +742,7 @@ export const SPECIES = {
     micrometers: 3, // her picture's real length: with her stalks
     cellMicrometers: 1.5, // her cell body, without her stalks
     doubling: 150,
+    swims: 'flagella',
     color: '#1a4f9c', // for her name above the dish
     tile: 'rgba(90, 169, 245, 0.3)',
     kind: 'rod',
@@ -766,6 +789,7 @@ export const SPECIES = {
     scientific: 'Cronobacter sakazakii',
     micrometers: 3, // her picture's real length: one cell
     doubling: 25,
+    swims: 'flagella',
     color: '#7d7200', // for her name above the dish
     tile: 'rgba(255, 240, 60, 0.35)',
     kind: 'rod',
@@ -810,6 +834,7 @@ export const SPECIES = {
     scientific: 'Geobacter sulfurreducens',
     micrometers: 2, // her picture's real length: one cell
     doubling: 480,
+    swims: 'still',
     color: '#4c1d95', // for her name above the dish: grape, darker than Elia's purple
     tile: 'rgba(178, 126, 224, 0.35)',
     kind: 'rod',
@@ -852,6 +877,7 @@ export const SPECIES = {
     scientific: 'Clostridioides difficile',
     micrometers: 4.5, // her picture's real length: one cell
     doubling: 60,
+    swims: 'flagella',
     color: '#7a2e1a', // for her name above the dish
     tile: 'rgba(210, 146, 127, 0.3)',
     kind: 'rod',
@@ -908,6 +934,7 @@ export const SPECIES = {
     micrometers: 15, // her picture's real length: a branching filament
     sizeNote: '15 µm filament', // one branching filament, not one cell
     doubling: 240,
+    swims: 'still',
     color: '#0f766e', // for her name above the dish
     tile: 'rgba(143, 227, 216, 0.4)',
     kind: 'rod',
@@ -988,6 +1015,7 @@ export const SPECIES = {
     micrometers: 2.5, // her picture's real length: in her capsule
     cellMicrometers: 2, // her cell body, without her capsule
     doubling: 25,
+    swims: 'still',
     color: '#6a5070', // for her name above the dish
     tile: 'rgba(232, 190, 206, 0.38)',
     kind: 'rod',
@@ -1033,6 +1061,7 @@ export const SPECIES = {
     scientific: 'Francisella tularensis',
     micrometers: 0.5, // her picture's real length: one cell
     doubling: 180,
+    swims: 'still',
     color: '#a8432e', // for her name above the dish
     tile: 'rgba(255, 201, 181, 0.45)',
     kind: 'rod',
@@ -1081,6 +1110,7 @@ export const SPECIES = {
     scientific: 'Escherichia coli',
     micrometers: 2.5, // her picture's real length: one cell
     doubling: 20,
+    swims: 'flagella',
     color: '#2e6b0e', // for her name above the dish
     tile: 'rgba(168, 236, 94, 0.35)',
     kind: 'rod',
@@ -1134,6 +1164,7 @@ export const SPECIES = {
     micrometers: 28, // her picture's real length: a string of 8
     cellMicrometers: 3.5, // one of her cells
     doubling: 1200,
+    swims: 'still',
     color: '#0d6e50', // for her name above the dish
     tile: 'rgba(63, 185, 138, 0.28)',
     kind: 'coccus',
@@ -1173,6 +1204,7 @@ export const SPECIES = {
     micrometers: 5, // her picture's real length: a square of 4
     cellMicrometers: 2.5, // one of her cells
     doubling: 90,
+    swims: 'still',
     color: '#a21caf', // for her name above the dish
     tile: 'rgba(240, 171, 252, 0.4)',
     kind: 'coccus',
@@ -1209,6 +1241,7 @@ export const SPECIES = {
     scientific: 'Mycobacterium marinum',
     micrometers: 3, // her picture's real length: one cell
     doubling: 300,
+    swims: 'still',
     color: '#8a2c0b', // for her name above the dish
     tile: 'rgba(244, 128, 63, 0.24)',
     kind: 'rod',
@@ -1255,6 +1288,7 @@ export const SPECIES = {
     scientific: 'Brucella melitensis',
     micrometers: 1, // her picture's real length: one cell
     doubling: 150,
+    swims: 'still',
     color: '#9a5b00', // for her name above the dish
     tile: 'rgba(255, 191, 60, 0.3)',
     kind: 'rod',
@@ -1296,6 +1330,7 @@ export const SPECIES = {
     micrometers: 1.6, // her picture's real length: a pair
     cellMicrometers: 0.8, // one of her cells
     doubling: 45,
+    swims: 'crawls',
     color: '#0b4f5e', // for her name above the dish
     tile: 'rgba(47, 166, 191, 0.25)',
     kind: 'coccus',
@@ -1335,6 +1370,7 @@ export const SPECIES = {
     scientific: 'Helicobacter pylori',
     micrometers: 3, // her picture's real length: one cell
     doubling: 180,
+    swims: 'flagella',
     color: '#1d4a26', // for her name above the dish
     tile: 'rgba(79, 154, 92, 0.25)',
     kind: 'rod',
@@ -1384,6 +1420,7 @@ export const SPECIES = {
     micrometers: 4, // her picture's real length: a V of two cells
     cellMicrometers: 3, // one of her cells
     doubling: 60,
+    swims: 'still',
     color: '#5c1a33', // for her name above the dish
     tile: 'rgba(176, 102, 128, 0.25)',
     kind: 'coccus',
@@ -1425,6 +1462,7 @@ export const SPECIES = {
     scientific: 'Mycoplasma pneumoniae',
     micrometers: 1.5, // her picture's real length: one cell
     doubling: 720,
+    swims: 'crawls',
     color: '#2b3b4e', // for her name above the dish
     tile: 'rgba(120, 144, 168, 0.3)',
     kind: 'rod',
@@ -1473,6 +1511,7 @@ export const SPECIES = {
     scientific: 'Clostridium perfringens',
     micrometers: 5, // her picture's real length: one cell
     doubling: 10,
+    swims: 'still',
     color: '#5a3f0f', // for her name above the dish
     tile: 'rgba(201, 154, 46, 0.24)',
     kind: 'rod',
@@ -1518,6 +1557,7 @@ export const SPECIES = {
     micrometers: 2, // her picture's real length: a pair
     cellMicrometers: 1, // one of her cells
     doubling: 60,
+    swims: 'still',
     color: '#7a1f55', // for her name above the dish
     tile: 'rgba(200, 80, 140, 0.2)',
     kind: 'coccus',
@@ -1550,7 +1590,25 @@ export const MIXED = {
   MAX_RIVALS: 3,
   CHOICES: 12, // pals offered on the rival screen; with more, a random 12
   NUTRIENTS_PER_PAL: 7,
-  RIVAL_SPEED: 0.55, // fraction of the dish radius per second (you swim at GAME.SPEED)
+  // How fast a rival swims, by how she really gets around (`swims` above), as
+  // a fraction of the dish radius per second. You swim at GAME.SPEED (0.8),
+  // so every rival is beatable, but a pal with flagella all over is a real
+  // race and one with none is a gentle one.
+  RIVAL_SPEEDS: {
+    flagella: 0.64,
+    twisting: 0.5,
+    crawls: 0.42,
+    still: 0.36,
+  },
+  // What her card says on the rival screen, so picking is a real choice: how
+  // fast she'll be, then why. The words rank in the same order as the speeds
+  // above, so a glance tells you who's the harder race.
+  RIVAL_NOTES: {
+    flagella: 'Fast: has flagella',
+    twisting: 'Medium: swims by twisting',
+    crawls: 'Slow: crawls, no flagella',
+    still: 'Slowest: no flagella',
+  },
   RIVAL_REACT_MS: 500, // how often the rival looks around for a new nutrient
   RIVAL_WANDER: 0.5, // how much the rival weaves off course, in radians
   RIVAL_START_MS: 1000, // the rival waits this long before it starts, so you get a head start

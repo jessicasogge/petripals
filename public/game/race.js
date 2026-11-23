@@ -6,7 +6,7 @@ import { GAME } from './config.js';
 import { coccusGroup } from './coccus.js';
 import { arrowKeys } from './keyboard.js';
 import { goTo } from './loading.js';
-import { rivalBrain } from './rival.js';
+import { rivalBrain, rivalSpeed } from './rival.js';
 import { listOf } from './rivals.js';
 import { rodGroup } from './rod.js';
 import { showFact } from './facts.js';
@@ -56,7 +56,8 @@ export function playRace({ you, rivals, nutrients, target }) {
     rival.leader.x = round(start * Math.cos(angle));
     rival.leader.y = round(start * Math.sin(angle));
     rival.leader.facing = rival.leader.x > 0 ? -1 : 1;
-    rival.brain = rivalBrain(rival.leader, nutrients);
+    // She swims at her own speed, by how she really gets around.
+    rival.brain = rivalBrain(rival.leader, nutrients, Math.random, rivalSpeed(rival.species));
   });
 
   const keys = arrowKeys();

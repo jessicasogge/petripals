@@ -21,7 +21,11 @@ vi.mock('../public/game/colony.js', () => ({
 const group = () => ({ x: 0, y: 0, facing: 1, body: () => [[0, 0, 5]] });
 vi.mock('../public/game/rod.js', () => ({ rodGroup: vi.fn(() => group()) }));
 vi.mock('../public/game/coccus.js', () => ({ coccusGroup: vi.fn(() => group()) }));
-vi.mock('../public/game/rival.js', () => ({ rivalBrain: vi.fn(() => ({ step: vi.fn() })) }));
+// The real rivalSpeed, so a race really does hand each rival her own speed.
+vi.mock('../public/game/rival.js', async (importOriginal) => ({
+  ...(await importOriginal()),
+  rivalBrain: vi.fn(() => ({ step: vi.fn() })),
+}));
 vi.mock('../public/game/keyboard.js', () => ({
   arrowKeys: vi.fn(() => ({ direction: () => [0, 0], stop: vi.fn() })),
 }));
@@ -35,6 +39,7 @@ vi.mock('../public/game/track.js', () => ({ track: vi.fn() }));
 const { playRace } = await import('../public/game/race.js');
 const { rodGroup } = await import('../public/game/rod.js');
 const { coccusGroup } = await import('../public/game/coccus.js');
+const { rivalBrain } = await import('../public/game/rival.js');
 const { sporeBurst } = await import('../public/game/spores.js');
 
 // (jsdom changes import.meta.url to a web address, so find the file from the project folder.)
@@ -140,6 +145,19 @@ describe('the rival', () => {
     expect(rodGroup).toHaveBeenCalledTimes(1);
     expect(coccusGroup).toHaveBeenCalledTimes(1);
     expect(coccusGroup.mock.calls[0][0].svg.getAttribute('aria-label')).toBe('Scarlett, your rival');
+  });
+});
+
+describe("each rival's speed", () => {
+  it('is how she really gets around, so a swimmer is a harder race', () => {
+    rivalBrain.mockClear();
+    // Colette has flagella; Goldie has none.
+    race({ them: ['colette', 'goldie'] });
+    const speeds = rivalBrain.mock.calls.map((call) => call[3]);
+    expect(speeds).toEqual([MIXED.RIVAL_SPEEDS.flagella, MIXED.RIVAL_SPEEDS.still]);
+    expect(speeds[0]).toBeGreaterThan(speeds[1]);
+    // Both are beatable: you swim faster than either.
+    for (const speed of speeds) expect(speed).toBeLessThan(GAME.SPEED);
   });
 });
 

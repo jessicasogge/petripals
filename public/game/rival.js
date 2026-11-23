@@ -1,8 +1,13 @@
 // The computer's pal in mixed culture mode. Every so often it looks around,
 // picks a nutrient to go after (usually the nearest one, sometimes the next
 // nearest), and swims toward it, weaving a little and slower than you, so
-// it's beatable.
+// it's beatable. How much slower is how she really gets around: a pal with
+// flagella keeps up a real chase, one with none falls behind (see
+// `swims` and MIXED.RIVAL_SPEEDS in config.js).
 import { MIXED } from './config.js';
+
+// How fast `species` swims as a rival.
+export const rivalSpeed = (species) => MIXED.RIVAL_SPEEDS[species.swims];
 
 // Which nutrient to go after from (fx, fy): the nearest, or now and then the
 // second nearest. `flecks` are { fx, fy }; `random` returns 0 to 1. Returns
@@ -15,7 +20,7 @@ export function chooseTarget(fx, fy, flecks, random = Math.random) {
 }
 
 // Steers `leader` (a rod or coccus group). Call step() every frame.
-export function rivalBrain(leader, nutrients, random = Math.random) {
+export function rivalBrain(leader, nutrients, random = Math.random, speed = MIXED.RIVAL_SPEEDS.still) {
   let target = null;
   let sinceLook = Infinity;
   let wander = 0; // radians off course, drifting slowly
@@ -42,8 +47,8 @@ export function rivalBrain(leader, nutrients, random = Math.random) {
       const angle = Math.atan2(target.fy - fy, target.fx - fx) + wander;
       const dx = Math.cos(angle);
       const dy = Math.sin(angle);
-      leader.x += dx * MIXED.RIVAL_SPEED * radius * seconds;
-      leader.y += dy * MIXED.RIVAL_SPEED * radius * seconds;
+      leader.x += dx * speed * radius * seconds;
+      leader.y += dy * speed * radius * seconds;
       if (Math.abs(dx) > 0.2) leader.facing = Math.sign(dx);
     },
   };

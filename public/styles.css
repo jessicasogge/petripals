@@ -1103,6 +1103,17 @@ a.pal-card:focus-visible {
 
 /* Six across (three on a phone), each the same width, with a short last row
    kept in the middle. */
+/* How a rival gets around, under her name on the rival screen: why she'll be
+   a real race or a gentle one. */
+.rival-note {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.25;
+  color: #5d7480;
+}
+
 .rivals-grid {
   display: flex;
   flex-wrap: wrap;
