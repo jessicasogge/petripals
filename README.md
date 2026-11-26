@@ -156,12 +156,10 @@ The tests use [Vitest](https://vitest.dev/). Most of the game logic runs in [jsd
 
 ```sh
 npm run lint        # check
-npm run lint:fix    # and tidy what can be tidied on its own
+npm run lint:fix    # tidy what can be tidied on its own
 ```
 
-[ESLint](https://eslint.org/) catches what the tests can't see: a variable left behind by an edit, a promise nobody waits for, a stray `console.log` shipped to the browser. The rules are in [`eslint.config.js`](eslint.config.js), and they're the ones the code already followed, so turning the linter on meant fixing two things, not rewriting anything. Style it doesn't police, like how things are named and how comments read, stays a matter for review.
-
-Pull requests run it alongside the tests. The deploy doesn't: a style slip shouldn't stop the game going out.
+[ESLint](https://eslint.org/), with the rules in [`eslint.config.js`](eslint.config.js). Pull requests run it alongside the tests.
 
 ## Project layout
 
