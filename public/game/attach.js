@@ -15,7 +15,7 @@ export const wobble = (k, salt) => Math.sin(k * 12.9898 + salt * 78.233);
 export function chainSpot(cells, px, py, allowed = () => true) {
   if (cells.length === 1) {
     let dx = px - cells[0].x;
-    let dy = py - cells[0].y;
+    const dy = py - cells[0].y;
     // If the player is exactly on the cell there's no direction toward them;
     // grow sideways instead of stacking the new cell on top of the old one.
     if (dx === 0 && dy === 0) dx = 1;
