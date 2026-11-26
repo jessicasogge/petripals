@@ -152,6 +152,15 @@ npm run test:coverage   # run them and check how much of the game they cover
 
 The tests use [Vitest](https://vitest.dev/). Most of the game logic runs in [jsdom](https://github.com/jsdom/jsdom), a simulated browser page. The coverage check fails if the tests leave game code untested (the thresholds are in [`vitest.config.js`](vitest.config.js)), and the deploy runs it, so untested code doesn't ship.
 
+## Linting
+
+```sh
+npm run lint        # check
+npm run lint:fix    # tidy what can be tidied on its own
+```
+
+[ESLint](https://eslint.org/), with the rules in [`eslint.config.js`](eslint.config.js). Pull requests run it alongside the tests.
+
 ## Project layout
 
 | Path | What's there |
@@ -166,6 +175,7 @@ The tests use [Vitest](https://vitest.dev/). Most of the game logic runs in [jsd
 | `public/game/` | Game code: Classic mode (`game.js`), Petri Picnic (`tumble.js`), Phage Attack (`phage.js`), Mixed Culture mode (`race.js`, with each rival's steering in `rival.js` and who's racing in `rivals.js`, picked on `choose-rivals.js`), what both share (a colony eating and dividing in `colony.js`, steering in `keyboard.js` and `touch.js`), how the pals grow (`rod.js`, `coccus.js`), antibiotics (`antibiotic.js`), nutrients, physics, settings and fun facts (`config.js`), the fun-fact pop-up (`facts.js`, with italics for scientific names from `italics.js`, and how each antibiotic works from `drug-facts.js`), the picker's microscope mode (`stain.js`) and Compare sizes mode (`toScale` in `pals.js`), the win confetti (`spores.js`), each pal's profile (`pal-profile.js`), Who’s That Pal? (`whos-that-pal.js`, with the facts' "this pal" swap in `guess.js` and the facts it asks about in `quiz-facts.js`), and a little surprise on the home page (`split.js`) |
 | `public/game/pals.js` | Every pal's name and drawing, in one place. All the pages draw the pals from here, in the order listed (except the picker, which sorts them by species), eight to a page (`PAGE_SIZE`). To add a pal, see the notes at the top. |
 | `test/` | Tests |
+| `eslint.config.js` | What the linter checks |
 | `src/index.ts` | Small Express server for local development |
 
 ## Deployment

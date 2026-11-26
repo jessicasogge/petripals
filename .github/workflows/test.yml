@@ -1,6 +1,8 @@
-# Run the tests on every pull request, so a change that breaks the game (or
-# leaves new code untested, see vitest.config.js) shows a red X on the pull
-# request before it's merged, not after, when it would stop the deploy.
+# Run the tests and the linter on every pull request, so a change that breaks
+# the game (or leaves new code untested, see vitest.config.js) shows a red X
+# on the pull request before it's merged, not after, when it would stop the
+# deploy. The deploy itself doesn't lint: a style slip shouldn't stop the game
+# going out.
 name: Tests
 
 on:
@@ -25,4 +27,5 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npm run lint # see eslint.config.js
       - run: npm run test:coverage # the same check the deploy runs

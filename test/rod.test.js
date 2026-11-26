@@ -14,7 +14,6 @@ const DISH_WIDTH = 400;
 const DISH_RADIUS = DISH_WIDTH / 2;
 // Rods are drawn 12% of the dish wide unless their species says otherwise.
 const rodPx = (name) => ((SPECIES[name].size ?? 12) / 100) * DISH_WIDTH;
-const ROD_PX = rodPx('mona');
 
 let saved;
 beforeEach(() => {
